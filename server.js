@@ -3,12 +3,12 @@ require('dotenv').config();
 const express    = require("express"),
       bodyParser = require('body-parser'),
       cors       = require("cors"),
-      mysql      = require("mysql"),
       jwt        = require("jsonwebtoken"),
       bcrypt     = require("bcryptjs"),
       cookieParser = require("cookie-parser");
 
 // Import routes
+const foodRoutes = require('./backend/routes/food.routes');
 
 // More init
 const app = express();
@@ -23,6 +23,7 @@ global.jwt = jwt;
 //   credentials: true
 // };
 
+// Cors settings
 // app.use(cors(corsOption));
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:8081"); // update to match the domain you will make the request from
@@ -36,22 +37,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // 'Use' routes here
+app.use("/", foodRoutes);
 
 // Last case: url not found
 app.get('/*', function(req, res){
   res.json({ message: "404 Not found" });
 });
-
-// DB Connection
-const db_config = {
-  host: 'scavenge-db.clkbasnuzdfc.us-east-2.rds.amazonaws.com',
-  user: 'admin',
-  password: process.env.DB_PASSWORD,
-  database: 'ScavengeDB',
-  connectionLimit: 10
-}; 
-const pool = mysql.createPool(db_config);
-global.pool = pool;
 
 // Start server
 const PORT = process.env.PORT || 8080;
