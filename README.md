@@ -6,4 +6,6 @@ Search for food you need at local food pantries and stay up-to-date on what's av
 - Ilkyu Ju
 - Jason Sutanto
 - Gleb Tsyganov
-- Yayen Lin
+- Sean Cunningham
+- Yayen (Andy) Lin, lin383@wisc.edu
+
