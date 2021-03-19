@@ -3848,6 +3848,13 @@
   "resolved" "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-0.6.0.tgz"
   "version" "0.6.0"
 
+"cjs@^0.0.11":
+  "integrity" "sha1-H+Uo69qPnuIfgaf3spmo1wsUpHw="
+  "resolved" "https://registry.npmjs.org/cjs/-/cjs-0.0.11.tgz"
+  "version" "0.0.11"
+  dependencies:
+    "sync-channel" "*"
+
 "class-utils@^0.3.5":
   "integrity" "sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg=="
   "resolved" "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz"
@@ -11690,6 +11697,11 @@
   "integrity" "sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw=="
   "resolved" "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz"
   "version" "3.2.4"
+
+"sync-channel@*":
+  "integrity" "sha1-C62DDY8fEbjOYSVJ4Nlje7BlKFA="
+  "resolved" "https://registry.npmjs.org/sync-channel/-/sync-channel-0.0.6.tgz"
+  "version" "0.0.6"
 
 "table@^6.0.4":
   "integrity" "sha512-rxZevLGTUzWna/qBLObOe16kB2RTnnbhciwgPbMMlazz1yZGVEgnZK762xyVdVznhqxrfCeBMmMkgOOaPwjH7g=="
