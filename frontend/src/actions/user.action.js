@@ -11,10 +11,13 @@ export const userActions = {
   getAll,
 };
 
-// 1. dispatches a LOGIN_REQUEST action with dispatch(request({ username }));
-// 2. calls the async task userService.login(username, password)
-// 3. dispatches a LOGIN_SUCCESS with dispatch(success(user)); if login was successful
-//    dispatches a LOGIN_FAILURE action with dispatch(failure(error)); if login failed
+/**
+ * 1. dispatches a LOGIN_REQUEST action with dispatch(request({ username }));
+ * 2. calls the async task userService.login(username, password)
+ * 3. dispatches a LOGIN_SUCCESS with dispatch(success(user)); if login was successful
+ *    dispatches a LOGIN_FAILURE action with dispatch(failure(error)); if login failed
+ */
+//
 function login(username, password) {
   return (dispatch) => {
     dispatch(request({ username }));
