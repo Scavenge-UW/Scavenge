@@ -1,8 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
-import { Provider } from 'react-redux';
+import logo from "./logo.svg";
+import "./App.css";
+import { Provider } from "react-redux";
 
-import store from './store';
+import store from "./store";
+
+import LoginView from "./components/LoginView";
 
 function App() {
   return (
@@ -22,6 +24,9 @@ function App() {
             Learn React
           </a>
         </header>
+        <body>
+          <LoginView />
+        </body>
       </div>
     </Provider>
   );
