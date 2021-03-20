@@ -84,7 +84,7 @@ class InventoryView extends Component {
   }
 
   /**
-   * Add an item to the pantry.
+   * Add an item to the foodItems state.
    *  
    * @param {Object} data data of the item containing food_id, name, and quantity
    */ 
@@ -93,6 +93,23 @@ class InventoryView extends Component {
     this.setState(prevState => ({
       foodItems: [...prevState.foodItems, data]
     }))
+  }
+
+  /**
+   * Remove an item from the foodItems state.
+   * 
+   * @param {int} food_id
+   */
+
+  removeItem(food_id) {
+    let foodItemsCopy = [...this.state.foodItems];
+    foodItemsCopy = foodItemsCopy.filter((item) => {
+      return item.food_id != food_id
+    })
+
+    this.setState({
+      foodItems: foodItemsCopy
+    })
   }
 
   /**
@@ -105,8 +122,9 @@ class InventoryView extends Component {
     for (const foodItem of this.state.foodItems) { // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
-          key={foodItem.id}
+          key={foodItem.food_id}
           foodItem={foodItem}
+          removeItem={this.removeItem.bind(this)}
         />
       )
     } 

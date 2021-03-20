@@ -13,10 +13,20 @@ class FoodItemCart extends Component {
     super(props);
   }
 
+  /**
+   * Return if the item is in stock.
+   * 
+   * @returns {boolean} true if the item is in stock, false if out of stock
+   */
   isInStock(){
     return this.props.foodItem.quantity > 0
   }
 
+  /**
+   * Display current stock information.
+   * 
+   * @returns an HTML object that consists of stock info along with visual icon
+   */
   showStockInfo() {
     if (this.isInStock()){
       return (
@@ -34,6 +44,21 @@ class FoodItemCart extends Component {
       )
     }
   }
+
+  /**
+   * Ask for delete confirmation and remove the item.
+   * 
+   */
+  onClickRemoveItem() {
+    let itemName = this.props.foodItem.name;
+    let food_id = this.props.foodItem.food_id;
+
+    if (window.confirm("Are you sure you want to delete " + itemName + "?")){
+      // TODO: send delete request to the server
+      
+      this.props.removeItem(food_id)
+    }
+  }
   
   render() {
     if (this.props.type === "filler"){
@@ -41,7 +66,7 @@ class FoodItemCart extends Component {
           <Card className="filler food-item" />
         )
     } else {
-        const { name, quantity } = this.props.foodItem;
+        const { food_id, name, quantity } = this.props.foodItem;
         return (
           <Card className="food-item">
             <Card.Body>
@@ -77,7 +102,14 @@ class FoodItemCart extends Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Button className="ml-3 mr-3" block variant="outline-danger">Remove</Button>
+                  <Button
+                    className="ml-3 mr-3"
+                    block
+                    variant="outline-danger"
+                    onClick={this.onClickRemoveItem.bind(this)}
+                  >
+                    Remove
+                  </Button>
                 </Row>
               </Card.Body>
           </Card>
