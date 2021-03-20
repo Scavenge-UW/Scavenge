@@ -8,7 +8,6 @@ class ClassComponentBoilerplate extends Component {
   getName(){
     return "ClassComponentBoilerplate"
   }
-  
   render() {
     return (
       <h1>
