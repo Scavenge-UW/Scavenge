@@ -34,8 +34,6 @@ class FoodItemCart extends Component {
       )
     }
   }
-
-  return
   
   render() {
     if (this.props.type === "filler"){
@@ -43,7 +41,7 @@ class FoodItemCart extends Component {
           <Card className="filler food-item" />
         )
     } else {
-        const { name } = this.props.foodItem;
+        const { name, quantity } = this.props.foodItem;
         return (
           <Card className="food-item">
             <Card.Body>
@@ -64,7 +62,11 @@ class FoodItemCart extends Component {
                     <Form>
                       <Form.Group controlId="formQuantity">
                         <Form.Label>Enter quantity in stock</Form.Label>
-                        <Form.Control type="number" placeholder="Quantity" />
+                        <Form.Control
+                          type="number"
+                          placeholder="Quantity"
+                          value={quantity}
+                        />
                       </Form.Group>
                     </Form>
                   </Col>
