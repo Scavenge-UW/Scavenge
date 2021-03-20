@@ -22,6 +22,11 @@ class InventoryView extends Component {
           name: "Banana",
           quantity: 0,
         },
+        {
+          food_id: 3,
+          name: "Edit Me!",
+          quantity: 5,
+        },
       ]
     }
   }
@@ -38,6 +43,11 @@ class InventoryView extends Component {
         />
       )
     } 
+
+    if (foodItemCards.length % 2) {
+      foodItemCards.push(<FoodItemCard type="filler" />)
+    }
+
     return foodItemCards;
   }
   

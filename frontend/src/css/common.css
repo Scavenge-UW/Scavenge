@@ -3,3 +3,7 @@
   margin-left: 1em;
   flex: 0 0 30em;
 }
+
+.filler {
+  border: 0px !important;
+}
