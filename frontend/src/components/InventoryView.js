@@ -119,12 +119,34 @@ class InventoryView extends Component {
 
     return foodItemCards;
   }
+
+  /**
+   * Returns the textual description of the current inventory.
+   * 
+   */
+  getInventoryOverview() {
+    let numItems = this.state.foodItems.length;
+    let numOutOfStockItems = this.state.foodItems.filter((item) => {
+      return item.quantity == 0
+    }).length
+
+    return (
+      <p className="text-center mt-4">
+        There are {numItems} items in total in your food pantry.
+        <br />
+        {numOutOfStockItems} items are currently out of stock.
+      </p>
+    ) 
+  }
   
   render() {
     return (
       <Container>
         <Row className="justify-content-center">
           <h2>Current Inventory</h2>
+        </Row>
+        <Row className="justify-content-center">
+          {this.getInventoryOverview()}
         </Row>
         <Row className="justify-content-end">
           <Button onClick={() => {this.openAddItemModal()}}>
@@ -141,6 +163,11 @@ class InventoryView extends Component {
           itemToBeAdded={this.state.itemToBeAdded}
           setItemToBeAdded={this.setItemToBeAdded.bind(this)}
         />
+        <Row className="justify-content-center">
+          <p className="mt-4">
+            Time is Money. We provide an efficient way for you to update available items.
+          </p>
+        </Row>
       </Container>
     );
   }
