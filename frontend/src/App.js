@@ -3,12 +3,12 @@ import './App.css';
 import { Provider } from 'react-redux';
 
 import store from './store';
-import InventoryView from './components/InventoryView';
+import PantryAdminView from './components/PantryAdminView';
 
 function App() {
   return (
     <Provider store={store}>
-      <InventoryView />
+      <PantryAdminView />
     </Provider>
   );
 }
