@@ -97,6 +97,7 @@ class InventoryView extends Component {
 
   /**
    * Remove an item from the foodItems state.
+   * Passed down to <FoodItemCard>
    * 
    * @param {int} food_id
    */
@@ -105,6 +106,26 @@ class InventoryView extends Component {
     let foodItemsCopy = [...this.state.foodItems];
     foodItemsCopy = foodItemsCopy.filter((item) => {
       return item.food_id != food_id
+    })
+
+    this.setState({
+      foodItems: foodItemsCopy
+    })
+  }
+
+  /**
+   * Remove item quantity from the foodItems state.
+   * Passed down to <FoodItemCard>
+   * 
+   * @param {int} food_id
+   */
+
+   updateItemQuantity(food_id, newQuantity) {
+    let foodItemsCopy = [...this.state.foodItems];
+    foodItemsCopy.forEach((item, idx) => {
+      if(item.food_id === food_id) {
+        foodItemsCopy[idx].quantity = newQuantity
+      }
     })
 
     this.setState({
@@ -125,6 +146,7 @@ class InventoryView extends Component {
           key={foodItem.food_id}
           foodItem={foodItem}
           removeItem={this.removeItem.bind(this)}
+          updateItemQuantity={this.updateItemQuantity.bind(this)}
         />
       )
     } 

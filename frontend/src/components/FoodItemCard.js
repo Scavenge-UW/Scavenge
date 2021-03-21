@@ -11,6 +11,11 @@ import '../css/common.css'
 class FoodItemCart extends Component {
   constructor(props) {
     super(props);
+
+    this.newQuantity = React.createRef();
+    this.state = {
+      editMode: false
+    }
   }
 
   /**
@@ -55,8 +60,84 @@ class FoodItemCart extends Component {
 
     if (window.confirm("Are you sure you want to delete " + itemName + "?")){
       // TODO: send delete request to the server
-      
+
       this.props.removeItem(food_id)
+    }
+  }
+
+  /**
+   * Ask for confirmation and update the item's quantity.
+   * 
+   */
+   onClickUpdateItemQuantity() {
+    let itemName = this.props.foodItem.name;
+    let food_id = this.props.foodItem.food_id;
+
+    if (window.confirm("Are you sure you want to update " + itemName + "?")){
+      // TODO: send delete request to the server
+
+      this.props.updateItemQuantity(food_id, this.newQuantity.current.value);
+      this.deactivateEditMode();
+    }
+  }
+
+
+  /**
+   * 
+   * @param {int} newQuantity newQuantity
+   */
+  onChangeItemQuantity(newQuantity) {
+    this.setState({
+      newQuantity: newQuantity
+    })
+  }
+
+  activateEditMode() {
+    this.setState({
+      editMode: true
+    })
+  }
+
+  deactivateEditMode() {
+    this.newQuantity.current.value = this.props.foodItem.quantity;
+    this.setState({
+      editMode: false
+    })
+  }
+
+  showUpdateItemQuantityButton() {
+    if (this.state.editMode){
+      return (
+        <Row>
+          <Col>
+          <Button 
+          block
+          onClick={this.onClickUpdateItemQuantity.bind(this)}
+          >
+            Update
+          </Button>
+          </Col>
+          <Col>
+          <Button 
+          block
+          variant="danger"
+          onClick={this.deactivateEditMode.bind(this)}
+          >
+            Cancel
+          </Button>
+          </Col>
+        </Row>
+      )
+    } else {
+      return (
+        <Button 
+        block
+        variant="outline-primary"
+        onClick={this.activateEditMode.bind(this)}
+        >
+          Edit quantity
+        </Button>
+      )
     }
   }
   
@@ -89,8 +170,10 @@ class FoodItemCart extends Component {
                         <Form.Label>Enter quantity in stock</Form.Label>
                         <Form.Control
                           type="number"
+                          disabled={!this.state.editMode}
                           placeholder="Quantity"
-                          value={quantity}
+                          defaultValue={this.props.foodItem.quantity}
+                          ref={this.newQuantity}
                         />
                       </Form.Group>
                     </Form>
@@ -98,7 +181,7 @@ class FoodItemCart extends Component {
                   <Col>
                     {/* Empty label is for aligning the input and the button */}
                     <Form.Label>&nbsp;</Form.Label> 
-                    <Button block>Update</Button>
+                    {this.showUpdateItemQuantityButton()}
                   </Col>
                 </Row>
                 <Row>
