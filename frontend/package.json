@@ -8,8 +8,6 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
-    "cjs": "^0.0.11",
-    "express": "^4.17.1",
     "jquery": "^1.9.1",
     "popper.js": "^1.16.1",
     "react": "^17.0.1",
