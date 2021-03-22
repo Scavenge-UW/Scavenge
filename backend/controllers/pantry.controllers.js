@@ -41,3 +41,11 @@ exports.getPantryDetailAction = (req, res) => {
     console.log(error);
   });
 }
+
+exports.pantryUpdateInventoryAction = (req, res) => {
+  db.pantryUpdateInventory(req, res).then(data => {
+    return res.json(data);
+  }).catch(error => {
+    console.log(error);
+  });
+}
