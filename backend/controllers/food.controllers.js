@@ -7,3 +7,11 @@ exports.getAllFoodsAction = (req, res) => {
     console.log(error);
   });
 }
+
+exports.addFoodAction = (req, res) => {
+  db.addFood(req, res).then(data => {
+    return res.json(data);
+  }).catch(error => {
+    console.log(error);
+  });
+}

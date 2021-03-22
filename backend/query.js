@@ -14,7 +14,7 @@ const db_config = {
 const pool = mysql.createPool(db_config);
 
 // Values params is optional
-exports.execQuery = (type, query, values = [[]]) => {
+exports.execQuery = (type, query, values = [[]], failure) => {
   return new Promise((resolve, reject) => {
     // Connect to database
     pool.getConnection((err, connection) => {
@@ -22,13 +22,14 @@ exports.execQuery = (type, query, values = [[]]) => {
         console.log("Error connecting to database!");
         return reject(err);
       } else {
-        if (type === 'select' || type === 'insert') {
+        if (type === 'select' || type === 'insert' || "replace") {
           connection.query(query, [values], async (error, results) => {
             // Always release the connection back
             connection.release();
     
             if (error) {
               console.log("Error in query!");
+              resolve({msg: failure});
               return reject(err);
             } else {
               return resolve(results);
@@ -41,6 +42,7 @@ exports.execQuery = (type, query, values = [[]]) => {
     
             if (error) {
               console.log("Error in query!");
+              resolve({msg: failure});
               return reject(err);
             } else {
               return resolve(results);
