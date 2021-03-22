@@ -29,7 +29,7 @@ exports.getPantryDetail = async (req, res) => {
     FROM pantry p
     JOIN inventory i ON p.id = i.pantry_id
     JOIN food f ON f.id = i.food_id
-    LEFT OUTER JOIN reservation r ON r.pantry_id = p.id
+    LEFT JOIN reservation r ON r.pantry_id = p.id
     WHERE p.id = ?;
   `;
   const values = [[req.params.pantry_id]];
