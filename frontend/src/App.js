@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import LoginView from './components/LoginView';
 import SignupView from './components/SignupView';
+import HomeView from './components/HomeView';
 import store from './store';
 
 function App() {
@@ -17,6 +18,10 @@ function App() {
     <Provider store={store}>
       <Router>
           <Switch>
+            <Route
+               exact path="/"
+               component={() => <HomeView />}
+            />
             <Route
               path="/login"
               component={() => <LoginView  />}
