@@ -14,7 +14,7 @@ const db_config = {
 const pool = mysql.createPool(db_config);
 
 // Values params is optional
-exports.execQuery = (type, query, values = [[]], failure) => {
+exports.execQuery = (type, query, values = [[]], failure="No failure message provided.") => {
   return new Promise((resolve, reject) => {
     // Connect to database
     pool.getConnection((err, connection) => {

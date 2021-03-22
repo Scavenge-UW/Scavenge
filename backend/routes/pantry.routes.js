@@ -8,7 +8,10 @@ const { pantryUpdateInventoryAction } = require("../controllers/pantry.controlle
 // Get pantry details
 router.get('/pantries/:pantry_id', getPantryDetailAction);
 
-// Add a food to inventory
+// Update food inventory
 router.put('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
+
+// Add a food to inventory
+router.post('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
 
 module.exports = router; // We need this at the end of every route file
