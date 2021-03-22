@@ -5,6 +5,7 @@ exports.getPantryDetailAction = (req, res) => {
     //Associative list
     let result = {};
     result['foods'] = {};
+    result['reservations'] = {};
     pantryDetail.forEach(element => {
       result['pantry_id']     = element['pantry_id'];
       result['name']          = element['name'];
@@ -23,6 +24,17 @@ exports.getPantryDetailAction = (req, res) => {
       result['foods'][element['food_id']]['food_name']  = element['food_name'];
       result['foods'][element['food_id']]['qr_code']    = element['qr_code'];
       result['foods'][element['food_id']]['quantity']   = element['quantity'];
+      if ('reservation_id' in element){
+        result['reservations'][element['reservation_id']] = {};
+        result['reservations'][element['reservation_id']]['reservation_id']     = element['reservation_id'];
+        result['reservations'][element['reservation_id']]['username']           = element['username'];
+        result['reservations'][element['reservation_id']]['order_time']         = element['order_time'];
+        result['reservations'][element['reservation_id']]['estimated_pick_up']  = element['estimated_pick_up'];
+        result['reservations'][element['reservation_id']]['picked_up_time']     = element['picked_up_time'];
+        result['reservations'][element['reservation_id']]['approved']           = element['approved'];
+        result['reservations'][element['reservation_id']]['cancelled']          = element['cancelled'];
+      }
+      
     })
     return res.json(result);
   }).catch(error => {
