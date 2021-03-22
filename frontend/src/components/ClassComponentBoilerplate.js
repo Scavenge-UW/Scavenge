@@ -19,3 +19,4 @@ class ClassComponentBoilerplate extends Component {
 }
 
 export default ClassComponentBoilerplate;
+
