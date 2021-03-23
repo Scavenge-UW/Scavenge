@@ -40,7 +40,6 @@ exports.pantryUpdateInventory = async (req, res) => {
   const query = `
     REPLACE INTO inventory(pantry_id, food_id, quantity)
     VALUES (?);
-    ;
   `;
   const values = [req.params.pantry_id, req.params.food_id, req.body.quantity];
   return await execQuery("replace", query, values, "Failure - nonexistent pantry or food");
