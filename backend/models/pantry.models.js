@@ -44,3 +44,26 @@ exports.pantryUpdateInventory = async (req, res) => {
   const values = [req.params.pantry_id, req.params.food_id, req.body.quantity];
   return await execQuery("replace", query, values, "Failure - nonexistent pantry or food");
 }
+
+exports.pantryUpdateDetail = async (req, res) => {
+  const query = `
+    UPDATE pantry
+    SET
+      name = ?,
+      address = ?,
+      city = ?,
+      state = ?,
+      zip = ?,
+      phone_number = ?,
+      details = ?,
+      img_src = ?,
+      lon = ?,
+      lat = ?,
+      website = ?
+    WHERE id = ?;
+  `;
+  const values = [req.body.name, req.body.address, req.body.city, req.body.state, req.body.zip,
+    req.body.phone_number, req.body.details, req.body.img_src, req.body.lon, req.body.lat, 
+    req.body.website, req.params.pantry_id];
+  return await execQuery("update", query, values, "Update failed due to server error");
+}

@@ -49,3 +49,11 @@ exports.pantryUpdateInventoryAction = (req, res) => {
     return res.status(500).json({ message: "Failed to update pantry inventory due to server error." });
   });
 }
+
+exports.pantryUpdateDetailAction = (req, res) => {
+  db.pantryUpdateDetail(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Failed to update pantry detail due to server error." });
+  });
+}
