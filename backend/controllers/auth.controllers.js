@@ -74,8 +74,7 @@ exports.signupAction = (req, res) => {
     "address": req.body.address,
     "city": req.body.city,
     "state": req.body.state,
-    "zipcode": req.body.zipcode,
-    "type": req.body.type
+    "zipcode": req.body.zipcode
   };
 
   db.signup(req, res, newUser)
@@ -104,7 +103,7 @@ exports.signupAction = (req, res) => {
         username: newUser.username,
         token: token,
         profile: {
-          username: newUser.username, email: newUser.email, phoneNumber: newUser.phoneNumber, address: newUser.address, city: newUser.city, state: newUser.state, zip: newUser.zipcode, carDescription: newUser.carDescription, type: newUser.type
+          username: newUser.username, email: newUser.email, phoneNumber: newUser.phoneNumber, address: newUser.address, city: newUser.city, state: newUser.state, zip: newUser.zipcode, carDescription: newUser.carDescription
         }
       });
     })
@@ -127,8 +126,7 @@ exports.updateUserAction = (req, res) => {
     "address": req.body.address,
     "city": req.body.city,
     "state": req.body.state,
-    "zipcode": req.body.zipcode,
-    "type": req.body.type
+    "zipcode": req.body.zipcode
   };
 
   db.updateUser(req, res, newInfo)
@@ -157,7 +155,7 @@ exports.updateUserAction = (req, res) => {
         username: newInfo.username,
         token: token,
         profile: {
-          username: newInfo.username, firstName: newInfo.firstName, lastName: newInfo.lastName, email: newInfo.email, phone: newInfo.phone, address: newInfo.address, city: newInfo.city, state: newInfo.state, zipcode: newInfo.zipcode, type: newInfo.type
+          username: newInfo.username, firstName: newInfo.firstName, lastName: newInfo.lastName, email: newInfo.email, phone: newInfo.phone, address: newInfo.address, city: newInfo.city, state: newInfo.state, zipcode: newInfo.zipcode
         }
       });
     })

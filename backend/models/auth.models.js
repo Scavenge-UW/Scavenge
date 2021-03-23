@@ -16,12 +16,12 @@ exports.login = async (req, res, user) => {
 }
 
 exports.signup = async (req, res, newUser) => {
-  const query = "INSERT INTO user (username, password, first_name, last_name, email, phone, address, city, state, zipcode, type) VALUES ?";
+  const query = "INSERT INTO user (username, password, first_name, last_name, email, phone, address, city, state, zipcode) VALUES ?";
   // hash password - takes awhile so we need aysnc await
   const hashedPassword = await bcrypt.hash(newUser.password, 8);
   const values = [
       [
-        newUser.username, hashedPassword, newUser.firstName, newUser.lastName, newUser.email, newUser.phone, newUser.address, newUser.city, newUser.state, newUser.zipcode, newUser.type
+        newUser.username, hashedPassword, newUser.firstName, newUser.lastName, newUser.email, newUser.phone, newUser.address, newUser.city, newUser.state, newUser.zipcode
       ]
     ];
 
@@ -41,14 +41,13 @@ exports.updateUser = async (req, res, newInfo) => {
       address = ?,
       city = ?,
       state = ?,
-      zipcode = ?,
-      type = ?
+      zipcode = ?
     WHERE u.username = ?;
   `;
   // hash password - takes awhile so we need aysnc await
   const hashedPassword = await bcrypt.hash(newInfo.password, 8);
   const values = [
-    newInfo.username, hashedPassword, newInfo.firstName, newInfo.lastName, newInfo.email, newInfo.phone, newInfo.address, newInfo.city, newInfo.state, newInfo.zipcode, newInfo.type, req.params.username
+    newInfo.username, hashedPassword, newInfo.firstName, newInfo.lastName, newInfo.email, newInfo.phone, newInfo.address, newInfo.city, newInfo.state, newInfo.zipcode, req.params.username
   ];
 
   return await execQuery("update", query, values);
