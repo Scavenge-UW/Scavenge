@@ -67,3 +67,16 @@ exports.pantryUpdateDetail = async (req, res) => {
     req.body.website, req.params.pantry_id];
   return await execQuery("update", query, values, "Update failed due to server error");
 }
+
+exports.completeReservation = async (req, res) => {
+  const query = `
+    UPDATE reservation
+    SET
+      picked_up_time = NOW()
+    WHERE id = ? AND pantry_id = ?;
+  `;
+  // pantry_id is determined by id, but since it's in the route we'll use it in the query
+  // as an added layer of verification
+  const values = [req.params.reservation_id, req.params.pantry_id];
+  return await execQuery("update", query, values, "Update failed due to server error");
+}

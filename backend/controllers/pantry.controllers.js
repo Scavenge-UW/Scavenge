@@ -57,3 +57,11 @@ exports.pantryUpdateDetailAction = (req, res) => {
     return res.status(500).json({ message: "Failed to update pantry detail due to server error." });
   });
 }
+
+exports.completeReservationAction = (req, res) => {
+  db.completeReservation(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Failed to complete reservation due to server error." });
+  });
+}

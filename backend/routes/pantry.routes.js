@@ -4,6 +4,7 @@ const router = express.Router();
 const { getPantryDetailAction } = require("../controllers/pantry.controllers.js");
 const { pantryUpdateInventoryAction } = require("../controllers/pantry.controllers.js");
 const { pantryUpdateDetailAction } = require("../controllers/pantry.controllers.js");
+const { completeReservationAction } = require("../controllers/pantry.controllers.js");
 
 
 // Get pantry details
@@ -17,6 +18,9 @@ router.put('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
 
 // Add a food to inventory
 router.post('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
+
+// Mark a reservation as picked up
+router.post('/pantries/:pantry_id/reservations/:reservation_id', completeReservationAction);
 
 
 
