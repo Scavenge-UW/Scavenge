@@ -29,7 +29,7 @@ exports.execQuery = (type, query, values = [[]]) => {
     
             if (error) {
               console.log("Error in query!");
-              return reject(err);
+              return reject(error);
             } else {
               return resolve(results);
             }
@@ -41,7 +41,7 @@ exports.execQuery = (type, query, values = [[]]) => {
     
             if (error) {
               console.log("Error in query!");
-              return reject(err);
+              return reject(error);
             } else {
               return resolve(results);
             }

@@ -9,14 +9,15 @@ const express    = require("express"),
 
 // Import routes
 const foodRoutes = require('./backend/routes/food.routes');
+const authRoutes = require('./backend/routes/auth.routes');
 
 // More init
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-global.bcrypt = bcrypt;
 global.jwt = jwt;
+global.bcrypt = bcrypt;
 
 // let corsOption = {
 //   origin: "http://localhost:8081",
@@ -38,6 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // 'Use' routes here
 app.use("/", foodRoutes);
+app.use('/', authRoutes);
 
 // Last case: url not found
 app.get('/*', function(req, res){
