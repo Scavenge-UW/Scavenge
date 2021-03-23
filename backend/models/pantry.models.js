@@ -80,3 +80,31 @@ exports.completeReservation = async (req, res) => {
   const values = [req.params.reservation_id, req.params.pantry_id];
   return await execQuery("update", query, values, "Update failed due to server error");
 }
+
+exports.approveReservation = async (req, res) => {
+  const query = `
+    UPDATE reservation
+    SET
+      cancelled = 0,
+      approved = 1
+    WHERE id = ? AND pantry_id = ?;
+  `;
+  // pantry_id is determined by id, but since it's in the route we'll use it in the query
+  // as an added layer of verification
+  const values = [req.params.reservation_id, req.params.pantry_id];
+  return await execQuery("update", query, values, "Update failed due to server error");
+}
+
+exports.cancelReservation = async (req, res) => {
+  const query = `
+    UPDATE reservation
+    SET
+      approved = 0,
+      cancelled = 1
+    WHERE id = ? AND pantry_id = ?;
+  `;
+  // pantry_id is determined by id, but since it's in the route we'll use it in the query
+  // as an added layer of verification
+  const values = [req.params.reservation_id, req.params.pantry_id];
+  return await execQuery("update", query, values, "Update failed due to server error");
+}

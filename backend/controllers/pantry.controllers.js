@@ -65,3 +65,19 @@ exports.completeReservationAction = (req, res) => {
     return res.status(500).json({ message: "Failed to complete reservation due to server error." });
   });
 }
+
+exports.approveReservationAction = (req, res) => {
+  db.approveReservation(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Failed to approve reservation due to server error." });
+  });
+}
+
+exports.cancelReservationAction = (req, res) => {
+  db.cancelReservation(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Failed to cancel reservation due to server error." });
+  });
+}
