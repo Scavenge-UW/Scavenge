@@ -27,8 +27,7 @@ exports.getPantryDetail = async (req, res) => {
       r.approved,
       r.cancelled,
       h.id as hours_id,
-      h.start,
-      h.end,
+      h.day,
       h.open,
       h.close,
       h.detail      
@@ -80,8 +79,7 @@ exports.getPantryHours = async (req, res) => {
     SELECT
       h.id as hours_id,
       h.pantry_id,
-      h.start,
-      h.end,
+      h.day,
       h.open,
       h.close,
       h.detail
@@ -97,15 +95,14 @@ exports.pantryUpdateHours = async (req, res) => {
   const query = `
     UPDATE hours
     SET
-      start = ?,
-      end = ?,
+      day = ?,
       open = ?,
       close = ?,
       detail = ?
-    WHERE id = ? AND pantry_id = ?;
+    WHERE day = ? AND pantry_id = ?;
   `;
-  const values = [req.body.start, req.body.end, req.body.open, req.body.close, req.body.detail,
-    req.params.hours_id, req.params.pantry_id];
+  const values = [req.body.day, req.body.open, req.body.close, req.body.detail,
+    req.params.day, req.params.pantry_id];
   return await execQuery("update", query, values);
 }
 
