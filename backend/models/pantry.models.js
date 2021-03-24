@@ -25,11 +25,18 @@ exports.getPantryDetail = async (req, res) => {
       r.estimated_pick_up,
       r.picked_up_time,
       r.approved,
-      r.cancelled
+      r.cancelled,
+      h.id as hours_id,
+      h.start,
+      h.end,
+      h.open,
+      h.close,
+      h.detail      
     FROM pantry p
     JOIN inventory i ON p.id = i.pantry_id
     JOIN food f ON f.id = i.food_id
     LEFT JOIN reservation r ON r.pantry_id = p.id
+    LEFT JOIN hours h ON p.id = h.pantry_id
     WHERE p.id = ?;
   `;
   const values = [[req.params.pantry_id]];

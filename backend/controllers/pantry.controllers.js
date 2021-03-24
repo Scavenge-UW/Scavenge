@@ -6,6 +6,7 @@ exports.getPantryDetailAction = (req, res) => {
     let result = {};
     result['foods'] = {};
     result['reservations'] = {};
+    result['hours'] = {};
     pantryDetail.forEach(element => {
       result['pantry_id']     = element['pantry_id'];
       result['name']          = element['name'];
@@ -33,6 +34,14 @@ exports.getPantryDetailAction = (req, res) => {
         result['reservations'][element['reservation_id']]['picked_up_time']     = element['picked_up_time'];
         result['reservations'][element['reservation_id']]['approved']           = element['approved'];
         result['reservations'][element['reservation_id']]['cancelled']          = element['cancelled'];
+      }
+      if ('hours_id' in element) {
+        result['hours'][element['hours_id']] = {};
+        result['hours'][element['hours_id']]['start']   = element['start'];
+        result['hours'][element['hours_id']]['end']     = element['end'];
+        result['hours'][element['hours_id']]['open']    = element['open'];
+        result['hours'][element['hours_id']]['close']   = element['close'];
+        result['hours'][element['hours_id']]['detail']  = element['detail'];
       }
       
     })
