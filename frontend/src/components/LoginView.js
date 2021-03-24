@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
-import "../css/LoginView.css";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 class LoginView extends Component {
   constructor(props) {
@@ -9,11 +8,12 @@ class LoginView extends Component {
     this.state = {
       username: "",
       password: "",
+      toHomeView: "", // used for redirection on login success
     };
     this.submitForm = this.submitForm.bind(this);
   }
 
-  submitForm() {
+  async submitForm() {
     const user = {
       username: this.state.username,
       password: this.state.password,
@@ -23,10 +23,20 @@ class LoginView extends Component {
       alert("Username or password field is empty.");
       return;
     }
-    this.props.login(user);
+
+    let loginResult = await this.props.login(user);
+    if (loginResult === 0){
+      this.setState({
+        toHomeView: true
+      })
+    }
   }
 
   render() {
+    if (this.state.toHomeView === true) {
+      return <Redirect to='/' />
+    }
+
     return (
       <Container className="center">
         <Form>
@@ -66,21 +76,17 @@ class LoginView extends Component {
               />
             </Form.Group>
           </Form.Row>
-          <Link
-            to={{
-              pathname: "/",
-            }}
+          <Button
+            variant="dark"
+            style={{ marginLeft: "30px" }}
+            onClick={this.submitForm}
           >
-            <Button
-              variant="dark"
-              style={{ marginLeft: "30px" }}
-              onClick={this.submitForm}
-            >
-              Login
-            </Button>
-          </Link>
+            Login
+          </Button>
         </Form>
       </Container>
     );
   }
 }
+
+export default LoginView;
