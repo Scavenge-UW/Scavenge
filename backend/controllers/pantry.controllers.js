@@ -6,6 +6,7 @@ exports.getPantryDetailAction = (req, res) => {
     let result = {};
     result['foods'] = {};
     result['reservations'] = {};
+    result['hours'] = {};
     pantryDetail.forEach(element => {
       result['pantry_id']     = element['pantry_id'];
       result['name']          = element['name'];
@@ -34,6 +35,14 @@ exports.getPantryDetailAction = (req, res) => {
         result['reservations'][element['reservation_id']]['approved']           = element['approved'];
         result['reservations'][element['reservation_id']]['cancelled']          = element['cancelled'];
       }
+      if ('hours_id' in element) {
+        result['hours'][element['hours_id']] = {};
+        result['hours'][element['hours_id']]['start']   = element['start'];
+        result['hours'][element['hours_id']]['end']     = element['end'];
+        result['hours'][element['hours_id']]['open']    = element['open'];
+        result['hours'][element['hours_id']]['close']   = element['close'];
+        result['hours'][element['hours_id']]['detail']  = element['detail'];
+      }
       
     })
     return res.status(200).json(result);
@@ -58,10 +67,40 @@ exports.pantryUpdateDetailAction = (req, res) => {
   });
 }
 
+exports.getPantryHoursAction = (req, res) => {
+  db.getPantryHours(req, res).then(hours => {
+    return res.status(200).json(hours);
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to get pantry hours due to server error."
+    });
+  });
+}
+
+exports.pantryUpdateHoursAction = (req, res) => {
+  db.pantryUpdateHours(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Error in query. Failed to update pantry hours." });
+  });
+}
+
 exports.updateReservationAction = (req, res) => {
   db.updateReservation(req, res).then(data => {
     return res.status(200).json(data);
   }).catch(error => {
     return res.status(500).json({ message: "Error in query. Failed to update reservation." });
+  });
+}
+
+exports.foodSearchAction = (req, res) => {
+  db.foodSearch(req, res).then(pantries => {
+    return res.status(200).json(pantries);
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).json({
+      message: "Search failed. Error in query."
+    });
   });
 }

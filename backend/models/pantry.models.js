@@ -25,11 +25,18 @@ exports.getPantryDetail = async (req, res) => {
       r.estimated_pick_up,
       r.picked_up_time,
       r.approved,
-      r.cancelled
+      r.cancelled,
+      h.id as hours_id,
+      h.start,
+      h.end,
+      h.open,
+      h.close,
+      h.detail      
     FROM pantry p
     JOIN inventory i ON p.id = i.pantry_id
     JOIN food f ON f.id = i.food_id
     LEFT JOIN reservation r ON r.pantry_id = p.id
+    LEFT JOIN hours h ON p.id = h.pantry_id
     WHERE p.id = ?;
   `;
   const values = [[req.params.pantry_id]];
@@ -65,6 +72,40 @@ exports.pantryUpdateDetail = async (req, res) => {
   const values = [req.body.name, req.body.address, req.body.city, req.body.state, req.body.zip,
     req.body.phone_number, req.body.details, req.body.img_src, req.body.lon, req.body.lat, 
     req.body.website, req.params.pantry_id];
+  return await execQuery("update", query, values);
+}
+
+exports.getPantryHours = async (req, res) => {
+  const query = `
+    SELECT
+      h.id as hours_id,
+      h.pantry_id,
+      h.start,
+      h.end,
+      h.open,
+      h.close,
+      h.detail
+    FROM hours h
+    JOIN pantry p ON p.id = h.pantry_id
+    WHERE h.pantry_id = ?;
+  `;
+  const values = [[req.params.pantry_id]];
+  return await execQuery("select", query, values);
+}
+
+exports.pantryUpdateHours = async (req, res) => {
+  const query = `
+    UPDATE hours
+    SET
+      start = ?,
+      end = ?,
+      open = ?,
+      close = ?,
+      detail = ?
+    WHERE id = ? AND pantry_id = ?;
+  `;
+  const values = [req.body.start, req.body.end, req.body.open, req.body.close, req.body.detail,
+    req.params.hours_id, req.params.pantry_id];
   return await execQuery("update", query, values);
 }
 
@@ -104,4 +145,17 @@ exports.updateReservation = async (req, res) => {
     console.log('Invalid action. Please use action: "complete", "approve", or "cancel".');
     throw new Error('Invalid action. Please use action: "complete", "approve", or "cancel".');
   }
+}
+
+exports.foodSearch = async (req, res) => {
+  const query = `
+    SELECT
+      i.pantry_id,
+      i.food_id,
+      i.quantity
+    FROM inventory i
+    WHERE i.food_id = ?;
+  `;
+  const values = [[req.params.food_id]];
+  return await execQuery("select", query, values);
 }
