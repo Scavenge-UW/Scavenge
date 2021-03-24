@@ -22,14 +22,14 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
         console.log("Error connecting to database!");
         return reject(err);
       } else {
-        if (type === 'select' || type === 'insert' || type === 'replace') {
+        if (type === 'select' || type === 'insert' || type === "replace") {
           connection.query(query, [values], async (error, results) => {
             // Always release the connection back
             connection.release();
     
             if (error) {
               console.log("Error in query!");
-              return reject({err: err});
+              return reject({err: error, failureMsg: failure});
             } else {
               return resolve(results);
             }
@@ -41,7 +41,7 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
     
             if (error) {
               console.log("Error in query!");
-              return reject({err: err});
+              return reject({err: error, failureMsg: failure});
             } else {
               return resolve(results);
             }
