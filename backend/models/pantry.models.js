@@ -146,3 +146,16 @@ exports.updateReservation = async (req, res) => {
     throw new Error('Invalid action. Please use action: "complete", "approve", or "cancel".');
   }
 }
+
+exports.foodSearch = async (req, res) => {
+  const query = `
+    SELECT
+      i.pantry_id,
+      i.food_id,
+      i.quantity
+    FROM inventory i
+    WHERE i.food_id = ?;
+  `;
+  const values = [[req.params.food_id]];
+  return await execQuery("select", query, values);
+}
