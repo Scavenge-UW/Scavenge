@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
-import img from './image.jpg'
+import img from '../images/home.jpg'
 
 class HomeView extends Component {
   constructor(props) {

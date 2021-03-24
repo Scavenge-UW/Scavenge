@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
-import "../css/LoginView.css";
+import "../../css/LoginView.css";
 import { Link } from "react-router-dom";
 
 class LoginView extends Component {

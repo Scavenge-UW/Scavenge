@@ -8,8 +8,8 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import LoginView from './components/LoginView';
-import SignupView from './components/SignupView';
+import LoginView from './components/Authentication/LoginView';
+import SignupView from './components/Authentication/SignupView';
 import HomeView from './components/HomeView';
 import store from './store';
 
