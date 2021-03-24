@@ -1,30 +1,31 @@
-import React, { useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
-import Button from 'react-bootstrap/Button';
+import React, { useState } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
+import Button from "react-bootstrap/Button";
 
-import InventoryView from './InventoryView'
-import DashboardView from './DashboardView'
+import InventoryView from "./InventoryView";
+import DashboardView from "./DashboardView";
 
 /**
  * PantryAdminView that consists of PantryDashboardView and InventoryView
- * 
+ *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
  */
 
- function PantryAdminView() {
+function PantryAdminView() {
   const PantryAdminViewTabs = () => {
-    const [tab, setTab] = useState('dashboard')
+    const [tab, setTab] = useState("dashboard");
 
     return (
       <Tabs
-        variant="pills"
+        variant="pills" // tab style {tabs, pills}
         activeKey={tab}
         onSelect={(t) => setTab(t)}
+        // transition={false}  // animation strategy
         className="mb-4 justify-content-center nav-justified"
       >
         <Tab eventKey="dashboard" title="Pantry Dashboard">
@@ -34,16 +35,14 @@ import DashboardView from './DashboardView'
           <InventoryView />
         </Tab>
       </Tabs>
-    )
-  }
+    );
+  };
 
   return (
     <Container>
-        <PantryAdminViewTabs />
+      <PantryAdminViewTabs />
     </Container>
   );
 }
-
-
 
 export default PantryAdminView;

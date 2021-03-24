@@ -1,9 +1,8 @@
-import logo from './logo.svg';
-import './App.css';
-import { Provider } from 'react-redux';
+import "./App.css";
+import { Provider } from "react-redux";
 
-import store from './store';
-import PantryAdminView from './components/PantryAdminView';
+import store from "./store";
+import PantryAdminView from "./components/PantryAdminView";
 
 function App() {
   return (
