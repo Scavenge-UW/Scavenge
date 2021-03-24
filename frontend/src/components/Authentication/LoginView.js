@@ -19,7 +19,7 @@ class LoginView extends Component {
       password: this.state.password,
     };
 
-    if (this.state.username.length == 0 || this.state.password.length == 0) {
+    if (this.state.username.length === 0 || this.state.password.length === 0) {
       alert("Username or password field is empty.");
       return;
     }

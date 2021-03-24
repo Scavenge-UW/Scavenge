@@ -17,10 +17,10 @@ class HomeView extends Component {
         <h1 className="view-header text-center mb-3">Welcome to Scavenge</h1>
         <Row className="justify-content-between align-items-center">
           <Row>
-            <Col md={4}>
+            <Col md={2}>
               <h1>List view</h1>
             </Col>
-            <Col md={8}>
+            <Col md={10}>
               <Map />
             </Col>
           </Row>
