@@ -5,6 +5,8 @@ const { getPantryDetailAction } = require("../controllers/pantry.controllers.js"
 const { pantryUpdateInventoryAction } = require("../controllers/pantry.controllers.js");
 const { pantryUpdateDetailAction } = require("../controllers/pantry.controllers.js");
 const { updateReservationAction } = require("../controllers/pantry.controllers.js");
+const { pantryUpdateHoursAction } = require("../controllers/pantry.controllers.js");
+const { getPantryHoursAction } = require("../controllers/pantry.controllers.js");
 
 
 // Get pantry details
@@ -12,6 +14,12 @@ router.get('/pantries/:pantry_id', getPantryDetailAction);
 
 // Update pantry details
 router.put('/pantries/:pantry_id/', pantryUpdateDetailAction);
+
+// Get pantry hours
+router.get('/pantries/:pantry_id/hours', getPantryHoursAction);
+
+// Update pantry hours
+router.put('/pantries/:pantry_id/hours/:hours_id', pantryUpdateHoursAction);
 
 // Update food inventory
 router.put('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
