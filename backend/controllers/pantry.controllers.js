@@ -46,7 +46,7 @@ exports.pantryUpdateInventoryAction = (req, res) => {
   db.pantryUpdateInventory(req, res).then(data => {
     return res.status(200).json(data);
   }).catch(error => {
-    return res.status(500).json({ message: "Failed to update pantry inventory due to server error." });
+    return res.status(500).json({ message: "Error in query. Failed to update pantry inventory." });
   });
 }
 
@@ -54,30 +54,14 @@ exports.pantryUpdateDetailAction = (req, res) => {
   db.pantryUpdateDetail(req, res).then(data => {
     return res.status(200).json(data);
   }).catch(error => {
-    return res.status(500).json({ message: "Failed to update pantry detail due to server error." });
+    return res.status(500).json({ message: "Error in query. Failed to update pantry detail." });
   });
 }
 
-exports.completeReservationAction = (req, res) => {
-  db.completeReservation(req, res).then(data => {
+exports.updateReservationAction = (req, res) => {
+  db.updateReservation(req, res).then(data => {
     return res.status(200).json(data);
   }).catch(error => {
-    return res.status(500).json({ message: "Failed to complete reservation due to server error." });
-  });
-}
-
-exports.approveReservationAction = (req, res) => {
-  db.approveReservation(req, res).then(data => {
-    return res.status(200).json(data);
-  }).catch(error => {
-    return res.status(500).json({ message: "Failed to approve reservation due to server error." });
-  });
-}
-
-exports.cancelReservationAction = (req, res) => {
-  db.cancelReservation(req, res).then(data => {
-    return res.status(200).json(data);
-  }).catch(error => {
-    return res.status(500).json({ message: "Failed to cancel reservation due to server error." });
+    return res.status(500).json({ message: "Error in query. Failed to update reservation." });
   });
 }

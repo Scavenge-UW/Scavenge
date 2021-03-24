@@ -29,7 +29,7 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
     
             if (error) {
               console.log("Error in query!");
-              return reject({err: err, failureMsg: failure});
+              return reject({err: err});
             } else {
               return resolve(results);
             }
@@ -41,13 +41,13 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
     
             if (error) {
               console.log("Error in query!");
-              return reject({err: err, failureMsg: failure});
+              return reject({err: err});
             } else {
               return resolve(results);
             }
           });
         } else {
-          return reject({ msg: "The first parameter must be 'select', 'insert', 'update', or 'delete'" });
+          return reject({ msg: "The first parameter must be 'select', 'insert', 'update', 'replace', or 'delete'" });
         }
       }
     });
