@@ -67,6 +67,14 @@ exports.pantryUpdateDetailAction = (req, res) => {
   });
 }
 
+exports.pantryUpdateHoursAction = (req, res) => {
+  db.pantryUpdateHours(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Error in query. Failed to update pantry hours." });
+  });
+}
+
 exports.updateReservationAction = (req, res) => {
   db.updateReservation(req, res).then(data => {
     return res.status(200).json(data);
