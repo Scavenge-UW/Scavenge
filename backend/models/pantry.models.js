@@ -42,5 +42,66 @@ exports.pantryUpdateInventory = async (req, res) => {
     VALUES (?);
   `;
   const values = [req.params.pantry_id, req.params.food_id, req.body.quantity];
-  return await execQuery("replace", query, values, "Failure - nonexistent pantry or food");
+  return await execQuery("replace", query, values);
+}
+
+exports.pantryUpdateDetail = async (req, res) => {
+  const query = `
+    UPDATE pantry
+    SET
+      name = ?,
+      address = ?,
+      city = ?,
+      state = ?,
+      zip = ?,
+      phone_number = ?,
+      details = ?,
+      img_src = ?,
+      lon = ?,
+      lat = ?,
+      website = ?
+    WHERE id = ?;
+  `;
+  const values = [req.body.name, req.body.address, req.body.city, req.body.state, req.body.zip,
+    req.body.phone_number, req.body.details, req.body.img_src, req.body.lon, req.body.lat, 
+    req.body.website, req.params.pantry_id];
+  return await execQuery("update", query, values);
+}
+
+exports.updateReservation = async (req, res) => {
+  if (req.params.action === 'complete') {
+    const query = `
+      UPDATE reservation
+      SET
+        picked_up_time = NOW()
+      WHERE id = ? AND pantry_id = ?;
+    `;
+    // pantry_id is determined by id, but since it's in the route we'll use it in the query
+    // as an added layer of verification
+    const values = [req.params.reservation_id, req.params.pantry_id];
+    return await execQuery("update", query, values);
+  } else if (req.params.action === 'approve') {
+    const query = `
+      UPDATE reservation
+      SET
+        cancelled = 0,
+        approved = 1
+      WHERE id = ? AND pantry_id = ?;
+    `;
+    const values = [req.params.reservation_id, req.params.pantry_id];
+    return await execQuery("update", query, values);
+  } else if (req.params.action === 'cancel') {
+    const query = `
+      UPDATE reservation
+      SET
+        approved = 0,
+        cancelled = 1
+      WHERE id = ? AND pantry_id = ?;
+    `;
+    const values = [req.params.reservation_id, req.params.pantry_id];
+    return await execQuery("update", query, values);
+  } else {
+    console.log('Invalid action. Please use action: "complete", "approve", or "cancel".');
+    throw new Error('Invalid action. Please use action: "complete", "approve", or "cancel".');
+  }
 }
