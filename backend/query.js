@@ -47,7 +47,7 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
             }
           });
         } else {
-          return reject({ msg: "The first parameter must be 'select', 'insert', 'update', or 'delete'" });
+          return reject({ msg: "The first parameter must be 'select', 'insert', 'update', 'replace', or 'delete'" });
         }
       }
     });
