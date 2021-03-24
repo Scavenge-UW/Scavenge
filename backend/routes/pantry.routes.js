@@ -7,6 +7,7 @@ const { pantryUpdateDetailAction } = require("../controllers/pantry.controllers.
 const { updateReservationAction } = require("../controllers/pantry.controllers.js");
 const { pantryUpdateHoursAction } = require("../controllers/pantry.controllers.js");
 const { getPantryHoursAction } = require("../controllers/pantry.controllers.js");
+const { foodSearchAction } = require("../controllers/pantry.controllers.js");
 
 
 // Get pantry details
@@ -29,5 +30,8 @@ router.post('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
 
 // Mark a reservation as picked up, approved, or cancelled
 router.put('/pantries/:pantry_id/reservations/:action/:reservation_id', updateReservationAction);
+
+// Search pantries by food id
+router.get('/pantries/search/:food_id', foodSearchAction);
 
 module.exports = router; // We need this at the end of every route file

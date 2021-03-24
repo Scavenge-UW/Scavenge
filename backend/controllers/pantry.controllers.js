@@ -93,3 +93,14 @@ exports.updateReservationAction = (req, res) => {
     return res.status(500).json({ message: "Error in query. Failed to update reservation." });
   });
 }
+
+exports.foodSearchAction = (req, res) => {
+  db.foodSearch(req, res).then(pantries => {
+    return res.status(200).json(pantries);
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).json({
+      message: "Search failed. Error in query."
+    });
+  });
+}
