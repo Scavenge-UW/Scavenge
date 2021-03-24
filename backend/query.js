@@ -22,7 +22,7 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
         console.log("Error connecting to database!");
         return reject(err);
       } else {
-        if (type === 'select' || type === 'insert' || "replace") {
+        if (type === 'select' || type === 'insert' || type === "replace") {
           connection.query(query, [values], async (error, results) => {
             // Always release the connection back
             connection.release();
