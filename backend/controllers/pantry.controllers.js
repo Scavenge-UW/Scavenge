@@ -1,5 +1,9 @@
 const db = require('../models/pantry.models.js');
 
+exports.getAllPantriesAction = (req, res) => {
+  //db.getAllPantries(req, res).then()
+}
+
 exports.getPantryDetailAction = (req, res) => {
   db.getPantryDetail(req, res).then(pantryDetail => {
     //Associative list
@@ -35,15 +39,11 @@ exports.getPantryDetailAction = (req, res) => {
         result['reservations'][element['reservation_id']]['approved']           = element['approved'];
         result['reservations'][element['reservation_id']]['cancelled']          = element['cancelled'];
       }
-      if ('hours_id' in element) {
-        result['hours'][element['hours_id']] = {};
-        result['hours'][element['hours_id']]['start']   = element['start'];
-        result['hours'][element['hours_id']]['end']     = element['end'];
-        result['hours'][element['hours_id']]['open']    = element['open'];
-        result['hours'][element['hours_id']]['close']   = element['close'];
-        result['hours'][element['hours_id']]['detail']  = element['detail'];
-      }
-      
+      result['hours'][element['day']] = {};
+      result['hours'][element['day']]['day']   = element['day'];
+      result['hours'][element['day']]['open']    = element['open'];
+      result['hours'][element['day']]['close']   = element['close'];
+      result['hours'][element['day']]['detail']  = element['detail'];
     })
     return res.status(200).json(result);
   }).catch(error => {

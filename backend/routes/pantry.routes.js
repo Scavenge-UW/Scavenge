@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-const { getPantryDetailAction } = require("../controllers/pantry.controllers.js");
-const { pantryUpdateInventoryAction } = require("../controllers/pantry.controllers.js");
-const { pantryUpdateDetailAction } = require("../controllers/pantry.controllers.js");
-const { updateReservationAction } = require("../controllers/pantry.controllers.js");
-const { pantryUpdateHoursAction } = require("../controllers/pantry.controllers.js");
-const { getPantryHoursAction } = require("../controllers/pantry.controllers.js");
-const { foodSearchAction } = require("../controllers/pantry.controllers.js");
+const { 
+  getAllPantriesAction,
+  getPantryDetailAction,
+  pantryUpdateInventoryAction,
+  updateReservationAction,
+  pantryUpdateHoursAction,
+  getPantryHoursAction,
+  pantryUpdateDetailAction
+} = require("../controllers/pantry.controllers.js");
 
+
+// Get all pantry info
+router.get('/pantries', getAllPantriesAction);
 
 // Get pantry details
 router.get('/pantries/:pantry_id', getPantryDetailAction);
@@ -20,7 +25,7 @@ router.put('/pantries/:pantry_id/', pantryUpdateDetailAction);
 router.get('/pantries/:pantry_id/hours', getPantryHoursAction);
 
 // Update pantry hours
-router.put('/pantries/:pantry_id/hours/:hours_id', pantryUpdateHoursAction);
+router.put('/pantries/:pantry_id/hours/:day', pantryUpdateHoursAction);
 
 // Update food inventory
 router.put('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
