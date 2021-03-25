@@ -1,5 +1,13 @@
 import request from './request';
 
+function getPantries() {
+  return request({
+    url: '/pantries',
+    method: 'GET',
+    withCredentials: true
+  });
+}
+
 /**
  * get pantry detail which contains
  * `foods`, `reservations`, and various info
@@ -26,7 +34,7 @@ function updateFoodItem(pantry_id, food_id, updatedData) {
 
 
 const PantryService = {
-  getDetail, updateFoodItem
+  getPantries, getDetail, updateFoodItem
 }
 
 export default PantryService;
