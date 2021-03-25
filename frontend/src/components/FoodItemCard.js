@@ -8,7 +8,7 @@ import { VscCircleFilled } from "react-icons/vsc";
 
 import '../css/common.css'
 
-class FoodItemCart extends Component {
+class FoodItemCard extends Component {
   constructor(props) {
     super(props);
 
@@ -55,7 +55,7 @@ class FoodItemCart extends Component {
    * 
    */
   onClickRemoveItem() {
-    let itemName = this.props.foodItem.name;
+    let itemName = this.props.foodItem.food_name;
     let food_id = this.props.foodItem.food_id;
 
     if (window.confirm("Are you sure you want to delete " + itemName + "?")){
@@ -70,7 +70,7 @@ class FoodItemCart extends Component {
    * 
    */
    onClickUpdateItemQuantity() {
-    let itemName = this.props.foodItem.name;
+    let itemName = this.props.foodItem.food_name;
     let food_id = this.props.foodItem.food_id;
 
     if (window.confirm("Are you sure you want to update " + itemName + "?")){
@@ -147,14 +147,14 @@ class FoodItemCart extends Component {
           <Card className="filler food-item" />
         )
     } else {
-        const { food_id, name, quantity } = this.props.foodItem;
+        const { food_id, food_name, quantity } = this.props.foodItem;
         return (
           <Card className="food-item">
             <Card.Body>
               <Card.Title className="mb-4">
                 <Row className="justify-content-between align-items-center">
                   <Col className="text-left">
-                    {name}
+                    {food_name}
                   </Col>
                   <Col className="text-right">
                     {/* Show if Item is in stock */}
@@ -201,4 +201,4 @@ class FoodItemCart extends Component {
   }
 }
 
-export default FoodItemCart;
+export default FoodItemCard;

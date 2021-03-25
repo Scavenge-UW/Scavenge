@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,6 +6,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
 
+import PantryService from '../services/pantry.service';
 import InventoryView from './InventoryView'
 import DashboardView from './DashboardView'
 
@@ -17,6 +18,26 @@ import DashboardView from './DashboardView'
  */
 
  function PantryAdminView() {
+  const [pantryDetail, setPantryDetail] = useState(null);
+  
+  /**
+   * Fetch pantry detail on init
+   * 
+   */
+  React.useEffect(() => {
+    fetchPantryDetail();
+  }, [])
+
+
+  /**
+   * Fetch pantry detail
+   * 
+   */
+  const fetchPantryDetail = async () => {
+    const detail = await PantryService.getDetail(1); // TODO: change pantry id based on user's affiliation
+    setPantryDetail(detail);
+  }
+
   const PantryAdminViewTabs = () => {
     const [tab, setTab] = useState('dashboard')
 
@@ -31,7 +52,10 @@ import DashboardView from './DashboardView'
           <DashboardView />
         </Tab>
         <Tab eventKey="inventory" title="Manage Inventory">
-          <InventoryView />
+          <InventoryView
+            pantryDetail={pantryDetail}
+            fetchPantryDetail={fetchPantryDetail}
+          />
         </Tab>
       </Tabs>
     )

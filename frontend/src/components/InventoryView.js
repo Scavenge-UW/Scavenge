@@ -28,25 +28,34 @@ class InventoryView extends Component {
        * Dummy food items.
        * TODO: Fetch actual inventory from the API
        */
-      foodItems: [
-        {
-          food_id: 1,
-          name: "Apple",
-          quantity: 123,
-        },
-        {
-          food_id: 2,
-          name: "Banana",
-          quantity: 0,
-        },
-        {
-          food_id: 3,
-          name: "Edit Me!",
-          quantity: 5,
-        },
+      foods: [
+        // {
+        //   food_id: 1,
+        //   name: "Apple",
+        //   quantity: 123,
+        // },
+        // {
+        //   food_id: 2,
+        //   name: "Banana",
+        //   quantity: 0,
+        // },
+        // {
+        //   food_id: 3,
+        //   name: "Edit Me!",
+        //   quantity: 5,
+        // },
       ],
       addItemModalShow: false, // determines the visibility of the Item Add modal
       itemToBeAdded: emptyItem, // stores the item to be added from the Item Add modal
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.pantryDetail) {
+      console.log(this.props.pantryDetail)
+      this.setState({
+        foods: Object.values(this.props.pantryDetail.foods)
+      })
     }
   }
 
@@ -91,7 +100,7 @@ class InventoryView extends Component {
   addItem(data) {
     // Add the item in the state
     this.setState(prevState => ({
-      foodItems: [...prevState.foodItems, data]
+      foods: [...prevState.foods, data]
     }))
   }
 
@@ -103,13 +112,13 @@ class InventoryView extends Component {
    */
 
   removeItem(food_id) {
-    let foodItemsCopy = [...this.state.foodItems];
-    foodItemsCopy = foodItemsCopy.filter((item) => {
+    let foodsCopy = [...this.state.foods];
+    foodsCopy = foodsCopy.filter((item) => {
       return item.food_id != food_id
     })
 
     this.setState({
-      foodItems: foodItemsCopy
+      foods: foodsCopy
     })
   }
 
@@ -121,15 +130,15 @@ class InventoryView extends Component {
    */
 
    updateItemQuantity(food_id, newQuantity) {
-    let foodItemsCopy = [...this.state.foodItems];
-    foodItemsCopy.forEach((item, idx) => {
+    let foodsCopy = [...this.state.foods];
+    foodsCopy.forEach((item, idx) => {
       if(item.food_id === food_id) {
-        foodItemsCopy[idx].quantity = newQuantity
+        foodsCopy[idx].quantity = newQuantity
       }
     })
 
     this.setState({
-      foodItems: foodItemsCopy
+      foods: foodsCopy
     })
   }
 
@@ -140,7 +149,7 @@ class InventoryView extends Component {
    */ 
   getFoodItemCards(){
     let foodItemCards = [];
-    for (const foodItem of this.state.foodItems) { // TODO: Change to props when API is implemented
+    for (const foodItem of this.state.foods) { // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
           key={foodItem.food_id}
@@ -165,8 +174,8 @@ class InventoryView extends Component {
    * 
    */
   getInventoryOverview() {
-    let numItems = this.state.foodItems.length;
-    let numOutOfStockItems = this.state.foodItems.filter((item) => {
+    let numItems = this.state.foods.length;
+    let numOutOfStockItems = this.state.foods.filter((item) => {
       return item.quantity == 0
     }).length
 
