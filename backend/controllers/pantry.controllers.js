@@ -135,7 +135,18 @@ exports.pantryUpdateHoursAction = (req, res) => {
 }
 
 exports.updateReservationAction = (req, res) => {
-  db.updateReservation(req, res).then(data => {
+  db.updateReservation(req, res).then(async data => {
+    if (req.params.action = "cancel") {
+      try {
+        var resFood = await(db.getResFood(req, res));
+        resFood.forEach(async(element, index) => {
+          db.cancelReservation(req, res, element.food_id, element.quantity);
+        });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Error in query. Failed to cancel reservation." });
+      }
+    }
     return res.status(200).json(data);
   }).catch(error => {
     return res.status(500).json({ message: "Error in query. Failed to update reservation." });
