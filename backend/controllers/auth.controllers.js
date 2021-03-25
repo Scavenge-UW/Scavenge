@@ -1,4 +1,5 @@
 const db = require("../models/auth.models.js");
+const db1 = require("../models/user.models.js");
 
 exports.loginAction = (req, res) => {
   const user = {
@@ -45,12 +46,31 @@ exports.loginAction = (req, res) => {
         console.log(token);
         //console.log(results[0]);
 
+        // get employee-of status
+        try {
+        var pantries = await(db1.isEmployeeOf(req, res, user));
+        } catch {
+          console.log(err);
+          return res.status(500).json({
+            messsage: "Employee of pantries lookup failed due to server error."
+          });
+        }
+        
+        // make into array
+        var pantriesArr = [];
+        pantries.forEach((obj, index) => {
+          pantriesArr[index] = obj['pantry_id'];
+        })
+
         return res.status(200).json({
           username: username,
           token: token,
           profile: {
-            username: results[0].username, firstName: results[0].first_name, lastName: results[0].last_name, email: results[0].email, phone: results[0].phone, address: results[0].address, city: results[0].city, state: results[0].state, zipcode: results[0].zipcode
-          }
+            username: results[0].username, firstName: results[0].first_name, lastName: results[0].last_name,
+            email: results[0].email, phone: results[0].phone, address: results[0].address, city: results[0].city, 
+            state: results[0].state, zipcode: results[0].zipcode, type: results[0].type
+          },
+          employee_of: pantriesArr
         });
       }
     })
