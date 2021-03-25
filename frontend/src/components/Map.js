@@ -131,7 +131,7 @@ class Map extends React.PureComponent {
     // </div>
     return (
       <div className="mapContainer">
-        <button className="sidebar" onClick={this.setUserLocation}>My Location</button>
+        <button className="sidebar" onClick={this.setUserLocation}>Pantries Near Me</button>
         <ReactMapGL ref={this.mapRef} {...this.state.viewport} onViewportChange={(viewport => this.handleViewportChange({viewport}))} mapStyle="mapbox://styles/mapbox/outdoors-v11" mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}>
           <Geocoder
             mapRef={this.mapRef}
