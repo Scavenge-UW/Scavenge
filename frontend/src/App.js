@@ -55,6 +55,21 @@ function App(props) {
       })
   }
 
+  const logout = async () => {
+    return AuthService.logout()
+      .then((response) => {
+        if (response.error){
+          toast.error(response.message);
+        } else {
+          setUsername("");
+          setToken("");
+          setProfile("");
+
+          toast.info("👋 You are logged out. See you again!")
+        }
+      })
+  }
+
   return (
     <Provider store={store}>
       <div id="body">
@@ -75,6 +90,7 @@ function App(props) {
           <div>
             <Navigation
               profile={profile}
+              logout={logout}
             />
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
