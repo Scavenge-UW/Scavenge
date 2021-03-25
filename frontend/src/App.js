@@ -9,18 +9,27 @@ import {
   Link
 } from "react-router-dom";
 
+import store from './store';
 import AuthService from './services/auth.service';
 import LoginView from './components/LoginView'
 import SignupView from './components/SignupView'
 import HomeView from './components/HomeView'
-import store from './store';
 import PantryAdminView from './components/PantryAdminView';
+import Navigation from './components/Navigation';
 
 function App(props) {
   const [username, setUsername] = useState("");
   const [token, setToken] = useState("");
   const [profile, setProfile] = useState("");
 
+  /**
+   * Log in, fetch profile of the user, and
+   * store profile in the state
+   * 
+   * @param {Object} user Object with `username` and `password` as keys 
+   * @returns 0 if login successful
+   * @returns -1 if login failure
+   */
   const login = async (user) => {
     return AuthService.login(user)
       .then((response) => {
@@ -43,31 +52,23 @@ function App(props) {
       <div>
         <Router>
           <div>
-            <nav>
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-                <li>
-                  <Link to="/signup">Signup</Link>
-                </li>
-              </ul>
-            </nav>
+            <Navigation
+              profile={profile}
+            />
 
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
             <Switch>
               <Route path="/login">
                 <LoginView
-                  history={props.history}
                   login={login}
                 />
               </Route>
-              <Route path="/Signup">
+              <Route path="/signup">
                 <SignupView />
+              </Route>
+              <Route path="/pantry">
+                <PantryAdminView />
               </Route>
               <Route path="/">
                 <HomeView
