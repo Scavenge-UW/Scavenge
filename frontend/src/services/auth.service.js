@@ -1,24 +1,25 @@
 import request from './request';
 
-// function signup(user) {
-//   return request({
-//     url: '/signup',
-//     method: 'POST',
-//     data: {
-//       "username": user.username,
-//       "password": user.password,
-//       "phoneNumber": user.phoneNumber,
-//       "address": user.address,
-//       "city": user.city,
-//       "state": user.state,
-//       "zip": user.zip,
-//       "carDescription": user.carDescription,
-//       "type": user.type,
-//       "email": user.email
-//     },
-//     withCredentials: true,
-//   });
-// }
+function signup(user) {
+  console.log(user);
+  return request({
+    url: '/signup',
+    method: 'POST',
+    data: {
+      "username": user.username,
+      "password": user.password,
+      "phoneNumber": user.phoneNumber,
+      "address": user.address,
+      "city": user.city,
+      "state": user.state,
+      "zip": user.zip,
+      "carDescription": user.carDescription,
+      "type": user.type,
+      "email": user.email
+    },
+    withCredentials: true,
+  });
+}
 
 function login(user) {
   return request({
@@ -32,12 +33,8 @@ function login(user) {
   });
 }
 
-// const AuthService = {
-//   signup, login
-// }
-
 const AuthService = {
-  login
+  signup, login
 }
 
 export default AuthService;
