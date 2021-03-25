@@ -9,7 +9,7 @@ exports.loginAction = (req, res) => {
 
   if (!user.username || !user.password || user.username === "" || user.password === "") {
     return res.status(200).json({
-      message: "Please provide a username or password."
+      message: "Please provide a username and password."
     });
   }
 
@@ -97,6 +97,12 @@ exports.signupAction = (req, res) => {
     "zipcode": req.body.zipcode
   };
 
+  if (!user.username || !user.password || user.username === "" || user.password === "") {
+    return res.status(200).json({
+      message: "Please provide a username and password."
+    });
+  }
+
   db.signup(req, res, newUser)
     .then((data) => {
       // create token and insert cookie
@@ -148,6 +154,12 @@ exports.updateUserAction = (req, res) => {
     "state": req.body.state,
     "zipcode": req.body.zipcode
   };
+
+  if (!user.username || !user.password || user.username === "" || user.password === "") {
+    return res.status(200).json({
+      message: "Please provide a username and password."
+    });
+  }
 
   db.updateUser(req, res, newInfo)
     .then((data) => {

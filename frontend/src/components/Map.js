@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactMapGL, {Marker, Popup} from 'react-map-gl';
+import ReactMapGL, {Marker, Popup, GeolocateControl} from 'react-map-gl';
 import { Col, Row, Container } from "react-bootstrap";
 //import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -14,12 +14,16 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import '../css/Map.css';
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
+const geolocateControlStyle= {
+  left: 10,
+  top: 10
+};
 class Map extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       viewport: {
-        width: "70vw",
+        width: "60vw",
         height: "80vh",
         latitude: 42.430472,
         longitude: -123.334102,
@@ -77,6 +81,7 @@ class Map extends React.PureComponent {
     });
   }
 
+  // Sets location to user's current location
   setUserLocation = () => {
     navigator.geolocation.getCurrentPosition(position => {
       let setUserLocation = {
@@ -84,7 +89,7 @@ class Map extends React.PureComponent {
           long: position.coords.longitude
       };
       let newViewport = {
-          width: "70vw",
+          width: "60vw",
           height: "80vh",
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -129,10 +134,18 @@ class Map extends React.PureComponent {
   //   <div className="sidebar">
   //   Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
     // </div>
+    //<button className="sidebar" onClick={this.setUserLocation}>Pantries Near Me</button>
     return (
       <div className="mapContainer">
-        <button className="sidebar" onClick={this.setUserLocation}>My Location</button>
         <ReactMapGL ref={this.mapRef} {...this.state.viewport} onViewportChange={(viewport => this.handleViewportChange({viewport}))} mapStyle="mapbox://styles/mapbox/outdoors-v11" mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}>
+          <GeolocateControl
+            style={geolocateControlStyle}
+            positionOptions={{enableHighAccuracy: true}}
+            trackUserLocation={true}
+            auto
+            label={"Find pantries near me"}
+
+          />
           <Geocoder
             mapRef={this.mapRef}
             onViewportChange={(viewport => this.handleGeocoderViewportChange({viewport}))}
@@ -140,12 +153,13 @@ class Map extends React.PureComponent {
             position="top-right"
           />
           {Object.keys(this.state.userLocation).length !== 0 ? (
-            <Marker
-              latitude={this.state.userLocation.lat}
-              longitude={this.state.userLocation.long}
-            >
-              <FontAwesomeIcon icon={faUser} size="2x" />
-            </Marker>
+            // <Marker
+            //   latitude={this.state.userLocation.lat}
+            //   longitude={this.state.userLocation.long}
+            // >
+            //   <FontAwesomeIcon icon={faUser} size="2x" />
+            // </Marker>
+            <div></div>
           ) : (
             <div></div>
           )}
