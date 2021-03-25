@@ -35,13 +35,13 @@ class ListView extends Component {
   searchData(pattern) {
     if (this.props.pantries.result !== null && typeof (this.props.pantries.result) !== "undefined") {
       let pantries = [];
-      console.log(this.props.pantries);
+      //console.log(this.props.pantries);
       Object.values(this.props.pantries.result).map((pantry) => {
         pantries.push(pantry);
       });
   
       if (!pattern) {
-        console.log("HRE1")
+        //console.log("HRE1")
         this.setState({ matchedPantries: pantries });
         return;
       }
@@ -54,7 +54,7 @@ class ListView extends Component {
   
       if (!result.length) {
         // No matches
-        console.log("HRE3");
+        //console.log("HRE3");
         this.setState({ matchedPantries: [] });
       } else {
         pantries = [];
@@ -62,7 +62,7 @@ class ListView extends Component {
           pantries.push(item);
         });
         this.setState({ matchedPantries: pantries });
-        console.log(this.state.matchedPantries);
+        //console.log(this.state.matchedPantries);
       }
     }
   }
@@ -72,7 +72,7 @@ class ListView extends Component {
     if (this.state.matchedPantries !== null && typeof this.state.matchedPantries !== "undefined") {
       this.state.matchedPantries.map((pantry) => {
         cards.push(
-            <Card>
+            <Card key={pantry.pantry_id}>
               <Card.Header className="text-center">
                 <Accordion.Toggle as={Button} variant="link" eventKey={pantry.pantry_id}>
                   {pantry.name}
