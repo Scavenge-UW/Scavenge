@@ -12,7 +12,6 @@ class SignupView extends Component {
       city: "",
       state: "",
       zip: "",
-      carDescription: "",
       type: "",
       email: "",
       phoneNumber: "",
@@ -29,7 +28,6 @@ class SignupView extends Component {
       city: this.state.city,
       state: this.state.state,
       zip: this.state.zip,
-      carDescription: this.state.carDescription,
       type: this.state.type,
       email: this.state.email,
     };
@@ -95,22 +93,6 @@ class SignupView extends Component {
             </Form.Group>
           </Form.Row>
 
-          <Form.Row>
-            <Form.Group
-              as={Col}
-              controlId="formGridCarDesc"
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
-            >
-              <Form.Label>Car Description</Form.Label>
-              <Form.Control
-                type={"text"}
-                value={this.state.carDescription}
-                onChange={(e) =>
-                  this.setState({ carDescription: e.target.value })
-                }
-              />
-            </Form.Group>
-          </Form.Row>
 
           <Form.Row>
             <Form.Group
