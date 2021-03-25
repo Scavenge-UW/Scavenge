@@ -89,7 +89,7 @@ function App(props) {
           break;
       }
     };
-  };
+  }
 
   return (
     <Provider store={store}>
