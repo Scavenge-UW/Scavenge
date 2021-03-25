@@ -1,0 +1,14 @@
+.Container {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 45px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.listGroup {
+    max-height: 700px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}

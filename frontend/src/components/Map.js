@@ -19,7 +19,7 @@ class Map extends React.PureComponent {
     super(props);
     this.state = {
       viewport: {
-        width: "70vw",
+        width: "60vw",
         height: "80vh",
         latitude: 42.430472,
         longitude: -123.334102,
@@ -84,7 +84,7 @@ class Map extends React.PureComponent {
           long: position.coords.longitude
       };
       let newViewport = {
-          width: "70vw",
+          width: "60vw",
           height: "80vh",
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
