@@ -19,13 +19,15 @@ class LoginView extends Component {
       password: this.state.password,
     };
 
-    if (this.state.username.length == 0 || this.state.password.length == 0) {
-      await this.props.createNotification("error", "Username or password is empty.")();
-      return;
-    }
+    // Don't need to check for this since login will create a notification with the message
+    // if (this.state.username.length == 0 || this.state.password.length == 0) {
+    //   await this.props.createNotification("error", "Username or password is empty.")();
+    //   return;
+    // }
 
     let loginResult = await this.props.login(user);
-    if (loginResult === 0){
+    if (loginResult === 0) {
+      // Successful login
       this.setState({
         toHomeView: true
       })
