@@ -6,6 +6,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
 
+
 import InventoryView from './InventoryView'
 import DashboardView from './DashboardView'
 

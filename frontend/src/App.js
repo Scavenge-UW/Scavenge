@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import PantryAdminView from './components/PantryAdminView';
 
+
 function App() {
   return (
     <Provider store={store}>
