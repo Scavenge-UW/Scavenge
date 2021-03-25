@@ -72,7 +72,7 @@ class ListView extends Component {
     if (this.state.matchedPantries !== null && typeof this.state.matchedPantries !== "undefined") {
       this.state.matchedPantries.map((pantry) => {
         cards.push(
-            <Card>
+            <Card key={pantry.pantry_id}>
               <Card.Header className="text-center">
                 <Accordion.Toggle as={Button} variant="link" eventKey={pantry.pantry_id}>
                   {pantry.name}

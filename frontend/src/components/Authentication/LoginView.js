@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 class LoginView extends Component {
   constructor(props) {
@@ -19,11 +20,10 @@ class LoginView extends Component {
       password: this.state.password,
     };
 
-    // Don't need to check for this since login will create a notification with the message
-    // if (this.state.username.length == 0 || this.state.password.length == 0) {
-    //   await this.props.createNotification("error", "Username or password is empty.")();
-    //   return;
-    // }
+    if (this.state.username.length == 0 || this.state.password.length == 0) {
+      toast.error("Please provide a username and password.");
+      return;
+    }
 
     let loginResult = await this.props.login(user);
     if (loginResult === 0) {

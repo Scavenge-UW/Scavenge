@@ -8,7 +8,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { ToastContainer, toast } from 'react-toastify';
 
 import store from './store';
 import AuthService from './services/auth.service';
@@ -18,7 +18,7 @@ import HomeView from './components/HomeView'
 import PantryAdminView from './components/PantryAdminView';
 import Navigation from './components/Navigation';
 
-import 'react-notifications/lib/notifications.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App(props) {
   const [username, setUsername] = useState("");
@@ -39,74 +39,49 @@ function App(props) {
         if (response.message){
           // When the API returns `message`,
           // that means the login has failed
-          createNotification("error", response.message)();
-          return -1
+          toast.error(response.message);
+          return -1;
         } else {
           setUsername(response.username);
           setToken(response.token);
           setProfile(response.profile);
 
-          createNotification("success", "Successfully logged in!")();
+          // We only need to import toast in other components 
+          // if we want to make a notification there.
+          toast.success("🚀 Successfully logged in!");
 
           return 0;
         }
       })
   }
 
-  const createNotification = (type, message) => {
-    console.log("INSIDE CREATE");
-    return () => {
-      // FOR REFERENCE
-      // switch (type) {
-      //   case 'info':
-      //     NotificationManager.info('Info message');
-      //     break;
-      //   case 'success':
-      //     NotificationManager.success('Success message', 'Title here');
-      //     break;
-      //   case 'warning':
-      //     NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
-      //     break;
-      //   case 'error':
-      //     NotificationManager.error('Error message', 'Click me!', 5000, () => {
-      //       alert('callback');
-      //     });
-      //     break;
-      // }
-      switch (type) {
-        case 'info':
-          // Message, title, timeout
-          NotificationManager.info(message, '', 3000);
-          break;
-        case 'success':
-          NotificationManager.success(message, '', 3000);
-          break;
-        case 'warning':
-          NotificationManager.warning(message, '', 3000);
-          break;
-        case 'error':
-          NotificationManager.error(message, '', 3000)
-          break;
-      }
-    };
-  }
-
   return (
     <Provider store={store}>
-      <div>
+      <div id="body">
         <Router>
+
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+           />
+
           <div>
             <Navigation
               profile={profile}
             />
-          <NotificationContainer />
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
-            <Switch>
+            <Switch id="body">
               <Route path="/login">
                 <LoginView
                   login={login}
-                  createNotification={createNotification}
                 />
               </Route>
               <Route path="/signup">
