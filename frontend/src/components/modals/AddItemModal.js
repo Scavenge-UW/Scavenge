@@ -38,6 +38,7 @@ function AddItemModal(props) {
     let food_id = Math.floor(Math.random() * 100) + 1;
 
     // TODO: check for generated item ID before adding the item
+    //       to prevent adding duplicate food_id
 
     props.setItemToBeAdded({
       food_id: food_id,

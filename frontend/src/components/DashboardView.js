@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import {
   ListGroup,
@@ -9,6 +8,10 @@ import {
   ListGroupItemHeading,
   ListGroupItemText,
 } from "reactstrap";
+
+import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
+
+const initReservedList = {};
 
 /**
  * Dashboard View
@@ -57,6 +60,8 @@ class DashboardView extends Component {
           },
         },
       ],
+      showRsvnMsg: false, // show reservation message, default false
+      reservedItemForUser: initReservedList,
     };
   }
 
@@ -75,8 +80,8 @@ class DashboardView extends Component {
   }
 
   /**
-   * Returns the message header (title and received time) for each message.
-   *
+   * @returns the message header (title and reservation time) for each message
+   *          and initialize reservedItemForUser in the state for the user.
    */
   getItemHeadingMessage(user_id) {
     let firstname;
@@ -94,8 +99,14 @@ class DashboardView extends Component {
         firstname = info.user_firstname;
         lastname = info.user_lastname;
         numItems = Object.keys(info.reserved_items).length;
+        this.state.reservedItemForUser = info.reserved_items;
       }
     });
+
+    console.log(
+      "this.state.reservedItemForUser are: ",
+      this.state.reservedItemForUser
+    ); // debug-remove
 
     return (
       <div>
@@ -112,6 +123,7 @@ class DashboardView extends Component {
    *
    */
   getMessageOverview() {
+    console.log("getMessageOverview"); // debug-remove
     return (
       <ListGroup>
         {this.state.reservationMessages.map((value, key) => {
@@ -121,11 +133,12 @@ class DashboardView extends Component {
               <ListGroupItemHeading key={key} className="mb-1">
                 {this.getItemHeadingMessage(value.user_id)}
               </ListGroupItemHeading>
-              <ListGroupItemText>
-                Donec id elit non mi porta gravida at eget metus. Maecenas sed
-                diam eget risus varius blandit.
-              </ListGroupItemText>
-              <Button variant="outline-info">View Message</Button>
+
+              {/* Button for View Reservation Message Modal */}
+              <ViewRsvnMsgModal
+                show={this.state.showRsvnMsg}
+                messageContent={this.state.reservedItemForUser}
+              />
               <Button variant="outline-primary">Mark as Picked up</Button>
               <Button variant="outline-danger">Cancel this reservation</Button>
             </ListGroupItem>
@@ -142,16 +155,22 @@ class DashboardView extends Component {
   render() {
     return (
       <Container>
+        {/* Page title */}
         <Row className="justify-content-center">
           <h2>Dashboard</h2>
         </Row>
         <hr />
+
+        {/* Overview message */}
         <Row className="justify-content-center">
           {this.getDashboardOverview()}
         </Row>
+
+        {/* Sub-session title */}
         <Row>
           <h4>Messgaes </h4>
         </Row>
+
         <Row>{this.getMessageOverview()}</Row>
       </Container>
     );

@@ -236,7 +236,7 @@ class InventoryView extends Component {
         />
         <Row className="justify-content-center">
           <p className="mt-4">
-            Time is Money. We provide an efficient way for you to update
+            Time Is Money - We provide an efficient way for you to update
             available items.
           </p>
         </Row>
