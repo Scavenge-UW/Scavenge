@@ -48,7 +48,7 @@ exports.loginAction = (req, res) => {
 
         // get employee-of status
         try {
-        var pantries = await(db1.isEmployeeOf(req, res, user));
+          var pantries = await(db1.isEmployeeOf(req, res, user));
         } catch {
           console.log(err);
           return res.status(500).json({
