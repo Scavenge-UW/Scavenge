@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Tabs from 'react-bootstrap/Tabs';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
+import Pagination from 'react-bootstrap/Pagination';
 import { useParams } from "react-router-dom";
 
 import FoodItemCard from '../components/FoodItemCard';
@@ -19,6 +20,8 @@ import PantryService from '../services/pantry.service';
 
  function PantryDetailView() {  
   const [pantryDetail, setPantryDetail] = useState(null);
+  const [currPage, setCurrPage] = useState(1);
+  const paginationCount = 10;
   const { pantry_id } = useParams(); // get pantry_id in route param 
 
   /**
@@ -62,7 +65,8 @@ import PantryService from '../services/pantry.service';
    */ 
    const getFoodItemCards = () => {
     let foodItemCards = [];
-    for (const foodItem of Object.values(pantryDetail.foods)) { // TODO: Change to props when API is implemented
+    const foods = Object.values(pantryDetail.foods).slice(1+(currPage-1)*paginationCount, paginationCount*currPage+1)
+    for (const foodItem of Object.values(foods)) { // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
           key={foodItem.food_id}
@@ -78,6 +82,30 @@ import PantryService from '../services/pantry.service';
     }
 
     return foodItemCards;
+  }
+  
+  const showPagination = () => {
+    let numItems = Object.values(pantryDetail.foods).length;
+    let numPages = Math.ceil(numItems / paginationCount);
+    let paginationItems = [];
+
+    for (let pageNo = 1; pageNo <= numPages; pageNo++){
+      paginationItems.push(
+        <Pagination.Item
+          key={pageNo}
+          active={pageNo === currPage}
+          onClick={() => {setCurrPage(pageNo)}}
+        >
+          {pageNo}
+        </Pagination.Item>
+      )
+    }
+
+    return (
+      <Pagination>
+        {paginationItems}
+      </Pagination>
+    )
   }
 
   if (pantryDetail !== null) {
@@ -121,6 +149,9 @@ import PantryService from '../services/pantry.service';
         </Row>
         <Row className="justify-content-center">
           {getFoodItemCards()}
+        </Row>
+        <Row className="justify-content-center mt-4">
+          {showPagination()}
         </Row>
       </Container>
     );
