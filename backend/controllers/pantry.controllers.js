@@ -94,7 +94,7 @@ exports.getAllPantriesAction = (req, res) => {
         let hour = {};
         hour['day'] = hourData['day'];
         hour['open'] = hourData['open'];
-        hour['close'] = hourData['closed'];
+        hour['close'] = hourData['close'];
         hour['detail'] = hourData['detail'];
 
         pantryInfo['hours'].push(hour);
@@ -198,7 +198,7 @@ exports.getPantryDetailAction = (req, res) => {
       let hour = {};
       hour['day'] = hourData['day'];
       hour['open'] = hourData['open'];
-      hour['close'] = hourData['closed'];
+      hour['close'] = hourData['close'];
       hour['detail'] = hourData['detail'];
 
       pantryInfo['hours'].push(hour);
