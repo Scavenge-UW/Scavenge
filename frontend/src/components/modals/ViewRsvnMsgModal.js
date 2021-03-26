@@ -3,18 +3,32 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
 function ViewRsvnMsgModal(props) {
-  // const
+  const usernameStyle = {
+    fontFamily: "monospace",
+    fontSize: "140%",
+    fontWeight: "450",
+  };
+
+  const rsvn = props.state.pantryDetails.reservations[props.selectedID];
+
+  const contents = Object.entries(rsvn.reserved_items).map(([key, value]) => (
+    <li key={key}>
+      {props.state.pantryDetails.foods[key].food_name}: {value}
+    </li>
+  ));
 
   return (
     <>
       <Modal {...props} size="lg" aria-labelledby="ViewRsvnMsgModal" centered>
         <Modal.Header closeButton>
-          {/* TODO: adding a Modal Title and time when the reservation is made. */}
-          <Modal.Title id="ViewRsvnMsgModal">"Hi"</Modal.Title>
+          <Modal.Title id="ViewRsvnMsgModal">
+            Reservation for User{" "}
+            <span style={usernameStyle}>{rsvn.username}</span>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* TODO: print reservation detail separated (items: quantity) by a new line  */}
-          hi
+          <h5>reservation ID: {rsvn.reservation_id}</h5>
+          {contents}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>

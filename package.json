@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/klmui/Scavenge#readme",
   "dependencies": {
-    "@popperjs/core": "^2.9.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.6.0",
@@ -25,12 +27,14 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "jquery": "^3.6.0",
+    "fuse.js": "^6.4.6",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-map-gl-geocoder": "^2.1.6",
+    "react-notifications": "^1.7.2",
     "reactstrap": "^8.9.0",
     "socket.io": "^4.0.0"
   }

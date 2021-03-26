@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import ReactDOMServer from "react-dom/server";
+
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
@@ -10,8 +12,6 @@ import {
 } from "reactstrap";
 
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
-
-// const initReservedList = {};
 
 /**
  * Dashboard View
@@ -28,51 +28,127 @@ class DashboardView extends Component {
        * Dummy Reseravtion examples.
        * TODO: fetch actual reservations from the API or use Socket.io?
        */
-      reservationMessages: [
-        {
-          user_id: 1,
-          user_firstname: "Andy",
-          user_lastname: "Lin",
-          reserved_items: {
-            Apple: 4,
-            Tomato: 3,
-            Banana: 1,
+      pantryDetails: {
+        foods: {
+          1: {
+            food_id: 1,
+            food_name: "Apple",
+            qr_code: null,
+            quantity: 0,
+          },
+          2: {
+            food_id: 2,
+            food_name: "Orange",
+            qr_code: null,
+            quantity: 27,
+          },
+          3: {
+            food_id: 3,
+            food_name: "Avocado",
+            qr_code: 123123123,
+            quantity: 156,
+          },
+          4: {
+            food_id: 4,
+            food_name: "Swiss Cheese",
+            qr_code: 10101011,
+            quantity: 22,
           },
         },
-        {
-          user_id: 2,
-          user_firstname: "Ilkyu",
-          user_lastname: "Ju",
-          reserved_items: {
-            Pineapple: 2,
-            Beef: 1,
-            Banana: 1,
+        reservations: {
+          1: {
+            reservation_id: 1,
+            username: "sean1",
+            reserved_items: { 1: 3, 2: 5, 3: 3 },
+            order_time: "2021-03-25T08:03:39.000Z",
+            estimated_pick_up: "2021-03-30T02:00:00.000Z",
+            picked_up_time: null,
+            approved: 0,
+            cancelled: 1,
+          },
+          106: {
+            reservation_id: 106,
+            username: "sean1",
+            reserved_items: { 2: 4, 3: 7, 4: 2 },
+            order_time: "2021-03-25T08:04:05.000Z",
+            estimated_pick_up: "2021-03-30T02:00:00.000Z",
+            picked_up_time: null,
+            approved: 0,
+            cancelled: 0,
+          },
+          107: {
+            reservation_id: 107,
+            username: "sean1",
+            reserved_items: { 1: 5, 2: 3, 3: 1, 4: 1 },
+            order_time: "2021-03-25T08:04:11.000Z",
+            estimated_pick_up: "2021-03-30T02:00:00.000Z",
+            picked_up_time: null,
+            approved: 0,
+            cancelled: 0,
           },
         },
-        {
-          user_id: 3,
-          user_firstname: "Jason",
-          user_lastname: "Sutanto",
-          reserved_items: {
-            Toast: 1,
-            Apple: 5,
-            Pineapple: 2,
-            Beef: 1,
+        hours: {
+          1: {
+            day: 1,
+            open: "10:00:00",
+            close: "15:00:00",
+            detail: "By Appointment Only",
+          },
+          2: {
+            day: 2,
+            open: "10:00:00",
+            close: "15:00:00",
+            detail: "By Appointment Only",
+          },
+          3: {
+            day: 3,
+            open: "10:00:00",
+            close: "15:00:00",
+            detail: "By Appointment Only",
+          },
+          4: {
+            day: 4,
+            open: "10:00:00",
+            close: "15:00:00",
+            detail: "By Appointment Only",
+          },
+          5: {
+            day: 5,
+            open: "10:00:00",
+            close: "15:00:00",
+            detail: "By Appointment Only",
+          },
+          6: {
+            day: 6,
+            open: "10:00:00",
+            close: "15:00:00",
+            detail: "By Appointment Only",
+          },
+          7: {
+            day: 7,
+            open: "10:00:00",
+            close: "15:00:00",
+            detail: "By Appointment Only",
           },
         },
-      ],
-      foodPantryDescription:
-        "Default Description. Elit voluptate labore" +
-        "amet ad eu mollit aliquip anim incididunt " +
-        "deserunt irure. Fugiat deserunt officia ad" +
-        "officia. Ullamco aliqua non nostrud duis" +
-        "adipisicing laboris aliqua sunt sint ullamco" +
-        "mollit adipisicing. In nostrud anim voluptate eu.",
-
-      foodPantryDefaultOpenHours: "Monday 3PM - 9PM, Wednesday 9AM - 11AM",
+        pantry_id: 1,
+        name: "The River Food Pantry",
+        address: "2201 Darwin Rd",
+        zip: 53704,
+        city: "Madison",
+        state: "WI",
+        phone_number: "6084428815",
+        details: "Here to serve!",
+        img_src:
+          "https://lh5.googleusercontent.com/p/AF1QipM6UYI64xgIkJx1w_t7RLh8eVCjelB9ogeoW_A3=w426-h240-k-no",
+        lat: -89,
+        lon: 43,
+        website: "https://www.riverfoodpantry.org/",
+        approved: 0,
+      },
 
       showRsvnMsg: false, // show reservation message, default false
-      // reservedItemForUser: initReservedList,
+      selectedID: 1, // TODO: set a default ID so that it can run
     };
   }
 
@@ -93,7 +169,8 @@ class DashboardView extends Component {
   closeViewRsvnMsgModal() {
     this.setState({
       showRsvnMsg: false,
-      // reservedItemForUser: initReservedList,
+      modalMessageHeader: "",
+      modalBodyContent: "",
     });
   }
 
@@ -102,7 +179,8 @@ class DashboardView extends Component {
    *
    */
   getDashboardOverview() {
-    let numReservation = this.state.reservationMessages.length;
+    let numReservation = Object.keys(this.state.pantryDetails.reservations)
+      .length;
 
     return (
       <p className="text-center mt-4">
@@ -112,98 +190,63 @@ class DashboardView extends Component {
   }
 
   /**
-   * @returns the message header (title and reservation time) for each message
-   *          and initialize reservedItemForUser in the state for the user.
+   * @returns the message header (title and reservation time) for each message.
    */
-  getItemHeadingMessage(user_id) {
-    let firstname;
-    let lastname;
-    let numItems;
-    const messageTime = {
+  getMessageHeader(rsvn_id) {
+    const rsvn = this.state.pantryDetails.reservations[rsvn_id];
+    const usernameStyle = {
+      fontFamily: "monospace",
+      fontsize: "140%",
+      fontWeight: "450",
+    };
+
+    const messageTimeStyle = {
       color: "--gray",
       textAlign: "right",
       fontSize: "60%",
       fontWeight: "300",
     };
 
-    this.state.reservationMessages.forEach((info) => {
-      // for (let info of this.state.reservationMessages) {
-      if (info.user_id === user_id) {
-        console.log("info.user_id = %d, user_id = %d", info.user_id, user_id);
-        firstname = info.user_firstname;
-        lastname = info.user_lastname;
-        numItems = Object.keys(info.reserved_items).length;
-        // this.state.reservedItemForUser = info.reserved_items;
-      }
-    });
-    // }
+    const username = <span style={usernameStyle}>{rsvn.username}</span>;
 
-    return (
+    const messageHeader = (
       <div>
-        {firstname} {lastname} has reserved {numItems} items at your food
-        pantry!
+        User {" " + username + " "} has reserved (xx) items at your food pantry!
         {/* Change messageTime according to API */}
-        <p style={messageTime}>20 minutes ago.</p>
+        <p style={messageTimeStyle}>20 minutes ago.</p>
       </div>
     );
+
+    return messageHeader;
   }
-
-  // getReservationItems(user_id) {
-  //   let content = "";
-  //   for (let info of this.state.reservationMessages) {
-  //     if (info.user_id === user_id) {
-  //       // this.state.reservedItemForUser = info.reserved_items;
-  //       Object.entries(info.reserved_items).map(
-  //         ([key, value]) => (content += `${key}: ${value} \n`)
-  //       );
-  //     }
-  //   }
-
-  //   console.log("content = ", content);
-  //   return content;
-  // }
 
   /**
    * Iteratively returns messages according to the number of reservations received.
    *
    */
   getMessageOverview() {
-    return (
-      <ListGroup>
-        {this.state.reservationMessages.map((value, key) => {
-          return (
-            <ListGroupItem tag="a" action>
-              {/* Heading */}
-              <ListGroupItemHeading key={key} className="mb-1">
-                {this.getItemHeadingMessage(value.user_id)}
-              </ListGroupItemHeading>
-
-              {/* Button */}
-              <Button
-                variant="outline-info"
-                onClick={() => {
-                  this.openViewRsvnMsgModal();
-                }}
-              >
-                View Message
-              </Button>
-
-              {/* <ListGroupItemText></ListGroupItemText> */}
-
-              {/* Model for View Reservation Message*/}
-              <ViewRsvnMsgModal
-                show={this.state.showRsvnMsg}
-                onHide={() => {
-                  this.closeViewRsvnMsgModal();
-                }}
-              />
-              <Button variant="outline-primary">Mark as Picked up</Button>
-              <Button variant="outline-danger">Cancel this reservation</Button>
-            </ListGroupItem>
-          );
-        })}
-      </ListGroup>
+    const viewMessages = Object.keys(this.state.pantryDetails.reservations).map(
+      (rsvn_id, key) => (
+        <ListGroupItem tag="a" action>
+          {/* Heading */}
+          <ListGroupItemHeading key={key} className="mb-1">
+            {this.getMessageHeader(rsvn_id)}
+          </ListGroupItemHeading>
+          {/* Button */}
+          <Button
+            variant="outline-info"
+            onClick={() => {
+              this.setState({ selectedID: rsvn_id }, this.openViewRsvnMsgModal);
+            }}
+          >
+            View Message
+          </Button>
+          <Button variant="outline-primary">Mark as Picked up</Button>
+          <Button variant="outline-danger">Cancel this reservation</Button>
+        </ListGroupItem>
+      )
     );
+    return <ListGroup>{viewMessages}</ListGroup>;
   }
 
   /**
@@ -229,9 +272,16 @@ class DashboardView extends Component {
           <h4>Messgaes </h4>
         </Row>
 
-        <Row className="justify-content-center" xs="2">
+        {/* Sub-session content (TODO: adjust style) */}
+        <Row className="justify-content-center">
           {this.getMessageOverview()}
         </Row>
+        <ViewRsvnMsgModal
+          show={this.state.showRsvnMsg}
+          onHide={() => this.closeViewRsvnMsgModal()}
+          selectedID={this.state.selectedID}
+          state={this.state}
+        />
       </Container>
     );
   }
