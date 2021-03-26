@@ -8,11 +8,11 @@ exports.reserveAction = async(req, res) => {
   try {
     foods.forEach(async(food_id, index) => {
       var qty = await(db.checkQuantity(req, res, food_id));
-      var qtyString = JSON.stringify(qty);
-      var qtyInt = qtyString.match(/\d/g);
-      qtyInt = qtyInt.join("");
+      // var qtyString = JSON.stringify(qty);
+      // var qtyInt = qtyString.match(/\d/g);
+      // qtyInt = qtyInt.join("");
 
-        if (qtyInt < quantities[index]) {
+        if (qty[0].quantity < quantities[index]) {
           errorEncountered = 1;
           console.log("Not enough quantity of food_id: " + food_id + ".");
           return res.status(500).json({
