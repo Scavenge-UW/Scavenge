@@ -39,13 +39,16 @@ class Map extends React.PureComponent {
       },
       userLocation: {},
       pantries: [],
-      selectedPantry: null
+      selectedPantry: null,
+      time: new Date()
     };
     this.handleViewportChange = this.handleViewportChange.bind(this);
     this.handleGeocoderViewportChange = this.handleGeocoderViewportChange.bind(this);
     this.loadPantryPins = this.loadPantryPins.bind(this);
     this.clickPin = this.clickPin.bind(this);
     this.closePopup = this.closePopup.bind(this);
+    this.determinePinColor = this.determinePinColor.bind(this);
+
     this.mapRef = React.createRef();
   }
 
@@ -59,6 +62,56 @@ class Map extends React.PureComponent {
       });
   }
 
+  determinePinColor(pantry) {
+    const currDay = this.state.time.getDay();
+    const currHour = this.state.time.getHours();
+    const currMinute = this.state.time.getMinutes();
+    
+    let dayOfOperation = "";
+    let open = "";
+    let close = "";
+    pantry.hours.forEach(hour => {
+      if (hour.day === parseInt(currDay)) {
+        dayOfOperation = hour.day;
+        open = hour.open;
+        close = hour.close;
+      }
+    });
+    const timeElementsClose = close.split(":");
+    const pantryHourClose = timeElementsClose[0];
+    const pantryMinuteClose = timeElementsClose[1];
+
+    const timeElementsOpen = open.split(":");
+    const pantryHourOpen = timeElementsOpen[0];
+    const pantryMinuteOpen = timeElementsOpen[1];
+
+    if (open === "00:00:00" && close === "00:00:00") {
+      // Closed all day
+      return "red";
+    } else if (currHour >= pantryHourOpen && currHour <= pantryHourClose) {
+      // We're in the hour range, now handle edge cases
+      if (currHour == pantryHourOpen) {
+        if (currMinute >= pantryMinuteOpen) {
+          return "green";
+        } else {
+          return "red";
+        }
+      } else if (currHour == pantryHourClose) {
+        if (currMinute >= pantryMinuteClose) {
+          return "red";
+        } else {
+          return "green";
+        }
+      } else {
+        // Time is somewhere between the start hour and close hour so pantry is open!
+        return "green";
+      }
+    } else {
+      // Curr hour is above the closing hour or below opening hour, so closed
+      return "red";
+    }
+  }
+
   loadPantryPins = () => {
     return this.state.pantries.map(pantry => {
       return (
@@ -68,7 +121,7 @@ class Map extends React.PureComponent {
           latitude={pantry.lat}
           longitude={pantry.lon}
         >
-          <FontAwesomeIcon className="pin" icon={faMapMarkerAlt} size="2x" color={pantry.color} onClick={() => this.clickPin(pantry)}/>
+          <FontAwesomeIcon className="pin" icon={faMapMarkerAlt} size="2x" color={this.determinePinColor(pantry)} onClick={() => this.clickPin(pantry)}/>
         </Marker>
       );
     });
