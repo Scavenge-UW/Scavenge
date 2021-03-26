@@ -11,7 +11,6 @@ exports.getAllPantriesAction = (req, res) => {
         result[element['pantry_id']]['reservations'] = {};
         result[element['pantry_id']]['hours'] = {};
       } 
-
       result[element['pantry_id']]['pantry_id']     = element['pantry_id'];
       result[element['pantry_id']]['name']          = element['name'];
       result[element['pantry_id']]['address']       = element['address'];
@@ -24,6 +23,7 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['lat']           = element['lat'];
       result[element['pantry_id']]['lon']           = element['lon'];
       result[element['pantry_id']]['website']       = element['website'];
+      result[element['pantry_id']]['approved']      = element['approved'];
       result[element['pantry_id']]['foods'][element['food_id']] = {};
       result[element['pantry_id']]['foods'][element['food_id']]['food_id']    = element['food_id'];
       result[element['pantry_id']]['foods'][element['food_id']]['food_name']  = element['food_name'];
@@ -72,6 +72,7 @@ exports.getPantryDetailAction = (req, res) => {
       result['lat']           = element['lat'];
       result['lon']           = element['lon'];
       result['website']       = element['website'];
+      result['approved']      = element['approved'];
       result['foods'][element['food_id']] = {};
       result['foods'][element['food_id']]['food_id']    = element['food_id'];
       result['foods'][element['food_id']]['food_name']  = element['food_name'];
@@ -88,7 +89,7 @@ exports.getPantryDetailAction = (req, res) => {
         result['reservations'][element['reservation_id']]['cancelled']          = element['cancelled'];
       }
       result['hours'][element['day']] = {};
-      result['hours'][element['day']]['day']   = element['day'];
+      result['hours'][element['day']]['day']     = element['day'];
       result['hours'][element['day']]['open']    = element['open'];
       result['hours'][element['day']]['close']   = element['close'];
       result['hours'][element['day']]['detail']  = element['detail'];
@@ -135,7 +136,18 @@ exports.pantryUpdateHoursAction = (req, res) => {
 }
 
 exports.updateReservationAction = (req, res) => {
-  db.updateReservation(req, res).then(data => {
+  db.updateReservation(req, res).then(async data => {
+    if (req.params.action = "cancel") {
+      try {
+        var resFood = await(db.getResFood(req, res));
+        resFood.forEach(async(element, index) => {
+          db.cancelReservation(req, res, element.food_id, element.quantity);
+        });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Error in query. Failed to cancel reservation." });
+      }
+    }
     return res.status(200).json(data);
   }).catch(error => {
     return res.status(500).json({ message: "Error in query. Failed to update reservation." });

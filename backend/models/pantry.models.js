@@ -15,6 +15,7 @@ exports.getAllPantries = async (req, res) => {
       p.lon,
       p.lat,
       p.website,
+      p.approved,
       f.id as food_id,
       f.name as food_name,
       f.qr_code,
@@ -55,6 +56,7 @@ exports.getPantryDetail = async (req, res) => {
       p.lon,
       p.lat,
       p.website,
+      p.approved,
       f.id as food_id,
       f.name as food_name,
       f.qr_code,
@@ -195,4 +197,29 @@ exports.foodSearch = async (req, res) => {
   `;
   const values = [[req.params.food_id]];
   return await execQuery("select", query, values);
+}
+
+// Get food from a reservation for use in cancelling a reservation
+exports.getResFood = async (req, res) => {
+  const query = `
+    SELECT
+      food_id,
+      quantity
+    FROM res_food
+    WHERE reservation_id = ?;
+  `;
+  const values = [[req.params.reservation_id]];
+  return await execQuery("select", query, values);
+}
+
+// add food back to inventory
+exports.cancelReservation = async (req, res, food_id, quantity) => {
+  const query = `
+    UPDATE inventory
+    SET
+      quantity = quantity + ?
+    WHERE food_id = ? AND pantry_id = ?
+  `;
+  const values = [quantity, food_id, req.params.pantry_id];
+  return await execQuery("update", query, values);
 }
