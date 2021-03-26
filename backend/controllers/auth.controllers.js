@@ -48,9 +48,9 @@ exports.loginAction = (req, res) => {
 
         // get employee-of status
         try {
-          var pantries = await(db1.isEmployeeOf(req, res, user));
-        } catch {
-          console.log(err);
+          pantries = await(db1.isEmployeeOf(req, res, user));
+        } catch (e) {
+          console.log(e);
           return res.status(500).json({
             messsage: "Employee of pantries lookup failed due to server error."
           });
