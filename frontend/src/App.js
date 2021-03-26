@@ -13,7 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import store from './store';
 import AuthService from './services/auth.service';
 import LoginView from './components/Authentication/LoginView'
-import SignupView from './/components/Authentication/SignupView'
+import SignupView from './components/Authentication/SignupView'
 import HomeView from './components/HomeView'
 import PantryAdminView from './components/PantryAdminView';
 import PantryDetailView from './components/PantryDetailView';
