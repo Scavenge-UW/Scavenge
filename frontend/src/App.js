@@ -16,6 +16,7 @@ import LoginView from './components/Authentication/LoginView'
 import SignupView from './/components/Authentication/SignupView'
 import HomeView from './components/HomeView'
 import PantryAdminView from './components/PantryAdminView';
+import PantryDetailView from './components/PantryDetailView';
 import Navigation from './components/Navigation';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -105,6 +106,9 @@ function App(props) {
               </Route>
               <Route path="/pantry">
                 <PantryAdminView />
+              </Route>
+              <Route path="/pantries/:pantry_id">
+                <PantryDetailView />
               </Route>
               <Route path="/">
                 <HomeView
