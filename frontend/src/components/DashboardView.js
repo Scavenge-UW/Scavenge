@@ -5,9 +5,12 @@ import moment from "moment";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+// import Card from "react-bootstrap/Card";
 import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
+import PantryDescriptionCard from "./PantryDescriptionCard";
+import OpenHourCard from "./OpenHourCard";
 
 /**
  * Dashboard View
@@ -153,8 +156,11 @@ class DashboardView extends Component {
       // used to calculate time elapsed since the reservation is made
       currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
     };
-    // this.getTimeElapsed = this.getTimeElapsed.bind(this);
   }
+
+  /////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// Reservation Message ////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
 
   /**
    * Opens View Reservation Message modal.
@@ -179,6 +185,8 @@ class DashboardView extends Component {
   }
 
   /**
+   *
+   * Helper function for getTimeElapsed to format time elapsed since the reservation received.
    *
    * reference:
    *          https://stackoverflow.com/questions/22938300/convert-milliseconds-to-hours-and-minutes-using-momentjs
@@ -223,6 +231,7 @@ class DashboardView extends Component {
    * @param {*} receivedTime the time (in String format) when the reservation was made
    */
   getTimeElapsed(receivedTime) {
+    // convert receivedTime to moment object
     const received = moment(new Date(receivedTime), "YYYY/MM/DD HH:mm:ss");
     const current = this.state.currentDateTime;
     return this.durationAsString(current - received);
@@ -271,11 +280,14 @@ class DashboardView extends Component {
 
     const receivedTime = rsvn.order_time;
 
+    // TODO: re-adjust the styling
     const messageHeader = (
       <div>
         User {username} has reserved {numItems} items at your food pantry!
         {/* Change messageTime according to API */}
-        <p style={messageTimeStyle}>{this.getTimeElapsed(receivedTime)} ago.</p>
+        <p class="text-right" style={messageTimeStyle}>
+          {this.getTimeElapsed(receivedTime)} ago.
+        </p>
       </div>
     );
 
@@ -297,19 +309,35 @@ class DashboardView extends Component {
           {/* Button */}
           <Button
             variant="outline-info"
+            className="mr-2"
             onClick={() => {
               this.setState({ selectedID: rsvn_id }, this.openViewRsvnMsgModal);
             }}
           >
             View Message
           </Button>
-          <Button variant="outline-primary">Mark as Picked up</Button>
-          <Button variant="outline-danger">Cancel this reservation</Button>
+          <Button variant="outline-primary" className="mr-2">
+            Mark as Picked up
+          </Button>
+          <Button variant="outline-danger" className="mr-2">
+            Cancel this reservation
+          </Button>
         </ListGroupItem>
       )
     );
     return <ListGroup>{viewMessages}</ListGroup>;
   }
+
+  /////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// Pantry Description /////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
+   *
+   */
+  // getPantryDescriptionCards() {
+  //   return <pantryDescriptionCard />;
+  // }
 
   /**
    * Renders components.
@@ -323,20 +351,24 @@ class DashboardView extends Component {
           <h2>Dashboard</h2>
         </Row>
         <hr />
-
         {/* Overview message */}
         <Row className="justify-content-center">
           {this.getDashboardOverview()}
         </Row>
-
         {/* Sub-session title */}
         <Row className="justify-content-center">
           <h4>Messgaes </h4>
         </Row>
-
         {/* Sub-session content (TODO: adjust style) */}
         <Row className="justify-content-center">
           {this.getMessageOverview()}
+        </Row>
+
+        <Row className="justify-content-center pt-4">
+          <PantryDescriptionCard />
+        </Row>
+        <Row className="justify-content-center pt-4">
+          <OpenHourCard openHours={this.state.pantryDetails.hours} />
         </Row>
         <ViewRsvnMsgModal
           show={this.state.showRsvnMsg}

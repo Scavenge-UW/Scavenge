@@ -9,6 +9,10 @@ function ViewRsvnMsgModal(props) {
     fontWeight: "450",
   };
 
+  const rsvnDetaillStyle = {
+    fontFamily: "monospace",
+  };
+
   const rsvn = props.state.pantryDetails.reservations[props.selectedID];
 
   const contents = Object.entries(rsvn.reserved_items).map(([key, value]) => (
@@ -27,7 +31,10 @@ function ViewRsvnMsgModal(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5>reservation ID: {rsvn.reservation_id}</h5>
+          <h5>
+            Reservation Detail (
+            <span style={rsvnDetaillStyle}>Food Name: Quantity</span>)
+          </h5>
           {contents}
         </Modal.Body>
         <Modal.Footer>
