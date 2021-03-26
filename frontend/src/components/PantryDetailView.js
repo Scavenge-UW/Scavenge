@@ -7,6 +7,7 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import { useParams } from "react-router-dom";
 
+import FoodItemCard from '../components/FoodItemCard';
 import PantryService from '../services/pantry.service';
 
 /**
@@ -54,6 +55,31 @@ import PantryService from '../services/pantry.service';
     return phone_number;
   }
 
+  /**
+   * Returns a list of <FoodItemCard> instances, 
+   * based on the list of food items.
+   * 
+   */ 
+   const getFoodItemCards = () => {
+    let foodItemCards = [];
+    for (const foodItem of Object.values(pantryDetail.foods)) { // TODO: Change to props when API is implemented
+      foodItemCards.push(
+        <FoodItemCard
+          key={foodItem.food_id}
+          foodItem={foodItem}
+        />
+      )
+    } 
+
+    // Use filler card to align cards correctly.
+    // This prevents a single card on the last row from being centered.
+    if (foodItemCards.length % 2) {
+      foodItemCards.push(<FoodItemCard type="filler" />)
+    }
+
+    return foodItemCards;
+  }
+
   if (pantryDetail !== null) {
     const { name, address, zip, city, state, lat, lon,
       phone_number, details, img_src, website } = pantryDetail;
@@ -63,7 +89,7 @@ import PantryService from '../services/pantry.service';
     return (
       <Container>
         <Row className="justify-content-center mt-4 mb-4">
-          <Col className="rounded bg-light">
+          <Col className="justify-content-center rounded bg-light">
             <Row className="justify-content-center mt-3">
               <h3>Welcome to {name}</h3>
             </Row>
@@ -80,18 +106,21 @@ import PantryService from '../services/pantry.service';
                     <strong>Phone: </strong> &nbsp; {formatted_phone_number}
                   </Row>
                   <Row>
-                    <strong>Website: </strong> &nbsp; <a href="{website}">{website}</a>
+                    <strong>Website: </strong> &nbsp; <a href={website} target="_blank">{website}</a>
                   </Row>
                 </Col>
               </Row>
             </Container>
           </Col>
-          <Col>
+          <Col className="justify-content-center">
             <Image className="rounded" src={img_src} />
           </Col>
         </Row>
         <Row className="justify-content-center">
           <h2>Available Items</h2>
+        </Row>
+        <Row className="justify-content-center">
+          {getFoodItemCards()}
         </Row>
       </Container>
     );
