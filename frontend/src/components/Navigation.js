@@ -22,7 +22,7 @@ class Navigation extends Component {
   getRoute(content) {
     switch (content) {
       case "Logout":
-        return "/logout";
+        return "/logout"; // will be redirected to '/' upon successful logout
       case "Login":
         return "/login";
       case "Signup":
@@ -46,7 +46,7 @@ class Navigation extends Component {
         <LinkContainer
           key={content}
           to={this.getRoute(content)}
-          onClick={()=> alert("TODO: Implement logout")}
+          onClick={()=> this.props.logout()}
         >
           <Nav.Link>{content}</Nav.Link>
         </LinkContainer>

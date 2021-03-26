@@ -33,8 +33,16 @@ function login(user) {
   });
 }
 
+function logout(user) {
+  return request({
+    url: '/logout',
+    method: 'POST',
+    withCredentials: true,
+  })
+}
+
 const AuthService = {
-  signup, login
+  signup, login, logout,
 }
 
 export default AuthService;
