@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import { toast } from 'react-toastify';
+import "../../css/LoginView.css";
 
 class LoginView extends Component {
   constructor(props) {
