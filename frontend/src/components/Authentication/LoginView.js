@@ -45,7 +45,7 @@ class LoginView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridEmail"
+              controlId="username"
               style={{ paddingTop: "70px", paddingLeft: "30px" }}
             >
               <Form.Label>Username</Form.Label>
@@ -61,7 +61,7 @@ class LoginView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridPassword"
+              controlId="password"
               style={{
                 paddingTop: "10px",
                 paddingLeft: "30px",
