@@ -26,6 +26,7 @@ function App(props) {
   const [username, setUsername] = useState("");
   const [token, setToken] = useState("");
   const [profile, setProfile] = useState("");
+  const [employeeOf, setEmployeeOf] = useState([]);
 
   /**
    * Log in, fetch profile of the user, and
@@ -47,6 +48,7 @@ function App(props) {
           setUsername(response.username);
           setToken(response.token);
           setProfile(response.profile);
+          setEmployeeOf(response.employee_of)
 
           // We only need to import toast in other components 
           // if we want to make a notification there.
@@ -66,10 +68,15 @@ function App(props) {
           setUsername("");
           setToken("");
           setProfile("");
+          setEmployeeOf([]);
 
           toast.info("👋 You are logged out. See you again!")
         }
       })
+  }
+  
+  const isAdmin = () => {
+    return employeeOf.length !== 0;
   }
 
   return (
@@ -93,6 +100,7 @@ function App(props) {
             <Navigation
               profile={profile}
               logout={logout}
+              isAdmin={isAdmin}
             />
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
