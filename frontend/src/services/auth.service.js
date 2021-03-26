@@ -8,12 +8,13 @@ function signup(user) {
     data: {
       "username": user.username,
       "password": user.password,
+      "firstname": user.firstname,
+      "lastname": user.lastname,
       "phoneNumber": user.phoneNumber,
       "address": user.address,
       "city": user.city,
       "state": user.state,
       "zip": user.zip,
-      "carDescription": user.carDescription,
       "type": user.type,
       "email": user.email
     },
@@ -33,16 +34,8 @@ function login(user) {
   });
 }
 
-function logout(user) {
-  return request({
-    url: '/logout',
-    method: 'POST',
-    withCredentials: true,
-  })
-}
-
 const AuthService = {
-  signup, login, logout,
+  signup, login
 }
 
 export default AuthService;

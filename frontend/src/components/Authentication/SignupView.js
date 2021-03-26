@@ -16,6 +16,7 @@ class SignupView extends Component {
       state: "",
       zipcode: "",
       email: "",
+      type:"",
     };
     this.submitForm = this.submitForm.bind(this);
   }
@@ -31,6 +32,7 @@ class SignupView extends Component {
       city: this.state.state,
       zipcode: this.state.zipcode,
       email: this.state.email,
+      type: this.state.type,
     };
 
     if (this.state.username.length == 0 || this.state.password.length == 0) {
@@ -38,7 +40,6 @@ class SignupView extends Component {
       return;
     }
 
-    this.props.signup(user);
   }
 
   render() {
@@ -104,6 +105,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"text"}
                 value={this.state.lastname}
+                placeholder="Last Name"
                 onChange={(e) =>
                   this.setState({ lastname: e.target.value })
                 }
@@ -121,6 +123,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"email"}
                 value={this.state.email}
+                placeholder="Email"
                 onChange={(e) => this.setState({ email: e.target.value })}
               />
             </Form.Group>
@@ -136,6 +139,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"text"}
                 value={this.state.phoneNumber}
+                placeholder="Phone"
                 onChange={(e) =>
                   this.setState({ phoneNumber: e.target.value })
                 }
@@ -153,6 +157,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"text"}
                 value={this.state.address}
+                placeholder="Address"
                 onChange={(e) =>
                   this.setState({ address: e.target.value })
                 }
@@ -171,6 +176,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"text"}
                 value={this.state.city}
+                placeholder="City"
                 onChange={(e) => this.setState({ city: e.target.value })}
               />
             </Form.Group>
@@ -180,6 +186,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"text"}
                 value={this.state.state}
+                placeholder="State"
                 onChange={(e) => this.setState({ state: e.target.value })}
               />
             </Form.Group>
@@ -193,6 +200,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"number"}
                 value={this.state.zip}
+                placeholder="Zip"
                 onChange={(e) => this.setState({ zip: e.target.value })}
               />
             </Form.Group>
