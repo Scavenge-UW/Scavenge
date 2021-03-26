@@ -6,7 +6,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Redux
@@ -17,15 +17,16 @@ import { fetchPantries } from '../actions/pantryActions';
 import Fuse from "fuse.js";
 
 import '../css/ListView.css';
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 
 class ListView extends Component {
   constructor(props) {
     super(props);  
     this.state = {
-      matchedPantries: null
+      matchedPantries: null,
+      time: new Date()
     }
     this.searchData = this.searchData.bind(this);
+    this.renderHourCircle = this.renderHourCircle.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +67,56 @@ class ListView extends Component {
       }
     }
   }
+
+  renderHourCircle(pantry) {
+    const currDay = this.state.time.getDay();
+    const currHour = this.state.time.getHours();
+    const currMinute = this.state.time.getMinutes();
+    
+    let dayOfOperation = "";
+    let open = "";
+    let close = "";
+    pantry.hours.forEach(hour => {
+      if (hour.day === parseInt(currDay)) {
+        dayOfOperation = hour.day;
+        open = hour.open;
+        close = hour.close;
+      }
+    });
+    const timeElementsClose = close.split(":");
+    const pantryHourClose = timeElementsClose[0];
+    const pantryMinuteClose = timeElementsClose[1];
+
+    const timeElementsOpen = open.split(":");
+    const pantryHourOpen = timeElementsOpen[0];
+    const pantryMinuteOpen = timeElementsOpen[1];
+
+    if (open === "00:00:00" && close === "00:00:00") {
+      // Closed all day
+      return <FontAwesomeIcon icon={faCircle} color="red" className="mr-3" />;
+    } else if (currHour >= pantryHourOpen && currHour <= pantryHourClose) {
+      // We're in the hour range, now handle edge cases
+      if (currHour == pantryHourOpen) {
+        if (currMinute >= pantryMinuteOpen) {
+          return <FontAwesomeIcon icon={faCircle} color="green" className="mr-3" />;
+        } else {
+          return <FontAwesomeIcon icon={faCircle} color="red" className="mr-3" />;
+        }
+      } else if (currHour == pantryHourClose) {
+        if (currMinute >= pantryMinuteClose) {
+          return <FontAwesomeIcon icon={faCircle} color="red" className="mr-3" />;
+        } else {
+          return <FontAwesomeIcon icon={faCircle} color="green" className="mr-3" />;
+        }
+      } else {
+        // Time is somewhere between the start hour and close hour so pantry is open!
+        return <FontAwesomeIcon icon={faCircle} color="green" className="mr-3" />;
+      }
+    } else {
+      // Curr hour is above the closing hour or below opening hour, so closed
+      return <FontAwesomeIcon icon={faCircle} color="red" className="mr-3" />;
+    }
+  }
     
   render() {
     let cards = [];
@@ -75,6 +126,7 @@ class ListView extends Component {
             <Card key={pantry.pantry_id}>
               <Card.Header className="text-center">
                 <Accordion.Toggle as={Button} variant="link" eventKey={pantry.pantry_id}>
+                  {this.renderHourCircle(pantry)}
                   {pantry.name}
                 </Accordion.Toggle>
               </Card.Header>
