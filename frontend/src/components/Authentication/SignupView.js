@@ -8,14 +8,14 @@ class SignupView extends Component {
     this.state = {
       username: "",
       password: "",
+      firstname: "",
+      lastname: "",
+      phone: "",
       address: "",
       city: "",
       state: "",
-      zip: "",
-      carDescription: "",
-      type: "",
+      zipcode: "",
       email: "",
-      phoneNumber: "",
     };
     this.submitForm = this.submitForm.bind(this);
   }
@@ -24,13 +24,12 @@ class SignupView extends Component {
     const user = {
       username: this.state.username,
       password: this.state.password,
-      phoneNumber: this.state.phoneNumber,
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
+      phone: this.state.phone,
       address: this.state.address,
-      city: this.state.city,
-      state: this.state.state,
-      zip: this.state.zip,
-      carDescription: this.state.carDescription,
-      type: this.state.type,
+      city: this.state.state,
+      zipcode: this.state.zipcode,
       email: this.state.email,
     };
 
@@ -82,15 +81,15 @@ class SignupView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridAddress1"
+              controlId="formGridFirstName"
               style={{ paddingLeft: "20px", paddingRight: "20px" }}
             >
-              <Form.Label>Address</Form.Label>
+              <Form.Label>First Name</Form.Label>
               <Form.Control
                 type={"text"}
-                placeholder="1234 Main St"
-                value={this.state.address}
-                onChange={(e) => this.setState({ address: e.target.value })}
+                placeholder="Name"
+                value={this.state.firstname}
+                onChange={(e) => this.setState({ firstname: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
@@ -98,15 +97,15 @@ class SignupView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridCarDesc"
+              controlId="formGridLastName"
               style={{ paddingLeft: "20px", paddingRight: "20px" }}
             >
-              <Form.Label>Car Description</Form.Label>
+              <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type={"text"}
-                value={this.state.carDescription}
+                value={this.state.lastname}
                 onChange={(e) =>
-                  this.setState({ carDescription: e.target.value })
+                  this.setState({ lastname: e.target.value })
                 }
               />
             </Form.Group>
@@ -143,6 +142,24 @@ class SignupView extends Component {
               />
             </Form.Group>
           </Form.Row>
+
+          <Form.Row>
+            <Form.Group
+              as={Col}
+              controlId="formControlsAddress"
+              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            >
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type={"text"}
+                value={this.state.address}
+                onChange={(e) =>
+                  this.setState({ address: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Form.Row>
+
 
           <Form.Row>
             <Form.Group
