@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Tabs from "react-bootstrap/Tabs";
-import Tab from "react-bootstrap/Tab";
-import Button from "react-bootstrap/Button";
+  
+import React, { useState, useEffect } from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+import Button from 'react-bootstrap/Button';
 
-import InventoryView from "./InventoryView";
-import DashboardView from "./DashboardView";
+import PantryService from '../services/pantry.service';
+import InventoryView from './InventoryView'
+import DashboardView from './DashboardView'
 
 /**
  * PantryAdminView that consists of PantryDashboardView and InventoryView
@@ -17,22 +19,44 @@ import DashboardView from "./DashboardView";
  */
 
 function PantryAdminView() {
+  const [pantryDetail, setPantryDetail] = useState(null);
+  
+  /**
+   * Fetch pantry detail on init
+   * 
+   */
+  React.useEffect(() => {
+    fetchPantryDetail();
+  }, [])
+
+
+  /**
+   * Fetch pantry detail
+   * 
+   */
+  const fetchPantryDetail = async () => {
+    const detail = await PantryService.getDetail(1); // TODO: change pantry id based on user's affiliation
+    setPantryDetail(detail);
+  }
+
   const PantryAdminViewTabs = () => {
     const [tab, setTab] = useState("dashboard");
 
     return (
       <Tabs
-        variant="pills" // tab style {tabs, pills}
+        variant="pills"
         activeKey={tab}
         onSelect={(t) => setTab(t)}
-        // transition={false}  // animation strategy
         className="mb-4 justify-content-center nav-justified"
       >
         <Tab eventKey="dashboard" title="Pantry Dashboard">
           <DashboardView />
         </Tab>
         <Tab eventKey="inventory" title="Manage Inventory">
-          <InventoryView />
+          <InventoryView
+            pantryDetail={pantryDetail}
+            fetchPantryDetail={fetchPantryDetail}
+          />
         </Tab>
       </Tabs>
     );
