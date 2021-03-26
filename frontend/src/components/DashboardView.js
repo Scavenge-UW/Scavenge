@@ -11,13 +11,14 @@ import {
 
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 
-const initReservedList = {};
+// const initReservedList = {};
 
 /**
  * Dashboard View
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
+ *         [Yayen Lin](https://github.com/yayen-lin)
  */
 class DashboardView extends Component {
   constructor(props) {
@@ -60,9 +61,40 @@ class DashboardView extends Component {
           },
         },
       ],
+      foodPantryDescription:
+        "Default Description. Elit voluptate labore" +
+        "amet ad eu mollit aliquip anim incididunt " +
+        "deserunt irure. Fugiat deserunt officia ad" +
+        "officia. Ullamco aliqua non nostrud duis" +
+        "adipisicing laboris aliqua sunt sint ullamco" +
+        "mollit adipisicing. In nostrud anim voluptate eu.",
+
+      foodPantryDefaultOpenHours: "Monday 3PM - 9PM, Wednesday 9AM - 11AM",
+
       showRsvnMsg: false, // show reservation message, default false
-      reservedItemForUser: initReservedList,
+      // reservedItemForUser: initReservedList,
     };
+  }
+
+  /**
+   * Opens View Reservation Message modal.
+   *
+   */
+  openViewRsvnMsgModal() {
+    this.setState({
+      showRsvnMsg: true,
+    });
+  }
+
+  /**
+   * Closes View Reservation Message modal.
+   *
+   */
+  closeViewRsvnMsgModal() {
+    this.setState({
+      showRsvnMsg: false,
+      // reservedItemForUser: initReservedList,
+    });
   }
 
   /**
@@ -95,49 +127,75 @@ class DashboardView extends Component {
     };
 
     this.state.reservationMessages.forEach((info) => {
+      // for (let info of this.state.reservationMessages) {
       if (info.user_id === user_id) {
+        console.log("info.user_id = %d, user_id = %d", info.user_id, user_id);
         firstname = info.user_firstname;
         lastname = info.user_lastname;
         numItems = Object.keys(info.reserved_items).length;
-        this.state.reservedItemForUser = info.reserved_items;
+        // this.state.reservedItemForUser = info.reserved_items;
       }
     });
-
-    console.log(
-      "this.state.reservedItemForUser are: ",
-      this.state.reservedItemForUser
-    ); // debug-remove
+    // }
 
     return (
       <div>
         {firstname} {lastname} has reserved {numItems} items at your food
         pantry!
         {/* Change messageTime according to API */}
-        <p style={messageTime}>3 days ago.</p>
+        <p style={messageTime}>20 minutes ago.</p>
       </div>
     );
   }
+
+  // getReservationItems(user_id) {
+  //   let content = "";
+  //   for (let info of this.state.reservationMessages) {
+  //     if (info.user_id === user_id) {
+  //       // this.state.reservedItemForUser = info.reserved_items;
+  //       Object.entries(info.reserved_items).map(
+  //         ([key, value]) => (content += `${key}: ${value} \n`)
+  //       );
+  //     }
+  //   }
+
+  //   console.log("content = ", content);
+  //   return content;
+  // }
 
   /**
    * Iteratively returns messages according to the number of reservations received.
    *
    */
   getMessageOverview() {
-    console.log("getMessageOverview"); // debug-remove
     return (
       <ListGroup>
         {this.state.reservationMessages.map((value, key) => {
           return (
-            <ListGroupItem tag="a" href="#" action>
+            <ListGroupItem tag="a" action>
               {/* Heading */}
               <ListGroupItemHeading key={key} className="mb-1">
                 {this.getItemHeadingMessage(value.user_id)}
               </ListGroupItemHeading>
 
-              {/* Button for View Reservation Message Modal */}
+              {/* Button */}
+              <Button
+                variant="outline-info"
+                onClick={() => {
+                  this.openViewRsvnMsgModal();
+                }}
+              >
+                View Message
+              </Button>
+
+              {/* <ListGroupItemText></ListGroupItemText> */}
+
+              {/* Model for View Reservation Message*/}
               <ViewRsvnMsgModal
                 show={this.state.showRsvnMsg}
-                messageContent={this.state.reservedItemForUser}
+                onHide={() => {
+                  this.closeViewRsvnMsgModal();
+                }}
               />
               <Button variant="outline-primary">Mark as Picked up</Button>
               <Button variant="outline-danger">Cancel this reservation</Button>
@@ -167,11 +225,13 @@ class DashboardView extends Component {
         </Row>
 
         {/* Sub-session title */}
-        <Row>
+        <Row className="justify-content-center">
           <h4>Messgaes </h4>
         </Row>
 
-        <Row>{this.getMessageOverview()}</Row>
+        <Row className="justify-content-center" xs="2">
+          {this.getMessageOverview()}
+        </Row>
       </Container>
     );
   }

@@ -3,35 +3,21 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
 function ViewRsvnMsgModal(props) {
-  const [show, setShow] = useState(props.show);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const
 
   return (
     <>
-      <Button variant="outline-info" onClick={handleShow}>
-        View Message
-      </Button>
-
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="ViewRsvnMsgModal"
-        centered
-      >
+      <Modal {...props} size="lg" aria-labelledby="ViewRsvnMsgModal" centered>
         <Modal.Header closeButton>
-          <Modal.Title id="ViewRsvnMsgModal">Modal heading</Modal.Title>
+          {/* TODO: adding a Modal Title and time when the reservation is made. */}
+          <Modal.Title id="ViewRsvnMsgModal">"Hi"</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* TODO: separate items: quantity by a new line  */}
-          {Object.entries(props.messageContent).map(
-            ([key, value]) => `${key}: ${value} \n`
-          )}
+          {/* TODO: print reservation detail separated (items: quantity) by a new line  */}
+          hi
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
         </Modal.Footer>
