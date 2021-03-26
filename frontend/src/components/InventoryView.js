@@ -152,6 +152,7 @@ class InventoryView extends Component {
     for (const foodItem of this.state.foods) { // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
+          adminMode
           key={foodItem.food_id}
           foodItem={foodItem}
           removeItem={this.removeItem.bind(this)}

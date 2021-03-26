@@ -16,6 +16,7 @@ import LoginView from './components/Authentication/LoginView'
 import SignupView from './/components/Authentication/SignupView'
 import HomeView from './components/HomeView'
 import PantryAdminView from './components/PantryAdminView';
+import PantryDetailView from './components/PantryDetailView';
 import Navigation from './components/Navigation';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -55,6 +56,21 @@ function App(props) {
       })
   }
 
+  const logout = async () => {
+    return AuthService.logout()
+      .then((response) => {
+        if (response.error){
+          toast.error(response.message);
+        } else {
+          setUsername("");
+          setToken("");
+          setProfile("");
+
+          toast.info("👋 You are logged out. See you again!")
+        }
+      })
+  }
+
   return (
     <Provider store={store}>
       <div id="body">
@@ -75,6 +91,7 @@ function App(props) {
           <div>
             <Navigation
               profile={profile}
+              logout={logout}
             />
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
@@ -89,6 +106,9 @@ function App(props) {
               </Route>
               <Route path="/pantry">
                 <PantryAdminView />
+              </Route>
+              <Route path="/pantries/:pantry_id">
+                <PantryDetailView />
               </Route>
               <Route path="/">
                 <HomeView
