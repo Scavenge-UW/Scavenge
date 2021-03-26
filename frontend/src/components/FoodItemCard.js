@@ -140,6 +140,51 @@ class FoodItemCard extends Component {
       )
     }
   }
+
+  /**
+   * Return controls that only admins can access (edit and remove)
+   * 
+   */
+  showAdminControls() {
+    if (this.props.adminMode) {
+      return (
+        <>
+        <hr /> 
+          <Row>
+            <Col>
+              <Form>
+                <Form.Group controlId="formQuantity">
+                  <Form.Label>Enter quantity in stock</Form.Label>
+                  <Form.Control
+                    type="number"
+                    disabled={!this.state.editMode}
+                    placeholder="Quantity"
+                    defaultValue={this.props.foodItem.quantity}
+                    ref={this.newQuantity}
+                  />
+                </Form.Group>
+              </Form>
+            </Col>
+            <Col>
+              {/* Empty label is for aligning the input and the button */}
+              <Form.Label>&nbsp;</Form.Label> 
+              {this.showUpdateItemQuantityButton()}
+            </Col>
+          </Row>
+          <Row>
+            <Button
+              className="ml-3 mr-3"
+              block
+              variant="outline-danger"
+              onClick={this.onClickRemoveItem.bind(this)}
+            >
+              Remove
+            </Button>
+          </Row>
+        </>
+      )
+    }
+  }
   
   render() {
     if (this.props.type === "filler"){
@@ -161,39 +206,8 @@ class FoodItemCard extends Component {
                     {this.showStockInfo()}
                   </Col>
                 </Row>
+                {this.showAdminControls()}
               </Card.Title>
-              <hr />
-                <Row>
-                  <Col>
-                    <Form>
-                      <Form.Group controlId="formQuantity">
-                        <Form.Label>Enter quantity in stock</Form.Label>
-                        <Form.Control
-                          type="number"
-                          disabled={!this.state.editMode}
-                          placeholder="Quantity"
-                          defaultValue={this.props.foodItem.quantity}
-                          ref={this.newQuantity}
-                        />
-                      </Form.Group>
-                    </Form>
-                  </Col>
-                  <Col>
-                    {/* Empty label is for aligning the input and the button */}
-                    <Form.Label>&nbsp;</Form.Label> 
-                    {this.showUpdateItemQuantityButton()}
-                  </Col>
-                </Row>
-                <Row>
-                  <Button
-                    className="ml-3 mr-3"
-                    block
-                    variant="outline-danger"
-                    onClick={this.onClickRemoveItem.bind(this)}
-                  >
-                    Remove
-                  </Button>
-                </Row>
               </Card.Body>
           </Card>
         );
