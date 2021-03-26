@@ -15,6 +15,21 @@ exports.login = async (req, res, user) => {
   return results;
 }
 
+exports.getType = async (req, res, user) => {
+  // User fields already validated
+  const query = `
+    SELECT type 
+    FROM user
+    WHERE username = ?;
+  `;
+  var values = [
+    [user.username]
+  ];
+
+  const results = await execQuery("select", query, values);
+  return results;
+}
+
 exports.signup = async (req, res, newUser) => {
   const query = "INSERT INTO user (username, password, first_name, last_name, email, phone, address, city, state, zipcode) VALUES ?";
   // hash password - takes awhile so we need aysnc await
