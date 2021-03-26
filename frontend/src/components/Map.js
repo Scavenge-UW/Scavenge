@@ -9,15 +9,23 @@ import Geocoder from "react-map-gl-geocoder";
 import { faUser, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../css/Map.css';
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import PantryService from '../services/pantry.service';
+import { Link } from 'react-router-dom';
 
 const geolocateControlStyle= {
   left: 10,
   top: 10
 };
+
+// Initial location is set to Union South
+const initialCoords = {
+  "lat": 43.071765004664,
+  "lon": -89.4076825483728
+}
+
 class Map extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -25,9 +33,9 @@ class Map extends React.PureComponent {
       viewport: {
         width: "60vw",
         height: "80vh",
-        latitude: 42.430472,
-        longitude: -123.334102,
-        zoom: 16
+        latitude: initialCoords['lat'],
+        longitude: initialCoords['lon'],
+        zoom: 13
       },
       userLocation: {},
       pantries: [],
@@ -43,37 +51,22 @@ class Map extends React.PureComponent {
 
   componentDidMount() {
     this.setUserLocation();
-
-    // TODO: Fetch from API
-    const pantries = [
-      {
-        "id": 1,
-        "latitude": 43.070910,
-        "longitude": -89.399130,
-        "color": "green",
-        "name": "Pantry 1",
-        "address": "Address 1"
-      },
-      {
-        "id": 2,
-        "latitude": 43.071694,
-        "longitude": -89.408069,
-        "color": "red",
-        "name": "pantry 2",
-        "address": "Address 2"
-      },
-    ]
-
-    this.setState({pantries: pantries});
+    PantryService.getPantries()
+      .then(pantries => {
+        this.setState({
+          pantries: Object.values(pantries.result)
+        });
+      });
   }
 
-  loadPantryPins() {
+  loadPantryPins = () => {
     return this.state.pantries.map(pantry => {
       return (
         <Marker
-          key={pantry.id}
-          latitude={parseFloat(pantry.latitude)}
-          longitude={parseFloat(pantry.longitude)}
+          style={{width: "100px", height: "100px"}}
+          key={pantry.pantry_id}
+          latitude={pantry.lat}
+          longitude={pantry.lon}
         >
           <FontAwesomeIcon className="pin" icon={faMapMarkerAlt} size="2x" color={pantry.color} onClick={() => this.clickPin(pantry)}/>
         </Marker>
@@ -166,12 +159,14 @@ class Map extends React.PureComponent {
           {this.loadPantryPins()}
           {this.state.selectedPantry !== null ? (
             <Popup
-              latitude={parseFloat(this.state.selectedPantry.latitude)}
-              longitude={parseFloat(this.state.selectedPantry.longitude)}
+              latitude={parseFloat(this.state.selectedPantry.lat)}
+              longitude={parseFloat(this.state.selectedPantry.lon)}
               onClose={this.closePopup}
+              closeOnClick={false}
             >
-              <p><b>Name: </b>{this.state.selectedPantry.name}</p>
-              <p><b>Address: </b>{this.state.selectedPantry.address}</p>
+              <p><strong>Name: </strong>{this.state.selectedPantry.name}</p>
+              <p><strong>Address: </strong>{this.state.selectedPantry.address}</p>
+              <p><Link to={"/pantries/" + this.state.selectedPantry.pantry_id}><strong>Click here for detail</strong></Link></p>
             </Popup>
             ) : null}
         </ReactMapGL>
