@@ -1,4 +1,5 @@
 import request from './request';
+import FoodService from './food.service';
 
 function getPantries() {
   return request({
@@ -32,9 +33,26 @@ function updateFoodItem(pantry_id, food_id, updatedData) {
   });
 }
 
+async function addFoodItemToInventory(pantry_id, food) {
+  // create a new item and get its id
+  const foodToAdd = {
+    food_name: food.food_name,
+    qr_code: Math.round(Math.random()*10000), // TODO: use actual qrcode data
+  }
+  const addedFood = await FoodService.addFood(foodToAdd);
+  const newFoodId = addedFood.insertId;
+
+  return request({
+    url: '/pantries/' + pantry_id + '/' + newFoodId,
+    method: 'POST',
+    data: food,
+    withCredentials: true,
+  })
+}
+
 
 const PantryService = {
-  getPantries, getDetail, updateFoodItem
+  getPantries, getDetail, updateFoodItem, addFoodItemToInventory,
 }
 
 export default PantryService;
