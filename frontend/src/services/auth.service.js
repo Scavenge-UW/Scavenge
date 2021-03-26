@@ -33,7 +33,7 @@ function login(user) {
   });
 }
 
-function editProfile(user, token){
+function editProfile(user, token) {
   return request({
     url: '/' + user.username,
     method: 'PUT',
@@ -55,8 +55,17 @@ function editProfile(user, token){
   });
 }
 
+function logout(user) {
+  return request({
+    url: '/logout',
+    method: 'POST',
+    withCredentials: true,
+  });
+};
+
 const AuthService = {
-  signup, login, editProfile
+  signup, login, editProfile, logout
 }
+
 
 export default AuthService;

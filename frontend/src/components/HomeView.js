@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import img from '../images/home.jpg';
 import Map from './Map.js';
+import ListView from './ListView.js';
 
 class HomeView extends Component {
   constructor(props) {
@@ -17,10 +18,10 @@ class HomeView extends Component {
         <h1 className="view-header text-center mb-3">Welcome to Scavenge</h1>
         <Row className="justify-content-between align-items-center">
           <Row>
-            <Col md={2}>
-              <h1>List view</h1>
+            <Col md={4} className="pr-1">
+              <ListView />
             </Col>
-            <Col md={10}>
+            <Col md={8} className="p-0 mt-4">
               <Map />
             </Col>
           </Row>

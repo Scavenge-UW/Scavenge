@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import { toast } from 'react-toastify';
+import "../../css/LoginView.css";
 
 class LoginView extends Component {
   constructor(props) {
@@ -20,12 +22,13 @@ class LoginView extends Component {
     };
 
     if (this.state.username.length == 0 || this.state.password.length == 0) {
-      await this.props.createNotification("error", "Username or password is empty.")();
+      toast.error("Please provide a username and password.");
       return;
     }
 
     let loginResult = await this.props.login(user);
-    if (loginResult === 0){
+    if (loginResult === 0) {
+      // Successful login
       this.setState({
         toHomeView: true
       })
@@ -43,7 +46,7 @@ class LoginView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridEmail"
+              controlId="username"
               style={{ paddingTop: "70px", paddingLeft: "30px" }}
             >
               <Form.Label>Username</Form.Label>
@@ -59,7 +62,7 @@ class LoginView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridPassword"
+              controlId="password"
               style={{
                 paddingTop: "10px",
                 paddingLeft: "30px",
