@@ -3,8 +3,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 import Image from 'react-bootstrap/Image';
-import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import Pagination from 'react-bootstrap/Pagination';
 import { useParams } from "react-router-dom";
 
@@ -21,6 +22,7 @@ import PantryService from '../services/pantry.service';
  function PantryDetailView() {  
   const [pantryDetail, setPantryDetail] = useState(null);
   const [currPage, setCurrPage] = useState(1);
+  const [tab, setTab] = useState("information");
   const paginationCount = 10;
   const { pantry_id } = useParams(); // get pantry_id in route param 
 
@@ -108,11 +110,73 @@ import PantryService from '../services/pantry.service';
     )
   }
 
+  const showPantryInfo = () => {
+    const { address, zip, city, state,
+      phone_number, website } = pantryDetail;
+
+    const formatted_phone_number = formatPhoneNumber(phone_number);
+
+    return (
+      <Row>
+        <Col className="ml-4 mt-2">
+          <Row>
+            <strong>Address:</strong> &nbsp; {address}, {city}, {state} {zip}
+          </Row>
+          <Row>
+            <strong>Phone: </strong> &nbsp; {formatted_phone_number}
+          </Row>
+          <Row>
+            <strong>Website: </strong> &nbsp; <a href={website} target="_blank">{website}</a>
+          </Row>
+        </Col>
+      </Row>
+    )
+  }
+
+  const showPantryHours = () => {
+    Object.values(pantryDetail.hours)
+    const daysOfTheWeek = {
+      1: "Sunday",
+      2: "Monday",
+      3: "Tuesday",
+      4: "Wednesday",
+      5: "Thursday",
+      6: "Friday",
+      7: "Saturday"
+    }
+
+    let items = []
+    for (const hours of Object.values(pantryDetail.hours)) {
+      items.push(
+        <tr key={hours.day}>
+          <td>{daysOfTheWeek[hours.day]}</td>
+          <td>{hours.open}</td>
+          <td>{hours.close}</td>
+          <td>{hours.detail}</td>
+        </tr>
+      )
+    }
+
+    return (
+      <Table striped hover size="sm">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Opens</th>
+            <th>Closes</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items}
+        </tbody>
+      </Table>
+    )
+  }
+
   if (pantryDetail !== null) {
     const { name, address, zip, city, state, lat, lon,
       phone_number, details, img_src, website } = pantryDetail;
-
-    const formatted_phone_number = formatPhoneNumber(phone_number)
 
     return (
       <Container>
@@ -124,21 +188,21 @@ import PantryService from '../services/pantry.service';
             <Row className="justify-content-center">
               <h5>{details}</h5>
             </Row>
-            <Container>
-              <Row className="mt-4 ml-4">
-                <Col>
-                  <Row>
-                    <strong>Address:</strong> &nbsp; {address}, {city}, {state} {zip}
-                  </Row>
-                  <Row>
-                    <strong>Phone: </strong> &nbsp; {formatted_phone_number}
-                  </Row>
-                  <Row>
-                    <strong>Website: </strong> &nbsp; <a href={website} target="_blank">{website}</a>
-                  </Row>
-                </Col>
+              <Row className="mt-2 ml-4">
+              <Tabs
+                style={{width: "100%"}}
+                id="operating-hours"
+                activeKey={tab}
+                onSelect={(t) => setTab(t)}
+              >
+                <Tab eventKey="information" title="Information">
+                  {showPantryInfo()}
+                </Tab>
+                <Tab eventKey="operating_hours" title="Operating Hours">
+                  {showPantryHours()}
+                </Tab>
+              </Tabs>
               </Row>
-            </Container>
           </Col>
           <Col className="justify-content-center">
             <Image className="rounded" src={img_src} />
