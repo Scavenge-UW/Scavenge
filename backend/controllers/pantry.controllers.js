@@ -45,6 +45,64 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['hours'][element['day']]['close']   = element['close'];
       result[element['pantry_id']]['hours'][element['day']]['detail']  = element['detail'];
     });
+
+    // Convert into array format without using ids as keys
+    let resultsArr = [];
+    for (let pantryId in result) {
+      const pantry = result[pantryId];
+      let pantryInfo = {};
+      pantryInfo['pantry_id'] = pantry['pantry_id'];
+      pantryInfo['name'] = pantry['name'];
+      pantryInfo['address'] = pantry['address'];
+      pantryInfo['zip'] = pantry['zip'];
+      pantryInfo['city'] = pantry['city'];
+      pantryInfo['state'] = pantry['state'];
+      pantryInfo['phone_number'] = pantry['phone_number'];
+      pantryInfo['details'] = pantry['details'];
+      pantryInfo['img_src'] = pantry['img_src'];
+      pantryInfo['lat'] = pantry['lat'];
+      pantryInfo['lon'] = pantry['lon'];
+      pantryInfo['website'] = pantry['website'];
+
+      pantryInfo['reservations'] = [];
+      pantryInfo['foods'] = [];
+      pantryInfo['hours'] = [];
+
+      for (const [reservationKey, reservationData] of Object.entries(pantry['reservations'])) {
+        let reservation = {};
+        reservation['reservation_id'] = reservationData['reservation_id'];
+        reservation['username'] = reservationData['username'];
+        reservation['order_time'] = reservationData['order_time'];
+        reservation['estimated_pick_up'] = reservationData['estimated_pick_up'];
+        reservation['approved'] = reservationData['approved'];
+        reservation['cancelled'] = reservationData['cancelled'];
+
+        pantryInfo['reservations'].push(reservation);
+      }
+
+      for (const [foodKey, foodData] of Object.entries(pantry['foods'])) {
+        let food = {};
+        food['food_id'] = foodData['food_id'];
+        food['food_name'] = foodData['food_name'];
+        food['qr_code'] = foodData['qr_code'];
+        food['quantity'] = foodData['quantity'];
+
+        pantryInfo['foods'].push(food);
+      }
+      
+      for (const [hourKey, hourData] of Object.entries(pantry['hours'])) {
+        let hour = {};
+        hour['day'] = hourData['day'];
+        hour['open'] = hourData['open'];
+        hour['close'] = hourData['closed'];
+        hour['detail'] = hourData['detail'];
+
+        pantryInfo['hours'].push(hour);
+      }
+      resultsArr.push(pantryInfo);
+    }
+    result = resultsArr;
+
     return res.status(200).json({result});
   }).catch(error => {
     console.log(error);
