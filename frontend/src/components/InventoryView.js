@@ -54,7 +54,7 @@ class InventoryView extends Component {
     if (this.props.pantryDetail) {
       console.log(this.props.pantryDetail)
       this.setState({
-        foods: Object.values(this.props.pantryDetail.foods)
+        foods: this.props.pantryDetail.foods
       })
     }
   }
