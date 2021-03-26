@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-import ReactDOMServer from "react-dom/server";
+
+import moment from "moment";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import {
-  ListGroup,
-  ListGroupItem,
-  ListGroupItemHeading,
-  ListGroupItemText,
-} from "reactstrap";
+import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 
@@ -26,7 +22,7 @@ class DashboardView extends Component {
     this.state = {
       /**
        * Dummy Reseravtion examples.
-       * TODO: fetch actual reservations from the API or use Socket.io?
+       * TODO: fetch actual reservations from the API
        */
       pantryDetails: {
         foods: {
@@ -60,7 +56,7 @@ class DashboardView extends Component {
             reservation_id: 1,
             username: "sean1",
             reserved_items: { 1: 3, 2: 5, 3: 3 },
-            order_time: "2021-03-25T08:03:39.000Z",
+            order_time: "2021-03-22T08:03:39.000Z",
             estimated_pick_up: "2021-03-30T02:00:00.000Z",
             picked_up_time: null,
             approved: 0,
@@ -70,7 +66,7 @@ class DashboardView extends Component {
             reservation_id: 106,
             username: "sean1",
             reserved_items: { 2: 4, 3: 7, 4: 2 },
-            order_time: "2021-03-25T08:04:05.000Z",
+            order_time: "2021-03-23T20:45:05.000Z",
             estimated_pick_up: "2021-03-30T02:00:00.000Z",
             picked_up_time: null,
             approved: 0,
@@ -80,7 +76,7 @@ class DashboardView extends Component {
             reservation_id: 107,
             username: "sean1",
             reserved_items: { 1: 5, 2: 3, 3: 1, 4: 1 },
-            order_time: "2021-03-25T08:04:11.000Z",
+            order_time: "2021-03-26T12:30:11.000Z",
             estimated_pick_up: "2021-03-30T02:00:00.000Z",
             picked_up_time: null,
             approved: 0,
@@ -147,9 +143,17 @@ class DashboardView extends Component {
         approved: 0,
       },
 
-      showRsvnMsg: false, // show reservation message, default false
-      selectedID: 1, // TODO: set a default ID so that it can run
+      // show reservation message, default false
+      showRsvnMsg: false,
+
+      // TODO: set a default ID so that it can run
+      // used to passing information to reservation message modal
+      selectedID: 1,
+
+      // used to calculate time elapsed since the reservation is made
+      currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
     };
+    // this.getTimeElapsed = this.getTimeElapsed.bind(this);
   }
 
   /**
@@ -175,6 +179,56 @@ class DashboardView extends Component {
   }
 
   /**
+   *
+   * reference:
+   *          https://stackoverflow.com/questions/22938300/convert-milliseconds-to-hours-and-minutes-using-momentjs
+   * example:
+   *          durationAsString(0) will return -
+   *          durationAsString(10000) will return 10s
+   *          durationAsString(100000) will return 1m 40s
+   *          durationAsString(10000000) will return 2h 46m 40s
+   *          durationAsString(100000000) will return 1d 3h 46m
+   *          durationAsString(100000000, 4) will return 1d 3h 46m 40s
+   * @param {*} ms
+   * @param {*} maxPrecission
+   * @returns
+   */
+  durationAsString(ms, maxPrecission = 3) {
+    const duration = moment.duration(ms);
+
+    const items = [];
+    items.push({ timeUnit: "d", value: Math.floor(duration.asDays()) });
+    items.push({ timeUnit: "h", value: duration.hours() });
+    items.push({ timeUnit: "m", value: duration.minutes() });
+    items.push({ timeUnit: "s", value: duration.seconds() });
+
+    const formattedItems = items.reduce((accumulator, { value, timeUnit }) => {
+      if (
+        accumulator.length >= maxPrecission ||
+        (accumulator.length === 0 && value === 0)
+      ) {
+        return accumulator;
+      }
+
+      accumulator.push(`${value}${timeUnit}`);
+      return accumulator;
+    }, []);
+
+    return formattedItems.length !== 0 ? formattedItems.join(" ") : "-";
+  }
+
+  /**
+   * Calculates and returns the time elapsed since the reservation was made.
+   *
+   * @param {*} receivedTime the time (in String format) when the reservation was made
+   */
+  getTimeElapsed(receivedTime) {
+    const received = moment(new Date(receivedTime), "YYYY/MM/DD HH:mm:ss");
+    const current = this.state.currentDateTime;
+    return this.durationAsString(current - received);
+  }
+
+  /**
    * Returns the textual description of the current inventory.
    *
    */
@@ -196,7 +250,7 @@ class DashboardView extends Component {
     const rsvn = this.state.pantryDetails.reservations[rsvn_id];
     const usernameStyle = {
       fontFamily: "monospace",
-      fontsize: "140%",
+      fontSize: "120%",
       fontWeight: "450",
     };
 
@@ -209,11 +263,19 @@ class DashboardView extends Component {
 
     const username = <span style={usernameStyle}>{rsvn.username}</span>;
 
+    const numItems = (
+      <span style={usernameStyle}>
+        {Object.keys(rsvn.reserved_items).length}
+      </span>
+    );
+
+    const receivedTime = rsvn.order_time;
+
     const messageHeader = (
       <div>
-        User {" " + username + " "} has reserved (xx) items at your food pantry!
+        User {username} has reserved {numItems} items at your food pantry!
         {/* Change messageTime according to API */}
-        <p style={messageTimeStyle}>20 minutes ago.</p>
+        <p style={messageTimeStyle}>{this.getTimeElapsed(receivedTime)} ago.</p>
       </div>
     );
 
