@@ -52,7 +52,7 @@ async function addFoodItemToInventory(pantry_id, food) {
 
 function updateDetail(pantry, pantryId, token){
   return request({
-    url: '/' + pantryId,
+    url: '/pantries/' + pantryId,
     method: 'PUT',
     data: {
       "username": pantry.username,
