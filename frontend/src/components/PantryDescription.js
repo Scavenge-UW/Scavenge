@@ -96,7 +96,7 @@ export default class PantryDescription extends Component {
                         <p> {"State: " + this.state.pantryInfo.state} </p>
                         <p> {"Zip: " + this.state.pantryInfo.zip} </p>
                         <p> {"Phone Number: " + this.state.pantryInfo.phone_number} </p> 
-                        <p> {"Details: " + this.state.pantryInfo.detail} </p>
+                        <p> {"Details: " + this.state.pantryInfo.details} </p>
                         <p> {"Website: " + this.state.pantryInfo.website} </p>
                     </Card.Text>
 
