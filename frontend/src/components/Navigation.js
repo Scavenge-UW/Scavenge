@@ -10,7 +10,7 @@ class Navigation extends Component {
     this.state = {
       message: "Welcome to the Welcome Page!",
       navbar4Admin: ["Manage Pantry", "Profile", "Logout"],
-      navbar4Customer: ["Search Food", "Profile", "Logout"],
+      navbar4Customer: ["Search Foods", "Profile", "Logout"],
       navbar4NotLoggedIn: ["Login", "Signup"],
     };
   }

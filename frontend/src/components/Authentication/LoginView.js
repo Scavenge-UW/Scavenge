@@ -22,7 +22,7 @@ class LoginView extends Component {
     };
 
     if (this.state.username.length == 0 || this.state.password.length == 0) {
-      toast.error("Please provide a username and password.");
+      toast.error("Username or password field is empty.");
       return;
     }
 

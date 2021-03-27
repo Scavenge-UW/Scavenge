@@ -57,6 +57,7 @@ function App(props) {
         }
       })
   }
+  
   const login = async (user) => {
     return AuthService.login(user)
       .then((response) => {
@@ -132,7 +133,7 @@ function App(props) {
                 />
               </Route>
               <Route path="/signup">
-                <SignupView />
+                <SignupView signup={signup} />
               </Route>
               <Route path="/pantry">
                 <PantryAdminView />

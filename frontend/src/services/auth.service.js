@@ -7,14 +7,13 @@ function signup(user) {
     data: {
       "username": user.username,
       "password": user.password,
-      "firstname": user.firstname,
-      "lastname": user.lastname,
-      "phoneNumber": user.phoneNumber,
+      "firstName": user.firstName,
+      "lastName": user.lastName,
+      "phone": user.phone,
       "address": user.address,
       "city": user.city,
       "state": user.state,
-      "zip": user.zip,
-      "type": user.type,
+      "zipcode": user.zipcode,
       "email": user.email
     },
     withCredentials: true,

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { Redirect } from "react-router-dom";
 
 class SignupView extends Component {
   constructor(props) {
@@ -17,32 +18,44 @@ class SignupView extends Component {
       zipcode: "",
       email: "",
       type:"",
+      toHomeView: "", // used for redirection on signup success
     };
     this.submitForm = this.submitForm.bind(this);
   }
 
-  submitForm() {
+  async submitForm() {
     const user = {
       username: this.state.username,
       password: this.state.password,
-      firstname: this.state.firstname,
-      lastname: this.state.lastname,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
       phone: this.state.phone,
       address: this.state.address,
-      city: this.state.state,
+      state: this.state.state,
+      city: this.state.city,
       zipcode: this.state.zipcode,
       email: this.state.email,
-      type: this.state.type,
     };
 
     if (this.state.username.length == 0 || this.state.password.length == 0) {
-      alert("Username or password field is empty.");
+      toast.error("Username or password field is empty.");
       return;
     }
 
+    let signupResult = await this.props.signup(user);
+    if (signupResult === 0) {
+      // Successful signup
+      this.setState({
+        toHomeView: true
+      })
+    }
   }
 
   render() {
+    if (this.state.toHomeView === true) {
+      return <Redirect to='/' />
+    }
+
     return (
       <Container>
         <Form>
@@ -79,39 +92,41 @@ class SignupView extends Component {
               />
             </Form.Group>
           </Form.Row>
-          <Form.Row>
-            <Form.Group
-              as={Col}
-              controlId="formGridFirstName"
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
-            >
-              <Form.Label>First Name</Form.Label>
-              <Form.Control
-                type={"text"}
-                placeholder="Name"
-                value={this.state.firstname}
-                onChange={(e) => this.setState({ firstname: e.target.value })}
-              />
-            </Form.Group>
-          </Form.Row>
 
           <Form.Row>
             <Form.Group
               as={Col}
+              controlId="formGridFirstName"
+              style={{ paddingTop: "10px", paddingLeft: "20px" }}
+            >
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type={"text"}
+                placeholder="John"
+                value={this.state.firstName}
+                onChange={(e) => this.setState({ firstName: e.target.value })}
+              />
+            </Form.Group>
+
+            <Form.Group
+              as={Col}
               controlId="formGridLastName"
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              style={{
+                paddingTop: "10px",
+                paddingLeft: "10px",
+                paddingRight: "20px",
+              }}
             >
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type={"text"}
-                value={this.state.lastname}
-                placeholder="Last Name"
-                onChange={(e) =>
-                  this.setState({ lastname: e.target.value })
-                }
+                placeholder="Smith"
+                value={this.state.lastName}
+                onChange={(e) => this.setState({ lastName: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
+
 
           <Form.Row>
             <Form.Group
@@ -138,10 +153,10 @@ class SignupView extends Component {
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type={"text"}
-                value={this.state.phoneNumber}
+                value={this.state.phone}
                 placeholder="Phone"
                 onChange={(e) =>
-                  this.setState({ phoneNumber: e.target.value })
+                  this.setState({ phone: e.target.value })
                 }
               />
             </Form.Group>
@@ -199,27 +214,20 @@ class SignupView extends Component {
               <Form.Label>Zip</Form.Label>
               <Form.Control
                 type={"number"}
-                value={this.state.zip}
+                value={this.state.zipcode}
                 placeholder="Zip"
-                onChange={(e) => this.setState({ zip: e.target.value })}
+                onChange={(e) => this.setState({ zipcode: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
 
-
-          <Link
-            to={{
-              pathname: "/",
-            }}
+          <Button
+            variant="primary"
+            style={{ marginLeft: "20px" }}
+            onClick={this.submitForm}
           >
-            <Button
-              variant="primary"
-              style={{ marginLeft: "20px" }}
-              onClick={this.submitForm}
-            >
-              Submit
-            </Button>
-          </Link>
+            Submit
+          </Button>
         </Form>
       </Container>
     );
