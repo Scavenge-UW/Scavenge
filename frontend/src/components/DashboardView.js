@@ -357,7 +357,7 @@ class DashboardView extends Component {
         </Row>
         {/* Sub-session title */}
         <Row className="justify-content-center">
-          <h4>Messgaes </h4>
+          <h4>Messages </h4>
         </Row>
         {/* Sub-session content (TODO: adjust style) */}
         <Row className="justify-content-center">
