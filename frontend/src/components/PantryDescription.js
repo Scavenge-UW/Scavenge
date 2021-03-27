@@ -31,7 +31,11 @@ export default class PantryDescription extends Component {
 
     componentDidMount(){
         //going to pass in pantryId from app.js
+        const {  }
         PantryService.getDetail(this.state.pantryId).then((response)=>{this.setState({pantryInfo: response})})
+        this.setState({
+            this.props.pantryDesc
+        })
     }
 
     handleClick(){
@@ -52,7 +56,7 @@ export default class PantryDescription extends Component {
             city: this.state.city,
             state: this.state.state,
             zip: this.state.zip,
-            phone_number: this.state.carDescription,
+            phone_number: this.state.phone_number,
             details: this.state.details,
             img_src: this.state.img_src,
             website: this.state.website
