@@ -126,13 +126,13 @@ function App(props) {
               <Route path="/search-food">
                 <FoodSearchView />
               </Route>
+              <Route path="/profile">
+                <ProfileView profile={profile}/>
+              </Route>
               <Route path="/">
                 <HomeView
                   profile={profile}
                 />
-              </Route>
-              <Route path="/profile">
-                <ProfileView profile={profile}/>
               </Route>
             </Switch>
           </div>
