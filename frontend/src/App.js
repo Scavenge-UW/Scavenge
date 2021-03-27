@@ -19,6 +19,7 @@ import PantryAdminView from './components/PantryAdminView';
 import PantryDetailView from './components/PantryDetailView';
 import FoodSearchView from './components/FoodSearchView';
 import Navigation from './components/Navigation';
+import ProfileView from './components/ProfileView';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -129,6 +130,9 @@ function App(props) {
                 <HomeView
                   profile={profile}
                 />
+              </Route>
+              <Route path="/:currentUsername">
+                <ProfileView profile={profile}/>
               </Route>
             </Switch>
           </div>

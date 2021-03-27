@@ -17,7 +17,6 @@ class profileView extends Component {
       "city": '',
       "state": '',
       "zip": '',
-      "type": '',
       "email": '',
       "first_name": '',
       "last_name": ''
@@ -36,7 +35,6 @@ class profileView extends Component {
           "city": this.state.city,
           "state": this.state.state,
           "zip": this.state.zip,
-          "type": this.state.type,
           "email": this.state.email,
           "firstName": this.state.first_name,
           "lastName": this.state.last_name
@@ -208,25 +206,6 @@ class profileView extends Component {
                   placeholder="Zipcode"
                   onChange={(e) => this.setState({ zip: e.target.value })}
                 />
-              </Form.Group>
-            </Form.Row>
-  
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId="formGridType"
-                style={{ paddingLeft: "20px", paddingRight: "20px" }}
-              >
-                <Form.Label>Type</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.type}
-                  onChange={(e) => this.setState({ type: e.target.value })}
-                >
-                  <option value="Customer">Customer</option>
-                  <option value="Staff">Staff</option>
-                  <option value="Admin">Admin</option>
-                </Form.Control>
               </Form.Group>
             </Form.Row>
             
