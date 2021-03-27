@@ -61,7 +61,6 @@ class profileView extends Component {
                 <Form.Label>Username</Form.Label>
                 <Form.Control
                   type={"text"}
-                  placeholder={"Username"}
                   value={this.state.username}
                   onChange={(e) => this.setState({ username: e.target.value })}
                 />
@@ -79,7 +78,6 @@ class profileView extends Component {
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                   type={"password"}
-                  placeholder="Password"
                   value={this.state.password}
                   onChange={(e) => this.setState({ password: e.target.value })}
                 />
@@ -95,7 +93,6 @@ class profileView extends Component {
                 <Form.Label>First Name</Form.Label>
                 <Form.Control
                   type={"text"}
-                  placeholder="John"
                   value={this.state.first_name}
                   onChange={(e) => this.setState({ first_name: e.target.value })}
                 />
@@ -111,7 +108,6 @@ class profileView extends Component {
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control
                   type={"text"}
-                  placeholder="Example"
                   value={this.state.last_name}
                   onChange={(e) => this.setState({ last_name: e.target.value })}
                 />
@@ -128,7 +124,6 @@ class profileView extends Component {
                 <Form.Label>Address</Form.Label>
                 <Form.Control
                   type={"text"}
-                  placeholder="1234 Main St"
                   value={this.state.address}
                   onChange={(e) => this.setState({ address: e.target.value })}
                 />
@@ -144,7 +139,6 @@ class profileView extends Component {
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type={"email"}
-                  placeholder="john@example.com"
                   value={this.state.email}
                   onChange={(e) => this.setState({ email: e.target.value })}
                 />
@@ -161,7 +155,6 @@ class profileView extends Component {
                 <Form.Control
                   type={"text"}
                   value={this.state.phoneNumber}
-                  placeholder="(123) 456 7890"
                   onChange={(e) =>
                     this.setState({ phoneNumber: e.target.value })
                   }
@@ -179,7 +172,6 @@ class profileView extends Component {
                 <Form.Control
                   type={"text"}
                   value={this.state.city}
-                  placeholder="City"
                   onChange={(e) => this.setState({ city: e.target.value })}
                 />
               </Form.Group>
@@ -189,7 +181,6 @@ class profileView extends Component {
                 <Form.Control
                   type={"text"}
                   value={this.state.state}
-                  placeholder="State"
                   onChange={(e) => this.setState({ state: e.target.value })}
                 />
               </Form.Group>
@@ -203,7 +194,6 @@ class profileView extends Component {
                 <Form.Control
                   type={"number"}
                   value={this.state.zip}
-                  placeholder="Zipcode"
                   onChange={(e) => this.setState({ zip: e.target.value })}
                 />
               </Form.Group>
