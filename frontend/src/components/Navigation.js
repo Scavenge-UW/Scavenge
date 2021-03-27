@@ -11,7 +11,7 @@ class Navigation extends Component {
       message: "Welcome to the Welcome Page!",
       navbar4Admin: ["Manage Pantry", "Profile", "Logout"],
       navbar4Customer: ["Search Foods", "Profile", "Logout"],
-      navbar4NotLoggedIn: ["Login", "Signup"],
+      navbar4NotLoggedIn: ["Search Foods", "Login", "Signup"],
     };
   }
 
