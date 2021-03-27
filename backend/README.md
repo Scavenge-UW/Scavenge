@@ -7,6 +7,8 @@ The `controllers` folder includes all of the functions that are called by the `r
 
 The `models` folder includes all of the functions that are called by the `controllers` folder. Each function in this folder is simply a query. They will use prepared statements to prevent SQL injections.
 
+Run BE tests: "npm run test" (server needs to be off as well).
+
 Template for a function in the models
 ```
 exports.deleteFood = (req, res) => {
