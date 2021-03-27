@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import { toast } from 'react-toastify';
+import "../../css/LoginView.css";
 
 class LoginView extends Component {
   constructor(props) {
@@ -45,7 +46,7 @@ class LoginView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridEmail"
+              controlId="username"
               style={{ paddingTop: "70px", paddingLeft: "30px" }}
             >
               <Form.Label>Username</Form.Label>
@@ -61,7 +62,7 @@ class LoginView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridPassword"
+              controlId="password"
               style={{
                 paddingTop: "10px",
                 paddingLeft: "30px",

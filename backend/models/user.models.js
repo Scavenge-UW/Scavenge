@@ -10,7 +10,7 @@ exports.isEmployeeOf = async (req, res, user) => {
   var values = [
     [user.username]
   ];
-
+  return await execQuery("select", query, values);
 }
 
 exports.checkQuantity = async (req, res, food_id) => {

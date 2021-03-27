@@ -206,25 +206,6 @@ class SignupView extends Component {
             </Form.Group>
           </Form.Row>
 
-          <Form.Row>
-            <Form.Group
-              as={Col}
-              controlId="formGridType"
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
-            >
-              <Form.Label>Type</Form.Label>
-              <Form.Control
-                as="select"
-                value={this.state.type}
-                onChange={(e) => this.setState({ type: e.target.value })}
-              >
-                <option>Choose</option>
-                <option>Customer</option>
-                <option>Staff</option>
-                <option>Admin</option>
-              </Form.Control>
-            </Form.Group>
-          </Form.Row>
 
           <Link
             to={{

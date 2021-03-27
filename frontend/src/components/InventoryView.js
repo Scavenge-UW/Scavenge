@@ -3,9 +3,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify';
 
 import FoodItemCard from './FoodItemCard';
 import AddItemModal from './modals/AddItemModal';
+import PantryService from '../services/pantry.service';
 
 // used to initialize itemToBeAdded
 const emptyItem = {
@@ -54,7 +56,7 @@ class InventoryView extends Component {
     if (this.props.pantryDetail) {
       console.log(this.props.pantryDetail)
       this.setState({
-        foods: Object.values(this.props.pantryDetail.foods)
+        foods: this.props.pantryDetail.foods
       })
     }
   }
@@ -98,10 +100,20 @@ class InventoryView extends Component {
    * @param {Object} data data of the item containing food_id, name, and quantity
    */ 
   addItem(data) {
-    // Add the item in the state
-    this.setState(prevState => ({
-      foods: [...prevState.foods, data]
-    }))
+    console.log(data)
+    PantryService.addFoodItemToInventory(
+      1, // TODO: Change to actual pantry id
+      data
+    ).then( () => {
+      toast.success(data.food_name + " was successfully added!")
+      // Add the item in the state
+      this.setState(prevState => ({
+        foods: [...prevState.foods, data]
+      }))
+    }
+    ).catch( () => {
+      toast.error("Error while adding " + data.food_name + " to inventory.")
+    })
   }
 
   /**

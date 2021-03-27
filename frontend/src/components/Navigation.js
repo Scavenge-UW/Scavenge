@@ -10,7 +10,7 @@ class Navigation extends Component {
     this.state = {
       message: "Welcome to the Welcome Page!",
       navbar4Admin: ["Manage Pantry", "Profile", "Logout"],
-      navbar4Customer: ["Cart", "Reservations", "Profile", "Logout"],
+      navbar4Customer: ["Search Food", "Profile", "Logout"],
       navbar4NotLoggedIn: ["Login", "Signup"],
     };
   }
@@ -28,7 +28,9 @@ class Navigation extends Component {
       case "Signup":
         return "/signup";
       case "Manage Pantry":
-        return "/pantry/"
+        return "/pantry"
+      case "Search Food":
+        return "/search-food"
       default:
         return "/";
     }
@@ -62,10 +64,14 @@ class Navigation extends Component {
     let navbarContent;
     navbarContent = this.state.navbar4NotLoggedIn;
     const { profile } = this.props;
-    if (profile) {
+    if (this.props.isAdmin()) {
       navbarContent = this.state.navbar4Admin;
     } else {
-      navbarContent = this.state.navbar4NotLoggedIn;
+      if (profile) {
+        navbarContent = this.state.navbar4Customer;
+      } else {
+        navbarContent = this.state.navbar4NotLoggedIn;
+      }
     }
 
     return (

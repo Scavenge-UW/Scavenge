@@ -1,3 +1,4 @@
+  
 import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -12,12 +13,12 @@ import DashboardView from './DashboardView'
 
 /**
  * PantryAdminView that consists of PantryDashboardView and InventoryView
- * 
+ *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
  */
 
- function PantryAdminView() {
+function PantryAdminView() {
   const [pantryDetail, setPantryDetail] = useState(null);
   
   /**
@@ -39,7 +40,7 @@ import DashboardView from './DashboardView'
   }
 
   const PantryAdminViewTabs = () => {
-    const [tab, setTab] = useState('dashboard')
+    const [tab, setTab] = useState("dashboard");
 
     return (
       <Tabs
@@ -58,16 +59,14 @@ import DashboardView from './DashboardView'
           />
         </Tab>
       </Tabs>
-    )
-  }
+    );
+  };
 
   return (
     <Container>
-        <PantryAdminViewTabs />
+      <PantryAdminViewTabs />
     </Container>
   );
 }
-
-
 
 export default PantryAdminView;

@@ -5,8 +5,10 @@ import Col from "react-bootstrap/Col";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { VscCircleFilled } from "react-icons/vsc";
+import { toast } from 'react-toastify';
 
 import '../css/common.css'
+import PantryService from '../services/pantry.service';
 
 class FoodItemCard extends Component {
   constructor(props) {
@@ -74,10 +76,19 @@ class FoodItemCard extends Component {
     let food_id = this.props.foodItem.food_id;
 
     if (window.confirm("Are you sure you want to update " + itemName + "?")){
-      // TODO: send delete request to the server
-
-      this.props.updateItemQuantity(food_id, this.newQuantity.current.value);
-      this.deactivateEditMode();
+      PantryService.updateFoodItem(
+        1,
+        food_id,
+        { quantity: this.newQuantity.current.value }
+      ).then( () => {
+        toast.success(itemName + "'s quantity was successfully updated!");
+        this.props.updateItemQuantity(food_id, this.newQuantity.current.value);
+        this.deactivateEditMode();
+      }).catch( (response) => {
+        if (response.message){
+          toast.error(response.message);
+        }
+      })
     }
   }
 
