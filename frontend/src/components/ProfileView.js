@@ -10,16 +10,16 @@ class profileView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      "username": '',
-      "password": '',
-      "phone": '',
-      "address": '',
-      "city": '',
-      "state": '',
-      "zip": '',
-      "email": '',
-      "first_name": '',
-      "last_name": ''
+      username: (this.props.profile) ? this.props.profile.username:'',
+      password: (this.props.profile) ? this.props.profile.password : "",
+      phone: (this.props.profile) ? this.props.profile.phone : "",
+      address: (this.props.profile) ? this.props.profile.address : "",
+      city: (this.props.profile) ? this.props.profile.city : "",
+      state: (this.props.profile) ? this.props.profile.state : "",
+      zip: (this.props.profile) ? this.props.profile.zip : "",
+      email: (this.props.profile) ? this.props.profile.email : "",
+      first_name: (this.props.profile) ? this.props.profile.firstName : "",
+      last_name: (this.props.profile) ? this.props.profile.lastName : ""
     };
 
   }
