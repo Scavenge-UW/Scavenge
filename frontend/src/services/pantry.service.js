@@ -62,9 +62,11 @@ function updateDetail(pantry, pantryId, token){
       "city": pantry.city,
       "state": pantry.state,
       "zip": pantry.zip,
-      "carDescription": pantry.carDescription,
-      "type": pantry.type,
-      "email": pantry.email
+      "details": pantry.details,
+      "img_src": pantry.img_src,
+      "lon": pantry.long,
+      "lat": pantry.lat,
+      "website": pantry.website
     },
     headers: {
       "Authorization": `Bearer ${token}`

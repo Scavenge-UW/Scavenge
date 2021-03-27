@@ -23,7 +23,9 @@ export default class PantryDescription extends Component {
             phone_number:"",
             details:"",
             img_src:"",
-            website:"" 
+            website:"",
+            lon:"",
+            lat:""
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -49,6 +51,8 @@ export default class PantryDescription extends Component {
                     phone_number: response.phone_number,
                     details: response.details,
                     img_src: response.img_src,
+                    lon: response.lon,
+                    lat: response.lat,
                     website: response.website
                 })
             }
@@ -76,6 +80,8 @@ export default class PantryDescription extends Component {
             phone_number: this.state.phone_number,
             details: this.state.details,
             img_src: this.state.img_src,
+            lon: this.state.lon,
+            lat: this.state.lat,
             website: this.state.website
         }
         this.setState({showModal:false})
