@@ -3,6 +3,8 @@ const router = express.Router();
 
 const { reserveAction } = require("../controllers/user.controllers.js");
 
+const authMiddleware = require("../middleware/auth.middleware");
+
 // Make a reservation
 router.route('/reserve/:pantry_id')
   .post(reserveAction);

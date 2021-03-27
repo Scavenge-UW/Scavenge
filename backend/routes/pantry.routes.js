@@ -12,6 +12,7 @@ const {
   foodSearchAction
 } = require("../controllers/pantry.controllers.js");
 
+const authMiddleware = require("../middleware/auth.middleware");
 
 // Get all pantry info
 router.get('/pantries', getAllPantriesAction);
@@ -20,22 +21,22 @@ router.get('/pantries', getAllPantriesAction);
 router.get('/pantries/:pantry_id', getPantryDetailAction);
 
 // Update pantry details
-router.put('/pantries/:pantry_id/', pantryUpdateDetailAction);
+router.put('/pantries/:pantry_id/', authMiddleware.requireLogin, pantryUpdateDetailAction);
 
 // Get pantry hours
 router.get('/pantries/:pantry_id/hours', getPantryHoursAction);
 
 // Update pantry hours
-router.put('/pantries/:pantry_id/hours/:day', pantryUpdateHoursAction);
+router.put('/pantries/:pantry_id/hours/:day', authMiddleware.requireLogin, pantryUpdateHoursAction);
 
 // Update food inventory
-router.put('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
+router.put('/pantries/:pantry_id/:food_id', authMiddleware.requireLogin, pantryUpdateInventoryAction);
 
 // Add a food to inventory
-router.post('/pantries/:pantry_id/:food_id', pantryUpdateInventoryAction);
+router.post('/pantries/:pantry_id/:food_id', authMiddleware.requireLogin, pantryUpdateInventoryAction);
 
 // Mark a reservation as picked up, approved, or cancelled
-router.put('/pantries/:pantry_id/reservations/:action/:reservation_id', updateReservationAction);
+router.put('/pantries/:pantry_id/reservations/:action/:reservation_id', authMiddleware.requireLogin, updateReservationAction);
 
 // Search pantries by food id
 router.get('/pantries/search/:food_id', foodSearchAction);
