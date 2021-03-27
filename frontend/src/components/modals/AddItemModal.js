@@ -34,12 +34,8 @@ function AddItemModal(props) {
    * 
    */
   const addItem = () => {
-    // TODO: send add request to API
-    let food_id = Math.floor(Math.random() * 100)+1
-
     props.setItemToBeAdded({
-      food_id: food_id,
-      name: name,
+      food_name: name,
       quantity: quantity,
     })
 

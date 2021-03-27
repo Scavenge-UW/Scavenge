@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+
 import PantryService from '../services/pantry.service'
 
 
@@ -78,7 +79,15 @@ export default class PantryDescription extends Component {
             website: this.state.website
         }
         this.setState({showModal:false})
-        PantryDescription.updateDetail(pantry,this.state.pantryId,this.state.token)
+        PantryService.updateDetail(
+            pantry,
+            this.state.pantryId,
+            this.state.token
+        ).then((response) => {
+            console.log(response)
+        }).catch((error) => {
+            console.error(error)
+        })
     }
 
 
