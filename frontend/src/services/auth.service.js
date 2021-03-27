@@ -1,19 +1,19 @@
 import request from './request';
 
 function signup(user) {
-  console.log(user);
   return request({
     url: '/signup',
     method: 'POST',
     data: {
       "username": user.username,
       "password": user.password,
+      "firstname": user.firstname,
+      "lastname": user.lastname,
       "phoneNumber": user.phoneNumber,
       "address": user.address,
       "city": user.city,
       "state": user.state,
       "zip": user.zip,
-      "carDescription": user.carDescription,
       "type": user.type,
       "email": user.email
     },
