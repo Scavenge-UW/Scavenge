@@ -29,7 +29,7 @@ class Navigation extends Component {
         return "/signup";
       case "Manage Pantry":
         return "/pantry"
-      case "Search Food":
+      case "Search Foods":
         return "/search-food"
       default:
         return "/";
