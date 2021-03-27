@@ -45,9 +45,9 @@ function editProfile(user, token) {
       "city": user.city,
       "state": user.state,
       "zip": user.zip,
-      "carDescription": user.carDescription,
-      "type": user.type,
-      "email": user.email
+      "email": user.email,
+      "firstName": user.firstName,
+      "lastName": user.LastName
     },
     headers: {
       "Authorization": `Bearer ${token}`

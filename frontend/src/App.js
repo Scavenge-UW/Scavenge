@@ -131,7 +131,7 @@ function App(props) {
                   profile={profile}
                 />
               </Route>
-              <Route path="/:currentUsername">
+              <Route path="/profile">
                 <ProfileView profile={profile}/>
               </Route>
             </Switch>

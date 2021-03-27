@@ -39,7 +39,7 @@ class profileView extends Component {
           "firstName": this.state.first_name,
           "lastName": this.state.last_name
     };
-    if(this.state.username && this.state.password){
+    if(this.state.username && this.state.password && this.state.phone && this.state.address && this.state.city && this.state.state && this.state.zip && this.state.email && this.state.first_name && this.state.last_name){
       this.props.editProf(user);
     } else{
       alert("Username or password field is empty.")

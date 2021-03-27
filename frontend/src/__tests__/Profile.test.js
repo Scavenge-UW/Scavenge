@@ -8,18 +8,18 @@ import "../setupTests"
 describe('Login tests', () => {
   const wrapper = shallow(<ProfileView />);
 
-  it('should have a login button', () => {
+  it('should have two buttons', () => {
     // There should be one button in LoginView
     expect(wrapper.find('Button')).toHaveLength(2);
 
   })
 
-  it('should have two inputs for username and password', () => {
+  it('should have 10 inputs for profile fields', () => {
     expect(wrapper.find('FormControl')).toHaveLength(10);
   })
 
 
-  it('should have two blank states for username and password', () => {
+  it('should have 10 blank states for username and password', () => {
     expect(wrapper.state('username')).toEqual('');
     expect(wrapper.state('password')).toEqual('');
     expect(wrapper.state('phone')).toEqual('');

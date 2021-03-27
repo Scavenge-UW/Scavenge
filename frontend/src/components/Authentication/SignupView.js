@@ -31,7 +31,7 @@ class SignupView extends Component {
       email: this.state.email,
     };
 
-    if (this.state.username.length == 0 || this.state.password.length == 0) {
+    if (this.state.username.length == 0 || this.state.password.length == 0 || this.state.phoneNumber.length == 0|| this.state.address.length == 0|| this.state.city.length == 0|| this.state.state.length == 0|| this.state.city.length == 0|| this.state.zip.length == 0|| this.state.email.length == 0) {
       alert("Username or password field is empty.");
       return;
     }
