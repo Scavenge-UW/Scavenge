@@ -11,7 +11,7 @@ export default class PantryDescription extends Component {
     constructor(props) {
         super(props);
         this.state={
-            showModal: true,
+            showModal: false,
             pantryInfo:"",
             pantryId:1,
             name:"",
@@ -31,7 +31,27 @@ export default class PantryDescription extends Component {
 
     componentDidMount(){
         //going to pass in pantryId from app.js
-        PantryService.getDetail(this.state.pantryId).then((response)=>{this.setState({pantryInfo: response})})
+        PantryService.getDetail(
+            this.state.pantryId
+        )
+        .then( (response) => {
+            console.log(response);
+            this.setState({
+                    pantryInfo: response,
+                    // sorry for the dirty fix... -lq
+                    pantryId: response.pantry_id,
+                    name: response.name,
+                    address: response.address,
+                    zip: response.zip,
+                    city: response.city,
+                    state: response.state,
+                    phone_number: response.phone_number,
+                    details: response.details,
+                    img_src: response.img_src,
+                    website: response.website
+                })
+            }
+        )
     }
 
     handleClick(){
@@ -91,42 +111,81 @@ export default class PantryDescription extends Component {
                             <Form>
                             <Form.Group controlId="formBasicName">
                                 <Form.Label>Pantry Name</Form.Label>
-                                <Form.Control type="text" placeholder="New Pantry Name" onChange={(e) => this.setState({ name: e.target.value })}/>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New Pantry Name"
+                                    value={this.state.name}
+                                    onChange={(e) => this.setState({ name: e.target.value })}
+                                />
                             </Form.Group>
 
                             <Form.Group controlId="formBasicAddress">
                                 <Form.Label>Address</Form.Label>
-                                <Form.Control type="text" placeholder="New Address" onChange={(e) => this.setState({ address: e.target.value })} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New Address"
+                                    onChange={(e) => this.setState({ address: e.target.value })}
+                                    value={this.state.address}
+                                />
                             </Form.Group>
 
                             <Form.Group controlId="formBasicCity">
                                 <Form.Label>City</Form.Label>
-                                <Form.Control type="text" placeholder="New City" onChange={(e) => this.setState({ city: e.target.value })} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New City"
+                                    value={this.state.city}
+                                    onChange={(e) => this.setState({ city: e.target.value })}
+                                />
                             </Form.Group>
 
                             <Form.Group controlId="formBasicZip">
                                 <Form.Label>Zip</Form.Label>
-                                <Form.Control type="text" placeholder="New Zipcode"  onChange={(e) => this.setState({ zip: e.target.value })}/>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New Zipcode"
+                                    value={this.state.zip}
+                                    onChange={(e) => this.setState({ zip: e.target.value })}
+                                />
                             </Form.Group>
 
                             <Form.Group controlId="formBasicPhone">
                                 <Form.Label>Phone Number</Form.Label>
-                                <Form.Control type="text" placeholder="New Phone Number" onChange={(e) => this.setState({phone_number: e.target.value })} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New Phone Number"
+                                    value={this.state.phone_number}
+                                    onChange={(e) => this.setState({phone_number: e.target.value })} />
                             </Form.Group>
                             
                             <Form.Group controlId="formBasicDetails">
                                 <Form.Label>Details</Form.Label>
-                                <Form.Control type="text" placeholder="New Phone Number" onChange={(e) => this.setState({ details: e.target.value })} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New Phone Number"
+                                    value={this.state.details}
+                                    onChange={(e) => this.setState({ details: e.target.value })}
+                                />
                             </Form.Group>
 
                             <Form.Group controlId="formBasicImage">
                                 <Form.Label>Image Source</Form.Label>
-                                <Form.Control type="text" placeholder="New Image Source" onChange={(e) => this.setState({ img_src: e.target.value })} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New Image Source"
+                                    value={this.state.img_src}
+                                    onChange={(e) => this.setState({ img_src: e.target.value })}
+                                />
                             </Form.Group>
 
                             <Form.Group controlId="formBasicImage">
                                 <Form.Label>Website</Form.Label>
-                                <Form.Control type="text" placeholder="New Website" onChange={(e) => this.setState({ website: e.target.value })} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="New Website"
+                                    value={this.state.website}
+                                    onChange={(e) => this.setState({ website: e.target.value })}
+                                />
                             </Form.Group>
 
 
