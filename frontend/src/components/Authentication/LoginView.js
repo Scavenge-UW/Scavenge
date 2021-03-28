@@ -15,7 +15,8 @@ class LoginView extends Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  async submitForm() {
+  async submitForm(e) {
+    e.preventDefault(); // prevent taking us to a new link
     const user = {
       username: this.state.username,
       password: this.state.password,
@@ -80,6 +81,7 @@ class LoginView extends Component {
             </Form.Group>
           </Form.Row>
           <Button
+            type="submit"
             variant="dark"
             style={{ marginLeft: "30px" }}
             onClick={this.submitForm}

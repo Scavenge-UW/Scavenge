@@ -8,6 +8,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useParams } from "react-router-dom";
 import { Typeahead } from 'react-bootstrap-typeahead';
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 import FoodItemCard from '../components/FoodItemCard';
 
@@ -83,17 +86,17 @@ function FoodSearchView() {
           <Form.Label htmlFor="foodInput" srOnly>
             Food Name
           </Form.Label>
-         <Typeahead
-          placeholder="Choose a food..."
-          className="mr-2"
-          options={dummySearchResult.map(food => food.food_name)}
-          onChange={onClickSearchButton}
-         />
+          <Typeahead
+            placeholder="Choose a food..."
+            className="mr-2"
+            options={dummySearchResult.map(food => food.food_name)}
+            onChange={onClickSearchButton}
+          />
           <Button
+            type="submit"
             className="mb-2"
-            onClick={onClickSearchButton}
           >
-            Search
+            <FontAwesomeIcon icon={faSearch}/>
           </Button>
         </Form>
       </Row>
