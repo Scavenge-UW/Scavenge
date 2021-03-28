@@ -7,6 +7,7 @@ import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useParams } from "react-router-dom";
+import { Typeahead } from 'react-bootstrap-typeahead';
 
 import FoodItemCard from '../components/FoodItemCard';
 
@@ -78,16 +79,16 @@ function FoodSearchView() {
         <h1>Search for foods</h1>
       </Row>
       <Row className="justify-content-center mt-4">
-        <Form inline>
+        <Form className="d-flex">
           <Form.Label htmlFor="foodInput" srOnly>
             Food Name
           </Form.Label>
-          <Form.Control
-            className="mb-2 mr-sm-2"
-            id="foodInput"
-            placeholder="Apple"
-            ref={foodInput}
-          />
+         <Typeahead
+          placeholder="Choose a food..."
+          className="mr-2"
+          options={dummySearchResult.map(food => food.food_name)}
+          onChange={onClickSearchButton}
+         />
           <Button
             className="mb-2"
             onClick={onClickSearchButton}
@@ -95,6 +96,9 @@ function FoodSearchView() {
             Search
           </Button>
         </Form>
+      </Row>
+      <Row className="justify-content-center mr-5">
+        <p>Tab to autocomplete food</p>
       </Row>
       <Row className="justify-content-center mt-4">
         {getFoodItemCards()}
