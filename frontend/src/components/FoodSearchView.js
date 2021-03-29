@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 import FoodItemCard from '../components/FoodItemCard';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 /**
  * FoodSearchView where users can search for a specific food item
@@ -25,6 +26,7 @@ function FoodSearchView() {
   const foodInput = React.createRef();
   const { query } = useParams(); // get query from route param
   const [ searchResult, setSearchResult ] = useState([]);
+  const [multiSelections, setMultiSelections] = useState([]);
   const dummySearchResult = [
     {
         "id": 1,
@@ -82,19 +84,23 @@ function FoodSearchView() {
         <h1>Search for foods</h1>
       </Row>
       <Row className="justify-content-center mt-4">
-        <Form className="d-flex">
+        <Form className="d-flex" obSubmit={onClickSearchButton}>
           <Form.Label htmlFor="foodInput" srOnly>
             Food Name
           </Form.Label>
           <Typeahead
             placeholder="Choose a food..."
             className="mr-2"
+            labelKey="food"
+            multiple
             options={dummySearchResult.map(food => food.food_name)}
-            onChange={onClickSearchButton}
+            onChange={setMultiSelections}
+            id="foodInput"
           />
           <Button
             type="submit"
             className="mb-2"
+            onClick={onClickSearchButton}
           >
             <FontAwesomeIcon icon={faSearch}/>
           </Button>
