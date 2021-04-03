@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 
 import "../css/common.css";
 
-class OpenHourCard extends Component {
+class DashboardOpenHourCard extends Component {
   constructor(props) {
     super(props);
   }
@@ -42,4 +42,4 @@ class OpenHourCard extends Component {
   }
 }
 
-export default OpenHourCard;
+export default DashboardOpenHourCard;

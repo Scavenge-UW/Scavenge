@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 
 import "../css/common.css";
 
-class PantryDescriptionCard extends Component {
+class DashboardDescriptionCard extends Component {
   constructor(props) {
     super(props);
 
@@ -44,4 +44,4 @@ class PantryDescriptionCard extends Component {
   }
 }
 
-export default PantryDescriptionCard;
+export default DashboardDescriptionCard;

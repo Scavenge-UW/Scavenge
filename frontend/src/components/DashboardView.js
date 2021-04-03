@@ -12,8 +12,9 @@ import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 
 // import for components
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
-import PantryDescriptionCard from "./PantryDescriptionCard";
-import OpenHourCard from "./OpenHourCard";
+import DashboardDescriptionCard from "./DashboardDescriptionCard";
+import DashboardOpenHourCard from "./DashboardOpenHourCard";
+import DashboardMessage from "./DashboardMessage";
 
 // import for services
 // import PantryService from "../services/pantry.service";
@@ -237,7 +238,7 @@ class DashboardView extends Component {
         </Button>
       </ListGroupItem>
     ));
-    return <ListGroup variant="flush">{viewMessages}</ListGroup>;
+    return <ListGroup>{viewMessages}</ListGroup>;
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -279,13 +280,17 @@ class DashboardView extends Component {
         <Row className="justify-content-center">
           {this.getMessageOverview()}
         </Row>
+        {/* TODO: add changes */}
+        <Row className="justify-content-center">
+          <DashboardMessage />
+        </Row>
         {/* Description */}
         <Row className="justify-content-center pt-4">
-          <PantryDescriptionCard />
+          <DashboardDescriptionCard />
         </Row>
         {/* Open Hours */}
         <Row className="justify-content-center pt-4">
-          <OpenHourCard openHours={this.state.hours} />
+          <DashboardOpenHourCard openHours={this.state.hours} />
         </Row>
         {/* Reservation Message Modal */}
         <ViewRsvnMsgModal
