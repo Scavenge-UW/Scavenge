@@ -13,13 +13,13 @@ function ViewRsvnMsgModal(props) {
     fontFamily: "monospace",
   };
 
-  const rsvn = props.state.pantryDetails.reservations[props.selectedID];
+  const rsvn = props.state.rsvns;
 
-  const contents = Object.entries(rsvn.reserved_items).map(([key, value]) => (
-    <li key={key}>
-      {props.state.pantryDetails.foods[key].food_name}: {value}
-    </li>
-  ));
+  // const contents = Object.entries(rsvn.reserved_items).map(([key, value]) => (
+  //   <li key={key}>
+  //     {props.state.pantryDetails.foods[key].food_name}: {value}
+  //   </li>
+  // ));
 
   return (
     <>
@@ -35,7 +35,7 @@ function ViewRsvnMsgModal(props) {
             Reservation Detail (
             <span style={rsvnDetaillStyle}>Food Name: Quantity</span>)
           </h5>
-          {contents}
+          {/* {contents} */}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
