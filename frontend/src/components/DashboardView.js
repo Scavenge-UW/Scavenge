@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 
-// import for calculating current time
-import moment from "moment";
-
 // import for bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -17,14 +14,19 @@ import DashboardOpenHourCard from "./DashboardOpenHourCard";
 import DashboardMessage from "./DashboardMessage";
 
 // import for services
-// import PantryService from "../services/pantry.service";
+import PantryService from "../services/pantry.service";
+
+// other imports
+import moment from "moment";
+import { toast } from "react-toastify";
 
 /**
  * Dashboard View
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
- *         [Yayen Lin](https://github.com/yayen-lin)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
+ *
  */
 class DashboardView extends Component {
   constructor(props) {
@@ -38,9 +40,13 @@ class DashboardView extends Component {
       // show reservation message, default false
       showRsvnMsg: false,
 
-      // TODO: set a default ID so that it can run
-      // used to passing information to reservation message modal
-      selectedID: 1,
+      // default selectedID = null,
+      // this is used to passing information to ViewRsvnMsgModal
+      selectedID: null,
+      selecedUsername: "",
+      selectedApproved: null,
+
+      approvedRsvns: {},
 
       // used to calculate time elapsed since the reservation is made
       currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
@@ -57,7 +63,7 @@ class DashboardView extends Component {
           foods: this.props.pantryDetail.foods,
           hours: this.props.pantryDetail.hours,
         },
-        () => this.getDashboardOverview()
+        () => this.getDashboardOverview() // TODO: seems like we don't need this
       );
     }
   }
@@ -90,7 +96,7 @@ class DashboardView extends Component {
 
   /**
    *
-   * Helper function for getTimeElapsed to format time elapsed since the reservation received.
+   * Helper function for `getTimeElapsed` to format time elapsed since the reservation received.
    *
    * reference:
    *          https://stackoverflow.com/questions/22938300/convert-milliseconds-to-hours-and-minutes-using-momentjs
@@ -206,6 +212,92 @@ class DashboardView extends Component {
   }
 
   /**
+   * Mark a reservation as picked up
+   * (TODO: need a undo button?)
+   *
+   */
+  markAsPickedUp(rsvn_id, pantry_id) {
+    console.log(rsvn_id);
+    PantryService.setPickedUp(
+      pantry_id, // TODO: Change to actual pantry id
+      rsvn_id
+    )
+      .then(() => {
+        toast.success(
+          "reservation with ID " +
+            rsvn_id +
+            " was successfully marked as picked up!"
+        );
+      })
+      .catch(() => {
+        toast.error(
+          "Error while marking reservation with ID " +
+            rsvn_id +
+            " as picked up."
+        );
+      });
+  }
+
+  /**
+   * Mark a reservation as approved
+   * (TODO: need a undo button?)
+   *
+   */
+  markAsApproved(rsvn_id, pantry_id) {
+    console.log(rsvn_id);
+    PantryService.setApproved(
+      pantry_id, // TODO: Change to actual pantry id
+      rsvn_id
+    )
+      .then(() => {
+        toast.success(
+          "You have successfully approve the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while approving reservation with ID " + rsvn_id);
+      });
+  }
+
+  /**
+   * Mark a reservation as cancelled
+   * (TODO: need a undo button?)
+   *
+   */
+  markAsCancelled(rsvn_id, pantry_id) {
+    console.log(rsvn_id);
+    PantryService.setCancelled(
+      pantry_id, // TODO: Change to actual pantry id
+      rsvn_id
+    )
+      .then(() => {
+        toast.success(
+          "You have successfully cancel the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while cancelling reservation with ID " + rsvn_id);
+      });
+  }
+
+  // isMarkedPickedUp(rsvn_id) {
+  //   console.log("isMarkedPickedUp, rsvn_id = ", { rsvn_id });
+  //   let rsvn = {};
+  //   for (const r of this.state.rsvns) {
+  //     if (r.reservation_id === rsvn_id) {
+  //       rsvn = { ...r };
+  //     }
+  //   }
+
+  //   console.log("rsvn.approved = ", rsvn.approved);
+  //   console.log("rsvn.approved = ", rsvn.approved ? "true" : "false");
+
+  //   // if rsvn.approved == 0, not approved yet, return "" to indicate button disabled=""
+  //   // else, it's approved. return "true" so button disabled="true"
+  //   return rsvn.approved ? "true" : "";
+  // }
+
+  /**
    * Iteratively returns messages according to the number of reservations received.
    *
    */
@@ -216,29 +308,74 @@ class DashboardView extends Component {
         <ListGroupItemHeading className="mb-1">
           {this.getMessageHeader(rsvn.reservation_id)}
         </ListGroupItemHeading>
-        {/* Buttons */}
+
+        {/* Veiw Message Buttons */}
         <Button
           variant="outline-info"
           className="m-2"
           md="auto"
           onClick={() => {
             this.setState(
-              { selectedID: rsvn.reservation_id },
-              this.openViewRsvnMsgModal
+              {
+                selectedID: rsvn.reservation_id,
+                selectedUsername: rsvn.username,
+                selectedApproved: rsvn.approved,
+              },
+              () => {
+                this.openViewRsvnMsgModal();
+              }
             );
           }}
         >
           View Message
         </Button>
-        <Button variant="outline-primary" className="m-2" md="auto">
+
+        {/* Approve this reservation Button */}
+        <Button
+          variant="outline-warning"
+          className="m-2"
+          md="auto"
+          onClick={() => {
+            this.setState({ selectedID: rsvn.reservation_id }, () => {
+              this.markAsApproved(this.state.selectedID, 1);
+            });
+          }}
+        >
+          Approve this reservation
+        </Button>
+
+        {/* Mark as Picked Up Button */}
+        <Button
+          variant="outline-primary"
+          className="m-2"
+          md="auto"
+          onClick={() => {
+            this.setState({ selectedID: rsvn.reservation_id }, () => {
+              this.markAsPickedUp(this.state.selectedID, 1);
+            });
+          }}
+          // disabled={this.state.selctedIdIsApproved}
+          // disabled={this.isMarkedPickedUp(rsvn.reservation_id)}
+        >
           Mark as Picked up
         </Button>
-        <Button variant="outline-danger" className="m-2" md="auto">
+
+        {/* Cancel this reservation Button */}
+        <Button
+          variant="outline-danger"
+          className="m-2"
+          md="auto"
+          onClick={() => {
+            this.setState({ selectedID: rsvn.reservation_id }, () => {
+              this.markAsCancelled(this.state.selectedID, 1);
+            });
+          }}
+        >
           Cancel this reservation
         </Button>
       </ListGroupItem>
     ));
-    return <ListGroup>{viewMessages}</ListGroup>;
+    return <ListGroup variant="fluid">{viewMessages}</ListGroup>; // BUG: fluid not displaying
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -297,7 +434,9 @@ class DashboardView extends Component {
           show={this.state.showRsvnMsg}
           onHide={() => this.closeViewRsvnMsgModal()}
           selectedID={this.state.selectedID}
-          state={this.state}
+          selectedUsername={this.state.selectedUsername}
+          selectedApproved={this.state.selectedApproved}
+          rsvns={this.state.rsvns}
         />
       </Container>
     );

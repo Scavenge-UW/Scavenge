@@ -190,14 +190,10 @@ class InventoryView extends Component {
    *
    */
   getInventoryOverview() {
-    console.log("getInventoryOverview"); // remove-debug
-    console.log(this.state.foods); // remove-debug
     let numItems = this.state.foods.length;
     let numOutOfStockItems = this.state.foods.filter((item) => {
       return item.quantity == 0;
     }).length;
-
-    console.log(numItems); // remove-debug
 
     return (
       <p className="text-center mt-4">

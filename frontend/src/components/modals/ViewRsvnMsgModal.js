@@ -9,17 +9,23 @@ function ViewRsvnMsgModal(props) {
     fontWeight: "450",
   };
 
-  const rsvnDetaillStyle = {
+  const rsvnDetailStyle = {
     fontFamily: "monospace",
   };
 
-  const rsvn = props.state.rsvns;
+  // const getInfo = props.rsvns.filter(
+  //   (info) => info.reservation_id === props.selectedID
+  // );
 
-  // const contents = Object.entries(rsvn.reserved_items).map(([key, value]) => (
-  //   <li key={key}>
-  //     {props.state.pantryDetails.foods[key].food_name}: {value}
-  //   </li>
-  // ));
+  // console.log("getInfo = ", { ...getInfo });
+
+  // const info = { ...getInfo }[0];
+
+  // console.log("info = ", { info });
+  // console.log("username.getInfo = ", getInfo[0].username);
+  // console.log("approved.getInfo = ", getInfo.approved);
+  // console.log("username.info = ", info.username);
+  // console.log("approved.info = ", info.approved);
 
   return (
     <>
@@ -27,14 +33,21 @@ function ViewRsvnMsgModal(props) {
         <Modal.Header closeButton>
           <Modal.Title id="ViewRsvnMsgModal">
             Reservation for User{" "}
-            <span style={usernameStyle}>{rsvn.username}</span>
+            <span style={usernameStyle}>{props.selectedUsername}</span>
+            {/* Reservation for User <span style={usernameStyle}>hi</span> */}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <h5>
             Reservation Detail (
-            <span style={rsvnDetaillStyle}>Food Name: Quantity</span>)
+            <span style={rsvnDetailStyle}>Food Name: Quantity</span>)
           </h5>
+          <hr />
+          {/* debug purpose - TODO: reomve this paragraph */}
+          <p>
+            reservation ID: {props.selectedID} <br />
+            Marked As Picked Up: {props.selectedApproved}
+          </p>
           {/* {contents} */}
         </Modal.Body>
         <Modal.Footer>
