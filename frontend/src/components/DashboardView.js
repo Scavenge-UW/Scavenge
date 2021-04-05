@@ -309,6 +309,8 @@ class DashboardView extends Component {
           {this.getMessageHeader(rsvn.reservation_id)}
         </ListGroupItemHeading>
 
+        {/* TODO: buttons should be disabled accordingly */}
+
         {/* Veiw Message Buttons */}
         <Button
           variant="outline-info"
@@ -410,6 +412,7 @@ class DashboardView extends Component {
   getDescriptionCards() {
     return (
       <DashboardDescriptionCard
+        adminMode
         pantryName={this.state.pantryName}
         description={this.state.description}
         address={this.state.address}
