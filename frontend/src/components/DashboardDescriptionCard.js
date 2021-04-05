@@ -24,6 +24,7 @@ class DashboardDescriptionCard extends Component {
       editMode4Weblink: false,
       pantry_id: 1, // TODO: change this to actual pantryID
     };
+
     this.onClickUpdateDetail = this.onClickUpdateDetail.bind(this);
     this.onClickUpdateAddress = this.onClickUpdateAddress.bind(this);
     this.onClickUpdateZipcode = this.onClickUpdateZipcode.bind(this);
@@ -461,8 +462,18 @@ class DashboardDescriptionCard extends Component {
               md="auto"
             >
               <Col>
-                <strong>- description: </strong>
-                {this.props.description}
+                <Form>
+                  <Form.Group controlId="formDescription">
+                    <Form.Label>
+                      <strong>- description: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      disabled={!this.state.editMode4Detail}
+                      defaultValue={this.props.description}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
               <Col>{this.showEditButton("description")}</Col>
             </Row>
@@ -471,8 +482,18 @@ class DashboardDescriptionCard extends Component {
               md="auto"
             >
               <Col>
-                <strong>- address: </strong>
-                {this.props.address}
+                <Form>
+                  <Form.Group controlId="formAddress">
+                    <Form.Label>
+                      <strong>- address: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      disabled={!this.state.editMode4Address}
+                      defaultValue={this.props.address}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
               <Col>{this.showEditButton("address")}</Col>
             </Row>
@@ -481,8 +502,18 @@ class DashboardDescriptionCard extends Component {
               md="auto"
             >
               <Col>
-                <strong>- zip code: </strong>
-                {this.props.zipcode}
+                <Form>
+                  <Form.Group controlId="formZipcode">
+                    <Form.Label>
+                      <strong>- zipcode: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="number"
+                      disabled={!this.state.editMode4Zipcode}
+                      defaultValue={this.props.zipcode}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
               <Col>{this.showEditButton("zipcode")}</Col>
             </Row>
@@ -491,8 +522,18 @@ class DashboardDescriptionCard extends Component {
               md="auto"
             >
               <Col>
-                <strong>- city: </strong>
-                {this.props.city} <br />
+                <Form>
+                  <Form.Group controlId="formCity">
+                    <Form.Label>
+                      <strong>- city: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      disabled={!this.state.editMode4City}
+                      defaultValue={this.props.city}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
               <Col>{this.showEditButton("city")}</Col>
             </Row>
@@ -501,8 +542,18 @@ class DashboardDescriptionCard extends Component {
               md="auto"
             >
               <Col>
-                <strong>- state: </strong>
-                {this.props.stte}
+                <Form>
+                  <Form.Group controlId="formState">
+                    <Form.Label>
+                      <strong>- state: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      disabled={!this.state.editMode4State}
+                      defaultValue={this.props.stte}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
               <Col>{this.showEditButton("state")}</Col>
             </Row>
@@ -511,8 +562,18 @@ class DashboardDescriptionCard extends Component {
               md="auto"
             >
               <Col>
-                <strong>- phone number: </strong>
-                {this.props.phone}
+                <Form>
+                  <Form.Group controlId="formPhone">
+                    <Form.Label>
+                      <strong>- phone number: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      disabled={!this.state.editMode4Phone}
+                      defaultValue={this.props.phone}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
               <Col>{this.showEditButton("phone")}</Col>
             </Row>
@@ -521,8 +582,18 @@ class DashboardDescriptionCard extends Component {
               md="auto"
             >
               <Col>
-                <strong>- weblink: </strong>
-                {this.props.weblink}
+                <Form>
+                  <Form.Group controlId="formWeblink">
+                    <Form.Label>
+                      <strong>- weblink: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      disabled={!this.state.editMode4Weblink}
+                      defaultValue={this.props.weblink}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
               <Col>{this.showEditButton("weblink")}</Col>
             </Row>

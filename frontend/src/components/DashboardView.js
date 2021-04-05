@@ -58,6 +58,10 @@ class DashboardView extends Component {
       // used to calculate time elapsed since the reservation is made
       currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
     };
+    this.openViewRsvnMsgModal = this.openViewRsvnMsgModal.bind(this);
+    this.markAsApproved = this.markAsApproved.bind(this);
+    this.markAsPickedUp = this.markAsPickedUp.bind(this);
+    this.markAsCancelled = this.markAsCancelled.bind(this);
   }
 
   componentDidMount() {
