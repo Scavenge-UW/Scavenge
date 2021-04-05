@@ -13,20 +13,6 @@ function ViewRsvnMsgModal(props) {
     fontFamily: "monospace",
   };
 
-  // const getInfo = props.rsvns.filter(
-  //   (info) => info.reservation_id === props.selectedID
-  // );
-
-  // console.log("getInfo = ", { ...getInfo });
-
-  // const info = { ...getInfo }[0];
-
-  // console.log("info = ", { info });
-  // console.log("username.getInfo = ", getInfo[0].username);
-  // console.log("approved.getInfo = ", getInfo.approved);
-  // console.log("username.info = ", info.username);
-  // console.log("approved.info = ", info.approved);
-
   return (
     <>
       <Modal {...props} size="lg" aria-labelledby="ViewRsvnMsgModal" centered>
@@ -46,7 +32,9 @@ function ViewRsvnMsgModal(props) {
           {/* debug purpose - TODO: reomve this paragraph */}
           <p>
             reservation ID: {props.selectedID} <br />
-            Marked As Picked Up: {props.selectedApproved}
+            Marked As Approved: {props.selectedApproved} <br />
+            Marked As Picked Up: {props.selectedPickedUp} <br />
+            Marked As Cancelled: {props.selectedCancelled} <br />
           </p>
           {/* {contents} */}
         </Modal.Body>

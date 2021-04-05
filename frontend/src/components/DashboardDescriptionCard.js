@@ -24,18 +24,35 @@ class DashboardDescriptionCard extends Component {
           <Row className="justify-content-between align-items-center">
             <Col className="text-left">Food Pantry Description</Col>
             <Col className="text-right">
-              <Button>Edit your description</Button>
+              <Button>Edit your pantry description</Button>
             </Col>
           </Row>
         </Card.Header>
         <Card.Body>
-          <Card.Title>Veniam amet consectetur labore tempor ea.</Card.Title>
+          <Card.Title>{this.props.pantryName}</Card.Title>
           <Card.Text>
-            Ipsum non consectetur ullamco Lorem ad anim est nostrud. Consequat
-            ipsum dolore irure sit sint incididunt. Quis aliquip deserunt
-            adipisicing adipisicing non veniam non laboris.
+            <strong>- description: </strong>
+            {this.props.description} <br />
+            <strong>- address: </strong>
+            {this.props.address} <br />
+            <strong>- zip code: </strong>
+            {this.props.zipcode} <br />
+            <strong>- city: </strong>
+            {this.props.city} <br />
+            <strong>- state: </strong>
+            {this.props.stte} <br />
+            <strong>- phone number: </strong>
+            {this.props.phone} <br />
+            <strong>- weblink: </strong>
+            {this.props.weblink} <br />
           </Card.Text>
-          <Button tag="a" href="#" variant="primary">
+          <Button
+            tag="a"
+            // reference:
+            // https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
+            onClick={() => window.open(this.props.weblink, "_blank")}
+            variant="primary"
+          >
             link to our site
           </Button>
         </Card.Body>

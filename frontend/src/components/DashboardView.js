@@ -17,7 +17,7 @@ import DashboardMessage from "./DashboardMessage";
 import PantryService from "../services/pantry.service";
 
 // other imports
-import moment from "moment";
+import moment, { parseTwoDigitYear } from "moment";
 import { toast } from "react-toastify";
 
 /**
@@ -36,6 +36,13 @@ class DashboardView extends Component {
       rsvns: [],
       foods: [],
       hours: [],
+      description: "",
+      address: "",
+      zipcode: "",
+      city: "",
+      stte: "",
+      phone: "",
+      weblink: "",
 
       // show reservation message, default false
       showRsvnMsg: false,
@@ -45,8 +52,8 @@ class DashboardView extends Component {
       selectedID: null,
       selecedUsername: "",
       selectedApproved: null,
-
-      approvedRsvns: {},
+      selectedPickedUp: null,
+      selectedCancelled: null,
 
       // used to calculate time elapsed since the reservation is made
       currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
@@ -54,16 +61,25 @@ class DashboardView extends Component {
   }
 
   componentDidMount() {
-    if (this.props.pantryDetail) {
-      console.log(this.props.pantryDetail);
+    const pantry = this.props.pantryDetail;
+
+    if (pantry) {
+      console.log(pantry);
       this.setState(
         {
-          pantryName: this.props.pantryDetail.name,
-          rsvns: this.props.pantryDetail.reservations,
-          foods: this.props.pantryDetail.foods,
-          hours: this.props.pantryDetail.hours,
+          pantryName: pantry.name,
+          rsvns: pantry.reservations,
+          foods: pantry.foods,
+          hours: pantry.hours,
+          description: pantry.details,
+          address: pantry.address,
+          zipcode: pantry.zip,
+          city: pantry.city,
+          stte: pantry.state,
+          phone: pantry.phone_number,
+          weblink: pantry.website,
         },
-        () => this.getDashboardOverview() // TODO: seems like we don't need this
+        () => this.getDashboardOverview() // TODO: not sure if this is needed.
       );
     }
   }
@@ -251,7 +267,7 @@ class DashboardView extends Component {
     )
       .then(() => {
         toast.success(
-          "You have successfully approve the reservation with ID " + rsvn_id
+          "You have successfully approved the reservation with ID " + rsvn_id
         );
       })
       .catch(() => {
@@ -272,7 +288,7 @@ class DashboardView extends Component {
     )
       .then(() => {
         toast.success(
-          "You have successfully cancel the reservation with ID " + rsvn_id
+          "You have successfully cancelled the reservation with ID " + rsvn_id
         );
       })
       .catch(() => {
@@ -280,30 +296,14 @@ class DashboardView extends Component {
       });
   }
 
-  // isMarkedPickedUp(rsvn_id) {
-  //   console.log("isMarkedPickedUp, rsvn_id = ", { rsvn_id });
-  //   let rsvn = {};
-  //   for (const r of this.state.rsvns) {
-  //     if (r.reservation_id === rsvn_id) {
-  //       rsvn = { ...r };
-  //     }
-  //   }
-
-  //   console.log("rsvn.approved = ", rsvn.approved);
-  //   console.log("rsvn.approved = ", rsvn.approved ? "true" : "false");
-
-  //   // if rsvn.approved == 0, not approved yet, return "" to indicate button disabled=""
-  //   // else, it's approved. return "true" so button disabled="true"
-  //   return rsvn.approved ? "true" : "";
-  // }
-
   /**
-   * Iteratively returns messages according to the number of reservations received.
+   * Iteratively returns messages according to the number of reservations received
+   * and buttons for some actions.
    *
    */
   getMessageOverview() {
     const viewMessages = this.state.rsvns.map((rsvn) => (
-      <ListGroupItem tag="a" action>
+      <ListGroupItem tag="a" className="justify-content-center" action>
         {/* Heading */}
         <ListGroupItemHeading className="mb-1">
           {this.getMessageHeader(rsvn.reservation_id)}
@@ -317,9 +317,13 @@ class DashboardView extends Component {
           onClick={() => {
             this.setState(
               {
+                // TODO: approved/pickedup/cancelled values not changed
+                // it requires a refresh of the page to see the updates
                 selectedID: rsvn.reservation_id,
                 selectedUsername: rsvn.username,
                 selectedApproved: rsvn.approved,
+                selectedPickedUp: rsvn.approved, // TODO: change this to picked up
+                selectedCancelled: rsvn.cancelled,
               },
               () => {
                 this.openViewRsvnMsgModal();
@@ -336,9 +340,15 @@ class DashboardView extends Component {
           className="m-2"
           md="auto"
           onClick={() => {
-            this.setState({ selectedID: rsvn.reservation_id }, () => {
-              this.markAsApproved(this.state.selectedID, 1);
-            });
+            this.setState(
+              {
+                selectedID: rsvn.reservation_id,
+                selectedApproved: rsvn.approved,
+              },
+              () => {
+                this.markAsApproved(this.state.selectedID, 1);
+              }
+            );
           }}
         >
           Approve this reservation
@@ -350,9 +360,15 @@ class DashboardView extends Component {
           className="m-2"
           md="auto"
           onClick={() => {
-            this.setState({ selectedID: rsvn.reservation_id }, () => {
-              this.markAsPickedUp(this.state.selectedID, 1);
-            });
+            this.setState(
+              {
+                selectedID: rsvn.reservation_id,
+                selectedPickedUp: rsvn.approved, // TODO: change this to picked up
+              },
+              () => {
+                this.markAsPickedUp(this.state.selectedID, 1);
+              }
+            );
           }}
           // disabled={this.state.selctedIdIsApproved}
           // disabled={this.isMarkedPickedUp(rsvn.reservation_id)}
@@ -366,9 +382,15 @@ class DashboardView extends Component {
           className="m-2"
           md="auto"
           onClick={() => {
-            this.setState({ selectedID: rsvn.reservation_id }, () => {
-              this.markAsCancelled(this.state.selectedID, 1);
-            });
+            this.setState(
+              {
+                selectedID: rsvn.reservation_id,
+                selectedCancelled: rsvn.cancelled,
+              },
+              () => {
+                this.markAsCancelled(this.state.selectedID, 1);
+              }
+            );
           }}
         >
           Cancel this reservation
@@ -385,9 +407,20 @@ class DashboardView extends Component {
   /**
    *
    */
-  // getPantryDescriptionCards() {
-  //   return <pantryDescriptionCard />;
-  // }
+  getDescriptionCards() {
+    return (
+      <DashboardDescriptionCard
+        pantryName={this.state.pantryName}
+        description={this.state.description}
+        address={this.state.address}
+        zipcode={this.state.zipcode}
+        city={this.state.city}
+        stte={this.state.stte}
+        phone={this.state.phone}
+        weblink={this.state.weblink}
+      />
+    );
+  }
 
   /**
    * Renders components.
@@ -423,7 +456,7 @@ class DashboardView extends Component {
         </Row>
         {/* Description */}
         <Row className="justify-content-center pt-4">
-          <DashboardDescriptionCard />
+          {this.getDescriptionCards()}
         </Row>
         {/* Open Hours */}
         <Row className="justify-content-center pt-4">
@@ -436,6 +469,8 @@ class DashboardView extends Component {
           selectedID={this.state.selectedID}
           selectedUsername={this.state.selectedUsername}
           selectedApproved={this.state.selectedApproved}
+          selectedPickedUp={this.state.selectedPickedUp}
+          selectedCancelled={this.state.selectedCancelled}
           rsvns={this.state.rsvns}
         />
       </Container>
