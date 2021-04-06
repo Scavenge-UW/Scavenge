@@ -15,6 +15,7 @@ class DashboardDescriptionCard extends Component {
     super(props);
 
     this.state = {
+      // used by switch case in 'editMode'
       editMode4Detail: false,
       editMode4Address: false,
       editMode4Zipcode: false,
@@ -25,6 +26,7 @@ class DashboardDescriptionCard extends Component {
       pantry_id: 1, // TODO: change this to actual pantryID
     };
 
+    // used by switch case in 'showEditButton'
     this.onClickUpdateDetail = this.onClickUpdateDetail.bind(this);
     this.onClickUpdateAddress = this.onClickUpdateAddress.bind(this);
     this.onClickUpdateZipcode = this.onClickUpdateZipcode.bind(this);
@@ -83,385 +85,204 @@ class DashboardDescriptionCard extends Component {
   onClickUpdateDetail() {
     let description = this.props.description;
 
-    // if (window.confirm("Are you sure you want to update ?")) {
-    PantryService.updatePantryDetail(this.state.pantry_id, description)
-      .then(() => {
-        toast.success("Description was successfully updated!");
-        this.editMode("description", false);
-      })
-      .catch((response) => {
-        if (response.message) {
-          toast.error(response.message);
-        }
-      });
-    // }
+    if (window.confirm("Are you sure you want to update ?")) {
+      PantryService.updatePantryDetail(this.state.pantry_id, description)
+        .then(() => {
+          toast.success("Description was successfully updated!");
+          this.editMode("description", false);
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   onClickUpdateAddress() {
     let address = this.props.address;
-    // if (window.confirm("Are you sure you want to update ?")) {
-    PantryService.updatePantryAddress(this.state.pantry_id, address)
-      .then(() => {
-        toast.success("Description was successfully updated!");
-        this.editMode("address", false);
-      })
-      .catch((response) => {
-        if (response.message) {
-          toast.error(response.message);
-        }
-      });
-    // }
+    if (window.confirm("Are you sure you want to update ?")) {
+      PantryService.updatePantryAddress(this.state.pantry_id, address)
+        .then(() => {
+          toast.success("Description was successfully updated!");
+          this.editMode("address", false);
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   onClickUpdateZipcode() {
     let zipcode = this.props.zipcode;
-    // if (window.confirm("Are you sure you want to update ?")) {
-    PantryService.updatePantryZipcode(this.state.pantry_id, zipcode)
-      .then(() => {
-        toast.success("Description was successfully updated!");
-        this.editMode("zipcode", false);
-      })
-      .catch((response) => {
-        if (response.message) {
-          toast.error(response.message);
-        }
-      });
-    // }
+    if (window.confirm("Are you sure you want to update ?")) {
+      PantryService.updatePantryZipcode(this.state.pantry_id, zipcode)
+        .then(() => {
+          toast.success("Description was successfully updated!");
+          this.editMode("zipcode", false);
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   onClickUpdateCity() {
     let city = this.props.city;
-    // if (window.confirm("Are you sure you want to update ?")) {
-    PantryService.updatePantryCity(this.state.pantry_id, city)
-      .then(() => {
-        toast.success("Description was successfully updated!");
-        this.editMode("city", false);
-      })
-      .catch((response) => {
-        if (response.message) {
-          toast.error(response.message);
-        }
-      });
-    // }
+    if (window.confirm("Are you sure you want to update ?")) {
+      PantryService.updatePantryCity(this.state.pantry_id, city)
+        .then(() => {
+          toast.success("Description was successfully updated!");
+          this.editMode("city", false);
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   onClickUpdateState() {
     let stte = this.props.stte;
-    // if (window.confirm("Are you sure you want to update ?")) {
-    PantryService.updatePantryState(this.state.pantry_id, stte)
-      .then(() => {
-        toast.success("Description was successfully updated!");
-        this.editMode("state", false);
-      })
-      .catch((response) => {
-        if (response.message) {
-          toast.error(response.message);
-        }
-      });
-    // }
+    if (window.confirm("Are you sure you want to update ?")) {
+      PantryService.updatePantryState(this.state.pantry_id, stte)
+        .then(() => {
+          toast.success("Description was successfully updated!");
+          this.editMode("state", false);
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   onClickUpdatePhone() {
     let phone = this.props.phone;
-    // if (window.confirm("Are you sure you want to update ?")) {
-    PantryService.updatePantryPhoneNumber(this.state.pantry_id, phone)
-      .then(() => {
-        toast.success("Description was successfully updated!");
-        this.editMode("phone", false);
-      })
-      .catch((response) => {
-        if (response.message) {
-          toast.error(response.message);
-        }
-      });
-    // }
+    if (window.confirm("Are you sure you want to update ?")) {
+      PantryService.updatePantryPhoneNumber(this.state.pantry_id, phone)
+        .then(() => {
+          toast.success("Description was successfully updated!");
+          this.editMode("phone", false);
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   onClickUpdateWeblink() {
     let weblink = this.props.weblink;
-    // if (window.confirm("Are you sure you want to update ?")) {
-    PantryService.updatePantryWebsite(this.state.pantry_id, weblink)
-      .then(() => {
-        toast.success("Description was successfully updated!");
-        this.editMode("weblink", false);
-      })
-      .catch((response) => {
-        if (response.message) {
-          toast.error(response.message);
-        }
-      });
-    // }
+    if (window.confirm("Are you sure you want to update ?")) {
+      PantryService.updatePantryWebsite(this.state.pantry_id, weblink)
+        .then(() => {
+          toast.success("Description was successfully updated!");
+          this.editMode("weblink", false);
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   showEditButton(params) {
+    let edit = null;
+    let onClickUpdate = null;
     switch (params) {
       case "description":
-        if (this.state.editMode4Detail) {
-          return (
-            <Row>
-              <Col>
-                <Button block onClick={this.onClickUpdateDetail}>
-                  Update
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  variant="danger"
-                  onClick={() => {
-                    this.editMode("description", false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          );
-        } else {
-          return (
-            <Button
-              block
-              variant="outline-primary"
-              onClick={() => {
-                this.editMode("description", true);
-              }}
-            >
-              Edit
-            </Button>
-          );
-        }
+        edit = this.state.editMode4Detail;
+        onClickUpdate = this.onClickUpdateDetail;
+        break;
+
       case "address":
-        if (this.state.editMode4Address) {
-          return (
-            <Row>
-              <Col>
-                <Button block onClick={this.onClickUpdateAddress}>
-                  Update
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  variant="danger"
-                  onClick={() => {
-                    this.editMode("address", false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          );
-        } else {
-          return (
-            <Button
-              block
-              variant="outline-primary"
-              onClick={() => {
-                this.editMode("address", true);
-              }}
-            >
-              Edit
-            </Button>
-          );
-        }
+        edit = this.state.editMode4Address;
+        onClickUpdate = this.onClickUpdateAddress;
+        break;
+
       case "zipcode":
-        if (this.state.editMode4Zipcode) {
-          return (
-            <Row>
-              <Col>
-                <Button block onClick={this.onClickUpdateZipcode}>
-                  Update
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  variant="danger"
-                  onClick={() => {
-                    this.editMode("zipcode", false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          );
-        } else {
-          return (
-            <Button
-              block
-              variant="outline-primary"
-              onClick={() => {
-                this.editMode("zipcode", true);
-              }}
-            >
-              Edit
-            </Button>
-          );
-        }
+        edit = this.state.editMode4Zipcode;
+        onClickUpdate = this.onClickUpdateZipcode;
+        break;
+
       case "city":
-        if (this.state.editMode4City) {
-          return (
-            <Row>
-              <Col>
-                <Button block onClick={this.onClickUpdateCity}>
-                  Update
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  variant="danger"
-                  onClick={() => {
-                    this.editMode("city", false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          );
-        } else {
-          return (
-            <Button
-              block
-              variant="outline-primary"
-              onClick={() => {
-                this.editMode("city", true);
-              }}
-            >
-              Edit
-            </Button>
-          );
-        }
+        edit = this.state.editMode4City;
+        onClickUpdate = this.onClickUpdateCity;
+        break;
+
       case "state":
-        if (this.state.editMode4State) {
-          return (
-            <Row>
-              <Col>
-                <Button block onClick={this.onClickUpdateState}>
-                  Update
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  variant="danger"
-                  onClick={() => {
-                    this.editMode("state", false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          );
-        } else {
-          return (
-            <Button
-              block
-              variant="outline-primary"
-              onClick={() => {
-                this.editMode("state", true);
-              }}
-            >
-              Edit
-            </Button>
-          );
-        }
+        edit = this.state.editMode4State;
+        onClickUpdate = this.onClickUpdateState;
+        break;
+
       case "phone":
-        if (this.state.editMode4Phone) {
-          return (
-            <Row>
-              <Col>
-                <Button block onClick={this.onClickUpdatePhone}>
-                  Update
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  variant="danger"
-                  onClick={() => {
-                    this.editMode("phone", false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          );
-        } else {
-          return (
-            <Button
-              block
-              variant="outline-primary"
-              onClick={() => {
-                this.editMode("phone", true);
-              }}
-            >
-              Edit
-            </Button>
-          );
-        }
+        edit = this.state.editMode4Phone;
+        onClickUpdate = this.onClickUpdatePhone;
+        break;
+
       case "weblink":
-        if (this.state.editMode4Weblink) {
-          return (
-            <Row>
-              <Col>
-                <Button block onClick={this.onClickUpdateWeblink}>
-                  Update
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  variant="danger"
-                  onClick={() => {
-                    this.editMode("weblink", false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          );
-        } else {
-          return (
+        edit = this.state.editMode4Weblink;
+        onClickUpdate = this.onClickUpdateWeblink;
+        break;
+    }
+    if (edit) {
+      return (
+        <Row>
+          <Col>
+            <Button onClick={onClickUpdate} size="sm">
+              Update
+            </Button>
+          </Col>
+          <Col>
             <Button
-              block
-              variant="outline-primary"
+              variant="danger"
+              size="sm"
               onClick={() => {
-                this.editMode("weblink", true);
+                this.editMode(params, false);
               }}
             >
-              Edit
+              Cancel
             </Button>
-          );
-        }
-      default:
-        console.log("Error hehe~~ShowEditButton");
+          </Col>
+        </Row>
+      );
+    } else {
+      return (
+        <Button
+          variant="outline-dark"
+          onClick={() => {
+            this.editMode(params, true);
+          }}
+        >
+          Edit
+        </Button>
+      );
     }
   }
 
   render() {
     return (
-      <Card>
+      <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
         <Card.Header as="h5">
           <Row className="justify-content-between align-items-center">
             <Col className="text-left">Food Pantry Description</Col>
-            {/* <Col className="text-right">{this.showEditDescriptionButton()}</Col> */}
           </Row>
         </Card.Header>
         <Card.Body>
           <Card.Title>{this.props.pantryName}</Card.Title>
+          <hr />
           <Card.Text>
-            <Row
-              className="justify-content-between align-items-center m-2"
-              md="auto"
-            >
-              <Col>
+            <Row className="align-items-center m-2">
+              <Col className="text-left" xs={9}>
                 <Form>
                   <Form.Group controlId="formDescription">
                     <Form.Label>
@@ -475,13 +296,10 @@ class DashboardDescriptionCard extends Component {
                   </Form.Group>
                 </Form>
               </Col>
-              <Col>{this.showEditButton("description")}</Col>
+              <Col xs={3}>{this.showEditButton("description")}</Col>
             </Row>
-            <Row
-              className="justify-content-between align-items-center m-2"
-              md="auto"
-            >
-              <Col>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left" xs={9}>
                 <Form>
                   <Form.Group controlId="formAddress">
                     <Form.Label>
@@ -495,13 +313,10 @@ class DashboardDescriptionCard extends Component {
                   </Form.Group>
                 </Form>
               </Col>
-              <Col>{this.showEditButton("address")}</Col>
+              <Col xs={3}>{this.showEditButton("address")}</Col>
             </Row>
-            <Row
-              className="justify-content-between align-items-center m-2"
-              md="auto"
-            >
-              <Col>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left" xs={9}>
                 <Form>
                   <Form.Group controlId="formZipcode">
                     <Form.Label>
@@ -515,13 +330,10 @@ class DashboardDescriptionCard extends Component {
                   </Form.Group>
                 </Form>
               </Col>
-              <Col>{this.showEditButton("zipcode")}</Col>
+              <Col xs={3}>{this.showEditButton("zipcode")}</Col>
             </Row>
-            <Row
-              className="justify-content-between align-items-center m-2"
-              md="auto"
-            >
-              <Col>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left" xs={9}>
                 <Form>
                   <Form.Group controlId="formCity">
                     <Form.Label>
@@ -535,13 +347,10 @@ class DashboardDescriptionCard extends Component {
                   </Form.Group>
                 </Form>
               </Col>
-              <Col>{this.showEditButton("city")}</Col>
+              <Col xs={3}>{this.showEditButton("city")}</Col>
             </Row>
-            <Row
-              className="justify-content-between align-items-center m-2"
-              md="auto"
-            >
-              <Col>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left" xs={9}>
                 <Form>
                   <Form.Group controlId="formState">
                     <Form.Label>
@@ -555,13 +364,10 @@ class DashboardDescriptionCard extends Component {
                   </Form.Group>
                 </Form>
               </Col>
-              <Col>{this.showEditButton("state")}</Col>
+              <Col xs={3}>{this.showEditButton("state")}</Col>
             </Row>
-            <Row
-              className="justify-content-between align-items-center m-2"
-              md="auto"
-            >
-              <Col>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left" xs={9}>
                 <Form>
                   <Form.Group controlId="formPhone">
                     <Form.Label>
@@ -575,13 +381,10 @@ class DashboardDescriptionCard extends Component {
                   </Form.Group>
                 </Form>
               </Col>
-              <Col>{this.showEditButton("phone")}</Col>
+              <Col xs={3}>{this.showEditButton("phone")}</Col>
             </Row>
-            <Row
-              className="justify-content-between align-items-center m-2"
-              md="auto"
-            >
-              <Col>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left" xs={9}>
                 <Form>
                   <Form.Group controlId="formWeblink">
                     <Form.Label>
@@ -595,19 +398,25 @@ class DashboardDescriptionCard extends Component {
                   </Form.Group>
                 </Form>
               </Col>
-              <Col>{this.showEditButton("weblink")}</Col>
+              <Col xs={3}>{this.showEditButton("weblink")}</Col>
             </Row>
           </Card.Text>
-          <Button
-            tag="a"
-            // open window in new tab
-            // reference:
-            // https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
-            onClick={() => window.open(this.props.weblink, "_blank")}
-            variant="primary"
-          >
-            link to our site
-          </Button>
+          {/* 
+          open window in new tab 
+          reference: 
+          https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react 
+          */}
+          <Row className="m-2">
+            <Col className="text-left">
+              <Button
+                tag="a"
+                onClick={() => window.open(this.props.weblink, "_blank")}
+                variant="outline-dark"
+              >
+                link to <em>{this.props.pantryName}</em>
+              </Button>
+            </Col>
+          </Row>
         </Card.Body>
       </Card>
     );

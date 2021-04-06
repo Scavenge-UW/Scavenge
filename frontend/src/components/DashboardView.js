@@ -307,11 +307,16 @@ class DashboardView extends Component {
    */
   getMessageOverview() {
     const viewMessages = this.state.rsvns.map((rsvn) => (
-      <ListGroupItem tag="a" className="justify-content-center" action>
+      <ListGroupItem
+        tag="a"
+        className="justify-content-center w-responsive w-100 mx-auto p-3 mt-1"
+        action
+      >
         {/* Heading */}
         <ListGroupItemHeading className="mb-1">
           {this.getMessageHeader(rsvn.reservation_id)}
         </ListGroupItemHeading>
+        <hr />
 
         {/* TODO: buttons should be disabled accordingly */}
 
@@ -403,7 +408,7 @@ class DashboardView extends Component {
         </Button>
       </ListGroupItem>
     ));
-    return <ListGroup variant="fluid">{viewMessages}</ListGroup>; // BUG: fluid not displaying
+    return <ListGroup>{viewMessages}</ListGroup>;
   }
 
   /////////////////////////////////////////////////////////////////////////////
