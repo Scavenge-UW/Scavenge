@@ -8,7 +8,7 @@ const db_config = {
   host: 'scavenge-db.clkbasnuzdfc.us-east-2.rds.amazonaws.com',
   user: 'admin',
   password: process.env.DB_PASSWORD,
-  database: 'ScavengeDB',
+  database: 'ScavengeDB_IT2',
   connectionLimit: 10
 }; 
 const pool = mysql.createPool(db_config);
