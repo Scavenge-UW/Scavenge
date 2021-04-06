@@ -9,19 +9,12 @@ exports.getAllPantriesAction = (req, res) => {
         result[element['pantry_id']]['foods'] = {};
         result[element['pantry_id']]['reservations'] = {};
         result[element['pantry_id']]['hours'] = {};
-
-        if ('reservation_id' in element) {
-          console.log(element['reservation_id']);
-          result[element['pantry_id']]['reservations'][element['reservation_id']] = {};
-          result[element['pantry_id']]['reservations'][element['reservation_id']]['res_foods'] = {};
-        }
-      } else if ('reservation_id' in element) {
-        console.log(element['reservation_id']);
+      }
+      if ('reservation_id' in element) {
         result[element['pantry_id']]['reservations'][element['reservation_id']] = {};
         result[element['pantry_id']]['reservations'][element['reservation_id']]['res_foods'] = {};
       }
     }); 
-    //console.log(result);
 
     pantryDetail.forEach(element => {
       result[element['pantry_id']]['pantry_id']     = element['pantry_id'];
@@ -44,8 +37,6 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['foods'][element['food_id']]['qr_code']    = element['qr_code'];
       result[element['pantry_id']]['foods'][element['food_id']]['quantity']   = element['quantity'];
       if ('reservation_id' in element) {
-        // console.log(element['reservation_id'])
-        // console.log(result[element['pantry_id']]['reservations'][element['reservation_id']])
         result[element['pantry_id']]['reservations'][element['reservation_id']]['reservation_id']     = element['reservation_id'];
         result[element['pantry_id']]['reservations'][element['reservation_id']]['username']           = element['username'];
         result[element['pantry_id']]['reservations'][element['reservation_id']]['order_time']         = element['order_time'];
