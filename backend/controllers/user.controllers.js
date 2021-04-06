@@ -8,9 +8,6 @@ exports.reserveAction = async(req, res) => {
   try {
     foods.forEach(async(food_id, index) => {
       var qty = await(db.checkQuantity(req, res, food_id));
-      // var qtyString = JSON.stringify(qty);
-      // var qtyInt = qtyString.match(/\d/g);
-      // qtyInt = qtyInt.join("");
 
         if (qty[0].quantity < quantities[index]) {
           errorEncountered = 1;
@@ -93,4 +90,37 @@ exports.reserveAction = async(req, res) => {
   return res.status(200).json({
     message: "Reservation Successful. All dependent tables updated."
   })
+}
+
+exports.addToWishlistAction = (req, res) => {
+  db.addToWishlist(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to add to wishlist due to server error. Possible duplicate entry or invalid username/food_id"
+    });
+  });
+}
+
+exports.getWishlistAction = (req, res) => {
+  db.getWishlist(req, res).then(wishlist => {
+    return res.status(200).json(wishlist);
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to retreive wishlist due to server error."
+    });
+  });
+}
+
+exports.removeFromWishlistAction = (req, res) => {
+  db.removeFromWishlist(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to delete from wishlist due to server error."
+    });
+  });
 }
