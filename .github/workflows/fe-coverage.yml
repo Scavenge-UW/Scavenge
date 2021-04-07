@@ -19,5 +19,5 @@ jobs:
       - uses: ArtiomTr/jest-coverage-report-action@v1.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          test_script: npm run test -- --coverage --watchAll=false
+          test_script: cd frontend && npm run test -- --coverage --watchAll=false
           threshold: 80 # we aim for 80% coverage
