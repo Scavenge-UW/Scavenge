@@ -67,3 +67,42 @@ exports.updateResInventory = async (req, res, food_id, reservedQty) => {
 
   return await execQuery("update", query, values, "insert into res_food table failed");
 }
+
+exports.addToWishlist = async (req, res) => {
+  const query = `
+    INSERT INTO wishlist (food_id, username)
+    VALUES ?;
+  `;
+  let values = [[req.params.food_id, req.params.username]];
+
+  return await execQuery("insert", query, values, 
+    "insert into wishlist table failed, possible duplicate entry or invalid username/food_id");
+}
+
+exports.getWishlist = async (req, res) => {
+  const query = `
+    SELECT
+      f.id as food_id,
+      f.name as food_name,
+      w.username
+    FROM wishlist w
+    JOIN food f ON f.id = w.food_id
+    WHERE w.username = ?;
+  `;
+  let values = [[req.params.username]];
+
+  return await execQuery("select", query, values, 
+    "failed to get wishlist due to server error.");
+}
+
+exports.removeFromWishlist = async (req, res) => {
+  const query = `
+    DELETE
+    FROM wishlist w
+    WHERE w.username = ? AND w.food_id = ?;
+  `;
+  let values = [req.params.username, req.params.food_id];
+
+  return await execQuery("delete", query, values, 
+    "failed to delete from wishlist due to server error.");
+}
