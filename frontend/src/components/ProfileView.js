@@ -5,7 +5,7 @@ import { editProf } from "../actions/profileAction";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.css";
 
-class profileView extends Component {
+class ProfileView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -237,8 +237,8 @@ class profileView extends Component {
   }
 }
 
-profileView.propTypes = {
+ProfileView.propTypes = {
   editProf: PropTypes.func.isRequired,
 };
 
-export default connect(null, { editProf })(profileView);
+export default connect(null, { editProf })(ProfileView);
