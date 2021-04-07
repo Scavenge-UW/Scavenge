@@ -31,7 +31,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./frontend/coverage/lcov.info
-      - uses: mattallty/jest-github-action@v1.0.3
-        with:
-          # Subdirectory to run tests in
-          working-directory: ./frontend
+      # - uses: mattallty/jest-github-action@v1.0.3
+      #   with:
+      #     # Subdirectory to run tests in
+      #     working-directory: ./frontend
