@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Redirect } from "react-router-dom";
 
 class SignupView extends Component {
   constructor(props) {
@@ -8,38 +9,63 @@ class SignupView extends Component {
     this.state = {
       username: "",
       password: "",
+      firstname: "",
+      lastname: "",
+      phone: "",
       address: "",
       city: "",
       state: "",
-      zip: "",
-      type: "",
+      zipcode: "",
       email: "",
-      phoneNumber: "",
+      type: "",
+      toHomeView: "", // used for redirection on signup success
     };
     this.submitForm = this.submitForm.bind(this);
   }
 
-  submitForm() {
+  async submitForm() {
     const user = {
       username: this.state.username,
       password: this.state.password,
-      phoneNumber: this.state.phoneNumber,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      phone: this.state.phone,
       address: this.state.address,
-      city: this.state.city,
       state: this.state.state,
-      zip: this.state.zip,
+      city: this.state.city,
+      zipcode: this.state.zipcode,
       email: this.state.email,
     };
 
-    if (this.state.username.length == 0 || this.state.password.length == 0 || this.state.phoneNumber.length == 0|| this.state.address.length == 0|| this.state.city.length == 0|| this.state.state.length == 0|| this.state.city.length == 0|| this.state.zip.length == 0|| this.state.email.length == 0) {
+    if (
+      this.state.username.length == 0 ||
+      this.state.password.length == 0 ||
+      this.state.phoneNumber.length == 0 ||
+      this.state.address.length == 0 ||
+      this.state.city.length == 0 ||
+      this.state.state.length == 0 ||
+      this.state.city.length == 0 ||
+      this.state.zip.length == 0 ||
+      this.state.email.length == 0
+    ) {
       alert("Username or password field is empty.");
       return;
     }
 
-    this.props.signup(user);
+    let signupResult = await this.props.signup(user);
+    if (signupResult === 0) {
+      // Successful signup
+      this.setState({
+        toHomeView: true,
+      });
+    }
   }
 
   render() {
+    if (this.state.toHomeView === true) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <Container>
         <Form>
@@ -76,22 +102,40 @@ class SignupView extends Component {
               />
             </Form.Group>
           </Form.Row>
+
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridAddress1"
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              controlId="formGridFirstName"
+              style={{ paddingTop: "10px", paddingLeft: "20px" }}
             >
-              <Form.Label>Address</Form.Label>
+              <Form.Label>First Name</Form.Label>
               <Form.Control
                 type={"text"}
-                placeholder="1234 Main St"
-                value={this.state.address}
-                onChange={(e) => this.setState({ address: e.target.value })}
+                placeholder="John"
+                value={this.state.firstName}
+                onChange={(e) => this.setState({ firstName: e.target.value })}
+              />
+            </Form.Group>
+
+            <Form.Group
+              as={Col}
+              controlId="formGridLastName"
+              style={{
+                paddingTop: "10px",
+                paddingLeft: "10px",
+                paddingRight: "20px",
+              }}
+            >
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type={"text"}
+                placeholder="Smith"
+                value={this.state.lastName}
+                onChange={(e) => this.setState({ lastName: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
-
 
           <Form.Row>
             <Form.Group
@@ -103,6 +147,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"email"}
                 value={this.state.email}
+                placeholder="Email"
                 onChange={(e) => this.setState({ email: e.target.value })}
               />
             </Form.Group>
@@ -117,10 +162,25 @@ class SignupView extends Component {
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type={"text"}
-                value={this.state.phoneNumber}
-                onChange={(e) =>
-                  this.setState({ phoneNumber: e.target.value })
-                }
+                value={this.state.phone}
+                placeholder="Phone"
+                onChange={(e) => this.setState({ phone: e.target.value })}
+              />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group
+              as={Col}
+              controlId="formControlsAddress"
+              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            >
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type={"text"}
+                value={this.state.address}
+                placeholder="Address"
+                onChange={(e) => this.setState({ address: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
@@ -135,6 +195,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"text"}
                 value={this.state.city}
+                placeholder="City"
                 onChange={(e) => this.setState({ city: e.target.value })}
               />
             </Form.Group>
@@ -144,6 +205,7 @@ class SignupView extends Component {
               <Form.Control
                 type={"text"}
                 value={this.state.state}
+                placeholder="State"
                 onChange={(e) => this.setState({ state: e.target.value })}
               />
             </Form.Group>
@@ -156,26 +218,20 @@ class SignupView extends Component {
               <Form.Label>Zip</Form.Label>
               <Form.Control
                 type={"number"}
-                value={this.state.zip}
-                onChange={(e) => this.setState({ zip: e.target.value })}
+                value={this.state.zipcode}
+                placeholder="Zip"
+                onChange={(e) => this.setState({ zipcode: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
 
-
-          <Link
-            to={{
-              pathname: "/",
-            }}
+          <Button
+            variant="primary"
+            style={{ marginLeft: "20px" }}
+            onClick={this.submitForm}
           >
-            <Button
-              variant="primary"
-              style={{ marginLeft: "20px" }}
-              onClick={this.submitForm}
-            >
-              Submit
-            </Button>
-          </Link>
+            Submit
+          </Button>
         </Form>
       </Container>
     );

@@ -32,11 +32,33 @@ function App(props) {
   /**
    * Log in, fetch profile of the user, and
    * store profile in the state
-   * 
-   * @param {Object} user Object with `username` and `password` as keys 
+   *
+   * @param {Object} user Object with `username` and `password` as keys
    * @returns 0 if login successful
    * @returns -1 if login failure
    */
+  const signup = async (user) => {
+    return AuthService.signup(user)
+      .then((response) => {
+        if (response.message){
+          // When the API returns `message`,
+          // that means the signup has failed
+          toast.error(response.message);
+          return -1;
+        } else {
+          setUsername(response.username);
+          setToken(response.token);
+          setProfile(response.profile);
+
+          // We only need to import toast in other components
+          // if we want to make a notification there.
+          toast.success("🚀 Successfully signed up!");
+
+          return 0;
+        }
+      })
+  }
+  
   const login = async (user) => {
     return AuthService.login(user)
       .then((response) => {
@@ -51,7 +73,7 @@ function App(props) {
           setProfile(response.profile);
           setEmployeeOf(response.employee_of)
 
-          // We only need to import toast in other components 
+          // We only need to import toast in other components
           // if we want to make a notification there.
           toast.success("🚀 Successfully logged in!");
 
@@ -112,7 +134,7 @@ function App(props) {
                 />
               </Route>
               <Route path="/signup">
-                <SignupView />
+                <SignupView signup={signup} />
               </Route>
               <Route path="/pantry">
                 <PantryAdminView />
