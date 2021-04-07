@@ -10,7 +10,7 @@ class ProfileView extends Component {
     super(props);
     this.state = {
       username: this.props.profile ? this.props.profile.username : "",
-      password: this.props.profile ? this.props.profile.password : "",
+      password: "",
       phone: this.props.profile ? this.props.profile.phone : "",
       address: this.props.profile ? this.props.profile.address : "",
       city: this.props.profile ? this.props.profile.city : "",
