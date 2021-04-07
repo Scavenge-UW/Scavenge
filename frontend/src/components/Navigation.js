@@ -10,7 +10,7 @@ class Navigation extends Component {
     this.state = {
       message: "Welcome to the Welcome Page!",
       navbar4Admin: ["Manage Pantry", "Profile", "Logout"],
-      navbar4Customer: ["Search Foods", "Profile", "Logout"],
+      navbar4Customer: ["Search Foods", "Cart", "Profile", "Logout"],
       navbar4NotLoggedIn: ["Search Foods", "Login", "Signup"],
     };
   }
@@ -28,9 +28,11 @@ class Navigation extends Component {
       case "Signup":
         return "/signup";
       case "Manage Pantry":
-        return "/pantry"
+        return "/pantry";
       case "Search Foods":
-        return "/search-food"
+        return "/search-food";
+      case "Cart":
+        return "/cart";
       default:
         return "/";
     }
@@ -48,7 +50,7 @@ class Navigation extends Component {
         <LinkContainer
           key={content}
           to={this.getRoute(content)}
-          onClick={()=> this.props.logout()}
+          onClick={() => this.props.logout()}
         >
           <Nav.Link>{content}</Nav.Link>
         </LinkContainer>
