@@ -12,11 +12,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      working-directory: ./frontend
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: mattallty/jest-github-action@v1.0.3
         with:
           # The test command to run
           test-command: npm run test -- --coverage --watchAll=false
           # Subdirectory to run tests in
-          working-directory: ./frontend
+          working-directory: "frontend"
