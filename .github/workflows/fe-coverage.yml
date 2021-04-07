@@ -29,3 +29,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./frontend/coverage/lcov.info
+      - uses: ArtiomTr/jest-coverage-report-action@v1.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: 80 # we aim for 80% coverage
