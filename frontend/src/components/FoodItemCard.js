@@ -42,14 +42,14 @@ class FoodItemCard extends Component {
     if (this.isInStock()) {
       return (
         <>
-          In Stock
+          <span id="current-stock">In Stock</span>
           <VscCircleFilled color="green" />
         </>
       );
     } else {
       return (
         <>
-          Out of Stock
+          <span id="current-stock">Out of Stock</span>
           <VscCircleFilled color="red" />
         </>
       );
@@ -291,7 +291,9 @@ class FoodItemCard extends Component {
           <Card.Body>
             <Card.Title className="mb-4">
               <Row className="justify-content-between align-items-center">
-                <Col className="text-left">{food_name}</Col>
+                <Col className="text-left">
+                  <span id="food_name">{food_name}</span>
+                </Col>
                 <Col className="text-right">
                   {/* Show if Item is in stock */}
                   {this.showStockInfo()}
