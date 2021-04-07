@@ -29,8 +29,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./frontend/coverage/lcov.info
-      - uses: ArtiomTr/jest-coverage-report-action@v1.1
-        working-directory: ./frontend
+      - uses: mattallty/jest-github-action@v1.0.3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          threshold: 80 # we aim for 80% coverage
+          # Subdirectory to run tests in
+          working-directory: ./frontend
