@@ -17,6 +17,6 @@ jobs:
       - uses: mattallty/jest-github-action@v1.0.3
         with:
           # The test command to run
-          test-command: npm run test -- --coverage --watchAll=false
+          # test-command: npm run test -- --coverage --watchAll=false
           # Subdirectory to run tests in
           working-directory: "frontend"
