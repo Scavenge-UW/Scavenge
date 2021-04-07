@@ -109,13 +109,24 @@ function PantryDetailView() {
   };
 
   const showPantryInfo = () => {
-    const { address, zip, city, state, phone_number, website } = pantryDetail;
+    const {
+      address,
+      zip,
+      city,
+      state,
+      phone_number,
+      website,
+      details,
+    } = pantryDetail;
 
     const formatted_phone_number = formatPhoneNumber(phone_number);
 
     return (
       <Row>
         <Col className="ml-4 mt-2">
+          <Row>
+            <strong>Description:</strong> &nbsp; {details}
+          </Row>
           <Row>
             <strong>Address:</strong> &nbsp; {address}, {city}, {state} {zip}
           </Row>
@@ -182,22 +193,23 @@ function PantryDetailView() {
       lat,
       lon,
       phone_number,
-      details,
       img_src,
       website,
     } = pantryDetail;
 
     return (
       <Container>
-        <Row className="justify-content-center mt-4 mb-4">
-          <Col className="justify-content-center rounded bg-light">
-            <Row className="justify-content-center mt-3">
-              <h3>Welcome to {name}</h3>
+        <Row className="justify-content-center mt-4 mb-4 bg-light">
+          <Col className="justify-content-center rounded">
+            <Row className="justify-content-center mt-3 text-center">
+              <h3>{name}</h3>
             </Row>
-            <Row className="justify-content-center">
-              <h5>{details}</h5>
+            <Row className="justify-content-center mx-auto mb-4">
+              <Image fluid rounded src={img_src} />
             </Row>
-            <Row className="mt-2 ml-4">
+          </Col>
+          <Col>
+            <Row className="mt-2 ml-4 mb-4">
               <Tabs
                 style={{ width: "100%" }}
                 id="operating-hours"
@@ -212,9 +224,6 @@ function PantryDetailView() {
                 </Tab>
               </Tabs>
             </Row>
-          </Col>
-          <Col className="justify-content-center">
-            <Image className="rounded" src={img_src} />
           </Col>
         </Row>
         <Row className="justify-content-center">
