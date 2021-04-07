@@ -237,6 +237,7 @@ class FoodItemCard extends Component {
                       this.cartQuantity.current.value =
                         parseInt(this.cartQuantity.current.value) + 1; // increment cartQuantity by 1
                     }}
+                    disabled={!this.isInStock()}
                   >
                     +
                   </Button>
@@ -253,6 +254,7 @@ class FoodItemCard extends Component {
                       this.cartQuantity.current.value =
                         parseInt(this.cartQuantity.current.value) - 1; // decrement cartQuantity by 1
                     }}
+                    disabled={!this.isInStock()}
                   >
                     -
                   </Button>
@@ -267,12 +269,18 @@ class FoodItemCard extends Component {
               block
               variant="success"
               onClick={this.onClickOneClickReserve}
+              disabled={!this.isInStock()}
             >
               One Click Reserve
             </Button>
           </Row>
           <Row className="justify-content-end">
-            <Button block variant="primary" onClick={this.onClickAddToCart}>
+            <Button
+              block
+              variant="primary"
+              onClick={this.onClickAddToCart}
+              disabled={!this.isInStock()}
+            >
               Add to Cart
             </Button>
           </Row>
