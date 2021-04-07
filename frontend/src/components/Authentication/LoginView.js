@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import "../../css/LoginView.css";
 
 class LoginView extends Component {
@@ -10,13 +10,12 @@ class LoginView extends Component {
     this.state = {
       username: "",
       password: "",
-      toHomeView: "", // used for redirection on login success
+      toHomeView: false, // used for redirection on login success
     };
     this.submitForm = this.submitForm.bind(this);
   }
 
   async submitForm(e) {
-    e.preventDefault(); // prevent taking us to a new link
     const user = {
       username: this.state.username,
       password: this.state.password,
@@ -31,14 +30,14 @@ class LoginView extends Component {
     if (loginResult === 0) {
       // Successful login
       this.setState({
-        toHomeView: true
-      })
+        toHomeView: true,
+      });
     }
   }
 
   render() {
     if (this.state.toHomeView === true) {
-      return <Redirect to='/' />
+      return <Redirect to="/" />;
     }
 
     return (
@@ -52,6 +51,7 @@ class LoginView extends Component {
             >
               <Form.Label>Username</Form.Label>
               <Form.Control
+                id="username_input"
                 type={"text"}
                 placeholder="Username"
                 value={this.state.username}
@@ -72,6 +72,7 @@ class LoginView extends Component {
             >
               <Form.Label>Password</Form.Label>
               <Form.Control
+                id="password_input"
                 type={"password"}
                 placeholder="Password"
                 value={this.state.password}
@@ -81,7 +82,6 @@ class LoginView extends Component {
             </Form.Group>
           </Form.Row>
           <Button
-            type="submit"
             variant="dark"
             style={{ marginLeft: "30px" }}
             onClick={this.submitForm}
