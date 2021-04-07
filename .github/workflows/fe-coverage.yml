@@ -12,11 +12,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      working-directory: ./frontend
       CI_JOB_NUMBER: 1
     steps:
       - uses: actions/checkout@v1
       - uses: ArtiomTr/jest-coverage-report-action@v1.1
+        working-directory: ./frontend
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           test_script: npm run test -- --coverage --watchAll=false
