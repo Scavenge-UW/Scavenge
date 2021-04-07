@@ -45,7 +45,7 @@ class profileView extends Component {
       this.state.address &&
       this.state.city &&
       this.state.state &&
-      this.state.zip &&
+      this.state.zipcode &&
       this.state.email &&
       this.state.first_name &&
       this.state.last_name
