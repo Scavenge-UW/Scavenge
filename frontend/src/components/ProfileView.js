@@ -15,7 +15,7 @@ class profileView extends Component {
       address: this.props.profile ? this.props.profile.address : "",
       city: this.props.profile ? this.props.profile.city : "",
       state: this.props.profile ? this.props.profile.state : "",
-      zip: this.props.profile ? this.props.profile.zip : "",
+      zipcode: this.props.profile ? this.props.profile.zipcode : "",
       email: this.props.profile ? this.props.profile.email : "",
       first_name: this.props.profile ? this.props.profile.firstName : "",
       last_name: this.props.profile ? this.props.profile.lastName : "",
@@ -23,6 +23,7 @@ class profileView extends Component {
   }
 
   onSubmit(e) {
+    //TODO: implement actual functionalities
     e.preventDefault();
 
     const user = {
@@ -32,7 +33,7 @@ class profileView extends Component {
       address: this.state.address,
       city: this.state.city,
       state: this.state.state,
-      zip: this.state.zip,
+      zipcode: this.state.zipcode,
       email: this.state.email,
       firstName: this.state.first_name,
       lastName: this.state.last_name,
@@ -207,9 +208,9 @@ class profileView extends Component {
               <Form.Label>Zip</Form.Label>
               <Form.Control
                 type={"number"}
-                value={this.state.zip}
+                value={this.state.zipcode}
                 placeholder="Zipcode"
-                onChange={(e) => this.setState({ zip: e.target.value })}
+                onChange={(e) => this.setState({ zipcode: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
@@ -217,14 +218,16 @@ class profileView extends Component {
           <Button
             variant="primary"
             style={{ marginLeft: "20px" }}
-            onClick={this.submitForm}
+            onClick={this.onSubmit}
           >
             Submit
           </Button>
           <Button
             variant="danger"
             style={{ marginLeft: "20px" }}
-            onClick={this.submitForm}
+            onClick={() => {
+              alert("TODO: implement cancel");
+            }}
           >
             Cancel
           </Button>
