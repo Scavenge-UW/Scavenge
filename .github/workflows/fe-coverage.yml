@@ -14,6 +14,9 @@ jobs:
     env:
       working-directory: ./frontend
     steps:
-      - uses: ziishaned/jest-reporter-action@0.1.1
+      - uses: mattallty/jest-github-action@v1.0.3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # The test command to run
+          test-command: npm run test -- --coverage --watchAll=false
+          # Subdirectory to run tests in
+          working-directory: ./frontend
