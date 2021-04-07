@@ -3,10 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
+import "regenerator-runtime/runtime";
 import { configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
-module.exports = {
-  coverageReporters: ["json", "lcov", "text", "clover"],
-};
 configure({ adapter: new Adapter() });
