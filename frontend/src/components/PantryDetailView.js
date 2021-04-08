@@ -73,7 +73,11 @@ function PantryDetailView() {
     for (const foodItem of Object.values(foods)) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
-        <FoodItemCard key={foodItem.food_id} foodItem={foodItem} />
+        <FoodItemCard
+          key={foodItem.food_id}
+          foodItem={foodItem}
+          pantry={pantryDetail}
+        />
       );
     }
 
