@@ -71,53 +71,10 @@ class DashboardView extends Component {
   }
 
   /**
-   * Returns the textual description of the current dashboard.
-   *
-   */
-  getDashboardOverview() {
-    const numReservation = Object.keys(this.state.rsvns).length;
-
-    return (
-      <>
-        {/* Page title */}
-        <Row className="justify-content-center">
-          <h3>Dashboard</h3>
-        </Row>
-        <hr />
-        {/* Overview message */}
-        <Row className="justify-content-center">
-          You have {numReservation} new reservations today.
-        </Row>
-      </>
-    );
-  }
-
-  /**
-   *
-   */
-  getDescriptionCards() {
-    return (
-      <>
-        <Row className="justify-content-center pt-4">
-          <DashboardDescriptionCard
-            adminMode
-            pantryName={this.state.pantryName}
-            description={this.state.description}
-            address={this.state.address}
-            zipcode={this.state.zipcode}
-            city={this.state.city}
-            stte={this.state.stte}
-            phone={this.state.phone}
-            weblink={this.state.weblink}
-          />
-        </Row>
-      </>
-    );
-  }
-
-  /**
    * Mark a reservation as approved
    *
+   * @param {*} rsvn_id
+   * @param {*} pantry_id
    */
   markAsApproved(rsvn_id, pantry_id) {
     console.log(rsvn_id);
@@ -142,6 +99,8 @@ class DashboardView extends Component {
   /**
    * Mark a reservation as picked up
    *
+   * @param {*} rsvn_id
+   * @param {*} pantry_id
    */
   markAsPickedUp(rsvn_id, pantry_id) {
     console.log(rsvn_id);
@@ -166,8 +125,10 @@ class DashboardView extends Component {
   }
 
   /**
-   * Mark a reservation as cancelled
+   *  Mark a reservation as cancelled
    *
+   * @param {*} rsvn_id
+   * @param {*} pantry_id
    */
   markAsCancelled(rsvn_id, pantry_id) {
     console.log(rsvn_id);
@@ -185,6 +146,57 @@ class DashboardView extends Component {
       });
   }
 
+  /**
+   * Returns the textual description of the current dashboard.
+   *
+   * @returns
+   */
+  getDashboardOverview() {
+    const numReservation = Object.keys(this.state.rsvns).length;
+
+    return (
+      <>
+        {/* Page title */}
+        <Row className="justify-content-center">
+          <h3>Dashboard</h3>
+        </Row>
+        <hr />
+        {/* Overview message */}
+        <Row className="justify-content-center">
+          You have {numReservation} new reservations today.
+        </Row>
+      </>
+    );
+  }
+
+  /**
+   *
+   * @returns
+   */
+  getDescriptionCards() {
+    return (
+      <>
+        <Row className="justify-content-center pt-4">
+          <DashboardDescriptionCard
+            adminMode
+            pantryName={this.state.pantryName}
+            description={this.state.description}
+            address={this.state.address}
+            zipcode={this.state.zipcode}
+            city={this.state.city}
+            stte={this.state.stte}
+            phone={this.state.phone}
+            weblink={this.state.weblink}
+          />
+        </Row>
+      </>
+    );
+  }
+
+  /**
+   *
+   * @returns
+   */
   getMessageAndFunctions() {
     return (
       <>

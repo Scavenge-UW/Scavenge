@@ -105,7 +105,7 @@ class FoodItemCard extends Component {
     this.setState({
       newQuantity: newQuantity,
     });
-  }
+  } // will this be used? -- andy
 
   activateEditMode() {
     this.setState({
