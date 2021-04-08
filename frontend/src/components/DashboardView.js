@@ -69,10 +69,6 @@ class DashboardView extends Component {
     }
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// Reservation Message ////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////
-
   /**
    * Returns the textual description of the current dashboard.
    *
@@ -81,37 +77,133 @@ class DashboardView extends Component {
     const numReservation = Object.keys(this.state.rsvns).length;
 
     return (
-      <p className="text-center mt-4">
-        You have {numReservation} new reservations today.
-      </p>
+      <>
+        {/* Page title */}
+        <Row className="justify-content-center">
+          <h3>Dashboard</h3>
+        </Row>
+        <hr />
+        {/* Overview message */}
+        <Row className="justify-content-center">
+          You have {numReservation} new reservations today.
+        </Row>
+      </>
     );
   }
-
-  /////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// Pantry Description /////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////
 
   /**
    *
    */
   getDescriptionCards() {
     return (
-      <DashboardDescriptionCard
-        adminMode
-        pantryName={this.state.pantryName}
-        description={this.state.description}
-        address={this.state.address}
-        zipcode={this.state.zipcode}
-        city={this.state.city}
-        stte={this.state.stte}
-        phone={this.state.phone}
-        weblink={this.state.weblink}
-      />
+      <>
+        <Row className="justify-content-center pt-4">
+          <DashboardDescriptionCard
+            adminMode
+            pantryName={this.state.pantryName}
+            description={this.state.description}
+            address={this.state.address}
+            zipcode={this.state.zipcode}
+            city={this.state.city}
+            stte={this.state.stte}
+            phone={this.state.phone}
+            weblink={this.state.weblink}
+          />
+        </Row>
+      </>
     );
   }
 
+  /**
+   * Mark a reservation as approved
+   *
+   */
+  markAsApproved(rsvn_id, pantry_id) {
+    console.log(rsvn_id);
+
+    // refresh the page to display the updated state
+    // const reload = () => window.location.reload();
+
+    PantryService.setApproved(
+      pantry_id, // TODO: Change to actual pantry id
+      rsvn_id
+    )
+      .then(() => {
+        toast.success(
+          "You have successfully approved the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while approving reservation with ID " + rsvn_id);
+      });
+  }
+
+  /**
+   * Mark a reservation as picked up
+   *
+   */
+  markAsPickedUp(rsvn_id, pantry_id) {
+    console.log(rsvn_id);
+    PantryService.setPickedUp(
+      pantry_id, // TODO: Change to actual pantry id
+      rsvn_id
+    )
+      .then(() => {
+        toast.success(
+          "reservation with ID " +
+            rsvn_id +
+            " was successfully marked as picked up!"
+        );
+      })
+      .catch(() => {
+        toast.error(
+          "Error while marking reservation with ID " +
+            rsvn_id +
+            " as picked up."
+        );
+      });
+  }
+
+  /**
+   * Mark a reservation as cancelled
+   *
+   */
+  markAsCancelled(rsvn_id, pantry_id) {
+    console.log(rsvn_id);
+    PantryService.setCancelled(
+      pantry_id, // TODO: Change to actual pantry id
+      rsvn_id
+    )
+      .then(() => {
+        toast.success(
+          "You have successfully cancelled the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while cancelling reservation with ID " + rsvn_id);
+      });
+  }
+
   getMessageAndFunctions() {
-    return <DashboardMessages adminMode rsvns={this.state.rsvns} />;
+    return (
+      <>
+        {/* Sub-session title */}
+        <Row className="justify-content-center">
+          <h4>Messages </h4>
+        </Row>
+        {/* Sub-session content (TODO: adjust style) */}
+        <Row className="justify-content-center">
+          <DashboardMessages
+            adminMode
+            rsvns={this.state.rsvns}
+            fetchPantryDetail={this.props.fetchPantryDetail}
+            markAsApproved={this.markAsApproved.bind(this)}
+            markAsPickedUp={this.markAsPickedUp.bind(this)}
+            markAsCancelled={this.markAsCancelled.bind(this)}
+          />
+        </Row>
+      </>
+    );
   }
 
   /**
@@ -125,31 +217,15 @@ class DashboardView extends Component {
         <Row className="justify-content-center">
           <h2>{this.state.pantryName}</h2>
         </Row>
-        {/* Page title */}
-        <Row className="justify-content-center">
-          <h3>Dashboard</h3>
-        </Row>
-        <hr />
-        {/* Overview message */}
-        <Row className="justify-content-center">
-          {this.getDashboardOverview()}
-        </Row>
-        {/* Sub-session title */}
-        <Row className="justify-content-center">
-          <h4>Messages </h4>
-        </Row>
-        {/* Sub-session content (TODO: adjust style) */}
-        <Row className="justify-content-center">
-          {this.getMessageAndFunctions()}
-        </Row>
-        {/* TODO: add changes
-        <Row className="justify-content-center">
-          <DashboardMessage />
-        </Row> */}
-        {/* Description */}
-        <Row className="justify-content-center pt-4">
-          {this.getDescriptionCards()}
-        </Row>
+        {/* dashboard and dashboard messages */}
+        {this.getDashboardOverview()}
+
+        {/* messages displayed and buttons for actions */}
+        {this.getMessageAndFunctions()}
+
+        {/* pantry description card and edits */}
+        {this.getDescriptionCards()}
+
         {/* Open Hours */}
         <Row className="justify-content-center pt-4">
           <DashboardOpenHourCard openHours={this.state.hours} />

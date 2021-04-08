@@ -50,35 +50,36 @@ async function addFoodItemToInventory(pantry_id, food) {
   });
 }
 
+// approve
 async function setApproved(pantry_id, reservation_id) {
   return request({
     //    /pantries/:pantry_id/reservations/:action/:reservation_id
     //    :action can be either "approve", "cancel", or "complete"
     url: "/pantries/" + pantry_id + "/reservations/approve/" + reservation_id,
     method: "PUT",
-    data: 1,
     withCredentials: true,
   });
 }
 
+// complete
 async function setPickedUp(pantry_id, reservation_id) {
   return request({
     //    /pantries/:pantry_id/reservations/:action/:reservation_id
     //    :action can be either "approve", "cancel", or "complete"
     url: "/pantries/" + pantry_id + "/reservations/complete/" + reservation_id,
     method: "PUT",
-    data: 1,
+    data: "null",
     withCredentials: true,
   });
 }
 
+// cancel
 async function setCancelled(pantry_id, reservation_id) {
   return request({
     //    /pantries/:pantry_id/reservations/:action/:reservation_id
     //    :action can be either "approve", "cancel", or "complete"
     url: "/pantries/" + pantry_id + "/reservations/cancel/" + reservation_id,
     method: "PUT",
-    data: 1,
     withCredentials: true,
   });
 }

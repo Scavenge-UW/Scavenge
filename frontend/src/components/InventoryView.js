@@ -54,8 +54,6 @@ class InventoryView extends Component {
 
   componentDidMount() {
     if (this.props.pantryDetail) {
-      console.log("this.props.pantryDetail-InventoryView");
-      console.log(this.props.pantryDetail);
       this.setState({
         foods: this.props.pantryDetail.foods,
       });

@@ -13,9 +13,13 @@ import PantryService from "../services/pantry.service";
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 
 // other imports
-import moment, { parseTwoDigitYear } from "moment";
+import moment from "moment";
 import { toast } from "react-toastify";
 import "../css/common.css";
+
+/////
+///// DISABLED BUTTONS
+/////
 
 class DashboardMessages extends Component {
   constructor(props) {
@@ -37,10 +41,10 @@ class DashboardMessages extends Component {
       // used to calculate time elapsed since the reservation is made
       currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
     };
-    this.openViewRsvnMsgModal = this.openViewRsvnMsgModal.bind(this);
-    this.markAsApproved = this.markAsApproved.bind(this);
-    this.markAsPickedUp = this.markAsPickedUp.bind(this);
-    this.markAsCancelled = this.markAsCancelled.bind(this);
+    // this.openViewRsvnMsgModal = this.openViewRsvnMsgModal.bind(this);
+    // this.markAsApproved = this.markAsApproved.bind(this);
+    // this.markAsPickedUp = this.markAsPickedUp.bind(this);
+    // this.markAsCancelled = this.markAsCancelled.bind(this);
   }
 
   /**
@@ -144,7 +148,6 @@ class DashboardMessages extends Component {
 
     const username = <span style={monoStyle}>{rsvn.username}</span>;
 
-    // TODO: change this when backend is updated
     const numItems = (
       <span style={monoStyle}>{Object.keys(rsvn.res_foods).length}</span>
     );
@@ -165,73 +168,30 @@ class DashboardMessages extends Component {
     return messageHeader;
   }
 
-  /**
-   * Mark a reservation as picked up
-   * (TODO: need a undo button?)
-   *
-   */
-  markAsPickedUp(rsvn_id, pantry_id) {
-    console.log(rsvn_id);
-    PantryService.setPickedUp(
-      pantry_id, // TODO: Change to actual pantry id
-      rsvn_id
-    )
-      .then(() => {
-        toast.success(
-          "reservation with ID " +
-            rsvn_id +
-            " was successfully marked as picked up!"
-        );
-      })
-      .catch(() => {
-        toast.error(
-          "Error while marking reservation with ID " +
-            rsvn_id +
-            " as picked up."
-        );
-      });
+  approvedButtonIsDisabled(rsvn) {
+    // if rsvn is cancelled, approved button should not be up
+    if (rsvn.cancelled) return true;
+    // if rsvn is approved, approved button should not be up
+    else if (rsvn.approved) return true;
+    // if rsvn is picked up, approved button should not be up
+    else if (rsvn.picked_up_time) return true;
+    else return false;
   }
 
-  /**
-   * Mark a reservation as approved
-   * (TODO: need a undo button?)
-   *
-   */
-  markAsApproved(rsvn_id, pantry_id) {
-    console.log(rsvn_id);
-    PantryService.setApproved(
-      pantry_id, // TODO: Change to actual pantry id
-      rsvn_id
-    )
-      .then(() => {
-        toast.success(
-          "You have successfully approved the reservation with ID " + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error("Error while approving reservation with ID " + rsvn_id);
-      });
+  pickedupButtonIsDisabled(rsvn) {
+    // if rsvn is cancelled, pickedup button should not be up
+    if (rsvn.cancelled) return true;
+    // if rsvn is not approved, pickedup button should not be up
+    else if (!rsvn.approved) return true;
+    // if rsvn is picked up, pickedup button should not be up
+    else if (rsvn.picked_up_time) return true;
+    else return false;
   }
 
-  /**
-   * Mark a reservation as cancelled
-   * (TODO: need a undo button?)
-   *
-   */
-  markAsCancelled(rsvn_id, pantry_id) {
-    console.log(rsvn_id);
-    PantryService.setCancelled(
-      pantry_id, // TODO: Change to actual pantry id
-      rsvn_id
-    )
-      .then(() => {
-        toast.success(
-          "You have successfully cancelled the reservation with ID " + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error("Error while cancelling reservation with ID " + rsvn_id);
-      });
+  cancelButtonIsDisabled(rsvn) {
+    // if rsvn is cancelled, pickedup button should not be up
+    if (rsvn.cancelled) return true;
+    else return false;
   }
 
   /**
@@ -244,6 +204,7 @@ class DashboardMessages extends Component {
       <ListGroupItem
         tag="a"
         className="justify-content-center w-responsive w-100 mx-auto p-3 mt-1"
+        key={rsvn.reservation_id}
         action
       >
         {/* Heading */}
@@ -267,7 +228,7 @@ class DashboardMessages extends Component {
                 selectedID: rsvn.reservation_id,
                 selectedUsername: rsvn.username,
                 selectedApproved: rsvn.approved,
-                selectedPickedUp: rsvn.approved, // TODO: change this to picked up
+                selectedPickedUp: rsvn.picked_up_time,
                 selectedCancelled: rsvn.cancelled,
                 selectedResFoods: rsvn.res_foods,
               },
@@ -286,16 +247,20 @@ class DashboardMessages extends Component {
           className="m-2"
           md="auto"
           onClick={() => {
-            this.setState(
-              {
-                selectedID: rsvn.reservation_id,
-                selectedApproved: rsvn.approved,
-              },
-              () => {
-                this.markAsApproved(this.state.selectedID, 1);
-              }
-            );
+            if (window.confirm("Approve this reservation?")) {
+              this.setState(
+                {
+                  selectedID: rsvn.reservation_id,
+                  selectedApproved: rsvn.approved,
+                },
+                () => {
+                  this.props.markAsApproved(this.state.selectedID, 1);
+                }
+              );
+            }
+            // this.props.fetchPantryDetail();
           }}
+          disabled={this.approvedButtonIsDisabled(rsvn)}
         >
           Approve this reservation
         </Button>
@@ -306,18 +271,20 @@ class DashboardMessages extends Component {
           className="m-2"
           md="auto"
           onClick={() => {
-            this.setState(
-              {
-                selectedID: rsvn.reservation_id,
-                selectedPickedUp: rsvn.approved, // TODO: change this to picked up
-              },
-              () => {
-                this.markAsPickedUp(this.state.selectedID, 1);
-              }
-            );
+            if (window.confirm("Mark this reservation as picked up?")) {
+              this.setState(
+                {
+                  selectedID: rsvn.reservation_id,
+                  selectedPickedUp: rsvn.picked_up_time,
+                },
+                () => {
+                  this.props.markAsPickedUp(this.state.selectedID, 1);
+                }
+              );
+            }
+            // this.props.fetchPantryDetail();
           }}
-          // disabled={this.state.selctedIdIsApproved}
-          // disabled={this.isMarkedPickedUp(rsvn.reservation_id)}
+          disabled={this.pickedupButtonIsDisabled(rsvn)}
         >
           Mark as Picked up
         </Button>
@@ -328,21 +295,47 @@ class DashboardMessages extends Component {
           className="m-2"
           md="auto"
           onClick={() => {
-            this.setState(
-              {
-                selectedID: rsvn.reservation_id,
-                selectedCancelled: rsvn.cancelled,
-              },
-              () => {
-                this.markAsCancelled(this.state.selectedID, 1);
-              }
-            );
+            if (window.confirm("Cancel this reservation?")) {
+              this.setState(
+                {
+                  selectedID: rsvn.reservation_id,
+                  selectedCancelled: rsvn.cancelled,
+                },
+                () => {
+                  this.props.markAsCancelled(this.state.selectedID, 1);
+                }
+              );
+            }
+            // this.props.fetchPantryDetail();
           }}
+          disabled={this.cancelButtonIsDisabled(rsvn)}
         >
           Cancel this reservation
         </Button>
+        <Button
+          variant="dark"
+          className="m-2"
+          md="auto"
+          onClick={() => {
+            if (window.confirm("Reset this reservation?")) {
+              this.setState(
+                {
+                  selectedID: rsvn.reservation_id,
+                  selectedCancelled: rsvn.cancelled,
+                },
+                () => {
+                  this.props.markAsApproved(this.state.selectedID, 1);
+                }
+              );
+            }
+          }}
+          disabled={false}
+        >
+          reset
+        </Button>
       </ListGroupItem>
     ));
+
     return (
       <>
         <ListGroup>{viewMessages}</ListGroup>
