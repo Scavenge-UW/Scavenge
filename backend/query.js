@@ -11,13 +11,25 @@ const db_config = {
   database: 'ScavengeDB_IT2',
   connectionLimit: 10
 }; 
+
+// TEST DB Connection
+const test_db_config = {
+  host: 'scavenge-db.clkbasnuzdfc.us-east-2.rds.amazonaws.com',
+  user: 'admin',
+  password: process.env.DB_PASSWORD,
+  database: 'ScavengeDB_TEST',
+  connectionLimit: 10
+}; 
+
 const pool = mysql.createPool(db_config);
+const test_pool = mysql.createPool(test_db_config);
+
 
 // Values params is optional
 exports.execQuery = (type, query, values = [[]], failure="No failure message provided.") => {
   return new Promise((resolve, reject) => {
     // Connect to database
-    pool.getConnection((err, connection) => {
+    (globalUseTestDB == 1 ? test_pool : pool).getConnection((err, connection) => {
       if (err) {
         console.log("Error connecting to database!");
         return reject(err);
