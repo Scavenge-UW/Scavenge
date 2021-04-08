@@ -54,7 +54,7 @@ describe("Login tests", () => {
     expect(wrapper.find("FormControl#password_input")).toHaveLength(0);
   });
 
-  it("should re", async () => {
+  it("should redirect to home on login success", async () => {
     wrapper.setState({ toHomeView: false });
     wrapper.setProps({
       login: () => {

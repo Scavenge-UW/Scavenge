@@ -33,6 +33,8 @@ class Navigation extends Component {
         return "/search-food";
       case "Cart":
         return "/cart";
+      case "Profile":
+        return "/profile";
       default:
         return "/";
     }

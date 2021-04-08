@@ -15,6 +15,7 @@ import PantryDetailView from "./components/PantryDetailView";
 import FoodSearchView from "./components/FoodSearchView";
 import CartView from "./components/CartView";
 import Navigation from "./components/Navigation";
+import ProfileView from "./components/ProfileView";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -135,6 +136,9 @@ function App(props) {
               </Route>
               <Route path="/cart">
                 <CartView />
+              </Route>
+              <Route path="/profile">
+                <ProfileView profile={profile} />
               </Route>
               <Route path="/">
                 <HomeView profile={profile} />

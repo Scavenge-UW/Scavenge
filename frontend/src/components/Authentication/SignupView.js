@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { Redirect } from "react-router-dom";
 
 class SignupView extends Component {
@@ -17,7 +17,7 @@ class SignupView extends Component {
       state: "",
       zipcode: "",
       email: "",
-      type:"",
+      type: "",
       toHomeView: "", // used for redirection on signup success
     };
     this.submitForm = this.submitForm.bind(this);
@@ -37,8 +37,18 @@ class SignupView extends Component {
       email: this.state.email,
     };
 
-    if (this.state.username.length == 0 || this.state.password.length == 0) {
-      toast.error("Username or password field is empty.");
+    if (
+      this.state.username.length == 0 ||
+      this.state.password.length == 0 ||
+      this.state.phoneNumber.length == 0 ||
+      this.state.address.length == 0 ||
+      this.state.city.length == 0 ||
+      this.state.state.length == 0 ||
+      this.state.city.length == 0 ||
+      this.state.zip.length == 0 ||
+      this.state.email.length == 0
+    ) {
+      alert("Username or password field is empty.");
       return;
     }
 
@@ -46,14 +56,14 @@ class SignupView extends Component {
     if (signupResult === 0) {
       // Successful signup
       this.setState({
-        toHomeView: true
-      })
+        toHomeView: true,
+      });
     }
   }
 
   render() {
     if (this.state.toHomeView === true) {
-      return <Redirect to='/' />
+      return <Redirect to="/" />;
     }
 
     return (
@@ -127,7 +137,6 @@ class SignupView extends Component {
             </Form.Group>
           </Form.Row>
 
-
           <Form.Row>
             <Form.Group
               as={Col}
@@ -155,9 +164,7 @@ class SignupView extends Component {
                 type={"text"}
                 value={this.state.phone}
                 placeholder="Phone"
-                onChange={(e) =>
-                  this.setState({ phone: e.target.value })
-                }
+                onChange={(e) => this.setState({ phone: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
@@ -173,13 +180,10 @@ class SignupView extends Component {
                 type={"text"}
                 value={this.state.address}
                 placeholder="Address"
-                onChange={(e) =>
-                  this.setState({ address: e.target.value })
-                }
+                onChange={(e) => this.setState({ address: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
-
 
           <Form.Row>
             <Form.Group
