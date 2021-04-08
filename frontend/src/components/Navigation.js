@@ -31,6 +31,8 @@ class Navigation extends Component {
         return "/pantry"
       case "Search Foods":
         return "/search-food"
+      case "Profile":
+        return "/profile"
       default:
         return "/";
     }
