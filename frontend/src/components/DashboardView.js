@@ -46,6 +46,7 @@ class DashboardView extends Component {
   }
 
   componentDidMount() {
+    console.log("componentDidMount!!");
     const pantry = this.props.pantryDetail;
 
     if (pantry) {

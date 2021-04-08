@@ -200,6 +200,9 @@ class DashboardMessages extends Component {
    *
    */
   render() {
+    /*
+    TODO: add a expand button to hide some reservation messages when len(messages) > 2
+    */
     const viewMessages = this.props.rsvns.map((rsvn) => (
       <ListGroupItem
         tag="a"
@@ -217,7 +220,9 @@ class DashboardMessages extends Component {
 
         {/* Veiw Message Buttons */}
         <Button
-          variant="outline-info"
+          // variant="outline-secondary"
+          variant="secondary"
+          size="sm"
           className="m-2"
           md="auto"
           onClick={() => {
@@ -243,7 +248,9 @@ class DashboardMessages extends Component {
 
         {/* Approve this reservation Button */}
         <Button
-          variant="outline-warning"
+          // variant="outline-primary"
+          variant="primary"
+          size="sm"
           className="m-2"
           md="auto"
           onClick={() => {
@@ -267,7 +274,9 @@ class DashboardMessages extends Component {
 
         {/* Mark as Picked Up Button */}
         <Button
-          variant="outline-primary"
+          // variant="outline-success"
+          variant="success"
+          size="sm"
           className="m-2"
           md="auto"
           onClick={() => {
@@ -291,7 +300,9 @@ class DashboardMessages extends Component {
 
         {/* Cancel this reservation Button */}
         <Button
-          variant="outline-danger"
+          // variant="outline-danger"
+          variant="danger"
+          size="sm"
           className="m-2"
           md="auto"
           onClick={() => {
@@ -312,8 +323,16 @@ class DashboardMessages extends Component {
         >
           Cancel this reservation
         </Button>
+
+        {/* 
+        reset button is used to debug with Ilkyu
+        and used for making disabled button enabled
+        e.g. cancelled = 1, clicking 'reset' will make 
+             `marked as picked up` button enabled 
+        */}
         <Button
           variant="dark"
+          size="sm"
           className="m-2"
           md="auto"
           onClick={() => {
