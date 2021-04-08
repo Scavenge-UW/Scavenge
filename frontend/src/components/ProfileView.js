@@ -21,7 +21,8 @@ class profileView extends Component {
       first_name: (this.props.profile) ? this.props.profile.firstName : "",
       last_name: (this.props.profile) ? this.props.profile.lastName : ""
     };
-
+    
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(e) {
@@ -42,7 +43,7 @@ class profileView extends Component {
     if(this.state.username && this.state.password && this.state.phone && this.state.address && this.state.city && this.state.state && this.state.zip && this.state.email && this.state.first_name && this.state.last_name){
       this.props.editProf(user);
     } else{
-      alert("Username or password field is empty.")
+      alert("Please enter all fields in the form.")
     }
   }
   
@@ -203,14 +204,14 @@ class profileView extends Component {
             <Button
               variant="primary"
               style={{ marginLeft: "20px" }}
-              onClick={this.submitForm}
+              onClick={this.onSubmit}
             >
               Submit
             </Button>
             <Button
               variant="danger"
               style={{ marginLeft: "20px" }}
-              onClick={this.submitForm}
+              onClick={this.onSubmit}
             >
               Cancel
             </Button>
