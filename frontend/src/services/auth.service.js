@@ -1,20 +1,19 @@
 import request from './request';
 
 function signup(user) {
-  console.log(user);
   return request({
     url: '/signup',
     method: 'POST',
     data: {
       "username": user.username,
       "password": user.password,
-      "phoneNumber": user.phoneNumber,
+      "firstName": user.firstName,
+      "lastName": user.lastName,
+      "phone": user.phone,
       "address": user.address,
       "city": user.city,
       "state": user.state,
-      "zip": user.zip,
-      "carDescription": user.carDescription,
-      "type": user.type,
+      "zipcode": user.zipcode,
       "email": user.email
     },
     withCredentials: true,
