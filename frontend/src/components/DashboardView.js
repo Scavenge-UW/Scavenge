@@ -79,9 +79,6 @@ class DashboardView extends Component {
   markAsApproved(rsvn_id, pantry_id) {
     console.log(rsvn_id);
 
-    // refresh the page to display the updated state
-    // const reload = () => window.location.reload();
-
     PantryService.setApproved(
       pantry_id, // TODO: Change to actual pantry id
       rsvn_id

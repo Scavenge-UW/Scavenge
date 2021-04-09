@@ -216,8 +216,6 @@ class DashboardMessages extends Component {
         </ListGroupItemHeading>
         <hr />
 
-        {/* TODO: buttons should be disabled accordingly */}
-
         {/* Veiw Message Buttons */}
         <Button
           // variant="outline-secondary"
@@ -228,8 +226,6 @@ class DashboardMessages extends Component {
           onClick={() => {
             this.setState(
               {
-                // TODO: approved/pickedup/cancelled values not changed
-                // it requires a refresh of the page to see the updates
                 selectedID: rsvn.reservation_id,
                 selectedUsername: rsvn.username,
                 selectedApproved: rsvn.approved,
@@ -265,7 +261,6 @@ class DashboardMessages extends Component {
                 }
               );
             }
-            // this.props.fetchPantryDetail();
           }}
           disabled={this.approvedButtonIsDisabled(rsvn)}
         >
@@ -291,7 +286,6 @@ class DashboardMessages extends Component {
                 }
               );
             }
-            // this.props.fetchPantryDetail();
           }}
           disabled={this.pickedupButtonIsDisabled(rsvn)}
         >
@@ -317,7 +311,6 @@ class DashboardMessages extends Component {
                 }
               );
             }
-            // this.props.fetchPantryDetail();
           }}
           disabled={this.cancelButtonIsDisabled(rsvn)}
         >
@@ -325,8 +318,8 @@ class DashboardMessages extends Component {
         </Button>
 
         {/* 
-        reset button is used to debug with Ilkyu
-        and used for making disabled button enabled
+        reset button is used for making disabled button enabled
+        by marking the reservation as approved
         e.g. cancelled = 1, clicking 'reset' will make 
              `marked as picked up` button enabled 
         */}
@@ -362,13 +355,13 @@ class DashboardMessages extends Component {
         {/* Reservation Message Modal */}
         <ViewRsvnMsgModal
           show={this.state.showRsvnMsg}
-          onHide={() => this.closeViewRsvnMsgModal()}
           selectedID={this.state.selectedID}
           selectedUsername={this.state.selectedUsername}
           selectedApproved={this.state.selectedApproved}
           selectedPickedUp={this.state.selectedPickedUp}
           selectedCancelled={this.state.selectedCancelled}
           selectedResFoods={this.state.selectedResFoods}
+          onHide={() => this.closeViewRsvnMsgModal()}
         />
       </>
     );
