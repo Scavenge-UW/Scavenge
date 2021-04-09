@@ -86,15 +86,24 @@ exports.getWishlist = async (req, res) => {
       f.name as food_name,
       w.username,
       w.pantry_id,
+      h.id as hours_id,
+      h.day,
+      h.open,
+      h.close,
+      h.detail,  
       p.name as pantry_name,
       p.website,
       p.address,
       p.city,
       p.state,
-      p.zip
+      p.zip,
+      p.phone_number, 
+      p.img_src, 
+      p.email
     FROM wishlist w
     JOIN food f ON f.id = w.food_id
     JOIN pantry p ON w.pantry_id = p.id
+    JOIN hours h ON p.id = h.pantry_id
     WHERE w.username = ?;
   `;
   let values = [[req.params.username]];
