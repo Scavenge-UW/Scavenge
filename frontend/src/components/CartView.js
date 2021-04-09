@@ -4,6 +4,10 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import moment from "moment";
+import { toast } from "react-toastify";
+
+import ReservationService from "../services/reservation.service";
 import FoodItemCard from "./FoodItemCard";
 
 function CartView(props) {
@@ -45,8 +49,6 @@ function CartView(props) {
       }
     });
 
-    console.log(reservationsByPantries);
-
     Object.keys(reservationsByPantries).forEach((pantry_id) => {
       let food_ids = [];
       let quantities = [];
@@ -56,11 +58,23 @@ function CartView(props) {
       });
 
       let data = {
+        username: props.username,
+        estimated_pick_up: moment(new Date())
+          .add(1, "hours")
+          .format("YYYY-MM-DD HH:mm:ss"), // TODO: currently, estimated pickup time is set to 1 hour from now
         food_ids: food_ids,
         quantities: quantities,
       };
 
-      console.log(data);
+      ReservationService.makeReservation(pantry_id, data)
+        .then(() => {
+          toast.info("Reservations successful!");
+        })
+        .catch(() => {
+          toast.error(
+            "There was an error while making a reservation. Please try again later."
+          );
+        });
     });
   };
 

@@ -19,7 +19,7 @@ import PantryService from "../services/pantry.service";
  * @author [Ilkyu Ju](https://github.com/osori)
  */
 
-function PantryDetailView() {
+function PantryDetailView(props) {
   const [pantryDetail, setPantryDetail] = useState(null);
   const [currPage, setCurrPage] = useState(1);
   const [tab, setTab] = useState("information");
@@ -74,6 +74,7 @@ function PantryDetailView() {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
+          username={props.username}
           key={foodItem.food_id}
           foodItem={foodItem}
           pantry={pantryDetail}

@@ -17,6 +17,7 @@ import store from "../store";
 
 import "../css/common.css";
 import PantryService from "../services/pantry.service";
+import OneClickReserveModal from "./modals/OneClickReserveModal";
 
 class FoodItemCard extends Component {
   constructor(props) {
@@ -27,6 +28,8 @@ class FoodItemCard extends Component {
 
     this.state = {
       editMode: false,
+      showOneClickReserveModal: false,
+      cartQuantity: 0,
     };
   }
 
@@ -62,12 +65,19 @@ class FoodItemCard extends Component {
     }
   }
 
+  setShowOneClickReserveModal(show) {
+    this.setState({
+      showOneClickReserveModal: show,
+      cartQuantity: this.cartQuantity.current.value,
+    });
+  }
+
   /**
    * TODO: This function is fired when One Click Reserve button is clicked
    *
    */
   onClickOneClickReserve() {
-    toast.info("TODO: implement One Click Reserve");
+    this.setShowOneClickReserveModal(true);
   }
 
   /**
@@ -287,7 +297,8 @@ class FoodItemCard extends Component {
                   </InputGroup.Prepend>
                   <FormControl
                     type="number"
-                    defaultValue={this.props.foodItem.quantity}
+                    disabled={!this.isInStock()}
+                    defaultValue={1}
                     ref={this.cartQuantity}
                   />
                   <InputGroup.Append>
@@ -363,7 +374,7 @@ class FoodItemCard extends Component {
                   </InputGroup.Prepend>
                   <FormControl
                     type="number"
-                    defaultValue={this.props.foodItem.quantity}
+                    defaultValue={this.props.cartQuantity}
                     ref={this.cartQuantity}
                   />
                   <InputGroup.Append>
@@ -433,25 +444,35 @@ class FoodItemCard extends Component {
     } else {
       const { food_id, food_name, quantity } = this.props.foodItem;
       return (
-        <Card className="food-item">
-          <Card.Body>
-            <Card.Title className="mb-4">
-              <Row className="justify-content-between align-items-center">
-                <Col className="text-left">
-                  <span id="food_name">{food_name}</span>
-                </Col>
-                <Col className="text-right">
-                  {/* Show if Item is in stock */}
-                  {this.showStockInfo()}
-                </Col>
-              </Row>
-              {this.showReserveControls()}
-              {this.showAdminControls()}
-              {this.showCartControls()}
-              {this.showPantryName()}
-            </Card.Title>
-          </Card.Body>
-        </Card>
+        <>
+          <Card className="food-item">
+            <Card.Body>
+              <Card.Title className="mb-4">
+                <Row className="justify-content-between align-items-center">
+                  <Col className="text-left">
+                    <span id="food_name">{food_name}</span>
+                  </Col>
+                  <Col className="text-right">
+                    {/* Show if Item is in stock */}
+                    {this.showStockInfo()}
+                  </Col>
+                </Row>
+                {this.showReserveControls()}
+                {this.showAdminControls()}
+                {this.showCartControls()}
+                {this.showPantryName()}
+              </Card.Title>
+            </Card.Body>
+          </Card>
+          <OneClickReserveModal
+            username={this.props.username}
+            cartQuantity={this.state.cartQuantity}
+            pantry={this.props.pantry}
+            foodItem={this.props.foodItem}
+            show={this.state.showOneClickReserveModal}
+            onHide={() => this.setShowOneClickReserveModal(false)}
+          />
+        </>
       );
     }
   }
