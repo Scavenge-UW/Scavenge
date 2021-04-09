@@ -9,8 +9,8 @@ class SignupView extends Component {
     this.state = {
       username: "",
       password: "",
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       phone: "",
       address: "",
       city: "",
@@ -76,11 +76,11 @@ class SignupView extends Component {
       errors.push("Email field is empty")
     }
     
-    if(this.state.firstname.length == 0){
+    if(this.state.firstName.length == 0){
       errors.push("First name is empty")
     }
 
-    if(this.state.lastname.length == 0){
+    if(this.state.lastName.length == 0){
       errors.push("Last name is empty")
     }
 

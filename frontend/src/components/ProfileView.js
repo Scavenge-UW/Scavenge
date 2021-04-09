@@ -58,9 +58,11 @@ class ProfileView extends Component {
       this.state.first_name &&
       this.state.last_name
     ) {
+
       this.props.editProf(user);
       this.setState({toHomeView: true})
-      this.setProfile(user);
+      this.props.setProfile(user);
+
     } else {
       let errors = [];
 
