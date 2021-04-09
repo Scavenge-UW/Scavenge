@@ -438,6 +438,21 @@ class FoodItemCard extends Component {
     }
   }
 
+  showModal() {
+    if (this.props.cartMode) {
+      return (
+        <OneClickReserveModal
+          username={this.props.username}
+          cartQuantity={this.state.cartQuantity}
+          pantry={this.props.pantry}
+          foodItem={this.props.foodItem}
+          show={this.state.showOneClickReserveModal}
+          onHide={() => this.setShowOneClickReserveModal(false)}
+        />
+      );
+    }
+  }
+
   render() {
     if (this.props.type === "filler") {
       return <Card className="filler food-item" />;
@@ -464,14 +479,6 @@ class FoodItemCard extends Component {
               </Card.Title>
             </Card.Body>
           </Card>
-          <OneClickReserveModal
-            username={this.props.username}
-            cartQuantity={this.state.cartQuantity}
-            pantry={this.props.pantry}
-            foodItem={this.props.foodItem}
-            show={this.state.showOneClickReserveModal}
-            onHide={() => this.setShowOneClickReserveModal(false)}
-          />
         </>
       );
     }
