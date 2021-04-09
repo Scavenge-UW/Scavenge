@@ -126,8 +126,9 @@ exports.getWishlistAction = (req, res) => {
       result[element['pantry_id']]['img_src']       = element['img_src'];
       result[element['pantry_id']]['website']       = element['website'];
       result[element['pantry_id']]['foods'][element['food_id']] = {};
-      result[element['pantry_id']]['foods'][element['food_id']]['food_id']    = element['food_id'];
-      result[element['pantry_id']]['foods'][element['food_id']]['food_name']  = element['food_name'];
+      result[element['pantry_id']]['foods'][element['food_id']]['wishlist_id'] = element['wishlist_id'];
+      result[element['pantry_id']]['foods'][element['food_id']]['food_id']     = element['food_id'];
+      result[element['pantry_id']]['foods'][element['food_id']]['food_name']   = element['food_name'];
     
       result[element['pantry_id']]['hours'][element['day']] = {};
       result[element['pantry_id']]['hours'][element['day']]['day']   = element['day'];
@@ -161,6 +162,7 @@ exports.getWishlistAction = (req, res) => {
         let food = {};
         food['food_id'] = foodData['food_id'];
         food['food_name'] = foodData['food_name'];
+        food['wishlist_id'] = foodData['wishlist_id'];
 
         pantryInfo['foods'].push(food);
       }
