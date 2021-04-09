@@ -32,6 +32,7 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
     (globalUseTestDB == 1 ? test_pool : pool).getConnection((err, connection) => {
       if (err) {
         console.log("Error connecting to database!");
+        console.log(err);
         return reject(err);
       } else {
         if (type === 'select' || type === 'insert' || type === "replace") {

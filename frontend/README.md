@@ -7,6 +7,8 @@ The `services` folder includes all of our frontend calls to the backend API.
 
 `App.js` is the root of our project. 
 
+Run tests: npm run test -- --coverage --watchAll=false
+
 <hr>
 
 # Getting Started with Create React App

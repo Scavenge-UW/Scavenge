@@ -5,7 +5,6 @@ const db = require("../controllers/db.controllers.js");
 //Require the dev-dependencies
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -19,9 +18,9 @@ describe('Auth', () => {
     let data = await(db.deleteAllDataAction());
   });
 
-  beforeEach((done) => { //Before each test we should empty the test database
-        done();
-  });
+  // beforeEach((done) => { 
+  //       done();
+  // });
 
   /*
   * Test that update user info is not available while logged out

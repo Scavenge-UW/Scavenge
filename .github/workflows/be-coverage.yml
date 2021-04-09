@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+      JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+      JWT_COOKIE_EXPIRES: ${{ secrets.JWT_COOKIE_EXPIRES }}
     strategy:
       matrix:
         node-version: [15.x]
