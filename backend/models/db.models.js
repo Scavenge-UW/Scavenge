@@ -27,7 +27,8 @@ exports.deleteMessageData = async (req, res) => {
 }
 exports.deletePantryData = async (req, res) => {
   const query = `
-    DELETE FROM pantry;
+    DELETE FROM pantry
+    WHERE id <> 1;
   `;
   return await execQuery("delete", query);
 }
@@ -45,13 +46,15 @@ exports.deleteReservationData = async (req, res) => {
 }
 exports.deleteUserData = async (req, res) => {
   const query = `
-    DELETE FROM user;
+    DELETE FROM user
+    WHERE username <> 'sean1';
   `;
   return await execQuery("delete", query);
 }
 exports.deleteUserToPantryData = async (req, res) => {
   const query = `
-    DELETE FROM user_to_pantry;
+    DELETE FROM user_to_pantry
+    WHERE username <> 'sean1';
   `;
   return await execQuery("delete", query);
 }
