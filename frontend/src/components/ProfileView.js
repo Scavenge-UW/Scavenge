@@ -22,7 +22,8 @@ class ProfileView extends Component {
       email: this.props.profile ? this.props.profile.email : "",
       first_name: this.props.profile ? this.props.profile.firstName : "",
       last_name: this.props.profile ? this.props.profile.lastName : "",
-      toHomeView: false
+      toHomeView: false,
+      errors: []
     };
   }
 
@@ -56,42 +57,47 @@ class ProfileView extends Component {
     ) {
       this.props.editProf(user);
     } else {
-      
+
+      let errors = []
+
       if(!this.state.username){
-        toast.error("Username field is empty");
+        errors.push("Username field is empty")
       } 
 
       if(!this.state.password){
-        toast.error("Password field is empty");
+        errors.push("Password field is empty")
       }
 
       if(!this.state.phone){
-        toast.error("Phone number field is empty");
+        errors.push("Phone field is empty")
       }
 
       if(!this.state.address){
-        toast.error("Address field is empty");
+        errors.push("Address field is empty")
       }
 
       if(!this.state.city){
-        toast.error("City field is empty")
+        errors.push("City field is empty")
       }
 
       if(!this.state.state){
-        toast.error("State field is empty")
+        errors.push("State field is empty")
       }
 
       if(!this.state.email){
-        toast.error("Email field is empty")
+        errors.push("Email field is empty")
       }
 
       if(!this.state.first_name){
-        toast.error("First Name field is empty")
+        errors.push("First Name field is empty")
       }
 
       if(!this.state.last_name){
-        toast.error("Last Name field is empty")
+        errors.push("Last Name field is empty")
       }
+
+      toast.error(<ul>{errors.map(er =>{return <li>{er}</li>})}</ul>)
+
     }
   }
 

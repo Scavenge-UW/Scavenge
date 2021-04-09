@@ -18,7 +18,8 @@ class SignupView extends Component {
       zipcode: "",
       email: "",
       type: "",
-      toHomeView: "", // used for redirection on signup success
+      toHomeView: "",
+      // used for redirection on signup success
     };
     this.submitForm = this.submitForm.bind(this);
   }
@@ -37,56 +38,64 @@ class SignupView extends Component {
       email: this.state.email,
     };
 
+    let errors = [];
+
     if (this.state.username.length == 0 ) {
-      toast.error("Username or password field is empty.");
-      return;
+      errors.push("Username field is empty")
     }
 
     if(this.state.password.length == 0){
-      toast.error("Password field is empty.")
+
+      errors.push("Password field is empty")
     }
 
-    if(this.state.phoneNumber.length == 0){
-      toast.error("Phone Number field is empty.")
+    if(this.state.phone.length == 0){
+
+      errors.push("Phone Number field is empty")
     }
 
     if(this.state.address.length == 0 ){
-      toast.error("Address field is empty.")
+
+      errors.push("Address field is empty")
     }
 
     if(this.state.city.length == 0){
-      toast.error("City field is empty");
+
+      errors.concat("City field is empty")
     }
 
-    if( this.state.state.length == 0 ){
-      toast.error("State field is empty")
+    if(this.state.state == 0){
+      errors.push("State Field is empty")
     }
 
-    if( this.state.zip.length == 0 ){
-      toast.error("Zipcode field is empty")
+    if( this.state.zipcode.length == 0 ){
+      errors.push("Zipcode field is empty")
     }
 
     if(this.state.email.length == 0){
-      toast.error("Email field is empty")
+      errors.push("Email field is empty")
     }
     
     if(this.state.firstname.length == 0){
-      toast.error("First Name field is empty");
+      errors.push("First name is empty")
     }
 
     if(this.state.lastname.length == 0){
-      toast.error("Last Name field is empty");
+      errors.push("Last name is empty")
     }
 
+    if(errors.length != 0){
 
+      toast.error(<ul>{errors.map(er =>{return <li>{er}</li>})}</ul>)
 
-
-    let signupResult = await this.props.signup(user);
-    if (signupResult === 0) {
-      // Successful signup
-      this.setState({
-        toHomeView: true,
-      });
+    } else{
+      let signupResult = await this.props.signup(user);
+      if (signupResult === 0) {
+        // Successful signup
+        this.setState({
+          toHomeView: true,
+        });
+      }
     }
   }
 
