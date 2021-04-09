@@ -18,3 +18,9 @@ export const updateQuantity = (item_id, newQuantity) => {
     payload: { item_id, newQuantity },
   };
 };
+
+export const clearCart = () => {
+  return {
+    type: "CLEAR_CART",
+  };
+};

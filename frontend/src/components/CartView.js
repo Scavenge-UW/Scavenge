@@ -7,6 +7,8 @@ import Button from "react-bootstrap/Button";
 import moment from "moment";
 import { toast } from "react-toastify";
 
+import { clearCart } from "../actions/cart.actions";
+import store from "../store";
 import ReservationService from "../services/reservation.service";
 import FoodItemCard from "./FoodItemCard";
 
@@ -69,6 +71,7 @@ function CartView(props) {
       ReservationService.makeReservation(pantry_id, data)
         .then(() => {
           toast.info("Reservations successful!");
+          store.dispatch(clearCart());
         })
         .catch(() => {
           toast.error(
