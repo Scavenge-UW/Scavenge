@@ -68,7 +68,6 @@ async function setPickedUp(pantry_id, reservation_id) {
     //    :action can be either "approve", "cancel", or "complete"
     url: "/pantries/" + pantry_id + "/reservations/complete/" + reservation_id,
     method: "PUT",
-    data: "null",
     withCredentials: true,
   });
 }
@@ -84,65 +83,11 @@ async function setCancelled(pantry_id, reservation_id) {
   });
 }
 
-async function updatePantryDetail(pantry_id, updDetail) {
+async function updatePantryInfo(pantry_id, updDetail) {
   return request({
-    url: "pantries/" + pantry_id + "/details",
+    url: "pantries/" + pantry_id,
     method: "PUT",
     data: updDetail, // update
-    withCredentials: true,
-  });
-}
-
-async function updatePantryAddress(pantry_id, updAddress) {
-  return request({
-    url: "pantries/" + pantry_id + "/address",
-    method: "PUT",
-    data: updAddress, // update
-    withCredentials: true,
-  });
-}
-
-async function updatePantryZipcode(pantry_id, updZipcode) {
-  return request({
-    url: "pantries/" + pantry_id + "/zip",
-    method: "PUT",
-    data: updZipcode, // update
-    withCredentials: true,
-  });
-}
-
-async function updatePantryCity(pantry_id, updCity) {
-  return request({
-    url: "pantries/" + pantry_id + "/city",
-    method: "PUT",
-    data: updCity, // update
-    withCredentials: true,
-  });
-}
-
-async function updatePantryState(pantry_id, updState) {
-  return request({
-    url: "pantries/" + pantry_id + "/state",
-    method: "PUT",
-    data: updState, // update
-    withCredentials: true,
-  });
-}
-
-async function updatePantryPhoneNumber(pantry_id, updPhoneNumber) {
-  return request({
-    url: "pantries/" + pantry_id + "/phone_number",
-    method: "PUT",
-    data: updPhoneNumber, // update
-    withCredentials: true,
-  });
-}
-
-async function updatePantryWebsite(pantry_id, updWebSite) {
-  return request({
-    url: "pantries/" + pantry_id + "/website",
-    method: "PUT",
-    data: updWebSite, // update
     withCredentials: true,
   });
 }
@@ -150,18 +95,18 @@ async function updatePantryWebsite(pantry_id, updWebSite) {
 const PantryService = {
   getPantries,
   getDetail,
+
+  // actions for adding/updating food
   updateFoodItem,
   addFoodItemToInventory,
+
+  // actions for a reservation
   setApproved,
   setPickedUp,
   setCancelled,
-  updatePantryDetail,
-  updatePantryAddress,
-  updatePantryZipcode,
-  updatePantryCity,
-  updatePantryState,
-  updatePantryPhoneNumber,
-  updatePantryWebsite,
+
+  // udpate pantry info
+  updatePantryInfo,
 };
 
 export default PantryService;

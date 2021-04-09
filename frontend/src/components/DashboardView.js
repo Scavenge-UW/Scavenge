@@ -31,6 +31,7 @@ class DashboardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      pantry_id: "", // TODO: Change to actual pantry id
       pantryName: "",
       rsvns: [],
       foods: [],
@@ -42,6 +43,10 @@ class DashboardView extends Component {
       stte: "",
       phone: "",
       weblink: "",
+      // these are needed but not sure if we want to edit this data
+      img_src: "",
+      lat: "",
+      lon: "",
     };
   }
 
@@ -53,6 +58,7 @@ class DashboardView extends Component {
       console.log(pantry);
       this.setState(
         {
+          pantry_id: pantry.pantry_id,
           pantryName: pantry.name,
           rsvns: pantry.reservations,
           foods: pantry.foods,
@@ -64,25 +70,27 @@ class DashboardView extends Component {
           stte: pantry.state,
           phone: pantry.phone_number,
           weblink: pantry.website,
+          img_src: pantry.img_src,
+          lat: pantry.lat,
+          lon: pantry.lon,
         },
         () => this.getDashboardOverview() // TODO: not sure if this is needed.
       );
     }
   }
 
+  // ************************************************************************
+  // ************************ DashboardMessages *****************************
+  // ************************************************************************
   /**
    * Mark a reservation as approved
    *
    * @param {*} rsvn_id
-   * @param {*} pantry_id
    */
-  markAsApproved(rsvn_id, pantry_id) {
+  markAsApproved(rsvn_id) {
     console.log(rsvn_id);
 
-    PantryService.setApproved(
-      pantry_id, // TODO: Change to actual pantry id
-      rsvn_id
-    )
+    PantryService.setApproved(this.state.pantry_id, rsvn_id)
       .then(() => {
         this.props.fetchPantryDetail();
         toast.success(
@@ -98,14 +106,10 @@ class DashboardView extends Component {
    * Mark a reservation as picked up
    *
    * @param {*} rsvn_id
-   * @param {*} pantry_id
    */
-  markAsPickedUp(rsvn_id, pantry_id) {
+  markAsPickedUp(rsvn_id) {
     console.log(rsvn_id);
-    PantryService.setPickedUp(
-      pantry_id, // TODO: Change to actual pantry id
-      rsvn_id
-    )
+    PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
       .then(() => {
         this.props.fetchPantryDetail();
         toast.success(
@@ -127,14 +131,10 @@ class DashboardView extends Component {
    *  Mark a reservation as cancelled
    *
    * @param {*} rsvn_id
-   * @param {*} pantry_id
    */
-  markAsCancelled(rsvn_id, pantry_id) {
+  markAsCancelled(rsvn_id) {
     console.log(rsvn_id);
-    PantryService.setCancelled(
-      pantry_id, // TODO: Change to actual pantry id
-      rsvn_id
-    )
+    PantryService.setCancelled(this.state.pantry_id, rsvn_id)
       .then(() => {
         this.props.fetchPantryDetail();
         toast.success(
@@ -144,6 +144,22 @@ class DashboardView extends Component {
       .catch(() => {
         toast.error("Error while cancelling reservation with ID " + rsvn_id);
       });
+  }
+
+  // ************************************************************************
+  // ******************* DashboardDescriptionCard.js ************************
+  // ************************************************************************
+
+  updateAll(updates) {
+    this.setState({
+      description: updates[0],
+      address: updates[1],
+      zipcode: updates[2],
+      city: updates[3],
+      stte: updates[4],
+      phone: updates[5],
+      weblink: updates[6],
+    });
   }
 
   /**
@@ -179,6 +195,7 @@ class DashboardView extends Component {
         <Row className="justify-content-center pt-4">
           <DashboardDescriptionCard
             adminMode
+            pantry_id={this.state.pantry_id}
             pantryName={this.state.pantryName}
             description={this.state.description}
             address={this.state.address}
@@ -187,6 +204,10 @@ class DashboardView extends Component {
             stte={this.state.stte}
             phone={this.state.phone}
             weblink={this.state.weblink}
+            updateAll={this.updateAll.bind(this)}
+            img_src={this.state.img_src}
+            lat={this.state.lat}
+            lon={this.state.lon}
           />
         </Row>
       </>
@@ -208,6 +229,7 @@ class DashboardView extends Component {
         <Row className="justify-content-center">
           <DashboardMessages
             adminMode
+            // pantry_id={this.state.pantry_id}
             rsvns={this.state.rsvns}
             fetchPantryDetail={this.props.fetchPantryDetail}
             markAsApproved={this.markAsApproved.bind(this)}

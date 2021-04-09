@@ -13,6 +13,13 @@ function ViewRsvnMsgModal(props) {
     fontFamily: "monospace",
   };
 
+  /*
+    TODO: 
+    marked complete reservation with check2-circle icon
+    marked cancelled reservation with x-circle icon
+    - https://icons.getbootstrap.com
+    */
+
   return (
     <>
       <Modal {...props} size="lg" aria-labelledby="ViewRsvnMsgModal" centered>

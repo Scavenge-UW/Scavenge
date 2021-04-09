@@ -154,6 +154,13 @@ class DashboardMessages extends Component {
 
     const receivedTime = rsvn.order_time;
 
+    /*
+    TODO: 
+    marked complete reservation with check2-circle icon
+    marked cancelled reservation with x-circle icon
+    - https://icons.getbootstrap.com
+    */
+
     const messageHeader = (
       <Row className="justify-content-between align-items-center">
         <Col xs={8} className="text-left">
@@ -191,6 +198,7 @@ class DashboardMessages extends Component {
   cancelButtonIsDisabled(rsvn) {
     // if rsvn is cancelled, pickedup button should not be up
     if (rsvn.cancelled) return true;
+    if (rsvn.picked_up_time) return true;
     else return false;
   }
 
@@ -257,7 +265,7 @@ class DashboardMessages extends Component {
                   selectedApproved: rsvn.approved,
                 },
                 () => {
-                  this.props.markAsApproved(this.state.selectedID, 1);
+                  this.props.markAsApproved(this.state.selectedID);
                 }
               );
             }
@@ -282,7 +290,7 @@ class DashboardMessages extends Component {
                   selectedPickedUp: rsvn.picked_up_time,
                 },
                 () => {
-                  this.props.markAsPickedUp(this.state.selectedID, 1);
+                  this.props.markAsPickedUp(this.state.selectedID);
                 }
               );
             }
@@ -307,7 +315,7 @@ class DashboardMessages extends Component {
                   selectedCancelled: rsvn.cancelled,
                 },
                 () => {
-                  this.props.markAsCancelled(this.state.selectedID, 1);
+                  this.props.markAsCancelled(this.state.selectedID);
                 }
               );
             }
@@ -336,7 +344,7 @@ class DashboardMessages extends Component {
                   selectedCancelled: rsvn.cancelled,
                 },
                 () => {
-                  this.props.markAsApproved(this.state.selectedID, 1);
+                  this.props.markAsApproved(this.state.selectedID);
                 }
               );
             }

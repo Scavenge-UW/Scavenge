@@ -14,82 +14,77 @@ class DashboardDescriptionCard extends Component {
   constructor(props) {
     super(props);
 
+    this.newDetail = React.createRef();
+    this.newAddress = React.createRef();
+    this.newZipcode = React.createRef();
+    this.newCity = React.createRef();
+    this.newStte = React.createRef();
+    this.newPhone = React.createRef();
+    this.newWeblink = React.createRef();
+
     this.state = {
       // used by switch case in 'editMode'
-      editMode4Detail: false,
-      editMode4Address: false,
-      editMode4Zipcode: false,
-      editMode4City: false,
-      editMode4State: false,
-      editMode4Phone: false,
-      editMode4Weblink: false,
-      pantry_id: 1, // TODO: change this to actual pantryID
+      editMode: false,
     };
-
-    // used by switch case in 'showEditButton'
-    this.onClickUpdateDetail = this.onClickUpdateDetail.bind(this);
-    this.onClickUpdateAddress = this.onClickUpdateAddress.bind(this);
-    this.onClickUpdateZipcode = this.onClickUpdateZipcode.bind(this);
-    this.onClickUpdateCity = this.onClickUpdateCity.bind(this);
-    this.onClickUpdateState = this.onClickUpdateState.bind(this);
-    this.onClickUpdatePhone = this.onClickUpdatePhone.bind(this);
-    this.onClickUpdateWeblink = this.onClickUpdateWeblink.bind(this);
   }
 
-  editMode(params, On) {
-    switch (params) {
-      case "description":
-        this.setState({
-          editMode4Detail: On ? true : false,
-        });
-        break;
-      case "address":
-        this.setState({
-          editMode4Address: On ? true : false,
-        });
-        break;
-      case "zipcode":
-        this.setState({
-          editMode4Zipcode: On ? true : false,
-        });
-        break;
-      case "city":
-        this.setState({
-          editMode4City: On ? true : false,
-        });
-        break;
-      case "state":
-        this.setState({
-          editMode4State: On ? true : false,
-        });
-        break;
-      case "phone":
-        this.setState({
-          editMode4Phone: On ? true : false,
-        });
-        break;
-      case "weblink":
-        this.setState({
-          editMode4Weblink: On ? true : false,
-        });
-        break;
-      default:
-        console.log("Error hehe~~EditMode");
+  /**
+   * Allows admins to enter/exit editMode.
+   *
+   * @param {*} On if On, activate editMode; if not On, deactivate editMode and discard the changes.
+   */
+  editMode(On) {
+    this.setState({
+      editMode: On ? true : false,
+    });
+    // upon exiting editMode, discard changes
+    if (!On) {
+      this.newDetail.current.value = this.props.description;
+      this.newAddress.current.value = this.props.address;
+      this.newZipcode.current.value = this.props.zipcode;
+      this.newCity.current.value = this.props.city;
+      this.newStte.current.value = this.props.stte;
+      this.newPhone.current.value = this.props.phone;
+      this.newWeblink.current.value = this.props.weblink;
     }
   }
 
   /**
-   * Ask for confirmation and update the item's quantity.
+   * Ask for confirmation and update the pantry's info.
    *
    */
-  onClickUpdateDetail() {
-    let description = this.props.description;
+  onClickUpdatePantryInfo() {
+    let pid = this.props.pantry_id;
 
-    if (window.confirm("Are you sure you want to update ?")) {
-      PantryService.updatePantryDetail(this.state.pantry_id, description)
+    if (window.confirm("Are you sure you want to make these updates?")) {
+      PantryService.updatePantryInfo(pid, {
+        name: this.props.pantryName, // TODO: this shouldn't be updated
+        address: this.newAddress.current.value,
+        zip: this.newZipcode.current.value,
+        city: this.newCity.current.value,
+        state: this.newStte.current.value,
+        phone_number: this.newPhone.current.value,
+        details: this.newDetail.current.value,
+        img_src: this.props.img_src, // TODO: this shouldn't be updated
+        lat: this.props.lat, // TODO: this shouldn't be updated
+        lon: this.props.lon, // TODO: this shouldn't be updated
+        website: this.newWeblink.current.value,
+      })
         .then(() => {
-          toast.success("Description was successfully updated!");
-          this.editMode("description", false);
+          toast.success("Pantry Info was successfully updated!");
+
+          // updates propogate back to parent component
+          this.props.updateAll([
+            this.newDetail.current.value,
+            this.newAddress.current.value,
+            this.newZipcode.current.value,
+            this.newCity.current.value,
+            this.newStte.current.value,
+            this.newPhone.current.value,
+            this.newWeblink.current.value,
+          ]);
+
+          this.editMode(false);
         })
         .catch((response) => {
           if (response.message) {
@@ -99,146 +94,12 @@ class DashboardDescriptionCard extends Component {
     }
   }
 
-  onClickUpdateAddress() {
-    let address = this.props.address;
-    if (window.confirm("Are you sure you want to update ?")) {
-      PantryService.updatePantryAddress(this.state.pantry_id, address)
-        .then(() => {
-          toast.success("Description was successfully updated!");
-          this.editMode("address", false);
-        })
-        .catch((response) => {
-          if (response.message) {
-            toast.error(response.message);
-          }
-        });
-    }
-  }
-
-  onClickUpdateZipcode() {
-    let zipcode = this.props.zipcode;
-    if (window.confirm("Are you sure you want to update ?")) {
-      PantryService.updatePantryZipcode(this.state.pantry_id, zipcode)
-        .then(() => {
-          toast.success("Description was successfully updated!");
-          this.editMode("zipcode", false);
-        })
-        .catch((response) => {
-          if (response.message) {
-            toast.error(response.message);
-          }
-        });
-    }
-  }
-
-  onClickUpdateCity() {
-    let city = this.props.city;
-    if (window.confirm("Are you sure you want to update ?")) {
-      PantryService.updatePantryCity(this.state.pantry_id, city)
-        .then(() => {
-          toast.success("Description was successfully updated!");
-          this.editMode("city", false);
-        })
-        .catch((response) => {
-          if (response.message) {
-            toast.error(response.message);
-          }
-        });
-    }
-  }
-
-  onClickUpdateState() {
-    let stte = this.props.stte;
-    if (window.confirm("Are you sure you want to update ?")) {
-      PantryService.updatePantryState(this.state.pantry_id, stte)
-        .then(() => {
-          toast.success("Description was successfully updated!");
-          this.editMode("state", false);
-        })
-        .catch((response) => {
-          if (response.message) {
-            toast.error(response.message);
-          }
-        });
-    }
-  }
-
-  onClickUpdatePhone() {
-    let phone = this.props.phone;
-    if (window.confirm("Are you sure you want to update ?")) {
-      PantryService.updatePantryPhoneNumber(this.state.pantry_id, phone)
-        .then(() => {
-          toast.success("Description was successfully updated!");
-          this.editMode("phone", false);
-        })
-        .catch((response) => {
-          if (response.message) {
-            toast.error(response.message);
-          }
-        });
-    }
-  }
-
-  onClickUpdateWeblink() {
-    let weblink = this.props.weblink;
-    if (window.confirm("Are you sure you want to update ?")) {
-      PantryService.updatePantryWebsite(this.state.pantry_id, weblink)
-        .then(() => {
-          toast.success("Description was successfully updated!");
-          this.editMode("weblink", false);
-        })
-        .catch((response) => {
-          if (response.message) {
-            toast.error(response.message);
-          }
-        });
-    }
-  }
-
-  showEditButton(params) {
-    let edit = null;
-    let onClickUpdate = null;
-    switch (params) {
-      case "description":
-        edit = this.state.editMode4Detail;
-        onClickUpdate = this.onClickUpdateDetail;
-        break;
-
-      case "address":
-        edit = this.state.editMode4Address;
-        onClickUpdate = this.onClickUpdateAddress;
-        break;
-
-      case "zipcode":
-        edit = this.state.editMode4Zipcode;
-        onClickUpdate = this.onClickUpdateZipcode;
-        break;
-
-      case "city":
-        edit = this.state.editMode4City;
-        onClickUpdate = this.onClickUpdateCity;
-        break;
-
-      case "state":
-        edit = this.state.editMode4State;
-        onClickUpdate = this.onClickUpdateState;
-        break;
-
-      case "phone":
-        edit = this.state.editMode4Phone;
-        onClickUpdate = this.onClickUpdatePhone;
-        break;
-
-      case "weblink":
-        edit = this.state.editMode4Weblink;
-        onClickUpdate = this.onClickUpdateWeblink;
-        break;
-    }
-    if (edit) {
+  editButtonControl() {
+    if (this.state.editMode) {
       return (
         <Row>
           <Col>
-            <Button onClick={onClickUpdate} size="sm">
+            <Button onClick={this.onClickUpdatePantryInfo.bind(this)} size="sm">
               Update
             </Button>
           </Col>
@@ -247,7 +108,7 @@ class DashboardDescriptionCard extends Component {
               variant="danger"
               size="sm"
               onClick={() => {
-                this.editMode(params, false);
+                this.editMode(false);
               }}
             >
               Cancel
@@ -258,12 +119,13 @@ class DashboardDescriptionCard extends Component {
     } else {
       return (
         <Button
+          adminMode
           variant="outline-dark"
           onClick={() => {
-            this.editMode(params, true);
+            this.editMode(true);
           }}
         >
-          Edit
+          Edit Pantry Info
         </Button>
       );
     }
@@ -274,7 +136,10 @@ class DashboardDescriptionCard extends Component {
       <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
         <Card.Header as="h5">
           <Row className="justify-content-between align-items-center">
-            <Col className="text-left">Food Pantry Description</Col>
+            <Col xs={9} className="text-left">
+              Food Pantry Description
+            </Col>
+            <Col xs={3}>{this.editButtonControl()}</Col>
           </Row>
         </Card.Header>
         <Card.Body>
@@ -282,7 +147,7 @@ class DashboardDescriptionCard extends Component {
           <hr />
           <Card.Text>
             <Row className="align-items-center m-2">
-              <Col className="text-left" xs={9}>
+              <Col className="text-left">
                 <Form>
                   <Form.Group controlId="formDescription">
                     <Form.Label>
@@ -290,16 +155,16 @@ class DashboardDescriptionCard extends Component {
                     </Form.Label>
                     <Form.Control
                       as="textarea"
-                      disabled={!this.state.editMode4Detail}
+                      ref={this.newDetail}
+                      disabled={!this.state.editMode}
                       defaultValue={this.props.description}
                     />
                   </Form.Group>
                 </Form>
               </Col>
-              <Col xs={3}>{this.showEditButton("description")}</Col>
             </Row>
             <Row className="align-items-center m-2" md="auto">
-              <Col className="text-left" xs={9}>
+              <Col className="text-left">
                 <Form>
                   <Form.Group controlId="formAddress">
                     <Form.Label>
@@ -307,16 +172,16 @@ class DashboardDescriptionCard extends Component {
                     </Form.Label>
                     <Form.Control
                       type="text"
-                      disabled={!this.state.editMode4Address}
+                      ref={this.newAddress}
+                      disabled={!this.state.editMode}
                       defaultValue={this.props.address}
                     />
                   </Form.Group>
                 </Form>
               </Col>
-              <Col xs={3}>{this.showEditButton("address")}</Col>
             </Row>
             <Row className="align-items-center m-2" md="auto">
-              <Col className="text-left" xs={9}>
+              <Col className="text-left">
                 <Form>
                   <Form.Group controlId="formZipcode">
                     <Form.Label>
@@ -324,16 +189,16 @@ class DashboardDescriptionCard extends Component {
                     </Form.Label>
                     <Form.Control
                       type="number"
-                      disabled={!this.state.editMode4Zipcode}
+                      ref={this.newZipcode}
+                      disabled={!this.state.editMode}
                       defaultValue={this.props.zipcode}
                     />
                   </Form.Group>
                 </Form>
               </Col>
-              <Col xs={3}>{this.showEditButton("zipcode")}</Col>
             </Row>
             <Row className="align-items-center m-2" md="auto">
-              <Col className="text-left" xs={9}>
+              <Col className="text-left">
                 <Form>
                   <Form.Group controlId="formCity">
                     <Form.Label>
@@ -341,16 +206,16 @@ class DashboardDescriptionCard extends Component {
                     </Form.Label>
                     <Form.Control
                       type="text"
-                      disabled={!this.state.editMode4City}
+                      ref={this.newCity}
+                      disabled={!this.state.editMode}
                       defaultValue={this.props.city}
                     />
                   </Form.Group>
                 </Form>
               </Col>
-              <Col xs={3}>{this.showEditButton("city")}</Col>
             </Row>
             <Row className="align-items-center m-2" md="auto">
-              <Col className="text-left" xs={9}>
+              <Col className="text-left">
                 <Form>
                   <Form.Group controlId="formState">
                     <Form.Label>
@@ -358,16 +223,16 @@ class DashboardDescriptionCard extends Component {
                     </Form.Label>
                     <Form.Control
                       type="text"
-                      disabled={!this.state.editMode4State}
+                      ref={this.newStte}
+                      disabled={!this.state.editMode}
                       defaultValue={this.props.stte}
                     />
                   </Form.Group>
                 </Form>
               </Col>
-              <Col xs={3}>{this.showEditButton("state")}</Col>
             </Row>
             <Row className="align-items-center m-2" md="auto">
-              <Col className="text-left" xs={9}>
+              <Col className="text-left">
                 <Form>
                   <Form.Group controlId="formPhone">
                     <Form.Label>
@@ -375,16 +240,16 @@ class DashboardDescriptionCard extends Component {
                     </Form.Label>
                     <Form.Control
                       type="text"
-                      disabled={!this.state.editMode4Phone}
+                      ref={this.newPhone}
+                      disabled={!this.state.editMode}
                       defaultValue={this.props.phone}
                     />
                   </Form.Group>
                 </Form>
               </Col>
-              <Col xs={3}>{this.showEditButton("phone")}</Col>
             </Row>
             <Row className="align-items-center m-2" md="auto">
-              <Col className="text-left" xs={9}>
+              <Col className="text-left">
                 <Form>
                   <Form.Group controlId="formWeblink">
                     <Form.Label>
@@ -392,13 +257,13 @@ class DashboardDescriptionCard extends Component {
                     </Form.Label>
                     <Form.Control
                       type="text"
-                      disabled={!this.state.editMode4Weblink}
+                      ref={this.newWeblink}
+                      disabled={!this.state.editMode}
                       defaultValue={this.props.weblink}
                     />
                   </Form.Group>
                 </Form>
               </Col>
-              <Col xs={3}>{this.showEditButton("weblink")}</Col>
             </Row>
           </Card.Text>
           {/* 
