@@ -32,9 +32,10 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
     (globalUseTestDB == 1 ? test_pool : pool).getConnection((err, connection) => {
       if (err) {
         console.log("Error connecting to database!");
+        console.log(err);
         return reject(err);
       } else {
-        if (type === 'select' || type === 'insert' || type === "replace") {
+        if (type === 'insert' || type === "replace") {
           connection.query(query, [values], async (error, results) => {
             // Always release the connection back
             connection.release();
@@ -47,7 +48,7 @@ exports.execQuery = (type, query, values = [[]], failure="No failure message pro
               return resolve(results);
             }
           });
-        } else if (type === "update" || type === "delete") {
+        } else if (type === "select" || type === "update" || type === "delete") {
           connection.query(query, values, async (error, results) => {
             // Always release the connection back
             connection.release();

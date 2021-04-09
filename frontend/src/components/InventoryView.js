@@ -54,6 +54,7 @@ class InventoryView extends Component {
 
   componentDidMount() {
     if (this.props.pantryDetail) {
+      console.log(this.props.pantryDetail);
       this.setState({
         foods: this.props.pantryDetail.foods,
       });
@@ -87,7 +88,7 @@ class InventoryView extends Component {
    */
   setItemToBeAdded(data) {
     this.setState({
-      itemTobeAdded: data,
+      itemToBeAdded: data,
     });
 
     this.addItem(data);
@@ -99,7 +100,6 @@ class InventoryView extends Component {
    * @param {Object} data data of the item containing food_id, name, and quantity
    */
   addItem(data) {
-    console.log(data);
     PantryService.addFoodItemToInventory(
       1, // TODO: Change to actual pantry id
       data
@@ -194,7 +194,7 @@ class InventoryView extends Component {
     }).length;
 
     return (
-      <p className="text-center mt-4">
+      <p id="inventory-overview" className="text-center mt-4">
         There are {numItems} items in total in your food pantry.
         <br />
         {numOutOfStockItems} items are currently out of stock.
@@ -213,6 +213,7 @@ class InventoryView extends Component {
         </Row>
         <Row className="justify-content-end">
           <Button
+            id="btn-add-item"
             onClick={() => {
               this.openAddItemModal();
             }}
@@ -224,8 +225,6 @@ class InventoryView extends Component {
         <AddItemModal
           show={this.state.addItemModalShow}
           onHide={() => this.closeAddItemModal()}
-          addItem={this.addItem.bind(this)}
-          itemToBeAdded={this.state.itemToBeAdded}
           setItemToBeAdded={this.setItemToBeAdded.bind(this)}
         />
         <Row className="justify-content-center">
