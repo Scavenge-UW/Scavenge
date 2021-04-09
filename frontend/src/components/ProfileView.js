@@ -25,6 +25,7 @@ class ProfileView extends Component {
       toHomeView: false,
       errors: []
     };
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(e) {
@@ -56,6 +57,7 @@ class ProfileView extends Component {
       this.state.last_name
     ) {
       this.props.editProf(user);
+      this.setState({toHomeView: true})
     } else {
 
       let errors = []
