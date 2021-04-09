@@ -22,7 +22,7 @@ describe('Pantries', () => {
   /*
   * Test the /pantries route
   */
-  describe('/pantires pantries', () => {
+  describe('Get all pantries', () => {
       it('it should GET all the pantries', async () => {
         let data = await(chai.request(server).get('/pantries'));
         assert.equal(data.status, 200, "status was not 200");
