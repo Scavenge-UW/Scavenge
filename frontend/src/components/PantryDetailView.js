@@ -241,7 +241,7 @@ function PantryDetailView(props) {
   } else {
     return (
       <Container>
-        <div class="spinner"></div>
+        <div className="spinner"></div>
       </Container>
     );
   }
