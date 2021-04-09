@@ -1,0 +1,231 @@
+export default {
+  pantryDetail: {
+    pantry_id: 2,
+    name: "Second Harvest Foodbank of Southern Wisconsin",
+    address: "2802 Dairy Dr",
+    zip: 53718,
+    city: "Madison",
+    state: "WI",
+    phone_number: "6082239121",
+    details: "lorem ipsum dolor",
+    img_src:
+      "https://lh5.googleusercontent.com/p/AF1QipOukd313uIyXDlvMDbvc95D4joVMz-1ywvRnW-P=w408-h271-k-no",
+    lat: 43.07,
+    lon: -89.41,
+    website: "https://www.secondharvestmadison.org/",
+    reservations: [
+      {
+        reservation_id: 108,
+        username: "sean1",
+        order_time: "2021-03-25T21:52:58.000Z",
+        estimated_pick_up: "2021-03-30T15:00:00.000Z",
+        picked_up_time: null,
+        approved: 1,
+        cancelled: 0,
+        res_foods: [
+          {
+            res_food_id: 1,
+            res_food_name: "Apple",
+            res_food_quantity: 1,
+          },
+          {
+            res_food_id: 2,
+            res_food_name: "Orange",
+            res_food_quantity: 1,
+          },
+          {
+            res_food_id: 3,
+            res_food_name: "Avocado",
+            res_food_quantity: 1,
+          },
+        ],
+      },
+      {
+        reservation_id: 109,
+        username: "sean1",
+        order_time: "2021-03-25T21:53:53.000Z",
+        estimated_pick_up: "2021-03-30T15:00:00.000Z",
+        picked_up_time: null,
+        approved: 0,
+        cancelled: 0,
+        res_foods: [
+          {
+            res_food_id: null,
+            res_food_name: null,
+            res_food_quantity: null,
+          },
+        ],
+      },
+      {
+        reservation_id: 110,
+        username: "sean1",
+        order_time: "2021-03-26T10:13:21.000Z",
+        estimated_pick_up: "2021-03-30T15:00:00.000Z",
+        picked_up_time: null,
+        approved: 0,
+        cancelled: 0,
+        res_foods: [
+          {
+            res_food_id: 1,
+            res_food_name: "Apple",
+            res_food_quantity: 1,
+          },
+          {
+            res_food_id: 2,
+            res_food_name: "Orange",
+            res_food_quantity: 1,
+          },
+          {
+            res_food_id: 3,
+            res_food_name: "Avocado",
+            res_food_quantity: 1,
+          },
+        ],
+      },
+      {
+        reservation_id: 111,
+        username: "sean1",
+        order_time: "2021-03-26T10:13:26.000Z",
+        estimated_pick_up: "2021-03-30T15:00:00.000Z",
+        picked_up_time: null,
+        approved: 0,
+        cancelled: 0,
+        res_foods: [
+          {
+            res_food_id: null,
+            res_food_name: null,
+            res_food_quantity: null,
+          },
+        ],
+      },
+      {
+        reservation_id: 112,
+        username: "sean1",
+        order_time: "2021-03-26T07:25:01.000Z",
+        estimated_pick_up: "2021-03-30T15:00:00.000Z",
+        picked_up_time: null,
+        approved: 0,
+        cancelled: 0,
+        res_foods: [
+          {
+            res_food_id: null,
+            res_food_name: null,
+            res_food_quantity: null,
+          },
+        ],
+      },
+      {
+        reservation_id: 113,
+        username: "sean1",
+        order_time: "2021-03-26T07:25:05.000Z",
+        estimated_pick_up: "2021-03-30T15:00:00.000Z",
+        picked_up_time: null,
+        approved: 0,
+        cancelled: 0,
+        res_foods: [
+          {
+            res_food_id: 1,
+            res_food_name: "Apple",
+            res_food_quantity: 1,
+          },
+          {
+            res_food_id: 2,
+            res_food_name: "Orange",
+            res_food_quantity: 1,
+          },
+          {
+            res_food_id: 3,
+            res_food_name: "Avocado",
+            res_food_quantity: 1,
+          },
+        ],
+      },
+      {
+        reservation_id: 204,
+        username: "sean3",
+        order_time: "2021-04-09T05:56:47.000Z",
+        estimated_pick_up: "2021-04-09T06:56:47.000Z",
+        picked_up_time: null,
+        approved: 0,
+        cancelled: 0,
+        res_foods: [
+          {
+            res_food_id: 2,
+            res_food_name: "Orange",
+            res_food_quantity: 1,
+          },
+        ],
+      },
+    ],
+    foods: [
+      {
+        food_id: 1,
+        food_name: "Apple",
+        qr_code: null,
+        quantity: 7,
+      },
+      {
+        food_id: 2,
+        food_name: "Orange",
+        qr_code: null,
+        quantity: 16,
+      },
+      {
+        food_id: 3,
+        food_name: "Avocado",
+        qr_code: 123123123,
+        quantity: 5,
+      },
+      {
+        food_id: 4,
+        food_name: "Swiss Cheese",
+        qr_code: 10101011,
+        quantity: 199,
+      },
+    ],
+    hours: [
+      {
+        day: 1,
+        open: "03:00:00",
+        close: "05:30:00",
+        detail: "Test Change",
+      },
+      {
+        day: 2,
+        open: "08:30:00",
+        close: "16:00:00",
+        detail: "Curbside Pickup Only",
+      },
+      {
+        day: 3,
+        open: "08:30:00",
+        close: "16:00:00",
+        detail: "Curbside Pickup Only",
+      },
+      {
+        day: 4,
+        open: "08:30:00",
+        close: "16:00:00",
+        detail: "Curbside Pickup Only",
+      },
+      {
+        day: 5,
+        open: "08:30:00",
+        close: "17:59:00",
+        detail: "",
+      },
+      {
+        day: 6,
+        open: "00:00:00",
+        close: "00:00:00",
+        detail: null,
+      },
+      {
+        day: 7,
+        open: "00:00:00",
+        close: "00:00:00",
+        detail: null,
+      },
+    ],
+  },
+};
