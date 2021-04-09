@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha 'backend/tests/**/*.js' --recursive --timeout 60000 --exit  || true"
+    "test": "nyc mocha 'backend/tests/**/*.js' --recursive --timeout 60000 --exit  || true"
   },
   "repository": {
     "type": "git",
@@ -37,7 +37,8 @@
   "devDependencies": {
     "chai": "*",
     "chai-http": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "nyc": "^15.1.0"
   },
   "//": "mocha is our preference, but you can use any test runner you like"
 }
