@@ -9,17 +9,16 @@ function ViewRsvnMsgModal(props) {
     fontWeight: "450",
   };
 
-  const rsvnDetaillStyle = {
+  const rsvnDetailStyle = {
     fontFamily: "monospace",
   };
 
-  const rsvn = props.state.pantryDetails.reservations[props.selectedID];
-
-  const contents = Object.entries(rsvn.reserved_items).map(([key, value]) => (
-    <li key={key}>
-      {props.state.pantryDetails.foods[key].food_name}: {value}
-    </li>
-  ));
+  /*
+    TODO: 
+    marked complete reservation with check2-circle icon
+    marked cancelled reservation with x-circle icon
+    - https://icons.getbootstrap.com
+    */
 
   return (
     <>
@@ -27,15 +26,37 @@ function ViewRsvnMsgModal(props) {
         <Modal.Header closeButton>
           <Modal.Title id="ViewRsvnMsgModal">
             Reservation for User{" "}
-            <span style={usernameStyle}>{rsvn.username}</span>
+            <span style={usernameStyle}>{props.selectedUsername}</span>
+            {/* Reservation for User <span style={usernameStyle}>hi</span> */}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <h5>
             Reservation Detail (
-            <span style={rsvnDetaillStyle}>Food Name: Quantity</span>)
+            <span style={rsvnDetailStyle}>Food Name: Quantity</span>)
           </h5>
-          {contents}
+          <hr />
+          {/* only render the list if selectedResFoods is not `undefined` */}
+          {props.show && (
+            <ul>
+              {props.selectedResFoods.map((item) => (
+                <li key={item.res_food_id}>
+                  <span style={rsvnDetailStyle}>
+                    <strong>{item.res_food_name}</strong>:{" "}
+                    {item.res_food_quantity}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {/* debug purpose - TODO: reomve this paragraph */}
+          <p>
+            reservation ID: {props.selectedID} <br />
+            Marked As Approved: {props.selectedApproved} <br />
+            Marked As Picked Up:{" "}
+            {props.selectedPickedUp ? props.selectedPickedUp : `null`} <br />
+            Marked As Cancelled: {props.selectedCancelled} <br />
+          </p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
