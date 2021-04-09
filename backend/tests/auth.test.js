@@ -5,7 +5,6 @@ const db = require("../controllers/db.controllers.js");
 //Require the dev-dependencies
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -16,9 +15,9 @@ describe('Auth', () => {
     let data = await(db.deleteAllDataAction());
   });
 
-  beforeEach((done) => { //Before each test we should empty the test database
-        done();
-  });
+  // beforeEach((done) => { 
+  //       done();
+  // });
 
   /*
   * Test the /signup route
@@ -40,9 +39,8 @@ describe('Auth', () => {
           email: "sjcunningham@wisc.edu"
         })
       );
-        assert.equal(data.status, 200, "status was not 200");
-        assert.instanceOf(data, Object, "data is not an object");
-            //res.body.length.should.be.eql(0);
+      assert.equal(data.status, 200, "status was not 200");
+      assert.instanceOf(data, Object, "data is not an object");
     });
   });
 
