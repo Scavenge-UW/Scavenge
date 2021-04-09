@@ -17,6 +17,7 @@ import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
 
 import "react-toastify/dist/ReactToastify.css";
+import async from "react-bootstrap-typeahead/lib/behaviors/async";
 
 function App(props) {
   const [username, setUsername] = useState("");
@@ -134,7 +135,7 @@ function App(props) {
                 <FoodSearchView />
               </Route>
               <Route path="/profile">
-                <ProfileView profile={profile} />
+                <ProfileView profile={profile} setProfile={setProfile} />
               </Route>
               <Route path="/">
                 <HomeView profile={profile} />
