@@ -42,7 +42,6 @@ class DashboardOpenHours extends Component {
                 close={item.close}
                 detail={item.detail}
                 updateOpenHours={this.props.updateOpenHours}
-                key={item.day.toString()}
               />
             ))}
           </Row>

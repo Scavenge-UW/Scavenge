@@ -18,8 +18,8 @@ class DashboardOpenHourCard extends Component {
   constructor(props) {
     super(props);
 
-    this.newOpenHours = React.createRef();
-    this.newClosedHours = React.createRef();
+    this.newOpen = React.createRef();
+    this.newClose = React.createRef();
     this.newDetail = React.createRef();
 
     this.state = {
@@ -39,12 +39,9 @@ class DashboardOpenHourCard extends Component {
     });
     // upon exiting editMode, discard changes
     if (!On) {
-      console.log("3", this.props.open, this.props.close, this.props.detail);
-      this.newOpenHours.current.value = this.props.open;
-      this.newClosedHours.current.value = this.props.close;
+      this.newOpen.current.value = this.props.open;
+      this.newClose.current.value = this.props.close;
       this.newDetail.current.value = this.props.detail;
-      console.log("3.5");
-      console.log("4", this.newOpenHours, this.newClosedHours, this.newDetail);
     }
   }
 
@@ -55,8 +52,6 @@ class DashboardOpenHourCard extends Component {
     let pid = this.props.pantry_id;
     let updDay = this.props.day;
 
-    console.log("1", this.props.open, this.props.close, this.props.detail);
-
     if (
       window.confirm(
         "Are you sure you want to make these updates on your open hours?"
@@ -64,27 +59,21 @@ class DashboardOpenHourCard extends Component {
     ) {
       PantryService.updateOpenHours(pid, updDay, {
         day: updDay,
-        open: this.newOpenHours.current.value,
-        close: this.newClosedHours.current.value,
+        open: this.newOpen.current.value,
+        close: this.newClose.current.value,
         detail: this.newDetail.current.value,
       })
         .then(() => {
-          console.log(
-            "2",
-            this.newOpenHours.current.value,
-            this.newClosedHours.current.value,
-            this.newDetail.current.value
-          );
           // propogate updates back to parent component
           this.props.updateOpenHours(updDay, [
-            this.newOpenHours.current.value,
-            this.newClosedHours.current.value,
+            this.newOpen.current.value,
+            this.newClose.current.value,
             this.newDetail.current.value,
           ]);
 
-          toast.success("Pantry's open hours was successfully updated!");
-
           this.editModeControl(false);
+
+          toast.success("Pantry's open hours was successfully updated!");
         })
         .catch((response) => {
           if (response.message) {
@@ -161,13 +150,13 @@ class DashboardOpenHourCard extends Component {
   getDynamicViews() {
     const hoursEditOn = (
       <Form>
-        <Form.Group controlId="formHours">
+        <Form.Group controlId={`formHours + ${this.props.day}`}>
           <Row className="align-items-center">
             <Col>
               open:
               <Form.Control
                 type="text"
-                ref={this.newOpenHours}
+                ref={this.newOpen}
                 disabled={!this.state.editMode}
                 defaultValue={this.props.open}
               />
@@ -176,7 +165,7 @@ class DashboardOpenHourCard extends Component {
               closed:
               <Form.Control
                 type="text"
-                ref={this.newClosedHours}
+                ref={this.newClose}
                 disabled={!this.state.editMode}
                 defaultValue={this.props.close}
               />

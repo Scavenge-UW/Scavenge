@@ -91,9 +91,8 @@ class DashboardDescriptionCard extends Component {
             this.newWeblink.current.value,
           ]);
 
-          toast.success("Pantry Info was successfully updated!");
-
           this.editModeControl(false);
+          toast.success("Pantry Info was successfully updated!");
         })
         .catch((response) => {
           if (response.message) {

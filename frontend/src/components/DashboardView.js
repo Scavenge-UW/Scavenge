@@ -3,14 +3,15 @@ import React, { Component } from "react";
 // import for bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 
 // import for components
 import DashboardMessages from "./DashboardMessages";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
-import DashboardOpenHours from "./DashboardOpenHours";
+import DashboardOpenHourCard from "./DashboardOpenHourCard";
 
 // import for services
 import PantryService from "../services/pantry.service";
@@ -262,17 +263,30 @@ class DashboardView extends Component {
 
   getOpenHoursCards() {
     return (
-      <>
-        <Row className="justify-content-center pt-4">
-          <DashboardOpenHours
-            adminMode
-            pantry_id={this.state.pantry_id}
-            pantryName={this.state.pantryName}
-            hours={this.state.hours}
-            updateOpenHours={this.updateOpenHours.bind(this)}
-          />
-        </Row>
-      </>
+      <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
+        <Card.Header as="h5">
+          <Row className="justify-content-between align-items-center">
+            <Col className="text-left">Operating Hours</Col>
+          </Row>
+        </Card.Header>
+        <Card.Body>
+          <Card.Title>{this.state.pantryName}</Card.Title>
+          <hr />
+          <Row className="w-responsive w-100">
+            {this.state.hours.map((item) => (
+              <DashboardOpenHourCard
+                adminMode
+                pantry_id={this.state.pantry_id}
+                day={item.day}
+                open={item.open}
+                close={item.close}
+                detail={item.detail}
+                updateOpenHours={this.updateOpenHours.bind(this)}
+              />
+            ))}
+          </Row>
+        </Card.Body>
+      </Card>
     );
   }
 
