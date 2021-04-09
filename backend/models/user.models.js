@@ -70,10 +70,10 @@ exports.updateResInventory = async (req, res, food_id, reservedQty) => {
 
 exports.addToWishlist = async (req, res) => {
   const query = `
-    INSERT INTO wishlist (food_id, username)
+    INSERT INTO wishlist (food_id, username, pantry_id)
     VALUES ?;
   `;
-  let values = [[req.params.food_id, req.params.username]];
+  let values = [[req.body.food_id, req.params.username, req.body.pantry_id]];
 
   return await execQuery("insert", query, values, 
     "insert into wishlist table failed, possible duplicate entry or invalid username/food_id");
@@ -84,9 +84,17 @@ exports.getWishlist = async (req, res) => {
     SELECT
       f.id as food_id,
       f.name as food_name,
-      w.username
+      w.username,
+      w.pantry_id,
+      p.name as pantry_name,
+      p.website,
+      p.address,
+      p.city,
+      p.state,
+      p.zip
     FROM wishlist w
     JOIN food f ON f.id = w.food_id
+    JOIN pantry p ON w.pantry_id = p.id
     WHERE w.username = ?;
   `;
   let values = [[req.params.username]];
@@ -99,9 +107,11 @@ exports.removeFromWishlist = async (req, res) => {
   const query = `
     DELETE
     FROM wishlist w
-    WHERE w.username = ? AND w.food_id = ?;
+    WHERE w.username = ? AND w.id = ?;
   `;
-  let values = [req.params.username, req.params.food_id];
+  let values = [req.params.username, req.params.wishlist_id];
+  /* w.id determines w.username, but since it's in the route anyway
+  we'll use it as a double check */
 
   return await execQuery("delete", query, values, 
     "failed to delete from wishlist due to server error.");
