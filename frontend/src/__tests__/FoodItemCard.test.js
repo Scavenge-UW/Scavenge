@@ -1,9 +1,12 @@
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 
 import FoodItemCard from "../components/FoodItemCard";
 import "../setupTests";
+import pantryDetail from "../__mocks__/pantryDetailMock";
+
+const mockPantryDetail = pantryDetail.pantryDetail;
 
 describe("FoodItemCard tests", () => {
   const foodItem1 = {
@@ -43,7 +46,48 @@ describe("FoodItemCard tests", () => {
     expect(wrapper2.find("Button")).toHaveLength(4);
   });
 
-  // it("should display correct initial quantity", () => {
-  //   expect(wrapper1.find("input").text()).toEqual("22");
-  // });
+  // Cart Mode
+  const wrapper3 = mount(
+    <FoodItemCard cartMode pantry={mockPantryDetail} foodItem={foodItem1} />
+  );
+
+  it("should have four buttons in Cart mode", () => {
+    expect(wrapper3.find("Button")).toHaveLength(4);
+  });
+
+  it("should have increment and decrement buttons in Cart mode", () => {
+    expect(wrapper3.find("Button.increment-cart-item")).toHaveLength(1);
+    expect(wrapper3.find("Button.decrement-cart-item")).toHaveLength(1);
+
+    wrapper3.instance().cartQuantity = {
+      current: {
+        value: 22,
+      },
+    };
+
+    wrapper3.find("Button.increment-cart-item").simulate("click");
+    expect(wrapper3.instance().cartQuantity.current.value).toEqual(23);
+
+    wrapper3.find("Button.decrement-cart-item").simulate("click");
+    expect(wrapper3.instance().cartQuantity.current.value).toEqual(22);
+  });
+
+  // FOodItemCard in DetailView
+  const wrapper4 = mount(<FoodItemCard foodItem={foodItem1} />);
+
+  it("should show a modal when user clicks on One Click Reserve", async () => {
+    await wrapper4.find("Button#btn-one-click-reserve").simulate("click");
+    expect(wrapper4.state("showOneClickReserveModal")).toEqual(true);
+  });
+
+  // Admin Inventory Mode
+  const wrapper5 = mount(<FoodItemCard adminMode foodItem={foodItem1} />);
+
+  it("should correctly switch between editMode and non-editMode", async () => {
+    await wrapper5.find("Button#btn-edit-quantity").simulate("click");
+    expect(wrapper5.state("editMode")).toEqual(true);
+
+    await wrapper5.find("Button#btn-cancel-edit-quantity").simulate("click");
+    expect(wrapper5.state("editMode")).toEqual(false);
+  });
 });

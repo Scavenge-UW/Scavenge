@@ -201,6 +201,7 @@ class FoodItemCard extends Component {
           </Col>
           <Col>
             <Button
+              id="btn-cancel-edit-quantity"
               block
               variant="danger"
               onClick={this.deactivateEditMode.bind(this)}
@@ -213,6 +214,7 @@ class FoodItemCard extends Component {
     } else {
       return (
         <Button
+          id="btn-edit-quantity"
           block
           variant="outline-primary"
           onClick={this.activateEditMode.bind(this)}
@@ -255,6 +257,7 @@ class FoodItemCard extends Component {
           </Row>
           <Row>
             <Button
+              id="btn-remove-item"
               className="ml-3 mr-3"
               block
               variant="outline-danger"
@@ -320,6 +323,7 @@ class FoodItemCard extends Component {
           <Col className="col-6 text-right">
             <Row className="justify-content-end mb-1">
               <Button
+                id="btn-one-click-reserve"
                 block
                 variant="success"
                 onClick={this.onClickOneClickReserve.bind(this)}
@@ -362,6 +366,7 @@ class FoodItemCard extends Component {
                 <InputGroup size="sm">
                   <InputGroup.Prepend>
                     <Button
+                      className="increment-cart-item"
                       variant="outline-primary"
                       onClick={() => {
                         this.cartQuantity.current.value =
@@ -379,6 +384,7 @@ class FoodItemCard extends Component {
                   />
                   <InputGroup.Append>
                     <Button
+                      className="decrement-cart-item"
                       variant="outline-primary"
                       onClick={() => {
                         this.cartQuantity.current.value =
