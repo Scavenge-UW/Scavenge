@@ -1,13 +1,17 @@
 import React, { Component } from "react";
+
+// import for bootstrap
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-import { toast } from "react-toastify";
+// import for services
 import PantryService from "../services/pantry.service";
 
+// other imports
+import { toast } from "react-toastify";
 import "../css/common.css";
 
 class DashboardDescriptionCard extends Component {
@@ -23,7 +27,7 @@ class DashboardDescriptionCard extends Component {
     this.newWeblink = React.createRef();
 
     this.state = {
-      // used by switch case in 'editMode'
+      // used by in 'editModeControl'
       editMode: false,
     };
   }
@@ -31,9 +35,10 @@ class DashboardDescriptionCard extends Component {
   /**
    * Allows admins to enter/exit editMode.
    *
-   * @param {*} On if On, activate editMode; if not On, deactivate editMode and discard the changes.
+   * @param {*} On if On, activate editMode;
+   *               if not On, deactivate editMode and discard the changes.
    */
-  editMode(On) {
+  editModeControl(On) {
     this.setState({
       editMode: On ? true : false,
     });
@@ -56,7 +61,11 @@ class DashboardDescriptionCard extends Component {
   onClickUpdatePantryInfo() {
     let pid = this.props.pantry_id;
 
-    if (window.confirm("Are you sure you want to make these updates?")) {
+    if (
+      window.confirm(
+        "Are you sure you want to make these updates on your pantry information?"
+      )
+    ) {
       PantryService.updatePantryInfo(pid, {
         name: this.props.pantryName, // TODO: this shouldn't be updated
         address: this.newAddress.current.value,
@@ -71,10 +80,8 @@ class DashboardDescriptionCard extends Component {
         website: this.newWeblink.current.value,
       })
         .then(() => {
-          toast.success("Pantry Info was successfully updated!");
-
-          // updates propogate back to parent component
-          this.props.updateAll([
+          // propogate updates back to parent component
+          this.props.updateAllDetails([
             this.newDetail.current.value,
             this.newAddress.current.value,
             this.newZipcode.current.value,
@@ -84,7 +91,9 @@ class DashboardDescriptionCard extends Component {
             this.newWeblink.current.value,
           ]);
 
-          this.editMode(false);
+          toast.success("Pantry Info was successfully updated!");
+
+          this.editModeControl(false);
         })
         .catch((response) => {
           if (response.message) {
@@ -108,7 +117,7 @@ class DashboardDescriptionCard extends Component {
               variant="danger"
               size="sm"
               onClick={() => {
-                this.editMode(false);
+                this.editModeControl(false);
               }}
             >
               Cancel
@@ -122,7 +131,7 @@ class DashboardDescriptionCard extends Component {
           adminMode
           variant="outline-dark"
           onClick={() => {
-            this.editMode(true);
+            this.editModeControl(true);
           }}
         >
           Edit Pantry Info

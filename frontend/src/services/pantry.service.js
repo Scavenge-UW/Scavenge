@@ -83,11 +83,21 @@ async function setCancelled(pantry_id, reservation_id) {
   });
 }
 
-async function updatePantryInfo(pantry_id, updDetail) {
+async function updatePantryInfo(pantry_id, updInfo) {
   return request({
     url: "pantries/" + pantry_id,
     method: "PUT",
-    data: updDetail, // update
+    data: updInfo, // update
+    withCredentials: true,
+  });
+}
+
+async function updateOpenHours(pantry_id, updDay, updHours) {
+  return request({
+    //    /pantries/:pantry_id/hours/:day
+    url: "pantries/" + pantry_id + "/hours/" + updDay,
+    method: "PUT",
+    data: updHours,
     withCredentials: true,
   });
 }
@@ -107,6 +117,9 @@ const PantryService = {
 
   // udpate pantry info
   updatePantryInfo,
+
+  // update open hours
+  updateOpenHours,
 };
 
 export default PantryService;

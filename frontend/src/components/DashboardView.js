@@ -10,8 +10,7 @@ import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 // import for components
 import DashboardMessages from "./DashboardMessages";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
-import DashboardOpenHourCard from "./DashboardOpenHourCard";
-// import DashboardMessage from "./DashboardMessage";
+import DashboardOpenHours from "./DashboardOpenHours";
 
 // import for services
 import PantryService from "../services/pantry.service";
@@ -34,8 +33,6 @@ class DashboardView extends Component {
       pantry_id: "", // TODO: Change to actual pantry id
       pantryName: "",
       rsvns: [],
-      foods: [],
-      hours: [],
       description: "",
       address: "",
       zipcode: "",
@@ -43,26 +40,26 @@ class DashboardView extends Component {
       stte: "",
       phone: "",
       weblink: "",
-      // these are needed but not sure if we want to edit this data
+      // these are needed for 'DashboardDescription Card
+      // but not sure if we want to edit this data
       img_src: "",
       lat: "",
       lon: "",
+
+      // used by DashboardOpenHourCard
+      hours: [],
     };
   }
 
   componentDidMount() {
-    console.log("componentDidMount!!");
     const pantry = this.props.pantryDetail;
 
     if (pantry) {
-      console.log(pantry);
       this.setState(
         {
           pantry_id: pantry.pantry_id,
           pantryName: pantry.name,
           rsvns: pantry.reservations,
-          foods: pantry.foods,
-          hours: pantry.hours,
           description: pantry.details,
           address: pantry.address,
           zipcode: pantry.zip,
@@ -73,6 +70,7 @@ class DashboardView extends Component {
           img_src: pantry.img_src,
           lat: pantry.lat,
           lon: pantry.lon,
+          hours: pantry.hours,
         },
         () => this.getDashboardOverview() // TODO: not sure if this is needed.
       );
@@ -92,7 +90,7 @@ class DashboardView extends Component {
 
     PantryService.setApproved(this.state.pantry_id, rsvn_id)
       .then(() => {
-        this.props.fetchPantryDetail();
+        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(
           "You have successfully approved the reservation with ID " + rsvn_id
         );
@@ -111,7 +109,7 @@ class DashboardView extends Component {
     console.log(rsvn_id);
     PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
       .then(() => {
-        this.props.fetchPantryDetail();
+        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(
           "reservation with ID " +
             rsvn_id +
@@ -136,7 +134,7 @@ class DashboardView extends Component {
     console.log(rsvn_id);
     PantryService.setCancelled(this.state.pantry_id, rsvn_id)
       .then(() => {
-        this.props.fetchPantryDetail();
+        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(
           "You have successfully cancelled the reservation with ID " + rsvn_id
         );
@@ -150,7 +148,7 @@ class DashboardView extends Component {
   // ******************* DashboardDescriptionCard.js ************************
   // ************************************************************************
 
-  updateAll(updates) {
+  updateAllDetails(updates) {
     this.setState({
       description: updates[0],
       address: updates[1],
@@ -161,6 +159,27 @@ class DashboardView extends Component {
       weblink: updates[6],
     });
   }
+
+  // ************************************************************************
+  // ******************* DashboardOpenHourCards *****************************
+  // ************************************************************************
+
+  updateOpenHours(updDay, updates) {
+    this.state.hours.map((item) => {
+      if (item.day === updDay) {
+        console.log("5", item.day);
+        item.open = updates[0];
+        item.close = updates[1];
+        item.detail = updates[2];
+        console.log("6", item.open, item.close, item.detail);
+        console.log("7", { ...this.state.hours });
+      }
+    });
+  }
+
+  // ************************************************************************
+  // ******************* render helper function *****************************
+  // ************************************************************************
 
   /**
    * Returns the textual description of the current dashboard.
@@ -180,35 +199,6 @@ class DashboardView extends Component {
         {/* Overview message */}
         <Row className="justify-content-center">
           You have {numReservation} new reservations today.
-        </Row>
-      </>
-    );
-  }
-
-  /**
-   *
-   * @returns
-   */
-  getDescriptionCards() {
-    return (
-      <>
-        <Row className="justify-content-center pt-4">
-          <DashboardDescriptionCard
-            adminMode
-            pantry_id={this.state.pantry_id}
-            pantryName={this.state.pantryName}
-            description={this.state.description}
-            address={this.state.address}
-            zipcode={this.state.zipcode}
-            city={this.state.city}
-            stte={this.state.stte}
-            phone={this.state.phone}
-            weblink={this.state.weblink}
-            updateAll={this.updateAll.bind(this)}
-            img_src={this.state.img_src}
-            lat={this.state.lat}
-            lon={this.state.lon}
-          />
         </Row>
       </>
     );
@@ -242,6 +232,51 @@ class DashboardView extends Component {
   }
 
   /**
+   *
+   * @returns
+   */
+  getDescriptionCards() {
+    return (
+      <>
+        <Row className="justify-content-center pt-4">
+          <DashboardDescriptionCard
+            adminMode
+            pantry_id={this.state.pantry_id}
+            pantryName={this.state.pantryName}
+            description={this.state.description}
+            address={this.state.address}
+            zipcode={this.state.zipcode}
+            city={this.state.city}
+            stte={this.state.stte}
+            phone={this.state.phone}
+            weblink={this.state.weblink}
+            updateAllDetails={this.updateAllDetails.bind(this)}
+            img_src={this.state.img_src}
+            lat={this.state.lat}
+            lon={this.state.lon}
+          />
+        </Row>
+      </>
+    );
+  }
+
+  getOpenHoursCards() {
+    return (
+      <>
+        <Row className="justify-content-center pt-4">
+          <DashboardOpenHours
+            adminMode
+            pantry_id={this.state.pantry_id}
+            pantryName={this.state.pantryName}
+            hours={this.state.hours}
+            updateOpenHours={this.updateOpenHours.bind(this)}
+          />
+        </Row>
+      </>
+    );
+  }
+
+  /**
    * Renders components.
    *
    */
@@ -262,8 +297,13 @@ class DashboardView extends Component {
         {this.getDescriptionCards()}
 
         {/* Open Hours */}
-        <Row className="justify-content-center pt-4">
-          <DashboardOpenHourCard openHours={this.state.hours} />
+        {this.getOpenHoursCards()}
+
+        <Row className="justify-content-center">
+          <p className="mt-4">
+            Time is Money. We provide an efficient way for you to update
+            available items.
+          </p>
         </Row>
       </Container>
     );

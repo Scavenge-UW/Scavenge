@@ -17,10 +17,6 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import "../css/common.css";
 
-/////
-///// DISABLED BUTTONS
-/////
-
 class DashboardMessages extends Component {
   constructor(props) {
     super(props);
@@ -41,10 +37,6 @@ class DashboardMessages extends Component {
       // used to calculate time elapsed since the reservation is made
       currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
     };
-    // this.openViewRsvnMsgModal = this.openViewRsvnMsgModal.bind(this);
-    // this.markAsApproved = this.markAsApproved.bind(this);
-    // this.markAsPickedUp = this.markAsPickedUp.bind(this);
-    // this.markAsCancelled = this.markAsCancelled.bind(this);
   }
 
   /**
@@ -64,8 +56,6 @@ class DashboardMessages extends Component {
   closeViewRsvnMsgModal() {
     this.setState({
       showRsvnMsg: false,
-      // modalMessageHeader: "",
-      // modalBodyContent: "",
     });
   }
 
