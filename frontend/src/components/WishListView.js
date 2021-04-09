@@ -6,48 +6,20 @@ import Button from 'react-bootstrap/Button';
 
 import FoodItemCard from './WishListItemCard';
 
+import { connect } from 'react-redux';
+import { fetchWishList } from '../actions/wishlistActions';
 
-// used to initialize itemToBeAdded
-const emptyItem = {
-  name: "",
-  quantity: 1,
-  food_id: "",
-}
 
 class WishListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      /**
-       * Dummy food items.
-       * TODO: Fetch actual inventory from the API
-       */
-      foods: [
-        // {
-        //   food_id: 1,
-        //   name: "Apple",
-        //   quantity: 123,
-        // },
-        // {
-        //   food_id: 2,
-        //   name: "Banana",
-        //   quantity: 0,
-        // },
-        // {
-        //   food_id: 3,
-        //   name: "Edit Me!",
-        //   quantity: 5,
-        // },
-      ],
+      foods: null
     }
   }
 
   componentDidMount() {
-    if () {
-      this.setState({
-        foods: Object.values()
-      })
-    }
+      this.setState({foods: this.props.fetchWishList()});
   }
 
 
@@ -58,7 +30,7 @@ class WishListView extends Component {
    */
   getFoodItemCards(){
     let foodItemCards = [];
-    for (const foodItem of this.state.foods) { // TODO: Change to props when API is implemented
+    for (const foodItem of this.state.foods) {
       foodItemCards.push(
         <WishListItemCard
           key={foodItem.food_id}
@@ -97,4 +69,19 @@ class WishListView extends Component {
   }
 }
 
-export default WishListView;
+WishListView.propTypes = {
+  fetchWishList: PropTypes.func.isRequired,
+  wishlist: PropTypes.object
+}
+
+// Takes in the state and returns an object
+const mapStateToProps = (state) => ({
+  wishlist: state.foods, // it's state.pantries because the index reducer specifies this reducer as 'pantries'
+});
+
+const mapFunctionToProps = {
+  fetchWishList
+}
+
+
+export default connect(mapStateToProps, mapFunctionToProps)(WishListView);
