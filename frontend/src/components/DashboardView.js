@@ -87,6 +87,7 @@ class DashboardView extends Component {
       rsvn_id
     )
       .then(() => {
+        this.props.fetchPantryDetail();
         toast.success(
           "You have successfully approved the reservation with ID " + rsvn_id
         );
@@ -109,6 +110,7 @@ class DashboardView extends Component {
       rsvn_id
     )
       .then(() => {
+        this.props.fetchPantryDetail();
         toast.success(
           "reservation with ID " +
             rsvn_id +
@@ -137,6 +139,7 @@ class DashboardView extends Component {
       rsvn_id
     )
       .then(() => {
+        this.props.fetchPantryDetail();
         toast.success(
           "You have successfully cancelled the reservation with ID " + rsvn_id
         );
