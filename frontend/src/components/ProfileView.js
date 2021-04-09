@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { editProf } from "../actions/profileAction";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.css";
+import {toast} from "react-toastify"
 import { Redirect } from "react-router-dom";
 
 
@@ -55,7 +56,42 @@ class ProfileView extends Component {
     ) {
       this.props.editProf(user);
     } else {
-      alert("Fields in the form are empty");
+      
+      if(!this.state.username){
+        toast.error("Username field is empty");
+      } 
+
+      if(!this.state.password){
+        toast.error("Password field is empty");
+      }
+
+      if(!this.state.phone){
+        toast.error("Phone number field is empty");
+      }
+
+      if(!this.state.address){
+        toast.error("Address field is empty");
+      }
+
+      if(!this.state.city){
+        toast.error("City field is empty")
+      }
+
+      if(!this.state.state){
+        toast.error("State field is empty")
+      }
+
+      if(!this.state.email){
+        toast.error("Email field is empty")
+      }
+
+      if(!this.state.first_name){
+        toast.error("First Name field is empty")
+      }
+
+      if(!this.state.last_name){
+        toast.error("Last Name field is empty")
+      }
     }
   }
 

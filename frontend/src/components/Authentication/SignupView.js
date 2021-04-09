@@ -37,20 +37,49 @@ class SignupView extends Component {
       email: this.state.email,
     };
 
-    if (
-      this.state.username.length == 0 ||
-      this.state.password.length == 0 ||
-      this.state.phoneNumber.length == 0 ||
-      this.state.address.length == 0 ||
-      this.state.city.length == 0 ||
-      this.state.state.length == 0 ||
-      this.state.city.length == 0 ||
-      this.state.zip.length == 0 ||
-      this.state.email.length == 0
-    ) {
-      alert("Username or password field is empty.");
+    if (this.state.username.length == 0 ) {
+      toast.error("Username or password field is empty.");
       return;
     }
+
+    if(this.state.password.length == 0){
+      toast.error("Password field is empty.")
+    }
+
+    if(this.state.phoneNumber.length == 0){
+      toast.error("Phone Number field is empty.")
+    }
+
+    if(this.state.address.length == 0 ){
+      toast.error("Address field is empty.")
+    }
+
+    if(this.state.city.length == 0){
+      toast.error("City field is empty");
+    }
+
+    if( this.state.state.length == 0 ){
+      toast.error("State field is empty")
+    }
+
+    if( this.state.zip.length == 0 ){
+      toast.error("Zipcode field is empty")
+    }
+
+    if(this.state.email.length == 0){
+      toast.error("Email field is empty")
+    }
+    
+    if(this.state.firstname.length == 0){
+      toast.error("First Name field is empty");
+    }
+
+    if(this.state.lastname.length == 0){
+      toast.error("Last Name field is empty");
+    }
+
+
+
 
     let signupResult = await this.props.signup(user);
     if (signupResult === 0) {
