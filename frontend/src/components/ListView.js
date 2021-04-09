@@ -49,7 +49,8 @@ class ListView extends Component {
   
       // Perform fuzzy search for pantries
       const fuse = new Fuse(pantries, {
-        keys: ["name", "city", "state", "phone_number", "address", "zip"],
+        keys: ["name", "city", "state", "address", "zip"],
+        threshold: 0.3
       });
       const result = fuse.search(pattern);
   
@@ -157,7 +158,7 @@ class ListView extends Component {
             className="SearchInput"
             type="text"
             onChange={(e) => this.searchData(e.target.value)}
-            placeholder="UW Food Shed"
+            placeholder="Search by name or location"
           />
         </div>
         <Accordion className="listGroup">
