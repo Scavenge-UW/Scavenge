@@ -39,7 +39,6 @@ class SignupView extends Component {
       return;
     }
 
-    this.props.signup(user);
   }
 
   render() {
