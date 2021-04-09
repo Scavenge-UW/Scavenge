@@ -27,6 +27,23 @@ describe('Pantries', () => {
         let data = await(chai.request(server).get('/pantries'));
         assert.equal(data.status, 200, "status was not 200");
         assert.instanceOf(data, Object, "data is not an object");
+        data = JSON.parse(data.text);
+        const length = Object.keys(data).length;
+        assert.equal(length, 1, "The length of pantries was not 1");
+      });
+  });
+
+  /*
+  * Test the /pantries/:pantry_id route
+  */
+    describe('Get pantry details', () => {
+      it('it should GET the pantry details', async () => {
+        let data = await(chai.request(server).get('/pantries/1'));
+        assert.equal(data.status, 200, "status was not 200");
+        assert.instanceOf(data, Object, "data is not an object");
+        data = JSON.parse(data.text);
+        const length = Object.keys(data).length;
+        assert.equal(length, 1, "The length of pantries was not 1");
       });
   });
 
