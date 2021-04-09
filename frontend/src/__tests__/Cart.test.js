@@ -3,7 +3,7 @@ import Adapter from "enzyme-adapter-react-16";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import CartView from "../components/CartVIew";
+import CartView from "../components/CartView";
 import "../setupTests";
 import store from "../store";
 
