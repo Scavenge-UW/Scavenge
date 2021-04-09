@@ -13,9 +13,9 @@ import HomeView from "./components/HomeView";
 import PantryAdminView from "./components/PantryAdminView";
 import PantryDetailView from "./components/PantryDetailView";
 import FoodSearchView from "./components/FoodSearchView";
-import CartView from "./components/CartView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
+import CartView from "./components/CartView";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -126,7 +126,7 @@ function App(props) {
                 <PantryAdminView />
               </Route>
               <Route path="/pantries/:pantry_id">
-                <PantryDetailView />
+                <PantryDetailView username={username} />
               </Route>
               <Route path="/search-food/:query">
                 <FoodSearchView />
@@ -134,11 +134,11 @@ function App(props) {
               <Route path="/search-food">
                 <FoodSearchView />
               </Route>
-              <Route path="/cart">
-                <CartView />
-              </Route>
               <Route path="/profile">
                 <ProfileView profile={profile} />
+              </Route>
+              <Route path="/cart">
+                <CartView username={username} />
               </Route>
               <Route path="/">
                 <HomeView profile={profile} />
