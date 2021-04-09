@@ -78,6 +78,7 @@ function PantryDetailView(props) {
           key={foodItem.food_id}
           foodItem={foodItem}
           pantry={pantryDetail}
+          pantryDetailMode
         />
       );
     }

@@ -439,7 +439,7 @@ class FoodItemCard extends Component {
   }
 
   showModal() {
-    if (this.props.cartMode) {
+    if (this.props.pantryDetailMode) {
       return (
         <OneClickReserveModal
           username={this.props.username}
@@ -479,6 +479,7 @@ class FoodItemCard extends Component {
               </Card.Title>
             </Card.Body>
           </Card>
+          {this.showModal()}
         </>
       );
     }
