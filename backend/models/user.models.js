@@ -84,6 +84,7 @@ exports.getWishlist = async (req, res) => {
     SELECT
       f.id as food_id,
       f.name as food_name,
+      w.id as wishlist_id,
       w.username,
       w.pantry_id,
       h.id as hours_id,
