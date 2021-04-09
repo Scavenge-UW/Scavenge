@@ -69,7 +69,7 @@ describe('Auth', () => {
         assert.equal(data.status, 200, "status was not 200");
         assert.instanceOf(data, Object, "data is not an object");
         data = JSON.parse(data.text);
-        assert.equal(Object.keys(data).length, "1", "Length of get foods should be 1");
+        assert.equal(Object.keys(data).length, "2", "Length of get foods should be 2");
     });
   });
 
