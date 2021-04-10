@@ -4,7 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import FoodItemCard from './WishListItemCard';
+import WishListItemCard from './WishListItemCard';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { fetchWishList } from '../actions/wishlistActions';
@@ -44,7 +45,7 @@ class WishListView extends Component {
     // Use filler card to align cards correctly.
     // This prevents a single card on the last row from being centered.
     if (foodItemCards.length % 2) {
-      foodItemCards.push(<FoodItemCard type="filler" />)
+      foodItemCards.push(<WishListItemCard type="filler" />)
     }
 
     return foodItemCards;

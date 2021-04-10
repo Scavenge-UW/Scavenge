@@ -16,6 +16,7 @@ import FoodSearchView from "./components/FoodSearchView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
 import CartView from "./components/CartView";
+import WishListView from "./components/WishListView";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -142,6 +143,9 @@ function App(props) {
               </Route>
               <Route path="/">
                 <HomeView profile={profile} />
+              </Route>
+              <Route path="/">
+                <WishListView />
               </Route>
             </Switch>
           </div>
