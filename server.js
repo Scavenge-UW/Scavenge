@@ -1,3 +1,7 @@
+// Global declaration. Needs to be before package imports.
+var globalUseTestDB;
+global.globalUseTestDB = globalUseTestDB;
+
 // Import packages
 require('dotenv').config();
 const express    = require("express"),
@@ -20,6 +24,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 global.jwt = jwt;
 global.bcrypt = bcrypt;
+
+
 
 // let corsOption = {
 //   origin: "http://localhost:8081",
@@ -55,3 +61,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+module.exports = app; // for testing

@@ -10,7 +10,7 @@ exports.isEmployeeOf = async (req, res, user) => {
   var values = [
     [user.username]
   ];
-
+  return await execQuery("select", query, values);
 }
 
 exports.checkQuantity = async (req, res, food_id) => {
@@ -66,4 +66,63 @@ exports.updateResInventory = async (req, res, food_id, reservedQty) => {
   let values = [reservedQty, food_id, req.params.pantry_id];
 
   return await execQuery("update", query, values, "insert into res_food table failed");
+}
+
+exports.addToWishlist = async (req, res) => {
+  const query = `
+    INSERT INTO wishlist (food_id, username, pantry_id)
+    VALUES ?;
+  `;
+  let values = [[req.body.food_id, req.params.username, req.body.pantry_id]];
+
+  return await execQuery("insert", query, values, 
+    "insert into wishlist table failed, possible duplicate entry or invalid username/food_id");
+}
+
+exports.getWishlist = async (req, res) => {
+  const query = `
+    SELECT
+      f.id as food_id,
+      f.name as food_name,
+      w.id as wishlist_id,
+      w.username,
+      w.pantry_id,
+      h.id as hours_id,
+      h.day,
+      h.open,
+      h.close,
+      h.detail,  
+      p.name as pantry_name,
+      p.website,
+      p.address,
+      p.city,
+      p.state,
+      p.zip,
+      p.phone_number, 
+      p.img_src, 
+      p.email
+    FROM wishlist w
+    JOIN food f ON f.id = w.food_id
+    JOIN pantry p ON w.pantry_id = p.id
+    JOIN hours h ON p.id = h.pantry_id
+    WHERE w.username = ?;
+  `;
+  let values = [[req.params.username]];
+
+  return await execQuery("select", query, values, 
+    "failed to get wishlist due to server error.");
+}
+
+exports.removeFromWishlist = async (req, res) => {
+  const query = `
+    DELETE
+    FROM wishlist w
+    WHERE w.username = ? AND w.id = ?;
+  `;
+  let values = [req.params.username, req.params.wishlist_id];
+  /* w.id determines w.username, but since it's in the route anyway
+  we'll use it as a double check */
+
+  return await execQuery("delete", query, values, 
+    "failed to delete from wishlist due to server error.");
 }

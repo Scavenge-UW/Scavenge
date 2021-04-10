@@ -186,16 +186,44 @@ exports.updateReservation = async (req, res) => {
   }
 }
 
+// Returns list of pantries with those foods
 exports.foodSearch = async (req, res) => {
-  const query = `
-    SELECT
-      i.pantry_id,
-      i.food_id,
-      i.quantity
-    FROM inventory i
-    WHERE i.food_id = ?;
+  let query = `
+    SELECT 
+      p.id as pantry_id,
+      p.name,
+      p.address,
+      p.zip,
+      p.city,
+      p.state,
+      p.phone_number,
+      p.img_src,
+      p.website,
+      p.approved,
+      f.id as food_id,
+      f.name as food_name,
+      f.qr_code,
+      i.quantity,
+      h.id as hours_id,
+      h.day,
+      h.open,
+      h.close,
+      h.detail      
+    FROM pantry p
+    LEFT JOIN inventory i ON p.id = i.pantry_id
+    LEFT JOIN food f ON f.id = i.food_id
+    JOIN hours h ON p.id = h.pantry_id
+    WHERE i.quantity > 0 AND 
   `;
-  const values = [[req.params.food_id]];
+  const foods = req.body.foods;
+  for (let i = 0; i < foods.length; i++) {
+    if (i === foods.length - 1) {
+      query += "f.name = ?;"
+    } else {
+      query += "f.name = ? OR "
+    }
+  }
+  const values = foods;
   return await execQuery("select", query, values);
 }
 

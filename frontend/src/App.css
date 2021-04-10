@@ -2,16 +2,23 @@
   text-align: center;
 }
 
-#body:before {
+body {
+  background-repeat: repeat-y !important;
+}
+
+body:before {
   content: ' ';
   background-image: url('./images/bg-home.jpg');
   background-size: cover;
+  background-repeat: repeat-y;
   position: absolute;
   opacity: 0.3;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
+  max-height: 1500px;
+  height: 5000px;
   z-index: -300;
 }
 
