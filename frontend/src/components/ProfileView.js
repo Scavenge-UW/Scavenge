@@ -60,7 +60,8 @@ class ProfileView extends Component {
     ) {
 
       this.props.editProf(user);
-      this.setState({toHomeView: true})
+      this.setState({toHomeView: true});
+      toast.success("You succesfully updated your profile")
       this.props.setProfile(user);
 
     } else {
@@ -100,6 +101,10 @@ class ProfileView extends Component {
 
       if (!this.state.last_name) {
         errors.push("Last Name field is empty");
+      }
+
+      if(!this.state.zipcode){
+        errors.push("Zipcode field is empty")
       }
 
       toast.error(
