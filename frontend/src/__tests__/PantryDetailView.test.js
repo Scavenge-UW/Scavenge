@@ -27,7 +27,7 @@ jest.mock("react-router-dom", () => ({
 // });
 
 describe("PantryDetailView tests", () => {
-  const wrapper = mount(<PantryDetailView />);
+  const wrapper = shallow(<PantryDetailView />);
 
   it("should display spinner on init", () => {
     expect(wrapper.find("div.spinner")).toHaveLength(1);
