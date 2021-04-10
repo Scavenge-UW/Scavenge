@@ -77,11 +77,15 @@ class SignupView extends Component {
     }
     
     if(this.state.firstName.length == 0){
-      errors.push("First name is empty")
+      errors.push("First name is field empty")
     }
 
     if(this.state.lastName.length == 0){
-      errors.push("Last name is empty")
+      errors.push("Last name is field empty")
+    }
+
+    if(this.state.zipcode.length == 0){
+      errors.push("Zipcode field is empty")
     }
 
     if(errors.length != 0){
