@@ -51,6 +51,7 @@ function editProfile(user, token) {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    withCredentials: true,
   });
 }
 
