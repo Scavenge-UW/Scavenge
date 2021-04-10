@@ -6,24 +6,8 @@ import PantryAdminView from "../components/PantryAdminView";
 import "../setupTests";
 import pantryDetail from "../__mocks__/pantryDetailMock";
 
-const mockPantryDetail = pantryDetail.pantryDetail;
-
 describe("PantryAdminView tests", () => {
-  const foodItem1 = {
-    food_id: 4,
-    food_name: "Swiss Cheese",
-    qr_code: 10101011,
-    quantity: 22,
-  };
-
-  const foodItem2 = {
-    food_id: 2,
-    food_name: "Orange",
-    qr_code: null,
-    quantity: 0,
-  };
-
-  const wrapper1 = mount(<PantryAdminView />);
+  const wrapper1 = shallow(<PantryAdminView />);
 
   it("should have <PantryAdminViewTabs />", () => {
     expect(wrapper1.find("PantryAdminViewTabs")).toHaveLength(1);
