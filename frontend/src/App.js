@@ -15,6 +15,7 @@ import PantryDetailView from "./components/PantryDetailView";
 import FoodSearchView from "./components/FoodSearchView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
+import CartView from "./components/CartView";
 
 import "react-toastify/dist/ReactToastify.css";
 import async from "react-bootstrap-typeahead/lib/behaviors/async";
@@ -126,7 +127,7 @@ function App(props) {
                 <PantryAdminView />
               </Route>
               <Route path="/pantries/:pantry_id">
-                <PantryDetailView />
+                <PantryDetailView username={username} />
               </Route>
               <Route path="/search-food/:query">
                 <FoodSearchView />
@@ -136,6 +137,9 @@ function App(props) {
               </Route>
               <Route path="/profile">
                 <ProfileView profile={profile} setProfile={setProfile} />
+              </Route>
+              <Route path="/cart">
+                <CartView username={username} />
               </Route>
               <Route path="/">
                 <HomeView profile={profile} />

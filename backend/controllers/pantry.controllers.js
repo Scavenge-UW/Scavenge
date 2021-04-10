@@ -316,8 +316,84 @@ exports.updateReservationAction = (req, res) => {
 }
 
 exports.foodSearchAction = (req, res) => {
-  db.foodSearch(req, res).then(pantries => {
-    return res.status(200).json(pantries);
+  let result = {};
+  db.foodSearch(req, res).then(pantryDetail => {
+    pantryDetail.forEach(element => {
+      if (!(element['pantry_id'] in result)) {
+        result[element['pantry_id']] = {};
+        result[element['pantry_id']]['foods'] = {};
+        result[element['pantry_id']]['hours'] = {};
+      }
+    }); 
+
+    pantryDetail.forEach(element => {
+      result[element['pantry_id']]['pantry_id']     = element['pantry_id'];
+      result[element['pantry_id']]['name']          = element['name'];
+      result[element['pantry_id']]['address']       = element['address'];
+      result[element['pantry_id']]['zip']           = element['zip'];
+      result[element['pantry_id']]['city']          = element['city'];
+      result[element['pantry_id']]['state']         = element['state'];
+      result[element['pantry_id']]['phone_number']  = element['phone_number'];
+      result[element['pantry_id']]['email']         = element['email'];
+      result[element['pantry_id']]['img_src']       = element['img_src'];
+      result[element['pantry_id']]['website']       = element['website'];
+      result[element['pantry_id']]['approved']      = element['approved'];
+      result[element['pantry_id']]['foods'][element['food_id']] = {};
+      result[element['pantry_id']]['foods'][element['food_id']]['food_id']    = element['food_id'];
+      result[element['pantry_id']]['foods'][element['food_id']]['food_name']  = element['food_name'];
+      result[element['pantry_id']]['foods'][element['food_id']]['qr_code']    = element['qr_code'];
+      result[element['pantry_id']]['foods'][element['food_id']]['quantity']   = element['quantity'];
+    
+      result[element['pantry_id']]['hours'][element['day']] = {};
+      result[element['pantry_id']]['hours'][element['day']]['day']   = element['day'];
+      result[element['pantry_id']]['hours'][element['day']]['open']    = element['open'];
+      result[element['pantry_id']]['hours'][element['day']]['close']   = element['close'];
+      result[element['pantry_id']]['hours'][element['day']]['detail']  = element['detail'];
+    });
+
+    // Convert into array format without using ids as keys
+    let resultsArr = [];
+    for (let pantryId in result) {
+      const pantry = result[pantryId];
+      let pantryInfo = {};
+      pantryInfo['pantry_id'] = pantry['pantry_id'];
+      pantryInfo['name'] = pantry['name'];
+      pantryInfo['address'] = pantry['address'];
+      pantryInfo['zip'] = pantry['zip'];
+      pantryInfo['city'] = pantry['city'];
+      pantryInfo['state'] = pantry['state'];
+      pantryInfo['phone_number'] = pantry['phone_number'];
+      pantryInfo['email'] = pantry['email'];
+      pantryInfo['img_src'] = pantry['img_src'];
+      pantryInfo['website'] = pantry['website'];
+
+      pantryInfo['foods'] = [];
+      pantryInfo['hours'] = [];
+
+      for (const [foodKey, foodData] of Object.entries(pantry['foods'])) {
+        let food = {};
+        food['food_id'] = foodData['food_id'];
+        food['food_name'] = foodData['food_name'];
+        food['qr_code'] = foodData['qr_code'];
+        food['quantity'] = foodData['quantity'];
+
+        pantryInfo['foods'].push(food);
+      }
+      
+      for (const [hourKey, hourData] of Object.entries(pantry['hours'])) {
+        let hour = {};
+        hour['day'] = hourData['day'];
+        hour['open'] = hourData['open'];
+        hour['close'] = hourData['close'];
+        hour['detail'] = hourData['detail'];
+
+        pantryInfo['hours'].push(hour);
+      }
+      resultsArr.push(pantryInfo);
+    }
+    result = resultsArr;
+
+    return res.status(200).json(result);
   }).catch(error => {
     console.log(error);
     return res.status(500).json({

@@ -1,343 +1,294 @@
 import React, { Component } from "react";
 
-import moment from "moment";
-
+// import for bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-// import Card from "react-bootstrap/Card";
 import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 
-import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
-import PantryDescriptionCard from "./PantryDescriptionCard";
-import OpenHourCard from "./OpenHourCard";
+// import for components
+import DashboardMessages from "./DashboardMessages";
+import DashboardDescriptionCard from "./DashboardDescriptionCard";
+import DashboardOpenHourCard from "./DashboardOpenHourCard";
+
+// import for services
+import PantryService from "../services/pantry.service";
+
+// other imports
+import { toast } from "react-toastify";
 
 /**
  * Dashboard View
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
- *         [Yayen Lin](https://github.com/yayen-lin)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
+ *
  */
 class DashboardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      /**
-       * Dummy Reseravtion examples.
-       * TODO: fetch actual reservations from the API
-       */
-      pantryDetails: {
-        foods: {
-          1: {
-            food_id: 1,
-            food_name: "Apple",
-            qr_code: null,
-            quantity: 0,
-          },
-          2: {
-            food_id: 2,
-            food_name: "Orange",
-            qr_code: null,
-            quantity: 27,
-          },
-          3: {
-            food_id: 3,
-            food_name: "Avocado",
-            qr_code: 123123123,
-            quantity: 156,
-          },
-          4: {
-            food_id: 4,
-            food_name: "Swiss Cheese",
-            qr_code: 10101011,
-            quantity: 22,
-          },
-        },
-        reservations: {
-          1: {
-            reservation_id: 1,
-            username: "sean1",
-            reserved_items: { 1: 3, 2: 5, 3: 3 },
-            order_time: "2021-03-22T08:03:39.000Z",
-            estimated_pick_up: "2021-03-30T02:00:00.000Z",
-            picked_up_time: null,
-            approved: 0,
-            cancelled: 1,
-          },
-          106: {
-            reservation_id: 106,
-            username: "sean1",
-            reserved_items: { 2: 4, 3: 7, 4: 2 },
-            order_time: "2021-03-23T20:45:05.000Z",
-            estimated_pick_up: "2021-03-30T02:00:00.000Z",
-            picked_up_time: null,
-            approved: 0,
-            cancelled: 0,
-          },
-          107: {
-            reservation_id: 107,
-            username: "sean1",
-            reserved_items: { 1: 5, 2: 3, 3: 1, 4: 1 },
-            order_time: "2021-03-26T12:30:11.000Z",
-            estimated_pick_up: "2021-03-30T02:00:00.000Z",
-            picked_up_time: null,
-            approved: 0,
-            cancelled: 0,
-          },
-        },
-        hours: {
-          1: {
-            day: 1,
-            open: "10:00:00",
-            close: "15:00:00",
-            detail: "By Appointment Only",
-          },
-          2: {
-            day: 2,
-            open: "10:00:00",
-            close: "15:00:00",
-            detail: "By Appointment Only",
-          },
-          3: {
-            day: 3,
-            open: "10:00:00",
-            close: "15:00:00",
-            detail: "By Appointment Only",
-          },
-          4: {
-            day: 4,
-            open: "10:00:00",
-            close: "15:00:00",
-            detail: "By Appointment Only",
-          },
-          5: {
-            day: 5,
-            open: "10:00:00",
-            close: "15:00:00",
-            detail: "By Appointment Only",
-          },
-          6: {
-            day: 6,
-            open: "10:00:00",
-            close: "15:00:00",
-            detail: "By Appointment Only",
-          },
-          7: {
-            day: 7,
-            open: "10:00:00",
-            close: "15:00:00",
-            detail: "By Appointment Only",
-          },
-        },
-        pantry_id: 1,
-        name: "The River Food Pantry",
-        address: "2201 Darwin Rd",
-        zip: 53704,
-        city: "Madison",
-        state: "WI",
-        phone_number: "6084428815",
-        details: "Here to serve!",
-        img_src:
-          "https://lh5.googleusercontent.com/p/AF1QipM6UYI64xgIkJx1w_t7RLh8eVCjelB9ogeoW_A3=w426-h240-k-no",
-        lat: -89,
-        lon: 43,
-        website: "https://www.riverfoodpantry.org/",
-        approved: 0,
-      },
+      pantry_id: "", // TODO: Change to actual pantry id
+      pantryName: "",
+      rsvns: [],
+      description: "",
+      address: "",
+      zipcode: "",
+      city: "",
+      stte: "",
+      phone: "",
+      weblink: "",
+      // these are needed for 'DashboardDescription Card
+      // but not sure if we want to edit this data
+      img_src: "",
+      lat: "",
+      lon: "",
 
-      // show reservation message, default false
-      showRsvnMsg: false,
-
-      // TODO: set a default ID so that it can run
-      // used to passing information to reservation message modal
-      selectedID: 1,
-
-      // used to calculate time elapsed since the reservation is made
-      currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
+      // used by DashboardOpenHourCard
+      hours: [],
     };
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// Reservation Message ////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////
+  componentDidMount() {
+    const pantry = this.props.pantryDetail;
 
+    if (pantry) {
+      this.setState(
+        {
+          pantry_id: pantry.pantry_id,
+          pantryName: pantry.name,
+          rsvns: pantry.reservations,
+          description: pantry.details,
+          address: pantry.address,
+          zipcode: pantry.zip,
+          city: pantry.city,
+          stte: pantry.state,
+          phone: pantry.phone_number,
+          weblink: pantry.website,
+          img_src: pantry.img_src,
+          lat: pantry.lat,
+          lon: pantry.lon,
+          hours: pantry.hours,
+        },
+        () => this.getDashboardOverview() // TODO: not sure if this is needed.
+      );
+    }
+  }
+
+  // ************************************************************************
+  // ************************ DashboardMessages *****************************
+  // ************************************************************************
   /**
-   * Opens View Reservation Message modal.
+   * Mark a reservation as approved
    *
+   * @param {*} rsvn_id
    */
-  openViewRsvnMsgModal() {
-    this.setState({
-      showRsvnMsg: true,
-    });
+  markAsApproved(rsvn_id) {
+    console.log(rsvn_id);
+
+    PantryService.setApproved(this.state.pantry_id, rsvn_id)
+      .then(() => {
+        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "You have successfully approved the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while approving reservation with ID " + rsvn_id);
+      });
   }
 
   /**
-   * Closes View Reservation Message modal.
+   * Mark a reservation as picked up
    *
+   * @param {*} rsvn_id
    */
-  closeViewRsvnMsgModal() {
-    this.setState({
-      showRsvnMsg: false,
-      modalMessageHeader: "",
-      modalBodyContent: "",
-    });
+  markAsPickedUp(rsvn_id) {
+    console.log(rsvn_id);
+    PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
+      .then(() => {
+        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "reservation with ID " +
+            rsvn_id +
+            " was successfully marked as picked up!"
+        );
+      })
+      .catch(() => {
+        toast.error(
+          "Error while marking reservation with ID " +
+            rsvn_id +
+            " as picked up."
+        );
+      });
   }
 
   /**
+   *  Mark a reservation as cancelled
    *
-   * Helper function for getTimeElapsed to format time elapsed since the reservation received.
+   * @param {*} rsvn_id
+   */
+  markAsCancelled(rsvn_id) {
+    console.log(rsvn_id);
+    PantryService.setCancelled(this.state.pantry_id, rsvn_id)
+      .then(() => {
+        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "You have successfully cancelled the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while cancelling reservation with ID " + rsvn_id);
+      });
+  }
+
+  // ************************************************************************
+  // ******************* DashboardDescriptionCard.js ************************
+  // ************************************************************************
+
+  updateAllDetails(updates) {
+    this.setState({
+      description: updates[0],
+      address: updates[1],
+      zipcode: updates[2],
+      city: updates[3],
+      stte: updates[4],
+      phone: updates[5],
+      weblink: updates[6],
+    });
+  }
+
+  // ************************************************************************
+  // ******************* DashboardOpenHourCards *****************************
+  // ************************************************************************
+
+  updateOpenHours(updDay, updates) {
+    this.state.hours.map((item) => {
+      if (item.day === updDay) {
+        console.log("5", item.day);
+        item.open = updates[0];
+        item.close = updates[1];
+        item.detail = updates[2];
+        console.log("6", item.open, item.close, item.detail);
+        console.log("7", { ...this.state.hours });
+      }
+    });
+  }
+
+  // ************************************************************************
+  // ******************* render helper function *****************************
+  // ************************************************************************
+
+  /**
+   * Returns the textual description of the current dashboard.
    *
-   * reference:
-   *          https://stackoverflow.com/questions/22938300/convert-milliseconds-to-hours-and-minutes-using-momentjs
-   * example:
-   *          durationAsString(0) will return -
-   *          durationAsString(10000) will return 10s
-   *          durationAsString(100000) will return 1m 40s
-   *          durationAsString(10000000) will return 2h 46m 40s
-   *          durationAsString(100000000) will return 1d 3h 46m
-   *          durationAsString(100000000, 4) will return 1d 3h 46m 40s
-   * @param {*} ms
-   * @param {*} maxPrecission
    * @returns
    */
-  durationAsString(ms, maxPrecission = 3) {
-    const duration = moment.duration(ms);
-
-    const items = [];
-    items.push({ timeUnit: "d", value: Math.floor(duration.asDays()) });
-    items.push({ timeUnit: "h", value: duration.hours() });
-    items.push({ timeUnit: "m", value: duration.minutes() });
-    items.push({ timeUnit: "s", value: duration.seconds() });
-
-    const formattedItems = items.reduce((accumulator, { value, timeUnit }) => {
-      if (
-        accumulator.length >= maxPrecission ||
-        (accumulator.length === 0 && value === 0)
-      ) {
-        return accumulator;
-      }
-
-      accumulator.push(`${value}${timeUnit}`);
-      return accumulator;
-    }, []);
-
-    return formattedItems.length !== 0 ? formattedItems.join(" ") : "-";
-  }
-
-  /**
-   * Calculates and returns the time elapsed since the reservation was made.
-   *
-   * @param {*} receivedTime the time (in String format) when the reservation was made
-   */
-  getTimeElapsed(receivedTime) {
-    // convert receivedTime to moment object
-    const received = moment(new Date(receivedTime), "YYYY/MM/DD HH:mm:ss");
-    const current = this.state.currentDateTime;
-    return this.durationAsString(current - received);
-  }
-
-  /**
-   * Returns the textual description of the current inventory.
-   *
-   */
   getDashboardOverview() {
-    let numReservation = Object.keys(this.state.pantryDetails.reservations)
-      .length;
+    const numReservation = Object.keys(this.state.rsvns).length;
 
     return (
-      <p className="text-center mt-4">
-        You have {numReservation} new reservations today.
-      </p>
+      <>
+        {/* Page title */}
+        <Row className="justify-content-center">
+          <h3>Dashboard</h3>
+        </Row>
+        <hr />
+        {/* Overview message */}
+        <Row className="justify-content-center">
+          You have {numReservation} new reservations today.
+        </Row>
+      </>
     );
   }
-
-  /**
-   * @returns the message header (title and reservation time) for each message.
-   */
-  getMessageHeader(rsvn_id) {
-    const rsvn = this.state.pantryDetails.reservations[rsvn_id];
-    const usernameStyle = {
-      fontFamily: "monospace",
-      fontSize: "120%",
-      fontWeight: "450",
-    };
-
-    const messageTimeStyle = {
-      color: "--gray",
-      textAlign: "right",
-      fontSize: "60%",
-      fontWeight: "300",
-    };
-
-    const username = <span style={usernameStyle}>{rsvn.username}</span>;
-
-    const numItems = (
-      <span style={usernameStyle}>
-        {Object.keys(rsvn.reserved_items).length}
-      </span>
-    );
-
-    const receivedTime = rsvn.order_time;
-
-    // TODO: re-adjust the styling
-    const messageHeader = (
-      <div>
-        User {username} has reserved {numItems} items at your food pantry!
-        {/* Change messageTime according to API */}
-        <p class="text-right" style={messageTimeStyle}>
-          {this.getTimeElapsed(receivedTime)} ago.
-        </p>
-      </div>
-    );
-
-    return messageHeader;
-  }
-
-  /**
-   * Iteratively returns messages according to the number of reservations received.
-   *
-   */
-  getMessageOverview() {
-    const viewMessages = Object.keys(this.state.pantryDetails.reservations).map(
-      (rsvn_id, key) => (
-        <ListGroupItem tag="a" action>
-          {/* Heading */}
-          <ListGroupItemHeading key={key} className="mb-1">
-            {this.getMessageHeader(rsvn_id)}
-          </ListGroupItemHeading>
-          {/* Button */}
-          <Button
-            variant="outline-info"
-            className="mr-2"
-            onClick={() => {
-              this.setState({ selectedID: rsvn_id }, this.openViewRsvnMsgModal);
-            }}
-          >
-            View Message
-          </Button>
-          <Button variant="outline-primary" className="mr-2">
-            Mark as Picked up
-          </Button>
-          <Button variant="outline-danger" className="mr-2">
-            Cancel this reservation
-          </Button>
-        </ListGroupItem>
-      )
-    );
-    return <ListGroup>{viewMessages}</ListGroup>;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// Pantry Description /////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////
 
   /**
    *
+   * @returns
    */
-  // getPantryDescriptionCards() {
-  //   return <pantryDescriptionCard />;
-  // }
+  getMessageAndFunctions() {
+    return (
+      <>
+        {/* Sub-session title */}
+        <Row className="justify-content-center">
+          <h4>Messages </h4>
+        </Row>
+        {/* Sub-session content (TODO: adjust style) */}
+        <Row className="justify-content-center">
+          <DashboardMessages
+            adminMode
+            // pantry_id={this.state.pantry_id}
+            rsvns={this.state.rsvns}
+            fetchPantryDetail={this.props.fetchPantryDetail}
+            markAsApproved={this.markAsApproved.bind(this)}
+            markAsPickedUp={this.markAsPickedUp.bind(this)}
+            markAsCancelled={this.markAsCancelled.bind(this)}
+          />
+        </Row>
+      </>
+    );
+  }
+
+  /**
+   *
+   * @returns
+   */
+  getDescriptionCards() {
+    return (
+      <>
+        <Row className="justify-content-center pt-4">
+          <DashboardDescriptionCard
+            adminMode
+            pantry_id={this.state.pantry_id}
+            pantryName={this.state.pantryName}
+            description={this.state.description}
+            address={this.state.address}
+            zipcode={this.state.zipcode}
+            city={this.state.city}
+            stte={this.state.stte}
+            phone={this.state.phone}
+            weblink={this.state.weblink}
+            updateAllDetails={this.updateAllDetails.bind(this)}
+            img_src={this.state.img_src}
+            lat={this.state.lat}
+            lon={this.state.lon}
+          />
+        </Row>
+      </>
+    );
+  }
+
+  getOpenHoursCards() {
+    return (
+      <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
+        <Card.Header as="h5">
+          <Row className="justify-content-between align-items-center">
+            <Col className="text-left">Operating Hours</Col>
+          </Row>
+        </Card.Header>
+        <Card.Body>
+          <Card.Title>{this.state.pantryName}</Card.Title>
+          <hr />
+          <Row className="w-responsive w-100">
+            {this.state.hours.map((item) => (
+              <DashboardOpenHourCard
+                adminMode
+                pantry_id={this.state.pantry_id}
+                day={item.day}
+                open={item.open}
+                close={item.close}
+                detail={item.detail}
+                updateOpenHours={this.updateOpenHours.bind(this)}
+              />
+            ))}
+          </Row>
+        </Card.Body>
+      </Card>
+    );
+  }
 
   /**
    * Renders components.
@@ -346,36 +297,28 @@ class DashboardView extends Component {
   render() {
     return (
       <Container>
-        {/* Page title */}
+        {/* Pantry's name */}
         <Row className="justify-content-center">
-          <h2>Dashboard</h2>
+          <h2>{this.state.pantryName}</h2>
         </Row>
-        <hr />
-        {/* Overview message */}
-        <Row className="justify-content-center">
-          {this.getDashboardOverview()}
-        </Row>
-        {/* Sub-session title */}
-        <Row className="justify-content-center">
-          <h4>Messages </h4>
-        </Row>
-        {/* Sub-session content (TODO: adjust style) */}
-        <Row className="justify-content-center">
-          {this.getMessageOverview()}
-        </Row>
+        {/* dashboard and dashboard messages */}
+        {this.getDashboardOverview()}
 
-        <Row className="justify-content-center pt-4">
-          <PantryDescriptionCard />
+        {/* messages displayed and buttons for actions */}
+        {this.getMessageAndFunctions()}
+
+        {/* pantry description card and edits */}
+        {this.getDescriptionCards()}
+
+        {/* Open Hours */}
+        {this.getOpenHoursCards()}
+
+        <Row className="justify-content-center">
+          <p className="mt-4">
+            Time is Money. We provide an efficient way for you to update
+            available items.
+          </p>
         </Row>
-        <Row className="justify-content-center pt-4">
-          <OpenHourCard openHours={this.state.pantryDetails.hours} />
-        </Row>
-        <ViewRsvnMsgModal
-          show={this.state.showRsvnMsg}
-          onHide={() => this.closeViewRsvnMsgModal()}
-          selectedID={this.state.selectedID}
-          state={this.state}
-        />
       </Container>
     );
   }
