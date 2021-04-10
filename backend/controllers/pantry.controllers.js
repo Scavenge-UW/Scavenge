@@ -277,16 +277,16 @@ exports.pantryUpdateDetailAction = (req, res) => {
   });
 }
 
-exports.getPantryHoursAction = (req, res) => {
-  db.getPantryHours(req, res).then(hours => {
-    return res.status(200).json(hours);
-  }).catch(error => {
-    console.log(error);
-    return res.status(500).json({
-      message: "Failed to get pantry hours due to server error."
-    });
-  });
-}
+// exports.getPantryHoursAction = (req, res) => {
+//   db.getPantryHours(req, res).then(hours => {
+//     return res.status(200).json(hours);
+//   }).catch(error => {
+//     console.log(error);
+//     return res.status(500).json({
+//       message: "Failed to get pantry hours due to server error."
+//     });
+//   });
+// }
 
 exports.pantryUpdateHoursAction = (req, res) => {
   db.pantryUpdateHours(req, res).then(data => {

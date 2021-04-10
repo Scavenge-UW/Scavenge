@@ -9,7 +9,7 @@ router.route('/login')
   .post(loginAction);
 
 router.route('/logout')
-  .post(logoutAction);
+  .post(authMiddleware.requireLogin, logoutAction);
 
 router.route('/signup')
   .post(signupAction);

@@ -33,8 +33,8 @@ exports.getAllPantries = async (req, res) => {
       h.close,
       h.detail      
     FROM pantry p
-    JOIN inventory i ON p.id = i.pantry_id
-    JOIN food f ON f.id = i.food_id
+    LEFT JOIN inventory i ON p.id = i.pantry_id
+    LEFT JOIN food f ON f.id = i.food_id
     LEFT JOIN reservation r ON r.pantry_id = p.id
     JOIN hours h ON p.id = h.pantry_id;
   `;
@@ -74,8 +74,8 @@ exports.getPantryDetail = async (req, res) => {
       h.close,
       h.detail      
     FROM pantry p
-    JOIN inventory i ON p.id = i.pantry_id
-    JOIN food f ON f.id = i.food_id
+    LEFT JOIN inventory i ON p.id = i.pantry_id
+    LEFT JOIN food f ON f.id = i.food_id
     LEFT JOIN reservation r ON r.pantry_id = p.id
     JOIN hours h ON p.id = h.pantry_id
     WHERE p.id = ?;
@@ -116,22 +116,22 @@ exports.pantryUpdateDetail = async (req, res) => {
   return await execQuery("update", query, values);
 }
 
-exports.getPantryHours = async (req, res) => {
-  const query = `
-    SELECT
-      h.id as hours_id,
-      h.pantry_id,
-      h.day,
-      h.open,
-      h.close,
-      h.detail
-    FROM hours h
-    JOIN pantry p ON p.id = h.pantry_id
-    WHERE h.pantry_id = ?;
-  `;
-  const values = [[req.params.pantry_id]];
-  return await execQuery("select", query, values);
-}
+// exports.getPantryHours = async (req, res) => {
+//   const query = `
+//     SELECT
+//       h.id as hours_id,
+//       h.pantry_id,
+//       h.day,
+//       h.open,
+//       h.close,
+//       h.detail
+//     FROM hours h
+//     JOIN pantry p ON p.id = h.pantry_id
+//     WHERE h.pantry_id = ?;
+//   `;
+//   const values = [[req.params.pantry_id]];
+//   return await execQuery("select", query, values);
+// }
 
 exports.pantryUpdateHours = async (req, res) => {
   const query = `

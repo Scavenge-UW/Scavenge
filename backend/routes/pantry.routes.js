@@ -23,8 +23,8 @@ router.get('/pantries/:pantry_id', getPantryDetailAction);
 // Update pantry details
 router.put('/pantries/:pantry_id/', authMiddleware.requireLogin, pantryUpdateDetailAction);
 
-// Get pantry hours
-router.get('/pantries/:pantry_id/hours', getPantryHoursAction);
+// Get pantry hours - not needed because it is included in the pantryDetailAction
+//router.get('/pantries/:pantry_id/hours', getPantryHoursAction);
 
 // Update pantry hours
 router.put('/pantries/:pantry_id/hours/:day', authMiddleware.requireLogin, pantryUpdateHoursAction);
