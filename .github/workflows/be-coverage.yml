@@ -15,7 +15,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
       JWT_COOKIE_EXPIRES: ${{ secrets.JWT_COOKIE_EXPIRES }}
     strategy:
