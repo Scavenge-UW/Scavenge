@@ -144,6 +144,7 @@ function FoodSearchView() {
             options={allFoods.map((food) => food.name)}
             onChange={setSelection}
             id="foodInput"
+            multiple
           />
           <Button className="mb-2" onClick={onClickSearchButton}>
             <FontAwesomeIcon icon={faSearch} />
