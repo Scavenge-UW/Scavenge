@@ -4,7 +4,7 @@ import { shallow, mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MemoryRouter, Route } from "react-router-dom";
 
-import PantryDetailView from "../components/PantryDetailView";
+import DashboardView from "../components/DashboardView";
 import "../setupTests";
 
 import pantryDetail from "../__mocks__/pantryDetailMock";
@@ -27,10 +27,23 @@ jest.mock("react-router-dom", () => ({
 // });
 
 describe("PantryDetailView tests", () => {
-  const wrapper = mount(<PantryDetailView />);
+  const wrapper = mount(<DashboardView pantryDetail={mockPantryDetail} />);
 
-  it("should display spinner on init", () => {
-    expect(wrapper.find("div.spinner")).toHaveLength(1);
+  it("should display menu title", () => {
+    expect(wrapper.find("h3").text()).toEqual("Dashboard");
+  });
+
+  it("should display <DashboardDescriptionCard />", () => {
+    expect(wrapper.find("DashboardDescriptionCard")).toHaveLength(1);
+  });
+
+  it("should have editMode for DashboardDescriptionCard disabled on init", () => {
+    const ddc = wrapper.find("DashboardDescriptionCard");
+    expect(ddc.state("editMode")).toEqual(false);
+  });
+
+  it("should display seven <DashboardOpenHourCard />s", () => {
+    expect(wrapper.find("DashboardOpenHourCard")).toHaveLength(7);
   });
 
   // it("should display spinner on init", async () => {
