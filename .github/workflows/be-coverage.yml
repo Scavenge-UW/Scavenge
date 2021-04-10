@@ -1,4 +1,4 @@
-name: Frontend Coverage Report
+name: Backend Coverage Report
 
 on:
   pull_request:
@@ -7,13 +7,17 @@ on:
 
 defaults:
   run:
-    working-directory: ./frontend
+    working-directory: ./
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+      JWT_COOKIE_EXPIRES: ${{ secrets.JWT_COOKIE_EXPIRES }}
     strategy:
       matrix:
         node-version: [15.x]
@@ -26,12 +30,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run test -- --coverage --watchAll=false --silent --collectCoverageFrom=src/components/**/*.js
-      - uses: romeovs/lcov-reporter-action@v0.2.16
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./frontend/coverage/lcov.info
-      # - uses: mattallty/jest-github-action@v1.0.3
-      #   with:
-      #     # Subdirectory to run tests in
-      #     working-directory: ./frontend
+      - run: npm run test 
