@@ -8,8 +8,6 @@ let chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 
-// Agent is necessary to save cookies
-const agent = chai.request.agent(server);
 
 //Our parent block
 describe('Auth', () => {
@@ -21,6 +19,55 @@ describe('Auth', () => {
   // beforeEach((done) => { 
   //       done();
   // });
+
+  let userToken = "";
+  /*
+  * Test the /signup route
+  */
+  describe('/signup', () => {
+    it('it should create a new user account', async () => {
+      let data = await chai.request(server)
+        .post('/signup')
+        .send({
+          username: 'abcabc',
+          password: 'abcabc',
+          firstName: 'firstname',
+          lastName: 'lastname',
+          phone: '123456789',
+          address: 'street',
+          city: 'Madison',
+          state: 'wi',
+          zipcode: '12345',
+          email: 'email@wisc.edu'
+        });
+        
+        assert.equal(data.status, 200, "status was not 200");
+        assert.instanceOf(data, Object, "data is not an object");
+        data = JSON.parse(data.text);
+        userToken = data.token;
+    });
+  });
+
+  /*
+  * Test the /logout route 
+  */
+  describe('/logout - using header and not cookies', () => {
+    it('should log the user out', async () => {
+      let data = await chai.request(server)
+                    .post('/logout')
+                    .set('x-access-token', userToken, 'Cookie', 'jwt=');
+                    
+      assert.equal(data.status, 200, "status was not 200");
+      assert.instanceOf(data, Object, "data is not an object");
+      var res = JSON.parse(data.res.text);
+      var expected = { message: 'Successfully logged out!' };
+      assert.deepEqual(res, expected, "json result does not match expected")
+    });
+  });
+
+
+  // Agent is necessary to save cookies
+  const agent = chai.request.agent(server);
 
   /*
   * Test that update user info is not available while logged out
@@ -49,47 +96,6 @@ describe('Auth', () => {
       );
     });
   });
-
-  /*
-  * Test the /signup route
-  */
-  describe('/signup', () => {
-    it('it should create a new user account', async () => {
-      let data = await(agent
-        .post('/signup')
-        .send({
-          username: 'abcabc',
-          password: 'abcabc',
-          firstName: 'firstname',
-          lastName: 'lastname',
-          phone: '123456789',
-          address: 'street',
-          city: 'Madison',
-          state: 'wi',
-          zipcode: '12345',
-          email: 'email@wisc.edu'
-        })
-      );
-        assert.equal(data.status, 200, "status was not 200");
-        assert.instanceOf(data, Object, "data is not an object");
-    });
-  });
-
-  /*
-  * Test the /logout route
-  */
-  describe('/logout', () => {
-    it('should log the user out', async () => {
-      let data = await(agent
-        .post('/logout')
-      );
-        assert.equal(data.status, 200, "status was not 200");
-        assert.instanceOf(data, Object, "data is not an object");
-        var res = JSON.parse(data.res.text);
-        var expected = { message: 'Successfully logged out!' };
-        assert.deepEqual(res, expected, "json result does not match expected")
-    });
-  });
   
   /*
   * Test the /login route
@@ -103,11 +109,11 @@ describe('Auth', () => {
           password: "abcabc"
         })
       );
-        assert.equal(data.status, 200, "status was not 200");
-        assert.instanceOf(data, Object, "data is not an object");
-        var res = JSON.parse(data.res.text);
-        assert.equal(res['profile']['username'], "abcabc", "username did not match");
-        assert.equal(res['profile']['type'], "user", "type is incorrect");  
+      assert.equal(data.status, 200, "status was not 200");
+      assert.instanceOf(data, Object, "data is not an object");
+      var res = JSON.parse(data.res.text);
+      assert.equal(res['profile']['username'], "abcabc", "username did not match");
+      assert.equal(res['profile']['type'], "user", "type is incorrect");  
     });
   });
 
