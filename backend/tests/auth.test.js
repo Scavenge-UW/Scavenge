@@ -51,7 +51,7 @@ describe('Auth', () => {
   /*
   * Test the /logout route 
   */
-  describe('/logout - using header and not cookies', () => {
+  describe('/logout - using header and not cookies (depends on test above)', () => {
     it('should log the user out', async () => {
       let data = await chai.request(server)
                     .post('/logout')

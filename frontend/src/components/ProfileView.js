@@ -28,7 +28,6 @@ class ProfileView extends Component {
   }
 
   onSubmit(e) {
-    //TODO: implement actual functionalities
     e.preventDefault();
 
     const user = {
@@ -43,8 +42,6 @@ class ProfileView extends Component {
       firstName: this.state.first_name,
       lastName: this.state.last_name,
     };
-
-    console.log(user); //TODO: Remove this debugging statement
 
     if (
       this.state.username &&
