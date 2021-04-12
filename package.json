@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "nyc mocha 'backend/tests/**/*.js' --recursive --timeout 60000 --exit  || true"
+    "test": "nyc mocha 'backend/tests/**/*.js' --recursive --timeout 60000 --exit  || true",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",

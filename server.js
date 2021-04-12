@@ -45,6 +45,11 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+}
+
 // 'Use' routes here
 app.use("/", foodRoutes);
 app.use('/', authRoutes);
