@@ -1,7 +1,6 @@
-//import { userConstants } from '../constants';
-//import { userService } from '../../services/auth.service.js';
-//import { alertActions } from './alert.actions.js';
-//import { history } from '../../helpers';
+import  {userConstants}  from '../constants/user.constants.js';
+import AuthService  from '../services/auth.service.js';
+import  {alertActions}  from './alert.actions.js';
 
 export const userActions = {
     login,
@@ -15,15 +14,16 @@ function login(username, password) {
     return dispatch => {
         dispatch(request({ username }));
 
-        userService.login(username, password)
+        AuthService.login(username, password)
             .then(
                 user => {
                     dispatch(success(user));
-                    history.push('/');
+                    return 0;
                 },
                 error => {
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
+                    return 1;
                 }
             );
     };
@@ -34,7 +34,7 @@ function login(username, password) {
 }
 
 function logout() {
-    userService.logout();
+    AuthService.logout();
     return { type: userConstants.LOGOUT };
 }
 
@@ -42,16 +42,17 @@ function register(user) {
     return dispatch => {
         dispatch(request(user));
 
-        userService.register(user)
+        AuthService.register(user)
             .then(
                 user => {
                     dispatch(success());
-                    history.push('/login');
                     dispatch(alertActions.success('Registration successful'));
+                    return 0;
                 },
                 error => {
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
+                    return 1;
                 }
             );
     };
@@ -65,7 +66,7 @@ function getAll() {
     return dispatch => {
         dispatch(request());
 
-        userService.getAll()
+        AuthService.getAll()
             .then(
                 users => dispatch(success(users)),
                 error => dispatch(failure(error.toString()))
@@ -82,7 +83,7 @@ function _delete(id) {
     return dispatch => {
         dispatch(request(id));
 
-        userService.delete(id)
+        AuthService.delete(id)
             .then(
                 user => dispatch(success(id)),
                 error => dispatch(failure(id, error.toString()))

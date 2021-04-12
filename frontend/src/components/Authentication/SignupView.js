@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { userActions } from '../../actions/user.actions.js';
 
 class SignupView extends Component {
   constructor(props) {
@@ -249,13 +248,6 @@ class SignupView extends Component {
 }
 
 
-function mapState(state) {
-    const { registering } = state.registration;
-    return { registering };
-}
 
-const actionCreators = {
-    register: userActions.register
-}
 
-export default connect(mapState, actionCreators)(SignupView);
+export default SignupView;
