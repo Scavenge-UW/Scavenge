@@ -204,7 +204,7 @@ describe('Pantries', () => {
       data = await(agent
         .put('/pantries/1/46')
         .send({
-          "quantity": "1"
+          "quantity": "20"
         })
       );     
       
@@ -218,7 +218,7 @@ describe('Pantries', () => {
       data = JSON.parse(data.text);
       //console.log(data);
       const appleInventory = data.foods[0].quantity;
-      assert.equal(appleInventory, "1", "The inventory did not update correctly.");
+      assert.equal(appleInventory, "20", "The inventory did not update correctly.");
     });
   });
 
