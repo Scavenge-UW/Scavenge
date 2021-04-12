@@ -52,6 +52,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("frontend/build"));
+  // Upon recieving reqs, send back the index.html assuming we ran 'npm build' in the frontend
+  app.get('*', (req, res) => {
+    res.sendFile(_dirname, 'frontend', 'build', 'index.html');
+  });
 }
 
 // 'Use' routes here

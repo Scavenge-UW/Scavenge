@@ -5,9 +5,11 @@
   "main": "server.js",
   "scripts": {
     "test": "nyc mocha 'backend/tests/**/*.js' --recursive --timeout 60000 --exit  || true",
-    "server": "node server.js",
-    "client": "cd frontend; npm run start",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "server": "nodemon server.js",
+    "client": "npm start --prefix frontend",
+    "clientinstall": "npm i --prefix frontend",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
     "type": "git",
@@ -30,12 +32,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "fuse.js": "^6.4.6",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.7",
-    "react-map-gl-geocoder": "^2.1.6",
-    "react-notifications": "^1.7.2",
     "socket.io": "^4.0.0"
   },
   "devDependencies": {
