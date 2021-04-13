@@ -141,8 +141,11 @@ function App(props) {
               <Route path="/cart">
                 <CartView username={username} />
               </Route>
-              <Route path="/">
+              <Route exact path="/">
                 <HomeView profile={profile} />
+              </Route>
+              <Route path="*">
+                <div>404 Not Found</div>
               </Route>
             </Switch>
           </div>
