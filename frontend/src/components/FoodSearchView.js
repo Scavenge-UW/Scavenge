@@ -70,11 +70,26 @@ function FoodSearchView() {
       const foodObj = allFoods.find((food) => {
         return food.name === selection[0];
       });
-      const response = await FoodService.searchFood(foodObj.id);
+      const response = await FoodService.searchFood(selection);
       setSearchResult(response);
     }
 
     // setSearchResult(dummySearchResult);
+  };
+
+  /**
+   * Returns a full address of a pantry
+   *
+   */
+  const getAddress = (pantry) => {
+    console.log(pantry);
+    let address = "";
+    address += pantry.address + ", ";
+    address += pantry.city + ", ";
+    address += pantry.state + " ";
+    address += pantry.zip;
+
+    return address;
   };
 
   /**
@@ -97,7 +112,7 @@ function FoodSearchView() {
               }
             </Link>
           </td>
-          <td>{pantry.quantity}</td>
+          <td>{getAddress(pantry)}</td>
         </tr>
       );
     }
@@ -112,7 +127,7 @@ function FoodSearchView() {
           <thead>
             <tr>
               <th>Pantry</th>
-              <th>Quantity</th>
+              <th>Address</th>
             </tr>
           </thead>
           <tbody>{getPantryCards()}</tbody>
