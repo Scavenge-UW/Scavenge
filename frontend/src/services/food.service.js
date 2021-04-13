@@ -24,10 +24,11 @@ function addFood(food) {
   });
 }
 
-function searchFood(food_id) {
+function searchFood(food_names) {
   return request({
-    url: "/pantries/search/" + food_id,
-    method: "GET",
+    url: "/pantries/search/",
+    method: "POST",
+    data: { foods: food_names },
   });
 }
 
