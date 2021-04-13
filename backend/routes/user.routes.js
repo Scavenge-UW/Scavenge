@@ -11,18 +11,18 @@ const authMiddleware = require("../middleware/auth.middleware");
 
 // Make a reservation
 router.route('/reserve/:pantry_id')
-  .post(reserveAction);
+  .post(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, reserveAction);
 
 // Add item to wishlist
 router.route('/user/:username/wishlist/add')
-  .post(addToWishlistAction);
+  .post(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, addToWishlistAction);
 
 // Get user's wishlist
 router.route('/user/:username/wishlist')
-  .get(getWishlistAction);
+  .get(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, getWishlistAction);
 
 // Remove from user's wishlist
 router.route('/user/:username/wishlist/remove/:wishlist_id')
-  .delete(removeFromWishlistAction);
+  .delete(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, removeFromWishlistAction);
 
 module.exports = router; // We need this at the end of every route file

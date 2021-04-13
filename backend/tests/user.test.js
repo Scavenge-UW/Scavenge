@@ -19,6 +19,15 @@ describe('User', async () => {
     globalUseTestDB = 1;
     await(db.deleteAllDataAction())
     // user 'sean1' and pantry 1 are not deleted
+
+     // Login as Sean to pass middleware checks
+     await(agent
+      .post('/login')
+      .send({
+        username: "sean1",
+        password: "abc"
+      })
+    );
   })
 
   // beforeEach((done) => { 

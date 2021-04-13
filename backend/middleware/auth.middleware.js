@@ -70,6 +70,7 @@ exports.verifyAndGetUserInfo = async (req, res, next) => {
 
           // Get pantries they work for
           const isEmployeeOf = await authDB.isEmployeeOf(req, res, {"username": req.user.username});
+          let isEmployeeOfArr = [];
           isEmployeeOf.forEach(data => {
             isEmployeeOfArr.push(data['pantry_id']);
           });
