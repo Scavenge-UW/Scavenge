@@ -53,11 +53,6 @@ app.use('/', authRoutes);
 app.use("/", pantryRoutes);
 app.use("/", userRoutes);
 
-// Last case: url not found
-app.get('/*', function(req, res){
-  res.json({ message: "404 Not found" });
-});
-
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("frontend/build"));
@@ -66,6 +61,12 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(_dirname, 'frontend', 'build', 'index.html'));
   });
 }
+
+// Last case: url not found
+app.get('/*', function(req, res){
+  res.json({ message: "404 Not found" });
+});
+
 
 // Start server
 const PORT = process.env.PORT || 8080;
