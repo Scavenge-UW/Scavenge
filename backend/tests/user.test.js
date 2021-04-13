@@ -80,6 +80,25 @@ describe('User', async () => {
     );
   });
 
+  // Get User's reservations
+  it('should get user reservations', (done) => {
+    agent
+      .get('/user/sean1/reservations')
+      .end((err, res) => {
+        var expected = {
+          res_foods: [
+            {
+              res_food_id: 46,
+              res_food_name: "Apple",
+              res_food_quantity: 1
+            }
+          ]
+        };
+        assert.deepEqual(JSON.parse(res.text), expected, "response did not match expected.")
+        done();
+      })
+  })  
+
   // Add item to wishlist
   it('should add item to wishlist', (done) => {
     agent

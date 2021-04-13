@@ -5,7 +5,8 @@ const {
   reserveAction, 
   addToWishlistAction, 
   getWishlistAction, 
-  removeFromWishlistAction } = require("../controllers/user.controllers.js");
+  removeFromWishlistAction,
+  getUserResAction } = require("../controllers/user.controllers.js");
 
 const authMiddleware = require("../middleware/auth.middleware");
 
@@ -24,5 +25,9 @@ router.route('/user/:username/wishlist')
 // Remove from user's wishlist
 router.route('/user/:username/wishlist/remove/:wishlist_id')
   .delete(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, removeFromWishlistAction);
+
+// Get user reservations
+router.route('/user/:username/reservations')
+  .get(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, getUserResAction);
 
 module.exports = router; // We need this at the end of every route file
