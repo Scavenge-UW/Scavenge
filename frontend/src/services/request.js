@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let baseURL = 'http://localhost:8080';
 if (process.env.NODE_ENV === "production") {
-  baseURL = process.env.NODE_ENV;
+  baseURL = 'http://localhost:' + process.env.PORT;
 }
 
 const client = axios.create({
