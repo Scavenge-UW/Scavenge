@@ -5,11 +5,13 @@
   "main": "server.js",
   "scripts": {
     "test": "nyc mocha 'backend/tests/**/*.js' --recursive --timeout 60000 --exit  || true",
+    "build": "cd frontend && npm run build",
+    "install-frontend": "cd frontend && npm install",
+    "heroku-postbuild": "npm run install-frontend && npm run build",
     "server": "nodemon server.js",
     "client": "npm start --prefix frontend",
-    "clientinstall": "npm i --prefix frontend",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+    "start-all": "npm run server\" \"npm run client\"",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
