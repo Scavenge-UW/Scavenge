@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let baseURL = 'http://localhost:3000';
+let baseURL = 'http://localhost:8080';
 if (process.env.NODE_ENV === "production") {
   baseURL = 'https://scavenge-uw.herokuapp.com/';
 }
