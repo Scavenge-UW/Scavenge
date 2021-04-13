@@ -5,9 +5,6 @@ import { Col, Row, Container } from "react-bootstrap";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import mapboxgl from 'mapbox-gl';
-
-// eslint-disable-next-line import/no-webpack-loader-syntax
-mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 import Geocoder from "react-map-gl-geocoder";
 
 import { faUser, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +15,9 @@ import '../css/Map.css';
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import PantryService from '../services/pantry.service';
 import { Link } from 'react-router-dom';
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const geolocateControlStyle= {
   left: 10,
