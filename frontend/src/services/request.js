@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+let baseURL = 'http://localhost:8080';
+if (process.env.NODE_ENV === "production") {
+  baseURL = process.env.NODE_ENV;
+}
+
 const client = axios.create({
-  baseURL: 'http://localhost:8080'
+  baseURL: baseURL
 });
 
 const request = function(options) {
