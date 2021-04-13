@@ -1,7 +1,3 @@
-// Global declaration. Needs to be before package imports.
-var globalUseTestDB;
-global.globalUseTestDB = globalUseTestDB;
-
 // Import packages
 require('dotenv').config();
 const express    = require("express"),
@@ -9,7 +5,8 @@ const express    = require("express"),
       cors       = require("cors"),
       jwt        = require("jsonwebtoken"),
       bcrypt     = require("bcryptjs"),
-      cookieParser = require("cookie-parser");
+      cookieParser = require("cookie-parser"),
+      path         = require("path");
 
 // Import routes
 const foodRoutes = require('./backend/routes/food.routes');
@@ -24,7 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 global.jwt = jwt;
 global.bcrypt = bcrypt;
-
+var globalUseTestDB;
+global.globalUseTestDB = globalUseTestDB;
 
 
 // let corsOption = {
@@ -49,11 +47,6 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Express only serves static assets in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("frontend/build"));
-}
-
 // 'Use' routes here
 app.use("/", foodRoutes);
 app.use('/', authRoutes);
@@ -64,6 +57,15 @@ app.use("/", userRoutes);
 app.get('/*', function(req, res){
   res.json({ message: "404 Not found" });
 });
+
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(_dirname, 'frontend', 'build', 'index.html'));
+  });
+}
 
 // Start server
 const PORT = process.env.PORT || 8080;
