@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-let baseURL = 'http://localhost:8080';
+let baseURL = 'http://localhost:3000';
 if (process.env.NODE_ENV === "production") {
-  baseURL = 'http://localhost:' + process.env.PORT;
+  baseURL = 'https://scavenge-uw.herokuapp.com/';
 }
 
 const client = axios.create({
