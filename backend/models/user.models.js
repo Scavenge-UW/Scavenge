@@ -130,7 +130,7 @@ exports.removeFromWishlist = async (req, res) => {
 exports.getUserRes = async (req, res) => {
   const query = `
     SELECT
-      rf.id as res_food_id,
+      f.id as res_food_id,
       f.name as res_food_name,
       rf.quantity as res_food_quantity
     FROM reservation r
