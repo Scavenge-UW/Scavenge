@@ -4,6 +4,10 @@ import { Col, Row, Container } from "react-bootstrap";
 //import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
+import mapboxgl from 'mapbox-gl';
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 import Geocoder from "react-map-gl-geocoder";
 
 import { faUser, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
