@@ -198,3 +198,24 @@ exports.removeFromWishlistAction = (req, res) => {
     });
   });
 }
+
+exports.getUserResAction = (req, res) => {
+  let result = {};
+  let resultArr = [];
+  db.getUserRes(req, res).then(userRes => {
+    userRes.forEach((element, index) => {
+      resultArr[index] = {
+        res_food_id: element['res_food_id'],
+        res_food_name: element['res_food_name'],
+        res_food_quantity: element['res_food_quantity']
+      };
+    });
+    result = {res_foods: resultArr};    
+    return res.status(200).json(result);
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to retreive user reservations due to server error."
+    });
+  });
+}
