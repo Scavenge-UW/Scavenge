@@ -106,7 +106,7 @@ exports.addToWishlistAction = (req, res) => {
 exports.getWishlistAction = (req, res) => {
   let result = {};
   db.getWishlist(req, res).then(pantryDetail => {
-     pantryDetail.forEach(element => {
+    pantryDetail.forEach(element => {
       if (!(element['pantry_id'] in result)) {
         result[element['pantry_id']] = {};
         result[element['pantry_id']]['foods'] = {};
@@ -201,16 +201,56 @@ exports.removeFromWishlistAction = (req, res) => {
 
 exports.getUserResAction = (req, res) => {
   let result = {};
-  let resultArr = [];
+ 
   db.getUserRes(req, res).then(userRes => {
-    userRes.forEach((element, index) => {
-      resultArr[index] = {
-        res_food_id: element['res_food_id'],
-        res_food_name: element['res_food_name'],
-        res_food_quantity: element['res_food_quantity']
-      };
+    userRes.forEach(element => {
+      if (!(element['reservation_id'] in result)) {
+        result[element['reservation_id']] = {};
+        result[element['reservation_id']]['res_foods'] = {};
+      }
+    }); 
+
+    userRes.forEach(element => {
+      result[element['reservation_id']]['reservation_id']    = element['reservation_id'];
+      result[element['reservation_id']]['username']          = element['username'];
+      result[element['reservation_id']]['order_time']        = element['order_time'];
+      result[element['reservation_id']]['estimated_pick_up'] = element['estimated_pick_up'];
+      result[element['reservation_id']]['picked_up_time']    = element['picked_up_time'];
+      result[element['reservation_id']]['approved']          = element['approved'];
+      result[element['reservation_id']]['cancelled']         = element['cancelled'];
+      result[element['reservation_id']]['res_foods'][element['res_food_id']] = {};
+      result[element['reservation_id']]['res_foods'][element['res_food_id']]['res_food_id']       = element['res_food_id'];
+      result[element['reservation_id']]['res_foods'][element['res_food_id']]['res_food_name']     = element['res_food_name'];
+      result[element['reservation_id']]['res_foods'][element['res_food_id']]['res_food_quantity'] = element['res_food_quantity'];
     });
-    result = {res_foods: resultArr};    
+
+    // Convert into array format without using ids as keys
+    let resultsArr = [];
+    for (let resID in result) {
+      const reservation = result[resID];
+      let resInfo = {};
+      resInfo['reservation_id']     = reservation['reservation_id'];
+      resInfo['username']           = reservation['username'];
+      resInfo['order_time']         = reservation['order_time'];
+      resInfo['estimated_pick_up']  = reservation['estimated_pick_up'];
+      resInfo['picked_up_time']     = reservation['picked_up_time'];
+      resInfo['approved']           = reservation['approved'];
+      resInfo['cancelled']          = reservation['cancelled'];
+
+      resInfo['res_foods'] = [];
+
+      for (const [foodKey, resFoodData] of Object.entries(reservation['res_foods'])) {
+        let resFood = {};
+        resFood['res_food_id']       = resFoodData['res_food_id'];
+        resFood['res_food_name']     = resFoodData['res_food_name'];
+        resFood['res_food_quantity'] = resFoodData['res_food_quantity'];
+
+        resInfo['res_foods'].push(resFood);
+      }
+
+      resultsArr.push(resInfo);
+    }
+    result = { reservations: resultsArr };
     return res.status(200).json(result);
   }).catch(error => {
     console.log(error);
