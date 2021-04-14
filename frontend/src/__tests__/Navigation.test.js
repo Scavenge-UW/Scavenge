@@ -48,7 +48,7 @@ describe("Navigation tests", () => {
 
   it("should have four buttons for civilian users", () => {
     // There should be one button in LoginView
-    expect(nonAdminWrapper.find("NavLink")).toHaveLength(4);
+    expect(nonAdminWrapper.find("NavLink")).toHaveLength(5);
     expect(
       nonAdminWrapper.findWhere((n) => n.key() === "Search Foods")
     ).toHaveLength(1);
