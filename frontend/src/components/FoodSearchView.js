@@ -20,6 +20,8 @@ import FoodService from "../services/food.service";
 import FoodItemCard from "../components/FoodItemCard";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 
+import '../css/FoodSearch.css';
+
 /**
  * FoodSearchView where users can search for a specific food item
  *
@@ -74,7 +76,6 @@ function FoodSearchView() {
       setSearchResult(response);
     }
 
-    // setSearchResult(dummySearchResult);
   };
 
   /**
@@ -153,21 +154,21 @@ function FoodSearchView() {
             Food Name
           </Form.Label>
           <Typeahead
-            placeholder="Choose a food..."
-            className="mr-2"
+            placeholder="Choose a food... "
+            className="search"
             labelKey="food"
             options={allFoods.map((food) => food.name)}
             onChange={setSelection}
             id="foodInput"
             multiple
           />
-          <Button className="mb-2" onClick={onClickSearchButton}>
+          <Button className="mb-2 search-icon" onClick={onClickSearchButton}>
             <FontAwesomeIcon icon={faSearch} />
           </Button>
         </Form>
       </Row>
       <Row className="justify-content-center mr-5">
-        <p>Tab to autocomplete food</p>
+        <small><em>Tab to autocomplete food</em></small>
       </Row>
       <Row className="justify-content-center mt-4">{showSearchResults()}</Row>
     </Container>
