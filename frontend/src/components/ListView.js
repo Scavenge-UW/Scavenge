@@ -9,6 +9,8 @@ import Button from 'react-bootstrap/Button';
 import { faSearch, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { Link } from 'react-router-dom';
+
 // Redux
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -144,6 +146,8 @@ class ListView extends Component {
                   <strong>Website: </strong>{pantry.website}
                   <br></br>
                   <strong>Phone: </strong>{pantry.phone_number}
+                  <br></br>
+                  <Link to={"/pantries/" + pantry.pantry_id}><strong>Click here for details</strong></Link>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -155,7 +159,7 @@ class ListView extends Component {
 
     return (
       <div className="search-wrapper">
-        <h6 className="text-center">All Food Pantries</h6>
+        <h4 className="text-center">All Food Pantries</h4>
         <div className="Search">
           <input
             className="SearchInput"
