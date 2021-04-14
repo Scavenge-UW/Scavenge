@@ -85,16 +85,17 @@ describe('User', async () => {
     agent
       .get('/user/sean1/reservations')
       .end((err, res) => {
-        var expected = {
-          res_foods: [
+        var expected = [
             {
               res_food_id: 46,
               res_food_name: "Apple",
               res_food_quantity: 1
             }
-          ]
-        };
-        assert.deepEqual(JSON.parse(res.text), expected, "response did not match expected.")
+          ];
+        let result = JSON.parse(res.text);
+        assert.deepEqual(result['reservations'][0]['res_foods'], expected, "response did not match expected.");
+        assert.lengthOf(result['reservations'], 1, "should only be 1 reservation");
+        assert.lengthOf(result['reservations'][0]['res_foods'], 1, "should only be 1 food");
         done();
       })
   })  
