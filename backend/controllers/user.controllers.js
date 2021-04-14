@@ -212,6 +212,8 @@ exports.getUserResAction = (req, res) => {
 
     userRes.forEach(element => {
       result[element['reservation_id']]['reservation_id']    = element['reservation_id'];
+      result[element['reservation_id']]['pantry_id']         = element['pantry_id'];
+      result[element['reservation_id']]['name']              = element['name'];
       result[element['reservation_id']]['username']          = element['username'];
       result[element['reservation_id']]['order_time']        = element['order_time'];
       result[element['reservation_id']]['estimated_pick_up'] = element['estimated_pick_up'];
@@ -230,6 +232,8 @@ exports.getUserResAction = (req, res) => {
       const reservation = result[resID];
       let resInfo = {};
       resInfo['reservation_id']     = reservation['reservation_id'];
+      resInfo['pantry_id']          = reservation['pantry_id'];
+      resInfo['name']               = reservation['name'];
       resInfo['username']           = reservation['username'];
       resInfo['order_time']         = reservation['order_time'];
       resInfo['estimated_pick_up']  = reservation['estimated_pick_up'];
