@@ -281,6 +281,7 @@ class ProfileView extends Component {
             variant="primary"
             style={{ marginLeft: "20px" }}
             onClick={this.onSubmit.bind(this)}
+            type="submit"
           >
             Submit
           </Button>
@@ -289,7 +290,7 @@ class ProfileView extends Component {
             style={{ marginLeft: "20px" }}
             onClick={() => {
               this.setState({ toHomeView: true });
-              alert("canceled editing profile redirecting you to home page");
+              toast.info("Canceled editing profile.\nRedirecting you home.");
             }}
           >
             Cancel

@@ -139,7 +139,8 @@ function FoodSearchView() {
     }
   };
 
-  const onClickSearchButton = async () => {
+  const onClickSearchButton = async (e) => {
+    e.preventDefault();
     await getSearchResults();
   };
 
@@ -162,7 +163,11 @@ function FoodSearchView() {
             id="foodInput"
             multiple
           />
-          <Button className="mb-2 search-icon" onClick={onClickSearchButton}>
+          <Button 
+            className="mb-2 search-icon"
+            onClick={onClickSearchButton}
+            type="submit"
+          >
             <FontAwesomeIcon icon={faSearch} />
           </Button>
         </Form>
