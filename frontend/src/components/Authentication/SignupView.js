@@ -24,7 +24,9 @@ class SignupView extends Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  async submitForm() {
+  async submitForm(e) {
+    e.preventDefault();
+
     const user = {
       username: this.state.username,
       password: this.state.password,
@@ -271,6 +273,7 @@ class SignupView extends Component {
             variant="primary"
             style={{ marginLeft: "20px" }}
             onClick={this.submitForm}
+            type="submit"
           >
             Submit
           </Button>

@@ -223,7 +223,7 @@ class Map extends React.PureComponent {
             >
               <p><strong>Name: </strong>{this.state.selectedPantry.name}</p>
               <p><strong>Address: </strong>{this.state.selectedPantry.address}</p>
-              <p><Link to={"/pantries/" + this.state.selectedPantry.pantry_id}><strong>Click here for detail</strong></Link></p>
+              <p><Link to={"/pantries/" + this.state.selectedPantry.pantry_id}><strong>Click here for details</strong></Link></p>
             </Popup>
             ) : null}
         </ReactMapGL>

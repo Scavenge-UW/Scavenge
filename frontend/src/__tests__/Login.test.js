@@ -31,7 +31,9 @@ describe("Login tests", () => {
 
   it("should not redirect to home if credentials are empty", async () => {
     const getLoginButton = wrapper.find("Button");
-    await getLoginButton.simulate("click");
+    await getLoginButton.simulate("click", {
+      preventDefault: jest.fn(),
+    });
 
     expect(wrapper.state("toHomeView")).toEqual(false);
   });
@@ -62,7 +64,9 @@ describe("Login tests", () => {
       },
     });
     const getLoginButton = wrapper.find("Button");
-    await getLoginButton.simulate("click");
+    await getLoginButton.simulate("click", {
+      preventDefault: jest.fn(),
+    });
 
     expect(wrapper.state("toHomeView")).toEqual(true);
     expect(wrapper.find("FormControl#username_input")).toHaveLength(0);
