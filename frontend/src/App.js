@@ -12,6 +12,7 @@ import SignupView from "./components/Authentication/SignupView";
 import HomeView from "./components/HomeView";
 import PantryAdminView from "./components/PantryAdminView";
 import PantryDetailView from "./components/PantryDetailView";
+import MyReservationsView from "./components/MyReservationsView";
 import FoodSearchView from "./components/FoodSearchView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
@@ -140,6 +141,9 @@ function App(props) {
               </Route>
               <Route path="/cart">
                 <CartView username={username} />
+              </Route>
+              <Route path="/reservations">
+                <MyReservationsView username={username} />
               </Route>
               <Route exact path="/">
                 <HomeView profile={profile} />
