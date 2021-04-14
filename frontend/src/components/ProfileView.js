@@ -278,7 +278,7 @@ class ProfileView extends Component {
           </Form.Row>
 
           <Button
-            variant="primary"
+            variant="dark"
             style={{ marginLeft: "20px" }}
             onClick={this.onSubmit.bind(this)}
             type="submit"

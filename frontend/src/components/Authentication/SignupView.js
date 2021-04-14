@@ -270,7 +270,7 @@ class SignupView extends Component {
           </Form.Row>
 
           <Button
-            variant="primary"
+            variant="dark"
             style={{ marginLeft: "20px" }}
             onClick={this.submitForm}
             type="submit"
