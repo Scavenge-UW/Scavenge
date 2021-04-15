@@ -6,7 +6,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 
 // import for components
 import DashboardMessages from "./DashboardMessages";
@@ -149,6 +148,12 @@ class DashboardView extends Component {
   // ******************* DashboardDescriptionCard.js ************************
   // ************************************************************************
 
+  /**
+   * Update pantry detail for state
+   *
+   * @param {*} updates - contains description, address, zipcode, city, state,
+   *                      phone, and link to pantry's website
+   */
   updateAllDetails(updates) {
     this.setState({
       description: updates[0],
@@ -164,17 +169,21 @@ class DashboardView extends Component {
   // ************************************************************************
   // ******************* DashboardOpenHourCards *****************************
   // ************************************************************************
-
+  /**
+   * Update pantry open hour for state
+   * @param {*} updDay - the day that is updated (e.g. Monday, etc)
+   * @param {*} updates - updates made by user (e,g. updates on open, close hours, and details)
+   */
   updateOpenHours(updDay, updates) {
     this.state.hours.map((item) => {
       if (item.day === updDay) {
-        console.log("5", item.day);
         item.open = updates[0];
         item.close = updates[1];
         item.detail = updates[2];
-        console.log("6", item.open, item.close, item.detail);
-        console.log("7", { ...this.state.hours });
       }
+    });
+    this.setState({
+      hours: this.state.hours,
     });
   }
 
@@ -206,8 +215,7 @@ class DashboardView extends Component {
   }
 
   /**
-   *
-   * @returns
+   * render componenet for messages box.
    */
   getMessageAndFunctions() {
     return (
@@ -233,8 +241,7 @@ class DashboardView extends Component {
   }
 
   /**
-   *
-   * @returns
+   * render component for description card.
    */
   getDescriptionCards() {
     return (
@@ -261,6 +268,9 @@ class DashboardView extends Component {
     );
   }
 
+  /**
+   * renders components for open hours card.
+   */
   getOpenHoursCards() {
     return (
       <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
@@ -281,7 +291,9 @@ class DashboardView extends Component {
                 open={item.open}
                 close={item.close}
                 detail={item.detail}
-                updateOpenHours={this.updateOpenHours.bind(this)}
+                updateOpenHours={(updDay, updates) =>
+                  this.updateOpenHours(updDay, updates)
+                }
               />
             ))}
           </Row>

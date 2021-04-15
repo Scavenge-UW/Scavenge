@@ -337,7 +337,7 @@ class DashboardMessages extends Component {
    */
   render() {
     /*
-    TODO: add a expand button to hide some reservation messages when len(messages) > 2
+    TODO: add a expand button to hide some reservation messages when len(messages) > 3
     */
     const viewMessages = this.props.rsvns
       .sort((a, b) => b.reservation_id - a.reservation_id)
