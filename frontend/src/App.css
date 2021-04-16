@@ -2,24 +2,27 @@
   text-align: center;
 }
 
-body {
-  background-repeat: repeat-y !important;
+html {
+  height: 100%;
 }
 
-body:before {
-  content: ' ';
-  background-image: url('./images/bg-home.jpg');
+body {
+  background-repeat: repeat-y;
+  min-height: 100%;
+}
+
+body {
+  content: " ";
+  background-image: url("./images/bg-home.jpg");
   background-size: cover;
   background-repeat: repeat-y;
-  position: absolute;
-  opacity: 0.3;
+  position: relative;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
-  max-height: 1500px;
-  height: 5000px;
   z-index: -300;
+  min-height: 100%;
 }
 
 .App-logo {

@@ -74,6 +74,8 @@ function PantryDetailView(props) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
+          isLoggedIn={props.isLoggedIn}
+          isAdmin={props.isAdmin}
           username={props.username}
           key={foodItem.food_id}
           foodItem={foodItem}

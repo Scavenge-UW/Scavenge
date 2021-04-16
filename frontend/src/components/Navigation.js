@@ -9,15 +9,16 @@ class Navigation extends Component {
     super(props);
     this.state = {
       message: "Welcome to the Welcome Page!",
-      navbar4Admin: ["Manage Pantry", "Profile", "Help","Logout"],
+      navbar4Admin: ["Search Foods", "Manage Pantry", "Help", "Profile", "Logout"],
       navbar4Customer: [
         "Search Foods",
         "Reservations",
         "Cart",
+        "Help",  
         "Profile",
-        "Logout", "Help"
+        "Logout"
       ],
-      navbar4NotLoggedIn: ["Search Foods", "Login", "Signup"],
+      navbar4NotLoggedIn: ["Search Foods", "Help", "Login", "Signup"],
     };
   }
 

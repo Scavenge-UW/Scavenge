@@ -103,6 +103,10 @@ function App(props) {
     return employeeOf.length !== 0;
   };
 
+  const isLoggedIn = () => {
+    return profile !== "";
+  };
+
   return (
     <Provider store={store}>
       <div id="body">
@@ -134,7 +138,11 @@ function App(props) {
                 <PantryAdminView />
               </Route>
               <Route path="/pantries/:pantry_id">
-                <PantryDetailView username={username} />
+                <PantryDetailView
+                  isLoggedIn={isLoggedIn}
+                  isAdmin={isAdmin}
+                  username={username}
+                />
               </Route>
               <Route path="/search-food/:query">
                 <FoodSearchView />
