@@ -44,9 +44,9 @@ router.put('/pantries/:pantry_id/reservations/:action/:reservation_id', authMidd
 router.post('/pantries/search/', foodSearchAction);
 
 // Add user to pantry
-router.post('/pantries/:pantry_id/user/:username', pantryAddEmployeeAction);
+router.post('/pantries/:pantry_id/user/:username', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryAddEmployeeAction);
 
 // Remove user from pantry
-router.delete('/pantries/:pantry_id/user/:username', pantryRemoveEmployeeAction);
+router.delete('/pantries/:pantry_id/user/:username', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryRemoveEmployeeAction);
 
 module.exports = router; // We need this at the end of every route file
