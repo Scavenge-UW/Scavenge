@@ -322,6 +322,7 @@ class FoodItemCard extends Component {
                   </InputGroup.Prepend>
                   <FormControl
                     type="number"
+                    onChange={this.onUpdateCartItemQuantity.bind(this)}
                     disabled={!this.isInStock()}
                     defaultValue={1}
                     ref={this.cartQuantity}
@@ -403,6 +404,7 @@ class FoodItemCard extends Component {
                     </Button>
                   </InputGroup.Prepend>
                   <FormControl
+                    onChange={this.onUpdateCartItemQuantity.bind(this)}
                     type="number"
                     defaultValue={this.props.cartQuantity}
                     ref={this.cartQuantity}
