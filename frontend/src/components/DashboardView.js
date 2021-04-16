@@ -224,7 +224,7 @@ class DashboardView extends Component {
         <Row className="justify-content-center">
           <h4>Messages </h4>
         </Row>
-        {/* Sub-session content (TODO: adjust style) */}
+        {/* Sub-session content */}
         <Row className="justify-content-center">
           <DashboardMessages
             adminMode

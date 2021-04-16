@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 
 import FoodItemCard from "../components/FoodItemCard";
 import PantryService from "../services/pantry.service";
+import formatters from "./formatters/DatetimeFormatter";
 
 /**
  * A view for user that displays details and food items in a specific pantry.
@@ -153,13 +154,13 @@ function PantryDetailView(props) {
   const showPantryHours = () => {
     Object.values(pantryDetail.hours);
     const daysOfTheWeek = {
-      1: "Sunday",
-      2: "Monday",
-      3: "Tuesday",
-      4: "Wednesday",
-      5: "Thursday",
-      6: "Friday",
-      7: "Saturday",
+      1: "Monday",
+      2: "Tuesday",
+      3: "Wednesday",
+      4: "Thursday",
+      5: "Friday",
+      6: "Saturday",
+      7: "Sunday",
     };
 
     let items = [];
@@ -167,8 +168,8 @@ function PantryDetailView(props) {
       items.push(
         <tr key={hours.day}>
           <td>{daysOfTheWeek[hours.day]}</td>
-          <td>{hours.open}</td>
-          <td>{hours.close}</td>
+          <td>{formatters.time(hours.open)}</td>
+          <td>{formatters.time(hours.close)}</td>
           <td>{hours.detail}</td>
         </tr>
       );

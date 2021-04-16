@@ -17,6 +17,7 @@ import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 // other imports
 import moment from "moment";
 import "../css/common.css";
+import formatters from "./formatters/DatetimeFormatter";
 
 class DashboardMessages extends Component {
   constructor(props) {
@@ -335,27 +336,6 @@ class DashboardMessages extends Component {
     return controls;
   }
 
-  // reference: https://stackoverflow.com/questions/50430968/converting-string-date-in-react-javascript
-  /**
-   * convert datetime string to desired format
-   * (e.g. "2018-05-18T04:00:00.000Z" to "May 18, 2018, 4:00 AM")
-   *
-   * @param {*} timeString - date time string
-   * @returns formatted date time string
-   */
-  formatDateTime(timeString) {
-    let options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    };
-    options.timeZone = "UTC";
-    // options.timeZoneName = "short";
-    return new Date(timeString).toLocaleDateString(["en-US"], options);
-  }
-
   /*
     TODO: 
     marked complete reservation with check2-circle icon
@@ -391,7 +371,7 @@ class DashboardMessages extends Component {
       },
       {
         key: "ORDERED AT:",
-        value: this.formatDateTime(rsvn.order_time),
+        value: formatters.datetime(rsvn.order_time),
         bgColor: "#F7F7F7",
       },
       {
@@ -401,13 +381,13 @@ class DashboardMessages extends Component {
       },
       {
         key: "ESTIMATED PICK UP AT:",
-        value: this.formatDateTime(rsvn.estimated_pick_up),
+        value: formatters.datetime(rsvn.estimated_pick_up),
         bgColor: "#F7F7F7",
       },
       {
         key: "PICKED UP AT:",
         value: rsvn.picked_up_time
-          ? this.formatDateTime(rsvn.picked_up_time)
+          ? formatters.datetime(rsvn.picked_up_time)
           : "not picked up",
         bgColor: "#FFFFFF",
       },
