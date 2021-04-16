@@ -48,6 +48,7 @@ export default class HelpView extends Component {
                     <li>User: See what's in stock for each pantry by using the search form or clicking a pantry</li>
                     <li>User: Make and cancel reservations</li>
                     <li>User: Ability to edit their profile</li>
+                    <li>Admin: Edit pantry information</li>
                     <li>Admin: Approve and edit reservations</li>
                     <li>Admin: Add/delete foods</li>
                     <li>Admin: Update food quantities</li>
