@@ -65,7 +65,7 @@ describe("Navigation tests", () => {
 
   it("should have correct three buttons for admin users", () => {
     // There should be one button in LoginView
-    expect(adminWrapper.find("NavLink")).toHaveLength(3);
+    expect(adminWrapper.find("NavLink")).toHaveLength(4);
     expect(
       adminWrapper.findWhere((n) => n.key() === "Manage Pantry")
     ).toHaveLength(1);

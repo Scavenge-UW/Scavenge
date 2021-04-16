@@ -73,7 +73,17 @@ describe("FoodItemCard tests", () => {
   });
 
   // FOodItemCard in DetailView
-  const wrapper4 = mount(<FoodItemCard foodItem={foodItem1} />);
+  const wrapper4 = mount(
+    <FoodItemCard
+      foodItem={foodItem1}
+      isLoggedIn={() => {
+        return true;
+      }}
+      isAdmin={() => {
+        return false;
+      }}
+    />
+  );
 
   it("should show a modal when user clicks on One Click Reserve", async () => {
     await wrapper4.find("Button#btn-one-click-reserve").simulate("click");
@@ -90,4 +100,10 @@ describe("FoodItemCard tests", () => {
     await wrapper5.find("Button#btn-cancel-edit-quantity").simulate("click");
     expect(wrapper5.state("editMode")).toEqual(false);
   });
+
+  // it("should correctly remove an item from inventory", async () => {
+  //   jest.spyOn(window, 'alert').mockImplementation(() => {return true});
+  //   await wrapper5.find("Button#btn-remove-item").simulate("click");
+  //   expect(wrapper5.state("editMode")).toEqual(true);
+  // });
 });

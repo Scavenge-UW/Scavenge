@@ -29,6 +29,9 @@ function OneClickReserveModal(props) {
         toast.error(
           "There was an error while making a reservation. Please try again later."
         );
+      })
+      .finally(() => {
+        props.onHide();
       });
   };
 
