@@ -193,7 +193,7 @@ describe('Pantries', () => {
     it('it should update the food inventory', async () => {
       // Reset inventory
       let data = await(agent
-        .put('/pantries/1/46')
+        .put('/pantries/1/Apple')
         .send({
           "quantity": "25"
         })
@@ -202,7 +202,7 @@ describe('Pantries', () => {
       // Update inventory
       
       data = await(agent
-        .put('/pantries/1/46')
+        .put('/pantries/1/Apple')
         .send({
           "quantity": "20"
         })
