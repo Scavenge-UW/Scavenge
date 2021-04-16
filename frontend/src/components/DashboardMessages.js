@@ -356,6 +356,14 @@ class DashboardMessages extends Component {
     return new Date(timeString).toLocaleDateString(["en-US"], options);
   }
 
+  /*
+    TODO: 
+    marked complete reservation with check2-circle icon
+    marked cancelled reservation with x-circle icon
+    add hover over description
+    - https://icons.getbootstrap.com
+    */
+
   /**
    * return formatted reservation status.
    */
@@ -411,7 +419,7 @@ class DashboardMessages extends Component {
     ].map((entry, key) => (
       <Row
         key={key}
-        style={{ backgroundColor: entry.bgColor, marginTop: "3px" }}
+        style={{ backgroundColor: entry.bgColor, paddingTop: "3px" }}
       >
         <Col style={keyStyle}>{entry.key}</Col>
         <Col style={valStyle}>{entry.value}</Col>
@@ -445,34 +453,36 @@ class DashboardMessages extends Component {
           {/* Body (status) */}
           <ListGroupItemText>{this.getMessageStatus(rsvn)}</ListGroupItemText>
 
-          {/* Veiw Message Buttons */}
-          <Button
-            // variant="outline-secondary"
-            variant="secondary"
-            size="sm"
-            className="m-2"
-            md="auto"
-            onClick={() => {
-              this.setState(
-                {
-                  selectedID: rsvn.reservation_id,
-                  selectedUsername: rsvn.username,
-                  selectedApproved: rsvn.approved,
-                  selectedPickedUp: rsvn.picked_up_time,
-                  selectedCancelled: rsvn.cancelled,
-                  selectedResFoods: rsvn.res_foods,
-                },
-                () => {
-                  this.openViewRsvnMsgModal();
-                }
-              );
-            }}
-          >
-            View Details
-          </Button>
+          <div className="justify-content-center align-items-center">
+            {/* Veiw Message Buttons */}
+            <Button
+              // variant="outline-secondary"
+              variant="secondary"
+              size="sm"
+              className="m-2"
+              md="auto"
+              onClick={() => {
+                this.setState(
+                  {
+                    selectedID: rsvn.reservation_id,
+                    selectedUsername: rsvn.username,
+                    selectedApproved: rsvn.approved,
+                    selectedPickedUp: rsvn.picked_up_time,
+                    selectedCancelled: rsvn.cancelled,
+                    selectedResFoods: rsvn.res_foods,
+                  },
+                  () => {
+                    this.openViewRsvnMsgModal();
+                  }
+                );
+              }}
+            >
+              View Reserved Foods
+            </Button>
 
-          {/* Buttons with approved/pickedup/cancelled/reset actions */}
-          {this.showControls(rsvn)}
+            {/* Buttons with approved/pickedup/cancelled/reset actions */}
+            {this.showControls(rsvn)}
+          </div>
         </ListGroupItem>
       ));
 

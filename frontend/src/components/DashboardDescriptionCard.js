@@ -275,10 +275,10 @@ class DashboardDescriptionCard extends Component {
             </Row>
           </Card.Text>
           {/* 
+          // link to the website button (not wanted but saved for later used)
           open window in new tab 
           reference: 
           https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react 
-          */}
           <Row className="m-2">
             <Col className="text-left">
               <Button
@@ -290,6 +290,7 @@ class DashboardDescriptionCard extends Component {
               </Button>
             </Col>
           </Row>
+          */}
         </Card.Body>
       </Card>
     );
