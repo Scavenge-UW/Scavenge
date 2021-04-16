@@ -76,33 +76,33 @@ exports.getAllPantriesAction = (req, res) => {
       pantryInfo['lon'] = pantry['lon'];
       pantryInfo['website'] = pantry['website'];
 
-      pantryInfo['reservations'] = [];
+      //pantryInfo['reservations'] = []; we don't want to give everyone access to the reservations
       pantryInfo['foods'] = [];
       pantryInfo['hours'] = [];
 
-      if ('reservations' in pantry) {
-        for (const [reservationKey, reservationData] of Object.entries(pantry['reservations'])) {
-          let reservation = {};
-          reservation['reservation_id'] = reservationData['reservation_id'];
-          reservation['username'] = reservationData['username'];
-          reservation['order_time'] = reservationData['order_time'];
-          reservation['estimated_pick_up'] = reservationData['estimated_pick_up'];
-          reservation['picked_up_time'] = reservationData['picked_up_time'];
-          reservation['approved'] = reservationData['approved'];
-          reservation['cancelled'] = reservationData['cancelled'];
+      // if ('reservations' in pantry) {
+      //   for (const [reservationKey, reservationData] of Object.entries(pantry['reservations'])) {
+      //     let reservation = {};
+      //     reservation['reservation_id'] = reservationData['reservation_id'];
+      //     reservation['username'] = reservationData['username'];
+      //     reservation['order_time'] = reservationData['order_time'];
+      //     reservation['estimated_pick_up'] = reservationData['estimated_pick_up'];
+      //     reservation['picked_up_time'] = reservationData['picked_up_time'];
+      //     reservation['approved'] = reservationData['approved'];
+      //     reservation['cancelled'] = reservationData['cancelled'];
   
-          reservation['res_foods'] = [];
-          for (const [resFoodId, foodData] of Object.entries(pantry['reservations'][reservationKey]['res_foods'])) {
-            let food = {};
-            food['res_food_id'] = foodData['res_food_id'];
-            food['res_food_name'] = foodData['res_food_name'];
-            food['res_food_quantity'] = foodData['res_food_quantity'];
-            reservation['res_foods'].push(food);
-          }
+      //     reservation['res_foods'] = [];
+      //     for (const [resFoodId, foodData] of Object.entries(pantry['reservations'][reservationKey]['res_foods'])) {
+      //       let food = {};
+      //       food['res_food_id'] = foodData['res_food_id'];
+      //       food['res_food_name'] = foodData['res_food_name'];
+      //       food['res_food_quantity'] = foodData['res_food_quantity'];
+      //       reservation['res_foods'].push(food);
+      //     }
   
-          pantryInfo['reservations'].push(reservation);
-        }
-      }
+      //     pantryInfo['reservations'].push(reservation);
+      //   }
+      // }
 
       for (const [foodKey, foodData] of Object.entries(pantry['foods'])) {
         let food = {};
@@ -210,7 +210,8 @@ exports.getPantryDetailAction = (req, res) => {
     pantryInfo['foods'] = [];
     pantryInfo['hours'] = [];
 
-    if ('reservations' in pantry) {
+    // Only include the reservations if the user is signed in and part of the pantry
+    if (req.user && req.isEmployeeOf.includes(pantryInfo['pantry_id']) && 'reservations' in pantry) {
       for (const [reservationKey, reservationData] of Object.entries(pantry['reservations'])) {
         let reservation = {};
         reservation['reservation_id'] = reservationData['reservation_id'];

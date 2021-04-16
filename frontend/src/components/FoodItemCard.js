@@ -68,7 +68,6 @@ class FoodItemCard extends Component {
   setShowOneClickReserveModal(show) {
     this.setState({
       showOneClickReserveModal: show,
-      cartQuantity: this.cartQuantity.current.value,
     });
   }
 
@@ -77,7 +76,18 @@ class FoodItemCard extends Component {
    *
    */
   onClickOneClickReserve() {
-    this.setShowOneClickReserveModal(true);
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to reserve items.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can reserve items."
+      );
+    } else {
+      this.setShowOneClickReserveModal(true);
+      this.setState({
+        cartQuantity: this.cartQuantity.current.value,
+      });
+    }
   }
 
   /**
@@ -85,16 +95,24 @@ class FoodItemCard extends Component {
    *
    */
   onClickAddToCart() {
-    let itemName = this.props.foodItem.food_name;
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to add items to cart.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can add items to cart."
+      );
+    } else {
+      let itemName = this.props.foodItem.food_name;
 
-    store.dispatch(
-      addToCart({
-        item: this.props.foodItem,
-        cartQuantity: this.cartQuantity.current.value,
-        pantry: this.props.pantry,
-      })
-    );
-    toast.info("🛒 " + itemName + " was added to your cart!");
+      store.dispatch(
+        addToCart({
+          item: this.props.foodItem,
+          cartQuantity: this.cartQuantity.current.value,
+          pantry: this.props.pantry,
+        })
+      );
+      toast.info("🛒 " + itemName + " was added to your cart!");
+    }
   }
 
   /**
@@ -144,7 +162,7 @@ class FoodItemCard extends Component {
    * update quantity of item in cart
    *
    */
-  onClickUpdateCartItemQuantity() {
+  onUpdateCartItemQuantity() {
     let itemName = this.props.foodItem.food_name;
 
     store.dispatch(
@@ -153,7 +171,9 @@ class FoodItemCard extends Component {
         this.cartQuantity.current.value
       )
     );
-    toast.info("✏️ " + itemName + "'s quantity was updated!");
+    this.setState({
+      cartQuantity: this.cartQuantity.current.value,
+    });
   }
 
   /**
@@ -288,10 +308,12 @@ class FoodItemCard extends Component {
                 <InputGroup>
                   <InputGroup.Prepend>
                     <Button
+                      className="increment-cart-item"
                       variant="outline-primary"
                       onClick={() => {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) + 1; // increment cartQuantity by 1
+                        this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
                     >
@@ -300,16 +322,19 @@ class FoodItemCard extends Component {
                   </InputGroup.Prepend>
                   <FormControl
                     type="number"
+                    onChange={this.onUpdateCartItemQuantity.bind(this)}
                     disabled={!this.isInStock()}
                     defaultValue={1}
                     ref={this.cartQuantity}
                   />
                   <InputGroup.Append>
                     <Button
+                      className="decrement-cart-item"
                       variant="outline-primary"
                       onClick={() => {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) - 1; // decrement cartQuantity by 1
+                        this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
                     >
@@ -371,6 +396,7 @@ class FoodItemCard extends Component {
                       onClick={() => {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) + 1; // increment cartQuantity by 1
+                        this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
                     >
@@ -378,6 +404,7 @@ class FoodItemCard extends Component {
                     </Button>
                   </InputGroup.Prepend>
                   <FormControl
+                    onChange={this.onUpdateCartItemQuantity.bind(this)}
                     type="number"
                     defaultValue={this.props.cartQuantity}
                     ref={this.cartQuantity}
@@ -389,6 +416,7 @@ class FoodItemCard extends Component {
                       onClick={() => {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) - 1; // decrement cartQuantity by 1
+                        this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
                     >
@@ -398,13 +426,13 @@ class FoodItemCard extends Component {
                 </InputGroup>
               </Col>
               <Col>
-                <Button
+                {/* <Button
                   onClick={this.onClickUpdateCartItemQuantity.bind(this)}
                   size="sm"
                   block
                 >
                   Update
-                </Button>
+                </Button> */}
               </Col>
             </Row>
           </Col>

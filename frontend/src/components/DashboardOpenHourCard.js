@@ -72,7 +72,6 @@ class DashboardOpenHourCard extends Component {
           ]);
 
           this.editModeControl(false);
-
           toast.success("Pantry's open hours was successfully updated!");
         })
         .catch((response) => {
@@ -128,6 +127,7 @@ class DashboardOpenHourCard extends Component {
    * @param {*} time - time string
    * @returns
    */
+  // TODO: change format to display only hh:mm
   tConvert(time) {
     // Check correct time format and split into components
     time = time
@@ -190,9 +190,18 @@ class DashboardOpenHourCard extends Component {
         <Card.Text className="mb-3">
           <Row className="align-items-center">
             <Col xs={9} className="text-left">
-              <strong>Open: </strong> {this.tConvert(this.props.open)} <hr />
-              <strong>Close: </strong> {this.tConvert(this.props.close)} <hr />
-              <strong>Detail: </strong> {this.props.detail} <hr />
+              <div ref={this.newOpen} defaultValue={this.props.open}>
+                <strong>Open: </strong> {this.tConvert(this.props.open)}
+              </div>
+              <hr />
+              <div ref={this.newClose} defaultValue={this.props.close}>
+                <strong>Close: </strong> {this.tConvert(this.props.close)}
+              </div>
+              <hr />
+              <div ref={this.newDetail} defaultValue={this.props.detail}>
+                <strong>Detail: </strong> {this.props.detail}
+              </div>
+              <hr />
             </Col>
             <Col xs={3}>{this.editButtonControl(this.props.day)}</Col>
           </Row>

@@ -9,13 +9,13 @@ router.route('/login')
   .post(loginAction);
 
 router.route('/logout')
-  .post(logoutAction);
+  .post(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, logoutAction);
 
 router.route('/signup')
   .post(signupAction);
 
 router.route('/:username')
-  .put(authMiddleware.requireLogin, updateUserAction)
-  .delete(authMiddleware.requireLogin, deleteUserAction);
+  .put(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, updateUserAction)
+  .delete(authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, deleteUserAction);
 
 module.exports = router; // We need this at the end of every route file

@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { editProf } from "../actions/profileAction";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.css";
+import { toast } from "react-toastify";
+import { Redirect } from "react-router-dom";
 
 class ProfileView extends Component {
   constructor(props) {
@@ -19,11 +21,13 @@ class ProfileView extends Component {
       email: this.props.profile ? this.props.profile.email : "",
       first_name: this.props.profile ? this.props.profile.firstName : "",
       last_name: this.props.profile ? this.props.profile.lastName : "",
+      toHomeView: false,
+      errors: [],
     };
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(e) {
-    //TODO: implement actual functionalities
     e.preventDefault();
 
     const user = {
@@ -38,6 +42,7 @@ class ProfileView extends Component {
       firstName: this.state.first_name,
       lastName: this.state.last_name,
     };
+
     if (
       this.state.username &&
       this.state.password &&
@@ -50,13 +55,70 @@ class ProfileView extends Component {
       this.state.first_name &&
       this.state.last_name
     ) {
+
       this.props.editProf(user);
+      this.setState({toHomeView: true});
+      toast.success("You succesfully updated your profile")
+      this.props.setProfile(user);
+
     } else {
-      alert("Username or password field is empty.");
+      let errors = [];
+
+      if (!this.state.username) {
+        errors.push("Username field is empty");
+      }
+
+      if (!this.state.password) {
+        errors.push("Password field is empty");
+      }
+
+      if (!this.state.phone) {
+        errors.push("Phone field is empty");
+      }
+
+      if (!this.state.address) {
+        errors.push("Address field is empty");
+      }
+
+      if (!this.state.city) {
+        errors.push("City field is empty");
+      }
+
+      if (!this.state.state) {
+        errors.push("State field is empty");
+      }
+
+      if (!this.state.email) {
+        errors.push("Email field is empty");
+      }
+
+      if (!this.state.first_name) {
+        errors.push("First Name field is empty");
+      }
+
+      if (!this.state.last_name) {
+        errors.push("Last Name field is empty");
+      }
+
+      if(!this.state.zipcode){
+        errors.push("Zipcode field is empty")
+      }
+
+      toast.error(
+        <ul>
+          {errors.map((er) => {
+            return <li>{er}</li>;
+          })}
+        </ul>
+      );
     }
   }
 
   render() {
+    if (this.state.toHomeView === true) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <Container>
         <h1>Edit Your Account</h1>
@@ -168,9 +230,9 @@ class ProfileView extends Component {
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type={"text"}
-                value={this.state.phoneNumber}
+                value={this.state.phone}
                 placeholder="(123) 456 7890"
-                onChange={(e) => this.setState({ phoneNumber: e.target.value })}
+                onChange={(e) => this.setState({ phone: e.target.value })}
               />
             </Form.Group>
           </Form.Row>
@@ -216,9 +278,10 @@ class ProfileView extends Component {
           </Form.Row>
 
           <Button
-            variant="primary"
+            variant="dark"
             style={{ marginLeft: "20px" }}
-            onClick={this.onSubmit}
+            onClick={this.onSubmit.bind(this)}
+            type="submit"
           >
             Submit
           </Button>
@@ -226,7 +289,8 @@ class ProfileView extends Component {
             variant="danger"
             style={{ marginLeft: "20px" }}
             onClick={() => {
-              alert("TODO: implement cancel");
+              this.setState({ toHomeView: true });
+              toast.info("Canceled editing profile.\nRedirecting you home.");
             }}
           >
             Cancel

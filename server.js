@@ -1,7 +1,3 @@
-// Global declaration. Needs to be before package imports.
-var globalUseTestDB;
-global.globalUseTestDB = globalUseTestDB;
-
 // Import packages
 require('dotenv').config();
 const express    = require("express"),
@@ -9,7 +5,8 @@ const express    = require("express"),
       cors       = require("cors"),
       jwt        = require("jsonwebtoken"),
       bcrypt     = require("bcryptjs"),
-      cookieParser = require("cookie-parser");
+      cookieParser = require("cookie-parser"),
+      path         = require("path");
 
 // Import routes
 const foodRoutes = require('./backend/routes/food.routes');
@@ -24,7 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 global.jwt = jwt;
 global.bcrypt = bcrypt;
-
+var globalUseTestDB;
+global.globalUseTestDB = globalUseTestDB;
 
 
 // let corsOption = {
@@ -35,7 +33,11 @@ global.bcrypt = bcrypt;
 // Cors settings
 // app.use(cors(corsOption));
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:8081"); // update to match the domain you will make the request from
+  const allowedOrigins = ["http://localhost:8081", "https://scavenge-uw.herokuapp.com/"];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   res.header("Access-Control-Allow-Credentials", true);
@@ -51,13 +53,23 @@ app.use('/', authRoutes);
 app.use("/", pantryRoutes);
 app.use("/", userRoutes);
 
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(_dirname, 'frontend', 'build', 'index.html'));
+  });
+}
+
 // Last case: url not found
 app.get('/*', function(req, res){
   res.json({ message: "404 Not found" });
 });
 
+
 // Start server
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

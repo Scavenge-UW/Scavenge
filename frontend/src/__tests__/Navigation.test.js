@@ -36,9 +36,9 @@ describe("Navigation tests", () => {
 
   const guestWrapper = shallow(<Navigation isAdmin={mockIsAdmin2} />);
 
-  it("should have three buttons for guest users", () => {
+  it("should have all buttons for guest users", () => {
     // There should be one button in LoginView
-    expect(guestWrapper.find("NavLink")).toHaveLength(3);
+    expect(guestWrapper.find("NavLink")).toHaveLength(4);
     expect(
       guestWrapper.findWhere((n) => n.key() === "Search Foods")
     ).toHaveLength(1);
@@ -46,9 +46,9 @@ describe("Navigation tests", () => {
     expect(guestWrapper.findWhere((n) => n.key() === "Signup")).toHaveLength(1);
   });
 
-  it("should have four buttons for civilian users", () => {
+  it("should have all buttons for civilian users", () => {
     // There should be one button in LoginView
-    expect(nonAdminWrapper.find("NavLink")).toHaveLength(4);
+    expect(nonAdminWrapper.find("NavLink")).toHaveLength(6);
     expect(
       nonAdminWrapper.findWhere((n) => n.key() === "Search Foods")
     ).toHaveLength(1);
@@ -63,9 +63,9 @@ describe("Navigation tests", () => {
     );
   });
 
-  it("should have correct three buttons for admin users", () => {
+  it("should have all buttons for admin users", () => {
     // There should be one button in LoginView
-    expect(adminWrapper.find("NavLink")).toHaveLength(3);
+    expect(adminWrapper.find("NavLink")).toHaveLength(5);
     expect(
       adminWrapper.findWhere((n) => n.key() === "Manage Pantry")
     ).toHaveLength(1);

@@ -18,7 +18,7 @@ exports.deleteHoursData = async (req, res) => {
 exports.deleteInventoryData = async (req, res) => {
   const query = `
     DELETE FROM inventory
-    WHERE id <> 65;
+    WHERE pantry_id <> 1 OR food_id <> 46;
   `;
   return await execQuery("delete", query);
 }

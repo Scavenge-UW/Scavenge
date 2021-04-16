@@ -19,6 +19,15 @@ describe('User', async () => {
     globalUseTestDB = 1;
     await(db.deleteAllDataAction())
     // user 'sean1' and pantry 1 are not deleted
+
+     // Login as Sean to pass middleware checks
+     await(agent
+      .post('/login')
+      .send({
+        username: "sean1",
+        password: "abc"
+      })
+    );
   })
 
   // beforeEach((done) => { 
@@ -70,6 +79,26 @@ describe('User', async () => {
       })
     );
   });
+
+  // Get User's reservations
+  it('should get user reservations', (done) => {
+    agent
+      .get('/user/sean1/reservations')
+      .end((err, res) => {
+        var expected = [
+            {
+              res_food_id: 46,
+              res_food_name: "Apple",
+              res_food_quantity: 1
+            }
+          ];
+        let result = JSON.parse(res.text);
+        assert.deepEqual(result['reservations'][0]['res_foods'], expected, "response did not match expected.");
+        assert.lengthOf(result['reservations'], 1, "should only be 1 reservation");
+        assert.lengthOf(result['reservations'][0]['res_foods'], 1, "should only be 1 food");
+        done();
+      })
+  })  
 
   // Add item to wishlist
   it('should add item to wishlist', (done) => {

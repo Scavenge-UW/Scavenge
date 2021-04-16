@@ -16,6 +16,7 @@ class LoginView extends Component {
   }
 
   async submitForm(e) {
+    e.preventDefault();
     const user = {
       username: this.state.username,
       password: this.state.password,
@@ -85,6 +86,7 @@ class LoginView extends Component {
             variant="dark"
             style={{ marginLeft: "30px" }}
             onClick={this.submitForm}
+            type="submit"
           >
             Login
           </Button>

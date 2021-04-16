@@ -2,7 +2,12 @@ import logo from "./logo.svg";
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import store from "./store";
@@ -12,13 +17,19 @@ import SignupView from "./components/Authentication/SignupView";
 import HomeView from "./components/HomeView";
 import PantryAdminView from "./components/PantryAdminView";
 import PantryDetailView from "./components/PantryDetailView";
+import MyReservationsView from "./components/MyReservationsView";
 import FoodSearchView from "./components/FoodSearchView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
 import CartView from "./components/CartView";
+<<<<<<< HEAD
 import WishListView from "./components/WishListView";
+=======
+import HelpView from "./components/HelpView"
+>>>>>>> main
 
 import "react-toastify/dist/ReactToastify.css";
+import async from "react-bootstrap-typeahead/lib/behaviors/async";
 
 function App(props) {
   const [username, setUsername] = useState("");
@@ -96,6 +107,10 @@ function App(props) {
     return employeeOf.length !== 0;
   };
 
+  const isLoggedIn = () => {
+    return profile !== "";
+  };
+
   return (
     <Provider store={store}>
       <div id="body">
@@ -127,7 +142,11 @@ function App(props) {
                 <PantryAdminView />
               </Route>
               <Route path="/pantries/:pantry_id">
-                <PantryDetailView username={username} />
+                <PantryDetailView
+                  isLoggedIn={isLoggedIn}
+                  isAdmin={isAdmin}
+                  username={username}
+                />
               </Route>
               <Route path="/search-food/:query">
                 <FoodSearchView />
@@ -136,13 +155,28 @@ function App(props) {
                 <FoodSearchView />
               </Route>
               <Route path="/profile">
-                <ProfileView profile={profile} />
+                <ProfileView profile={profile} setProfile={setProfile} />
+              </Route>
+              <Route path="/help">
+                <HelpView />
               </Route>
               <Route path="/cart">
                 <CartView username={username} />
               </Route>
+              <Route path="/reservations">
+                <MyReservationsView username={username} />
+              </Route>
+              <Route path="/logout">
+                <Redirect push to="/" />
+              </Route>
+              <Route exact path="/">
+                <HomeView profile={profile} />
+              </Route>
               <Route path="/wishlist">
-                <WishListView username={username}/>
+                <WishListView username={username} />
+              </Route>
+              <Route path="*">
+                <div>404 Not Found</div>
               </Route>
             </Switch>
           </div>
