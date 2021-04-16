@@ -137,10 +137,13 @@ exports.getUserRes = async (req, res) => {
       r.picked_up_time,
       r.approved,
       r.cancelled,
+      r.pantry_id,
+      p.name,
       f.id as res_food_id,
       f.name as res_food_name,
       rf.quantity as res_food_quantity
     FROM reservation r
+    JOIN pantry p ON p.id = r.pantry_id
     JOIN res_food rf ON r.id = rf.reservation_id
     JOIN food f ON rf.food_id = f.id
     WHERE r.username = ?;

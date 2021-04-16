@@ -223,16 +223,17 @@ exports.foodSearch = async (req, res) => {
     LEFT JOIN inventory i ON p.id = i.pantry_id
     LEFT JOIN food f ON f.id = i.food_id
     JOIN hours h ON p.id = h.pantry_id
-    WHERE i.quantity > 0 AND 
+    WHERE i.quantity > 0 AND (
   `;
   const foods = req.body.foods;
   for (let i = 0; i < foods.length; i++) {
     if (i === foods.length - 1) {
-      query += "f.name = ?;"
+      query += "f.name = ?);"
     } else {
       query += "f.name = ? OR "
     }
   }
+
   const values = foods;
   return await execQuery("select", query, values);
 }

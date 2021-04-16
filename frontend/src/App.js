@@ -2,7 +2,12 @@ import logo from "./logo.svg";
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import store from "./store";
@@ -12,6 +17,7 @@ import SignupView from "./components/Authentication/SignupView";
 import HomeView from "./components/HomeView";
 import PantryAdminView from "./components/PantryAdminView";
 import PantryDetailView from "./components/PantryDetailView";
+import MyReservationsView from "./components/MyReservationsView";
 import FoodSearchView from "./components/FoodSearchView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
@@ -96,6 +102,10 @@ function App(props) {
     return employeeOf.length !== 0;
   };
 
+  const isLoggedIn = () => {
+    return profile !== "";
+  };
+
   return (
     <Provider store={store}>
       <div id="body">
@@ -127,7 +137,11 @@ function App(props) {
                 <PantryAdminView />
               </Route>
               <Route path="/pantries/:pantry_id">
-                <PantryDetailView username={username} />
+                <PantryDetailView
+                  isLoggedIn={isLoggedIn}
+                  isAdmin={isAdmin}
+                  username={username}
+                />
               </Route>
               <Route path="/search-food/:query">
                 <FoodSearchView />
@@ -140,6 +154,12 @@ function App(props) {
               </Route>
               <Route path="/cart">
                 <CartView username={username} />
+              </Route>
+              <Route path="/reservations">
+                <MyReservationsView username={username} />
+              </Route>
+              <Route path="/logout">
+                <Redirect push to="/" />
               </Route>
               <Route exact path="/">
                 <HomeView profile={profile} />

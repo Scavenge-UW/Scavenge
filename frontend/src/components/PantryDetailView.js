@@ -67,13 +67,15 @@ function PantryDetailView(props) {
   const getFoodItemCards = () => {
     let foodItemCards = [];
     const foods = Object.values(pantryDetail.foods).slice(
-      1 + (currPage - 1) * paginationCount,
-      paginationCount * currPage + 1
+      (currPage - 1) * paginationCount,
+      paginationCount * currPage
     );
     for (const foodItem of Object.values(foods)) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
+          isLoggedIn={props.isLoggedIn}
+          isAdmin={props.isAdmin}
           username={props.username}
           key={foodItem.food_id}
           foodItem={foodItem}
