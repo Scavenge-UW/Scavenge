@@ -68,7 +68,6 @@ class FoodItemCard extends Component {
   setShowOneClickReserveModal(show) {
     this.setState({
       showOneClickReserveModal: show,
-      cartQuantity: this.cartQuantity.current.value,
     });
   }
 
@@ -78,6 +77,9 @@ class FoodItemCard extends Component {
    */
   onClickOneClickReserve() {
     this.setShowOneClickReserveModal(true);
+    this.setState({
+      cartQuantity: this.cartQuantity.current.value,
+    });
   }
 
   /**
