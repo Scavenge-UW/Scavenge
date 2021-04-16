@@ -187,7 +187,7 @@ describe('Pantries', () => {
   });
 
   /*
-  * Test the /pantries/:pantry_id/:food_id PUT route
+  * Test the /pantries/:pantry_id/:food_name PUT route
   */
   describe('Update food inventory', () => {
     it('it should update the food inventory', async () => {
@@ -219,6 +219,36 @@ describe('Pantries', () => {
       //console.log(data);
       const appleInventory = data.foods[0].quantity;
       assert.equal(appleInventory, "20", "The inventory did not update correctly.");
+    });
+  });
+
+  /*
+  * Test the /pantries/:pantry_id/:food_name POST route with a new food
+  */
+  describe('Update food inventory', () => {
+    it('it should add the food and update the inventory', async () => {     
+
+      // Update inventory
+      data = await(agent
+        .put('/pantries/1/Cucumber')
+        .send({
+          "quantity": "777"
+        })
+      );     
+      
+      assert.equal(data.status, 200, "status was not 200");
+      assert.instanceOf(data, Object, "data is not an object");
+
+      // Check new inventory by getting pantry details
+      data = await(agent.get('/pantries/1'));
+      foodData = await(agent.get('/foods'));
+      assert.equal(data.status, 200, "status was not 200");
+      assert.instanceOf(data, Object, "data is not an object");
+      data = JSON.parse(data.text);     
+      foodData = JSON.parse(foodData.text);
+      const cucInventory = data.foods[1].quantity;
+      assert.lengthOf(foodData, 2, "There were not 2 entries in the food table")
+      assert.equal(cucInventory, "777", "The inventory did not update correctly.");
     });
   });
 
