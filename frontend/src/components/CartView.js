@@ -8,12 +8,14 @@ import moment from "moment";
 import { toast } from "react-toastify";
 
 import { clearCart } from "../actions/cart.actions";
+import { fetchPantries } from "../actions/pantryActions";
 import store from "../store";
 import ReservationService from "../services/reservation.service";
 import FoodItemCard from "./FoodItemCard";
 
 function CartView(props) {
   const cart = useSelector((store) => store.cart);
+  const pantries = useSelector((store) => store.pantries);
 
   const cartItems =
     cart.length >= 1 ? (
@@ -37,13 +39,31 @@ function CartView(props) {
       </Row>
     );
 
-  const onClickCheckout = () => {
+  const onClickCheckout = async () => {
     let reservationsByPantries = {};
+
+    await store.dispatch(fetchPantries());
 
     cart.forEach((item) => {
       const pantry_id = item.pantry.pantry_id;
       const food_id = item.item.food_id;
       const quantity = parseInt(item.cartQuantity);
+
+      /// quantity validation
+      const actualQuantity = pantries.pantries.result
+        .find((e) => {
+          return e.pantry_id === pantry_id;
+        })
+        .foods.find((e) => {
+          return e.food_id === food_id;
+        }).quantity;
+      if (actualQuantity < quantity) {
+        toast.error(
+          item.item.food_name + " has only " + actualQuantity + " in stock."
+        );
+        return;
+      }
+
       if (pantry_id in reservationsByPantries) {
         reservationsByPantries[pantry_id].push([food_id, quantity]);
       } else {
