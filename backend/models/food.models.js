@@ -15,3 +15,12 @@ exports.addFood = async (req, res) => {
   let values = [[req.body.food_name, req.body.qr_code]]
   return await execQuery("insert", query, values);
 }
+
+exports.addFoodByName = async (req, res) => {
+  const query = `
+    INSERT INTO food (name)
+    VALUES ?;
+  `;
+  let values = [[req.params.food_name]]
+  return await execQuery("insert", query, values);
+}

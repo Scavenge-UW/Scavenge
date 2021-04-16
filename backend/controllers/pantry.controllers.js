@@ -1,4 +1,5 @@
 const db = require('../models/pantry.models.js');
+const foodDb = require('../models/food.models.js');
 
 exports.getAllPantriesAction = (req, res) => {
   let result = {};
@@ -262,7 +263,41 @@ exports.getPantryDetailAction = (req, res) => {
   });
 }
 
-exports.pantryUpdateInventoryAction = (req, res) => {
+exports.pantryUpdateInventoryAction = async(req, res) => {
+  var exists;
+  // Check whether food exists in food table
+  try {
+    let data = await(db.foodExists(req, res));
+    exists = data[0]['COUNT (name)'];
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Food check failed."
+    });
+  }
+  // If it does not, add it
+  if (exists == 0) {
+    try {
+      let foodData = await (foodDb.addFoodByName(req, res));
+      req.params.food_id = foodData['insertId'];
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Failed to add food to food table due to server error."
+      });
+    }
+  } else { // Get foodID for existing food
+    try {
+      let data = await (db.getFoodId(req, res)); 
+      req.params.food_id = data[0]['id'];     
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Failed to add food to food table due to server error."
+      });
+    }
+  }
+  // Update pantry inventory
   db.pantryUpdateInventory(req, res).then(data => {
     return res.status(200).json(data);
   }).catch(error => {

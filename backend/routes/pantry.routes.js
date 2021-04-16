@@ -30,10 +30,10 @@ router.put('/pantries/:pantry_id/', authMiddleware.verifyAndGetUserInfo, authMid
 router.put('/pantries/:pantry_id/hours/:day', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryUpdateHoursAction);
 
 // Update food inventory
-router.put('/pantries/:pantry_id/:food_id', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryUpdateInventoryAction);
+router.put('/pantries/:pantry_id/:food_name', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryUpdateInventoryAction);
 
 // Add a food to inventory
-router.post('/pantries/:pantry_id/:food_id', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryUpdateInventoryAction);
+router.post('/pantries/:pantry_id/:food_name', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryUpdateInventoryAction);
 
 // Mark a reservation as picked up, approved, or cancelled
 router.put('/pantries/:pantry_id/reservations/:action/:reservation_id', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, updateReservationAction);
