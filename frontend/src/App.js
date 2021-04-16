@@ -136,7 +136,7 @@ function App(props) {
                 <FoodSearchView />
               </Route>
               <Route path="/profile">
-                <ProfileView profile={profile} setProfile={setProfile} />
+                <SignupView signup={signup} profile={profile} />
               </Route>
               <Route path="/cart">
                 <CartView username={username} />
