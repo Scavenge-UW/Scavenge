@@ -121,7 +121,7 @@ function App(props) {
                 <LoginView login={login} />
               </Route>
               <Route path="/signup">
-                <SignupView signup={signup} />
+                <SignupView signup={signup} profile={profile} />
               </Route>
               <Route path="/pantry">
                 <PantryAdminView />
