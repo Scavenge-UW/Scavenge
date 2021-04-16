@@ -9,7 +9,9 @@ const {
   pantryUpdateHoursAction,
   getPantryHoursAction,
   pantryUpdateDetailAction,
-  foodSearchAction
+  foodSearchAction,
+  pantryAddEmployeeAction,
+  pantryRemoveEmployeeAction
 } = require("../controllers/pantry.controllers.js");
 
 const authMiddleware = require("../middleware/auth.middleware");
@@ -40,5 +42,11 @@ router.put('/pantries/:pantry_id/reservations/:action/:reservation_id', authMidd
 
 // Search pantries by foods
 router.post('/pantries/search/', foodSearchAction);
+
+// Add user to pantry
+router.post('/pantries/:pantry_id/user/:username', pantryAddEmployeeAction);
+
+// Remove user from pantry
+router.delete('/pantries/:pantry_id/user/:username', pantryRemoveEmployeeAction);
 
 module.exports = router; // We need this at the end of every route file

@@ -402,3 +402,19 @@ exports.foodSearchAction = (req, res) => {
     });
   });
 }
+
+exports.pantryAddEmployeeAction = (req, res) => {
+  db.pantryAddEmployee(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Error in query. Failed to add employee." });
+  });
+}
+
+exports.pantryRemoveEmployeeAction = (req, res) => {
+  db.pantryRemoveEmployee(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Error in query. Failed to remove employee." });
+  });
+}

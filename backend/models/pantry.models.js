@@ -261,3 +261,23 @@ exports.cancelReservation = async (req, res, food_id, quantity) => {
   const values = [quantity, food_id, req.params.pantry_id];
   return await execQuery("update", query, values);
 }
+
+// Add user to pantry as employee
+exports.pantryAddEmployee = async (req, res) => {
+  const query = `
+    INSERT INTO user_to_pantry (username, pantry_id)
+    VALUES ?;
+  `;
+  let values = [[req.params.username, req.params.pantry_id]]
+  return await execQuery("insert", query, values);
+}
+
+// DELETE user from pantry as employee
+exports.pantryRemoveEmployee = async (req, res) => {
+  const query = `
+    DELETE FROM user_to_pantry
+    WHERE username = ? AND pantry_id = ?;
+  `;
+  let values = [req.params.username, req.params.pantry_id]
+  return await execQuery("delete", query, values);
+}
