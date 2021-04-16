@@ -1,3 +1,5 @@
+import moment from "moment";
+
 // reference: https://stackoverflow.com/questions/50430968/converting-string-date-in-react-javascript
 /**
  * convert datetime string to desired format
@@ -44,5 +46,52 @@ function FormatTime(time) {
   return time.join(""); // return adjusted time or original string
 }
 
-const formatters = { datetime: FormatDateTime, time: FormatTime };
+/**
+ * reference:
+ *   https://stackoverflow.com/questions/22938300/convert-milliseconds-to-hours-and-minutes-using-momentjs
+ * example:
+ *   durationAsString(0) will return -
+ *   durationAsString(10000) will return 10s
+ *   durationAsString(100000) will return 1m 40s
+ *   durationAsString(10000000) will return 2h 46m 40s
+ *   durationAsString(100000000) will return 1d 3h 46m
+ *   durationAsString(100000000, 4) will return 1d 3h 46m 40s
+ *
+ *
+ * @param {*} receivedTime the time (in String format) when the reservation was made
+ * @returns formatted time elapsed since the reservation was made.
+ */
+function FormatTimeElapsed(receivedTime, maxPrecission = 3) {
+  // convert receivedTime to moment object
+  const received = moment(new Date(receivedTime), "YYYY/MM/DD HH:mm:ss");
+  const current = moment(new Date(), "YYYY/MM/DD HH:mm:ss");
+
+  // calculate time elapsed and formatting
+  const duration = moment.duration(current - received);
+  const items = [];
+  items.push({ timeUnit: "d", value: Math.floor(duration.asDays()) });
+  items.push({ timeUnit: "h", value: duration.hours() });
+  items.push({ timeUnit: "m", value: duration.minutes() });
+  items.push({ timeUnit: "s", value: duration.seconds() });
+
+  const formattedItems = items.reduce((accumulator, { value, timeUnit }) => {
+    if (
+      accumulator.length >= maxPrecission ||
+      (accumulator.length === 0 && value === 0)
+    ) {
+      return accumulator;
+    }
+
+    accumulator.push(`${value}${timeUnit}`);
+    return accumulator;
+  }, []);
+
+  return formattedItems.length !== 0 ? formattedItems.join(" ") : "-";
+}
+
+const formatters = {
+  datetime: FormatDateTime,
+  time: FormatTime,
+  timeElapsed: FormatTimeElapsed,
+};
 export default formatters;

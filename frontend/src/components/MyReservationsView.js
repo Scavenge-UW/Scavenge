@@ -28,7 +28,7 @@ import { toast } from "react-toastify";
 class MyReservationsView extends Component {
   constructor(props) {
     super(props);
-    this.state = { rsvns: [] };
+    this.state = { rsvns: [], weblink: "" };
   }
 
   componentDidMount() {
@@ -39,8 +39,11 @@ class MyReservationsView extends Component {
         rsvns: response.reservations,
       });
     });
+    // TODO: load website link for each pantry (to be used in DashboardMessage, and will be shown in My Reservation page)
+    PantryService.getDetail();
   }
 
+  // TODO: action not functioning
   /**
    *  Mark a reservation as cancelled
    *
@@ -78,6 +81,7 @@ class MyReservationsView extends Component {
           <DashboardMessages
             // pantry_id={this.state.pantry_id}
             rsvns={this.state.rsvns}
+            weblink={this.state.weblink}
             // fetchPantryDetail={this.props.fetchPantryDetail}
             // markAsApproved={this.markAsApproved.bind(this)}
             // markAsPickedUp={this.markAsPickedUp.bind(this)}

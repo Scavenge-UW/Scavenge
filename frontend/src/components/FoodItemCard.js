@@ -238,6 +238,7 @@ class FoodItemCard extends Component {
             <Col>
               <Form>
                 <Form.Group controlId="formQuantity">
+                  {/* TODO: validate valid input quantity number */}
                   <Form.Label>Enter quantity in stock</Form.Label>
                   <Form.Control
                     type="number"
@@ -245,6 +246,7 @@ class FoodItemCard extends Component {
                     placeholder="Quantity"
                     defaultValue={this.props.foodItem.quantity}
                     ref={this.newQuantity}
+                    min="0" // test
                   />
                 </Form.Group>
               </Form>
@@ -298,11 +300,13 @@ class FoodItemCard extends Component {
                       +
                     </Button>
                   </InputGroup.Prepend>
+                  {/* TODO: validate valid input quantity number */}
                   <FormControl
                     type="number"
                     disabled={!this.isInStock()}
                     defaultValue={1}
                     ref={this.cartQuantity}
+                    min="1" // test
                   />
                   <InputGroup.Append>
                     <Button
@@ -377,10 +381,12 @@ class FoodItemCard extends Component {
                       +
                     </Button>
                   </InputGroup.Prepend>
+                  {/* TODO: validate valid input quantity number */}
                   <FormControl
                     type="number"
                     defaultValue={this.props.cartQuantity}
                     ref={this.cartQuantity}
+                    min="1" // test
                   />
                   <InputGroup.Append>
                     <Button

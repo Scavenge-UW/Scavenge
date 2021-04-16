@@ -24,11 +24,14 @@ function ViewRsvnMsgModal(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {/* 
+          not wanted but save for later used
           <h5>
             Reservation Detail #{props.selectedID}
-            {/* (<span style={rsvnDetailStyle}>Food Name: Quantity</span>) */}
+            (<span style={rsvnDetailStyle}>Food Name: Quantity</span>)
           </h5>
-          <hr />
+          <hr /> 
+          */}
           {/* only render the list if selectedResFoods is not `undefined` */}
           {props.show && (
             <ul>

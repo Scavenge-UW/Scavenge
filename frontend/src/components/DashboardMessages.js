@@ -15,9 +15,8 @@ import {
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 
 // other imports
-import moment from "moment";
 import "../css/common.css";
-import formatters from "./formatters/DatetimeFormatter";
+import formatters from "./formatters/DatetimeFormatter"; // time formatters
 
 class DashboardMessages extends Component {
   constructor(props) {
@@ -35,9 +34,6 @@ class DashboardMessages extends Component {
       selectedPickedUp: null,
       selectedCancelled: null,
       selectedResFoods: null,
-
-      // used to calculate time elapsed since the reservation is made
-      currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
     };
   }
 
@@ -61,59 +57,12 @@ class DashboardMessages extends Component {
     });
   }
 
-  /**
-   *
-   * Helper function for `getTimeElapsed` to format time elapsed since the reservation received.
-   *
-   * reference:
-   *          https://stackoverflow.com/questions/22938300/convert-milliseconds-to-hours-and-minutes-using-momentjs
-   * example:
-   *          durationAsString(0) will return -
-   *          durationAsString(10000) will return 10s
-   *          durationAsString(100000) will return 1m 40s
-   *          durationAsString(10000000) will return 2h 46m 40s
-   *          durationAsString(100000000) will return 1d 3h 46m
-   *          durationAsString(100000000, 4) will return 1d 3h 46m 40s
-   * @param {*} ms
-   * @param {*} maxPrecission
-   * @returns
-   */
-  durationAsString(ms, maxPrecission = 3) {
-    const duration = moment.duration(ms);
-
-    const items = [];
-    items.push({ timeUnit: "d", value: Math.floor(duration.asDays()) });
-    items.push({ timeUnit: "h", value: duration.hours() });
-    items.push({ timeUnit: "m", value: duration.minutes() });
-    items.push({ timeUnit: "s", value: duration.seconds() });
-
-    const formattedItems = items.reduce((accumulator, { value, timeUnit }) => {
-      if (
-        accumulator.length >= maxPrecission ||
-        (accumulator.length === 0 && value === 0)
-      ) {
-        return accumulator;
-      }
-
-      accumulator.push(`${value}${timeUnit}`);
-      return accumulator;
-    }, []);
-
-    return formattedItems.length !== 0 ? formattedItems.join(" ") : "-";
-  }
-
-  /**
-   * Calculates and returns the time elapsed since the reservation was made.
-   *
-   * @param {*} receivedTime the time (in String format) when the reservation was made
-   */
-  getTimeElapsed(receivedTime) {
-    // convert receivedTime to moment object
-    const received = moment(new Date(receivedTime), "YYYY/MM/DD HH:mm:ss");
-    const current = this.state.currentDateTime;
-    return this.durationAsString(current - received);
-  }
-
+  /*
+      TODO: 
+      marked complete reservation with check2-circle icon
+      marked cancelled reservation with x-circle icon
+      - https://icons.getbootstrap.com
+  */
   /**
    * @returns the message header (title and reservation time) for each message.
    */
@@ -131,41 +80,50 @@ class DashboardMessages extends Component {
       fontWeight: "450",
     };
 
-    const messageTimeStyle = {
+    const timeElapsedStyle = {
       color: "--gray",
       textAlign: "right",
       fontSize: "60%",
       fontWeight: "300",
+      paddingLeft: "2px",
     };
 
-    const username = <span style={monoStyle}>{rsvn.username}</span>;
+    const messageStyle = {
+      textAlign: "left",
+      fontSize: "95%",
+      fontWeight: "light",
+      paddingLeft: "2px",
+    };
 
+    const receivedTime = rsvn.order_time;
     const numItems = (
       <span style={monoStyle}>{Object.keys(rsvn.res_foods).length}</span>
     );
-
-    const receivedTime = rsvn.order_time;
-
-    /*
-    TODO: 
-    marked complete reservation with check2-circle icon
-    marked cancelled reservation with x-circle icon
-    - https://icons.getbootstrap.com
-    */
-    var message;
+    let message;
     if (this.props.adminMode) {
+      const username = <span style={monoStyle}>{rsvn.username}</span>;
       message = ["User ", username, " just reserved ", numItems, " items!"];
     } else {
-      message = ["You just reserved ", numItems, " items!"];
+      const pantryname = (
+        <Button
+          tag="a"
+          onClick={() => window.open(this.props.weblink, "_blank")}
+          variant="link"
+          // size="sm"
+        >
+          <em>{rsvn.name}</em>
+        </Button>
+      );
+      message = ["You have  ", numItems, " items reserved at ", pantryname];
     }
 
     const messageHeader = (
-      <Row className="justify-content-between align-items-center">
-        <Col xs={9} className="text-left">
+      <Row className="align-items-center" style={messageStyle}>
+        <Col xs={10} className="text-left">
           {message}
         </Col>
-        <Col xs={3} className="text-right" style={messageTimeStyle}>
-          {this.getTimeElapsed(receivedTime)} ago.
+        <Col xs={2} className="text-right" style={timeElapsedStyle}>
+          {formatters.timeElapsed(receivedTime)} ago.
         </Col>
       </Row>
     );
@@ -329,8 +287,7 @@ class DashboardMessages extends Component {
         resetButton,
       ];
     } else {
-      // controls = cancelReservationButton;
-      controls = [];
+      controls = [cancelReservationButton]; // TODO: button not functioning
     }
 
     return controls;
@@ -415,13 +372,14 @@ class DashboardMessages extends Component {
   render() {
     /*
     TODO: add a expand button to hide some reservation messages when len(messages) > 3
+    TODO: display all messages for admin view in Pagination
     */
     const viewMessages = [...this.props.rsvns]
       .sort((a, b) => b.reservation_id - a.reservation_id)
       .map((rsvn) => (
         <ListGroupItem
           tag="a"
-          className="justify-content-center w-responsive w-100 mx-auto p-3 mt-1"
+          className="justify-content-center p-3 mt-1"
           key={rsvn.reservation_id}
           action
         >
@@ -433,7 +391,7 @@ class DashboardMessages extends Component {
           {/* Body (status) */}
           <ListGroupItemText>{this.getMessageStatus(rsvn)}</ListGroupItemText>
 
-          <div className="justify-content-center align-items-center">
+          <Row className="justify-content-center align-items-center">
             {/* Veiw Message Buttons */}
             <Button
               // variant="outline-secondary"
@@ -460,15 +418,20 @@ class DashboardMessages extends Component {
               View Reserved Foods
             </Button>
 
-            {/* Buttons with approved/pickedup/cancelled/reset actions */}
+            {/* 
+              approved/pickedup/cancelled/reset buttons for adminMode,
+              cancelled buttons for userMode
+            */}
             {this.showControls(rsvn)}
-          </div>
+          </Row>
         </ListGroupItem>
       ));
 
     return (
       <>
-        <ListGroup>{viewMessages}</ListGroup>
+        <ListGroup className="w-responsive w-75 mx-auto">
+          {viewMessages}
+        </ListGroup>
 
         {/* Reservation Message Modal */}
         <ViewRsvnMsgModal
