@@ -15,7 +15,7 @@ class Navigation extends Component {
         "Reservations",
         "Cart",
         "Profile",
-        "Logout",
+        "Logout", "Help"
       ],
       navbar4NotLoggedIn: ["Search Foods", "Login", "Signup"],
     };
@@ -43,6 +43,8 @@ class Navigation extends Component {
         return "/profile";
       case "Reservations":
         return "/reservations";
+      case "Help":
+        return "/help";
       default:
         return "/";
     }
