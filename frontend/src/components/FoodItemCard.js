@@ -76,10 +76,18 @@ class FoodItemCard extends Component {
    *
    */
   onClickOneClickReserve() {
-    this.setShowOneClickReserveModal(true);
-    this.setState({
-      cartQuantity: this.cartQuantity.current.value,
-    });
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to reserve items.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can reserve items."
+      );
+    } else {
+      this.setShowOneClickReserveModal(true);
+      this.setState({
+        cartQuantity: this.cartQuantity.current.value,
+      });
+    }
   }
 
   /**
@@ -87,16 +95,24 @@ class FoodItemCard extends Component {
    *
    */
   onClickAddToCart() {
-    let itemName = this.props.foodItem.food_name;
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to add items to cart.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can add items to cart."
+      );
+    } else {
+      let itemName = this.props.foodItem.food_name;
 
-    store.dispatch(
-      addToCart({
-        item: this.props.foodItem,
-        cartQuantity: this.cartQuantity.current.value,
-        pantry: this.props.pantry,
-      })
-    );
-    toast.info("🛒 " + itemName + " was added to your cart!");
+      store.dispatch(
+        addToCart({
+          item: this.props.foodItem,
+          cartQuantity: this.cartQuantity.current.value,
+          pantry: this.props.pantry,
+        })
+      );
+      toast.info("🛒 " + itemName + " was added to your cart!");
+    }
   }
 
   /**
