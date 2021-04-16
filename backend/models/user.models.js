@@ -126,3 +126,30 @@ exports.removeFromWishlist = async (req, res) => {
   return await execQuery("delete", query, values, 
     "failed to delete from wishlist due to server error.");
 }
+
+exports.getUserRes = async (req, res) => {
+  const query = `
+    SELECT
+      r.id as reservation_id,
+      r.username,
+      r.order_time,
+      r.estimated_pick_up,
+      r.picked_up_time,
+      r.approved,
+      r.cancelled,
+      r.pantry_id,
+      p.name,
+      f.id as res_food_id,
+      f.name as res_food_name,
+      rf.quantity as res_food_quantity
+    FROM reservation r
+    JOIN pantry p ON p.id = r.pantry_id
+    JOIN res_food rf ON r.id = rf.reservation_id
+    JOIN food f ON rf.food_id = f.id
+    WHERE r.username = ?;
+  `;
+  let values = [[req.params.username]];
+
+  return await execQuery("select", query, values, 
+    "failed to get user reservations due to server error.");
+}

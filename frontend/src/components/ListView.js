@@ -9,6 +9,8 @@ import Button from 'react-bootstrap/Button';
 import { faSearch, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { Link } from 'react-router-dom';
+
 // Redux
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -125,10 +127,16 @@ class ListView extends Component {
       this.state.matchedPantries.map((pantry) => {
         cards.push(
             <Card key={pantry.pantry_id}>
-              <Card.Header className="text-center">
+              <Card.Header className="d-inline align-middle card-header">
                 <Accordion.Toggle as={Button} variant="link" eventKey={pantry.pantry_id}>
-                  {this.renderHourCircle(pantry)}
-                  {pantry.name}
+                  <Row>
+                    <Col md={2}>
+                      <span>{this.renderHourCircle(pantry)}</span>
+                    </Col>
+                    <Col md={10} className="p-0">
+                      <span className="pantry-link">{pantry.name}</span>
+                    </Col>
+                  </Row>
                 </Accordion.Toggle>
               </Card.Header>
               <Accordion.Collapse eventKey={pantry.pantry_id}>
@@ -138,6 +146,8 @@ class ListView extends Component {
                   <strong>Website: </strong>{pantry.website}
                   <br></br>
                   <strong>Phone: </strong>{pantry.phone_number}
+                  <br></br>
+                  <Link to={"/pantries/" + pantry.pantry_id}><strong>Click here for details</strong></Link>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -148,18 +158,18 @@ class ListView extends Component {
     }
 
     return (
-      <div>
-        <h6 className="text-center">All Food Pantries</h6>
+      <div className="search-wrapper">
+        <h4 className="text-center">All Food Pantries</h4>
         <div className="Search">
-          <span className="SearchSpan">
-            <FontAwesomeIcon className="pin" icon={faSearch}/>
-          </span>
           <input
             className="SearchInput"
             type="text"
             onChange={(e) => this.searchData(e.target.value)}
             placeholder="Search by name or location"
           />
+          <span className="SearchSpan">
+            <FontAwesomeIcon className="pin" icon={faSearch}/>
+          </span>
         </div>
         <Accordion className="listGroup">
           {cards}

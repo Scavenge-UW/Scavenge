@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 const agent = chai.request.agent(server);
 
 //Our parent block
-describe('Auth', () => {
+describe('Food', () => {
   before( async () => {
     globalUseTestDB = 1;
     let data = await(db.deleteAllDataAction());

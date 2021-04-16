@@ -17,8 +17,10 @@ import { useSelector } from "react-redux";
 import store from "../store";
 
 import FoodService from "../services/food.service";
-import FoodItemCard from "../components/FoodItemCard";
+import PantryCard from "../components/PantryCard";
 import "react-bootstrap-typeahead/css/Typeahead.css";
+
+import "../css/FoodSearch.css";
 
 /**
  * FoodSearchView where users can search for a specific food item
@@ -70,11 +72,24 @@ function FoodSearchView() {
       const foodObj = allFoods.find((food) => {
         return food.name === selection[0];
       });
-      const response = await FoodService.searchFood(foodObj.id);
+      const response = await FoodService.searchFood(selection);
       setSearchResult(response);
     }
+  };
 
-    // setSearchResult(dummySearchResult);
+  /**
+   * Returns a full address of a pantry
+   *
+   */
+  const getAddress = (pantry) => {
+    console.log(pantry);
+    let address = "";
+    address += pantry.address + ", ";
+    address += pantry.city + ", ";
+    address += pantry.state + " ";
+    address += pantry.zip;
+
+    return address;
   };
 
   /**
@@ -83,47 +98,39 @@ function FoodSearchView() {
    *
    */
   const getPantryCards = () => {
-    let pantries = [];
+    let pantryCards = [];
     for (const pantry of searchResult) {
       // TODO: Change to props when API is implemented
-      pantries.push(
-        <tr key={pantry.pantry_id}>
-          <td>
-            <Link to={"/pantries/" + pantry.pantry_id}>
-              {
-                allPantries.pantries.result.find((p) => {
-                  return p.pantry_id === pantry.pantry_id;
-                }).name
-              }
-            </Link>
-          </td>
-          <td>{pantry.quantity}</td>
-        </tr>
+      pantryCards.push(
+        <PantryCard pantry={pantry} />
+        // <tr key={pantry.pantry_id}>
+        //   <td>
+        //     <Link to={"/pantries/" + pantry.pantry_id}>
+        //       {
+        //         allPantries.pantries.result.find((p) => {
+        //           return p.pantry_id === pantry.pantry_id;
+        //         }).name
+        //       }
+        //     </Link>
+        //   </td>
+        //   <td>{getAddress(pantry)}</td>
+        // </tr>
       );
     }
 
-    return pantries;
+    return pantryCards;
   };
 
   const showSearchResults = () => {
     if (searchResult.length > 0) {
-      return (
-        <Table striped bordered hover className="bg-light">
-          <thead>
-            <tr>
-              <th>Pantry</th>
-              <th>Quantity</th>
-            </tr>
-          </thead>
-          <tbody>{getPantryCards()}</tbody>
-        </Table>
-      );
+      return getPantryCards();
     } else {
       return <h6>No results</h6>;
     }
   };
 
-  const onClickSearchButton = async () => {
+  const onClickSearchButton = async (e) => {
+    e.preventDefault();
     await getSearchResults();
   };
 
@@ -138,20 +145,27 @@ function FoodSearchView() {
             Food Name
           </Form.Label>
           <Typeahead
-            placeholder="Choose a food..."
-            className="mr-2"
+            placeholder="Choose a food... "
+            className="search"
             labelKey="food"
             options={allFoods.map((food) => food.name)}
             onChange={setSelection}
             id="foodInput"
+            multiple
           />
-          <Button className="mb-2" onClick={onClickSearchButton}>
+          <Button
+            className="mb-2 search-icon"
+            onClick={onClickSearchButton}
+            type="submit"
+          >
             <FontAwesomeIcon icon={faSearch} />
           </Button>
         </Form>
       </Row>
       <Row className="justify-content-center mr-5">
-        <p>Tab to autocomplete food</p>
+        <small>
+          <em>Tab to autocomplete food</em>
+        </small>
       </Row>
       <Row className="justify-content-center mt-4">{showSearchResults()}</Row>
     </Container>

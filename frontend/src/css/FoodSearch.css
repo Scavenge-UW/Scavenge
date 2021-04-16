@@ -1,0 +1,18 @@
+.search {
+  border: 3px solid #1C76D2;
+  width: 350px;
+  height: 42px;
+  border-radius: 5px 0 0 5px;
+  border-right: none;
+}
+
+.search-icon {
+  width: 15%;
+  border: 1px solid #1C76D2;
+  background: #1C76D2;
+  padding-top: 4px;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  font-size: 20px;
+}

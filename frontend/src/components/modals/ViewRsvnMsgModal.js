@@ -50,13 +50,13 @@ function ViewRsvnMsgModal(props) {
             </ul>
           )}
           {/* debug purpose - TODO: reomve this paragraph */}
-          <p>
+          {/* <p>
             reservation ID: {props.selectedID} <br />
             Marked As Approved: {props.selectedApproved} <br />
             Marked As Picked Up:{" "}
             {props.selectedPickedUp ? props.selectedPickedUp : `null`} <br />
             Marked As Cancelled: {props.selectedCancelled} <br />
-          </p>
+          </p> */}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>

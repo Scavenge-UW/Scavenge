@@ -90,7 +90,7 @@ function CartView(props) {
           </Row>
           {cartItems}
           <Row xs={5} md={4} lg={3} className="mt-4 justify-content-center">
-            <Button onClick={onClickCheckout} size="lg" block>
+            <Button id="btn-checkout" onClick={onClickCheckout} size="lg" block>
               Checkout
             </Button>
           </Row>

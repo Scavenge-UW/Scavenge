@@ -4,6 +4,7 @@ import { Col, Row, Container } from "react-bootstrap";
 //import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
+import mapboxgl from 'mapbox-gl';
 import Geocoder from "react-map-gl-geocoder";
 
 import { faUser, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +15,9 @@ import '../css/Map.css';
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import PantryService from '../services/pantry.service';
 import { Link } from 'react-router-dom';
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const geolocateControlStyle= {
   left: 10,
@@ -219,7 +223,7 @@ class Map extends React.PureComponent {
             >
               <p><strong>Name: </strong>{this.state.selectedPantry.name}</p>
               <p><strong>Address: </strong>{this.state.selectedPantry.address}</p>
-              <p><Link to={"/pantries/" + this.state.selectedPantry.pantry_id}><strong>Click here for detail</strong></Link></p>
+              <p><Link to={"/pantries/" + this.state.selectedPantry.pantry_id}><strong>Click here for details</strong></Link></p>
             </Popup>
             ) : null}
         </ReactMapGL>
