@@ -9,8 +9,8 @@ export default class HelpView extends Component {
                <div className="container mt-4">
                 <h5>Frequently Asked Questions</h5>
                 <ul>
-                    <li>How do I manage a pantry?: Ask Kenny to email you the information for a pantry manager.</li>
-                    <li>How do I make a pantry?: Email your pantry information to Kenny and he will submit it once it has been approved.</li>
+                    <li><em>How do I manage a pantry?</em> Ask Kenny to email you the information for a pantry manager.</li>
+                    <li><em>How do I make a pantry?</em> Email your pantry information to Kenny and he will submit it once it has been approved.</li>
                 </ul>
             
                 <h5>Contact Info</h5>
