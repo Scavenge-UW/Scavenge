@@ -51,25 +51,34 @@ describe("FoodItemCard tests", () => {
     <FoodItemCard cartMode pantry={mockPantryDetail} foodItem={foodItem1} />
   );
 
-  it("should have four buttons in Cart mode", () => {
-    expect(wrapper3.find("Button")).toHaveLength(4);
+  it("should have three buttons in Cart mode", () => {
+    expect(wrapper3.find("Button")).toHaveLength(3);
   });
 
   it("should have increment and decrement buttons in Cart mode", () => {
     expect(wrapper3.find("Button.increment-cart-item")).toHaveLength(1);
     expect(wrapper3.find("Button.decrement-cart-item")).toHaveLength(1);
+  });
 
+  it("should increment cart quantity correctly in cart mode", async () => {
     wrapper3.instance().cartQuantity = {
       current: {
         value: 22,
       },
     };
 
-    wrapper3.find("Button.increment-cart-item").simulate("click");
-    expect(wrapper3.instance().cartQuantity.current.value).toEqual(23);
+    await wrapper3.find("Button.increment-cart-item").simulate("click");
+    expect(wrapper3.state("cartQuantity")).toEqual(23);
+  });
 
-    wrapper3.find("Button.decrement-cart-item").simulate("click");
-    expect(wrapper3.instance().cartQuantity.current.value).toEqual(22);
+  it("should decrement cart quantity correctly in cart mode", async () => {
+    wrapper3.instance().cartQuantity = {
+      current: {
+        value: 4,
+      },
+    };
+    await wrapper3.find("Button.decrement-cart-item").simulate("click");
+    expect(wrapper3.state("cartQuantity")).toEqual(3);
   });
 
   // FOodItemCard in DetailView
@@ -88,6 +97,27 @@ describe("FoodItemCard tests", () => {
   it("should show a modal when user clicks on One Click Reserve", async () => {
     await wrapper4.find("Button#btn-one-click-reserve").simulate("click");
     expect(wrapper4.state("showOneClickReserveModal")).toEqual(true);
+  });
+
+  it("should increment cart quantity correctly in PantryDetail mode", async () => {
+    wrapper4.instance().cartQuantity = {
+      current: {
+        value: 22,
+      },
+    };
+
+    await wrapper4.find("Button.increment-cart-item").simulate("click");
+    expect(wrapper4.state("cartQuantity")).toEqual(23);
+  });
+
+  it("should decrement cart quantity correctly in PantryDetail mode", async () => {
+    wrapper4.instance().cartQuantity = {
+      current: {
+        value: 4,
+      },
+    };
+    await wrapper4.find("Button.decrement-cart-item").simulate("click");
+    expect(wrapper4.state("cartQuantity")).toEqual(3);
   });
 
   // Admin Inventory Mode
