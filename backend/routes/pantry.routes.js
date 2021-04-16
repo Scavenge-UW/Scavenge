@@ -7,7 +7,7 @@ const {
   pantryUpdateInventoryAction,
   updateReservationAction,
   pantryUpdateHoursAction,
-  getPantryHoursAction,
+//  getPantryHoursAction,
   pantryUpdateDetailAction,
   foodSearchAction
 } = require("../controllers/pantry.controllers.js");
