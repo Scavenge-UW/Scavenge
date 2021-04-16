@@ -141,11 +141,8 @@ function App(props) {
               <Route path="/cart">
                 <CartView username={username} />
               </Route>
-              <Route path="/">
-                <HomeView profile={profile} />
-              </Route>
-              <Route path="/">
-                <WishListView />
+              <Route path="/wishlist">
+                <WishListView username={username}/>
               </Route>
             </Switch>
           </div>

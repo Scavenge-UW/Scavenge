@@ -15,7 +15,23 @@ class WishListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      foods: null
+      foods: [
+        {
+          food_id: 1,
+          name: "Apple",
+          quantity: 123,
+        },
+        {
+          food_id: 2,
+          name: "Banana",
+          quantity: 0,
+        },
+        {
+          food_id: 3,
+          name: "Edit Me!",
+          quantity: 5,
+        },
+      ],
     }
   }
 
@@ -36,17 +52,12 @@ class WishListView extends Component {
         <WishListItemCard
           key={foodItem.food_id}
           foodItem={foodItem}
-          removeItem={this.removeItem.bind(this)}
-          updateItemQuantity={this.updateItemQuantity.bind(this)}
         />
       )
     }
 
     // Use filler card to align cards correctly.
     // This prevents a single card on the last row from being centered.
-    if (foodItemCards.length % 2) {
-      foodItemCards.push(<WishListItemCard type="filler" />)
-    }
 
     return foodItemCards;
   }
