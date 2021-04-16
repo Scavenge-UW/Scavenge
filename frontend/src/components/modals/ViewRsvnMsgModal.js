@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
@@ -32,8 +32,8 @@ function ViewRsvnMsgModal(props) {
         </Modal.Header>
         <Modal.Body>
           <h5>
-            Reservation Detail (
-            <span style={rsvnDetailStyle}>Food Name: Quantity</span>)
+            Reservation Detail #{props.selectedID}
+            {/* (<span style={rsvnDetailStyle}>Food Name: Quantity</span>) */}
           </h5>
           <hr />
           {/* only render the list if selectedResFoods is not `undefined` */}

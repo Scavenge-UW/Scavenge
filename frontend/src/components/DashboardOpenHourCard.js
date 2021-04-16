@@ -121,13 +121,14 @@ class DashboardOpenHourCard extends Component {
       );
     }
   }
+
+  // reference: https://stackoverflow.com/questions/13898423/javascript-convert-24-hour-time-of-day-string-to-12-hour-time-with-am-pm-and-no
   /**
    * convert 24-hour time-of-day string to 12-hour time with AM/PM and no timezone
    *
    * @param {*} time - time string
    * @returns
    */
-  // TODO: change format to display only hh:mm
   tConvert(time) {
     // Check correct time format and split into components
     time = time
@@ -139,7 +140,10 @@ class DashboardOpenHourCard extends Component {
       time = time.slice(1); // Remove full string match value
       time[5] = +time[0] < 12 ? "AM" : "PM"; // Set AM/PM
       time[0] = +time[0] % 12 || 12; // Adjust hours
+      time.splice(3, 1);
     }
+    console.log("TIME IS - ", time);
+
     return time.join(""); // return adjusted time or original string
   }
 
