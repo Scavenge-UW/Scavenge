@@ -10,7 +10,7 @@ export default class HelpView extends Component {
                 <h5>Frequently Asked Questions</h5>
                 <ul>
                     <li><em>How do I manage a pantry?</em> Ask Kenny to email you the information for a pantry manager.</li>
-                    <li><em>How do I edit my pantry's infomation?</em>Login as a pantry staff or admin and go to "Manage Pantry". Scroll to the bottom to edit your pantry's description and hours (we know it can be a lot of scrolling unfortunately and are currently addressing this issue).</li>
+                    <li><em>How do I edit my pantry's infomation?</em> Login as a pantry staff or admin and go to "Manage Pantry". Scroll to the bottom to edit your pantry's description and hours (we know it can be a lot of scrolling unfortunately and are currently addressing this issue).</li>
                     <li><em>How do I make a pantry?</em> Email your pantry information to Kenny and he will submit it once it has been approved.</li>
                 </ul>
             
