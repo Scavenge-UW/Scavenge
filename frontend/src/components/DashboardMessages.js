@@ -4,18 +4,19 @@ import React, { Component } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
-
-// import for services
-import PantryService from "../services/pantry.service";
+import {
+  ListGroup,
+  ListGroupItem,
+  ListGroupItemHeading,
+  ListGroupItemText,
+} from "reactstrap";
 
 // import for components
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 
 // other imports
-import moment from "moment";
-import { toast } from "react-toastify";
 import "../css/common.css";
+import formatters from "./formatters/DatetimeFormatter"; // time formatters
 
 class DashboardMessages extends Component {
   constructor(props) {
@@ -33,9 +34,6 @@ class DashboardMessages extends Component {
       selectedPickedUp: null,
       selectedCancelled: null,
       selectedResFoods: null,
-
-      // used to calculate time elapsed since the reservation is made
-      currentDateTime: moment(new Date(), "YYYY/MM/DD HH:mm:ss"),
     };
   }
 
@@ -59,59 +57,12 @@ class DashboardMessages extends Component {
     });
   }
 
-  /**
-   *
-   * Helper function for `getTimeElapsed` to format time elapsed since the reservation received.
-   *
-   * reference:
-   *          https://stackoverflow.com/questions/22938300/convert-milliseconds-to-hours-and-minutes-using-momentjs
-   * example:
-   *          durationAsString(0) will return -
-   *          durationAsString(10000) will return 10s
-   *          durationAsString(100000) will return 1m 40s
-   *          durationAsString(10000000) will return 2h 46m 40s
-   *          durationAsString(100000000) will return 1d 3h 46m
-   *          durationAsString(100000000, 4) will return 1d 3h 46m 40s
-   * @param {*} ms
-   * @param {*} maxPrecission
-   * @returns
-   */
-  durationAsString(ms, maxPrecission = 3) {
-    const duration = moment.duration(ms);
-
-    const items = [];
-    items.push({ timeUnit: "d", value: Math.floor(duration.asDays()) });
-    items.push({ timeUnit: "h", value: duration.hours() });
-    items.push({ timeUnit: "m", value: duration.minutes() });
-    items.push({ timeUnit: "s", value: duration.seconds() });
-
-    const formattedItems = items.reduce((accumulator, { value, timeUnit }) => {
-      if (
-        accumulator.length >= maxPrecission ||
-        (accumulator.length === 0 && value === 0)
-      ) {
-        return accumulator;
-      }
-
-      accumulator.push(`${value}${timeUnit}`);
-      return accumulator;
-    }, []);
-
-    return formattedItems.length !== 0 ? formattedItems.join(" ") : "-";
-  }
-
-  /**
-   * Calculates and returns the time elapsed since the reservation was made.
-   *
-   * @param {*} receivedTime the time (in String format) when the reservation was made
-   */
-  getTimeElapsed(receivedTime) {
-    // convert receivedTime to moment object
-    const received = moment(new Date(receivedTime), "YYYY/MM/DD HH:mm:ss");
-    const current = this.state.currentDateTime;
-    return this.durationAsString(current - received);
-  }
-
+  /*
+      TODO: 
+      marked complete reservation with check2-circle icon
+      marked cancelled reservation with x-circle icon
+      - https://icons.getbootstrap.com
+  */
   /**
    * @returns the message header (title and reservation time) for each message.
    */
@@ -129,41 +80,50 @@ class DashboardMessages extends Component {
       fontWeight: "450",
     };
 
-    const messageTimeStyle = {
+    const timeElapsedStyle = {
       color: "--gray",
       textAlign: "right",
       fontSize: "60%",
       fontWeight: "300",
+      paddingLeft: "2px",
     };
 
-    const username = <span style={monoStyle}>{rsvn.username}</span>;
+    const messageStyle = {
+      textAlign: "left",
+      fontSize: "95%",
+      fontWeight: "light",
+      paddingLeft: "2px",
+    };
 
+    const receivedTime = rsvn.order_time;
     const numItems = (
       <span style={monoStyle}>{Object.keys(rsvn.res_foods).length}</span>
     );
-
-    const receivedTime = rsvn.order_time;
-
-    /*
-    TODO: 
-    marked complete reservation with check2-circle icon
-    marked cancelled reservation with x-circle icon
-    - https://icons.getbootstrap.com
-    */
-    var message;
+    let message;
     if (this.props.adminMode) {
+      const username = <span style={monoStyle}>{rsvn.username}</span>;
       message = ["User ", username, " just reserved ", numItems, " items!"];
     } else {
-      message = ["You just reserved ", numItems, " items!"];
+      const pantryname = (
+        <Button
+          tag="a"
+          onClick={() => window.open(this.props.weblink, "_blank")}
+          variant="link"
+          // size="sm"
+        >
+          <em>{rsvn.name}</em>
+        </Button>
+      );
+      message = ["You have  ", numItems, " items reserved at ", pantryname];
     }
 
     const messageHeader = (
-      <Row className="justify-content-between align-items-center">
-        <Col xs={8} className="text-left">
+      <Row className="align-items-center" style={messageStyle}>
+        <Col xs={10} className="text-left">
           {message}
         </Col>
-        <Col xs={4} className="text-right" style={messageTimeStyle}>
-          {this.getTimeElapsed(receivedTime)} ago.
+        <Col xs={2} className="text-right" style={timeElapsedStyle}>
+          {formatters.timeElapsed(receivedTime)} ago.
         </Col>
       </Row>
     );
@@ -171,7 +131,7 @@ class DashboardMessages extends Component {
     return messageHeader;
   }
 
-  approvedButtonIsDisabled(rsvn) {
+  approvedButtonIsHidden(rsvn) {
     // if rsvn is cancelled, approved button should not be up
     if (rsvn.cancelled) return true;
     // if rsvn is approved, approved button should not be up
@@ -181,7 +141,7 @@ class DashboardMessages extends Component {
     else return false;
   }
 
-  pickedupButtonIsDisabled(rsvn) {
+  pickedupButtonIsHidden(rsvn) {
     // if rsvn is cancelled, pickedup button should not be up
     if (rsvn.cancelled) return true;
     // if rsvn is not approved, pickedup button should not be up
@@ -191,10 +151,18 @@ class DashboardMessages extends Component {
     else return false;
   }
 
-  cancelButtonIsDisabled(rsvn) {
-    // if rsvn is cancelled, pickedup button should not be up
+  cancelButtonIsHidden(rsvn) {
+    // if rsvn is cancelled, cancelled button should not be up
     if (rsvn.cancelled) return true;
+    // if rsvn is picked up, cancelled button should not be up
     if (rsvn.picked_up_time) return true;
+    else return false;
+  }
+
+  resetButtonIsHidden(rsvn) {
+    // if rsvn is approved and picked up, reset button should not be up
+    if (rsvn.approved && rsvn.picked_up_time) return true;
+    // if rsvn is picked up, cancelled button should not be up
     else return false;
   }
 
@@ -203,8 +171,7 @@ class DashboardMessages extends Component {
    */
   showControls(rsvn) {
     var controls;
-    const approveButton = (
-      // Approve this reservation Button
+    const approveButton = !this.approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
       <Button
         // variant="outline-primary"
         variant="primary"
@@ -224,13 +191,12 @@ class DashboardMessages extends Component {
             );
           }
         }}
-        disabled={this.approvedButtonIsDisabled(rsvn)}
       >
         Approve this reservation
       </Button>
     );
 
-    const markAsPickedUpButton = (
+    const markAsPickedUpButton = !this.pickedupButtonIsHidden(rsvn) && (
       // {/* Mark as Picked Up Button */}
       <Button
         // variant="outline-success"
@@ -251,13 +217,12 @@ class DashboardMessages extends Component {
             );
           }
         }}
-        disabled={this.pickedupButtonIsDisabled(rsvn)}
       >
         Mark as Picked up
       </Button>
     );
 
-    const cancelReservationButton = (
+    const cancelReservationButton = !this.cancelButtonIsHidden(rsvn) && (
       // {/* Cancel this reservation Button */}
       <Button
         // variant="outline-danger"
@@ -278,13 +243,12 @@ class DashboardMessages extends Component {
             );
           }
         }}
-        disabled={this.cancelButtonIsDisabled(rsvn)}
       >
         Cancel this reservation
       </Button>
     );
 
-    const resetButton = (
+    const resetButton = !this.resetButtonIsHidden(rsvn) && (
       // {/*
       // reset button is used for making disabled button enabled
       // by marking the reservation as approved
@@ -297,7 +261,7 @@ class DashboardMessages extends Component {
         className="m-2"
         md="auto"
         onClick={() => {
-          if (window.confirm("Reset this reservation?")) {
+          if (window.confirm("Reset and approve this reservation?")) {
             this.setState(
               {
                 selectedID: rsvn.reservation_id,
@@ -311,7 +275,7 @@ class DashboardMessages extends Component {
         }}
         disabled={false}
       >
-        Reset
+        Reset and Approve
       </Button>
     );
 
@@ -323,11 +287,81 @@ class DashboardMessages extends Component {
         resetButton,
       ];
     } else {
-      // controls = cancelReservationButton;
-      controls = [];
+      controls = [cancelReservationButton]; // TODO: button not functioning
     }
 
     return controls;
+  }
+
+  /*
+    TODO: 
+    marked complete reservation with check2-circle icon
+    marked cancelled reservation with x-circle icon
+    add hover over description
+    - https://icons.getbootstrap.com
+    */
+
+  /**
+   * return formatted reservation status.
+   */
+  getMessageStatus(rsvn) {
+    const keyStyle = {
+      textAlign: "right",
+      paddingRight: "3px",
+      fontWeight: "bold",
+      color: "#A9A9A9",
+    };
+
+    const valStyle = {
+      textAlign: "left",
+      justifyContent: "center",
+      paddingLeft: "3px",
+      fontFamily: "monospace",
+      fontSize: "1.1rem",
+    };
+
+    return [
+      {
+        key: "ID:",
+        value: `#${rsvn.reservation_id}`, // append a # in the front of id number
+        bgColor: "#FFFFFF",
+      },
+      {
+        key: "ORDERED AT:",
+        value: formatters.datetime(rsvn.order_time),
+        bgColor: "#F7F7F7",
+      },
+      {
+        key: "APPROVED:",
+        value: rsvn.approved ? "approved" : "not approved",
+        bgColor: "#FFFFFF",
+      },
+      {
+        key: "ESTIMATED PICK UP AT:",
+        value: formatters.datetime(rsvn.estimated_pick_up),
+        bgColor: "#F7F7F7",
+      },
+      {
+        key: "PICKED UP AT:",
+        value: rsvn.picked_up_time
+          ? formatters.datetime(rsvn.picked_up_time)
+          : "not picked up",
+        bgColor: "#FFFFFF",
+      },
+      {
+        key: "CANCELLED:",
+        value: rsvn.cancelled ? "cancelled" : "not cancelled",
+        bgColor: "#F7F7F7",
+      },
+    ].map((entry, key) => (
+      <Row
+        key={key}
+        style={{ backgroundColor: entry.bgColor, paddingTop: "3px" }}
+      >
+        <Col style={keyStyle}>{entry.key}</Col>
+        <Col style={valStyle}>{entry.value}</Col>
+      </Row>
+    ));
   }
 
   /**
@@ -338,13 +372,14 @@ class DashboardMessages extends Component {
   render() {
     /*
     TODO: add a expand button to hide some reservation messages when len(messages) > 3
+    TODO: display all messages for admin view in Pagination
     */
-    const viewMessages = this.props.rsvns
+    const viewMessages = [...this.props.rsvns]
       .sort((a, b) => b.reservation_id - a.reservation_id)
       .map((rsvn) => (
         <ListGroupItem
           tag="a"
-          className="justify-content-center w-responsive w-100 mx-auto p-3 mt-1"
+          className="justify-content-center p-3 mt-1"
           key={rsvn.reservation_id}
           action
         >
@@ -353,39 +388,50 @@ class DashboardMessages extends Component {
             {this.getMessageHeader(rsvn.reservation_id)}
           </ListGroupItemHeading>
           <hr />
+          {/* Body (status) */}
+          <ListGroupItemText>{this.getMessageStatus(rsvn)}</ListGroupItemText>
 
-          {/* Veiw Message Buttons */}
-          <Button
-            // variant="outline-secondary"
-            variant="secondary"
-            size="sm"
-            className="m-2"
-            md="auto"
-            onClick={() => {
-              this.setState(
-                {
-                  selectedID: rsvn.reservation_id,
-                  selectedUsername: rsvn.username,
-                  selectedApproved: rsvn.approved,
-                  selectedPickedUp: rsvn.picked_up_time,
-                  selectedCancelled: rsvn.cancelled,
-                  selectedResFoods: rsvn.res_foods,
-                },
-                () => {
-                  this.openViewRsvnMsgModal();
-                }
-              );
-            }}
-          >
-            View Details
-          </Button>
-          {this.showControls(rsvn)}
+          <Row className="justify-content-center align-items-center">
+            {/* Veiw Message Buttons */}
+            <Button
+              // variant="outline-secondary"
+              variant="secondary"
+              size="sm"
+              className="m-2"
+              md="auto"
+              onClick={() => {
+                this.setState(
+                  {
+                    selectedID: rsvn.reservation_id,
+                    selectedUsername: rsvn.username,
+                    selectedApproved: rsvn.approved,
+                    selectedPickedUp: rsvn.picked_up_time,
+                    selectedCancelled: rsvn.cancelled,
+                    selectedResFoods: rsvn.res_foods,
+                  },
+                  () => {
+                    this.openViewRsvnMsgModal();
+                  }
+                );
+              }}
+            >
+              View Reserved Foods
+            </Button>
+
+            {/* 
+              approved/pickedup/cancelled/reset buttons for adminMode,
+              cancelled buttons for userMode
+            */}
+            {this.showControls(rsvn)}
+          </Row>
         </ListGroupItem>
       ));
 
     return (
       <>
-        <ListGroup>{viewMessages}</ListGroup>
+        <ListGroup className="w-responsive w-75 mx-auto">
+          {viewMessages}
+        </ListGroup>
 
         {/* Reservation Message Modal */}
         <ViewRsvnMsgModal

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
@@ -13,13 +13,6 @@ function ViewRsvnMsgModal(props) {
     fontFamily: "monospace",
   };
 
-  /*
-    TODO: 
-    marked complete reservation with check2-circle icon
-    marked cancelled reservation with x-circle icon
-    - https://icons.getbootstrap.com
-    */
-
   return (
     <>
       <Modal {...props} size="lg" aria-labelledby="ViewRsvnMsgModal" centered>
@@ -31,11 +24,14 @@ function ViewRsvnMsgModal(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {/* 
+          not wanted but save for later used
           <h5>
-            Reservation Detail (
-            <span style={rsvnDetailStyle}>Food Name: Quantity</span>)
+            Reservation Detail #{props.selectedID}
+            (<span style={rsvnDetailStyle}>Food Name: Quantity</span>)
           </h5>
-          <hr />
+          <hr /> 
+          */}
           {/* only render the list if selectedResFoods is not `undefined` */}
           {props.show && (
             <ul>

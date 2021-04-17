@@ -13,6 +13,7 @@ import PantryService from "../services/pantry.service";
 // other imports
 import { toast } from "react-toastify";
 import "../css/common.css";
+import formatters from "./formatters/DatetimeFormatter";
 
 class DashboardOpenHourCard extends Component {
   constructor(props) {
@@ -121,27 +122,9 @@ class DashboardOpenHourCard extends Component {
       );
     }
   }
-  /**
-   * convert 24-hour time-of-day string to 12-hour time with AM/PM and no timezone
-   *
-   * @param {*} time - time string
-   * @returns
-   */
-  // TODO: change format to display only hh:mm
-  tConvert(time) {
-    // Check correct time format and split into components
-    time = time
-      .toString()
-      .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
 
-    if (time.length > 1) {
-      // If time format correct
-      time = time.slice(1); // Remove full string match value
-      time[5] = +time[0] < 12 ? "AM" : "PM"; // Set AM/PM
-      time[0] = +time[0] % 12 || 12; // Adjust hours
-    }
-    return time.join(""); // return adjusted time or original string
-  }
+  // TODO: add edit open hour form
+  // https://mdbootstrap.com/docs/react/forms/time-picker/
 
   /**
    *
@@ -191,11 +174,11 @@ class DashboardOpenHourCard extends Component {
           <Row className="align-items-center">
             <Col xs={9} className="text-left">
               <div ref={this.newOpen} defaultValue={this.props.open}>
-                <strong>Open: </strong> {this.tConvert(this.props.open)}
+                <strong>Open: </strong> {formatters.time(this.props.open)}
               </div>
               <hr />
               <div ref={this.newClose} defaultValue={this.props.close}>
-                <strong>Close: </strong> {this.tConvert(this.props.close)}
+                <strong>Close: </strong> {formatters.time(this.props.close)}
               </div>
               <hr />
               <div ref={this.newDetail} defaultValue={this.props.detail}>

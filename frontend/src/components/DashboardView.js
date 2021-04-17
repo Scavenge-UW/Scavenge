@@ -224,7 +224,7 @@ class DashboardView extends Component {
         <Row className="justify-content-center">
           <h4>Messages </h4>
         </Row>
-        {/* Sub-session content (TODO: adjust style) */}
+        {/* Sub-session content */}
         <Row className="justify-content-center">
           <DashboardMessages
             adminMode
@@ -273,32 +273,34 @@ class DashboardView extends Component {
    */
   getOpenHoursCards() {
     return (
-      <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
-        <Card.Header as="h5">
-          <Row className="justify-content-between align-items-center">
-            <Col className="text-left">Operating Hours</Col>
-          </Row>
-        </Card.Header>
-        <Card.Body>
-          <Card.Title>{this.state.pantryName}</Card.Title>
-          <hr />
-          <Row className="w-responsive w-100">
-            {this.state.hours.map((item) => (
-              <DashboardOpenHourCard
-                adminMode
-                pantry_id={this.state.pantry_id}
-                day={item.day}
-                open={item.open}
-                close={item.close}
-                detail={item.detail}
-                updateOpenHours={(updDay, updates) =>
-                  this.updateOpenHours(updDay, updates)
-                }
-              />
-            ))}
-          </Row>
-        </Card.Body>
-      </Card>
+      <Row className="justify-content-center pt-4">
+        <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
+          <Card.Header as="h5">
+            <Row className="justify-content-between align-items-center">
+              <Col className="text-left">Operating Hours</Col>
+            </Row>
+          </Card.Header>
+          <Card.Body>
+            <Card.Title>{this.state.pantryName}</Card.Title>
+            <hr />
+            <Row className="w-responsive w-100">
+              {this.state.hours.map((item) => (
+                <DashboardOpenHourCard
+                  adminMode
+                  pantry_id={this.state.pantry_id}
+                  day={item.day}
+                  open={item.open}
+                  close={item.close}
+                  detail={item.detail}
+                  updateOpenHours={(updDay, updates) =>
+                    this.updateOpenHours(updDay, updates)
+                  }
+                />
+              ))}
+            </Row>
+          </Card.Body>
+        </Card>
+      </Row>
     );
   }
 
