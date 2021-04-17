@@ -15,28 +15,32 @@ export default class HelpView extends Component {
             
                 <h5>Contact Info</h5>
                 <ul>
-                        <li>Andy: Frontend Developer</li>
+                    <li>Kenny: Project Leader / Backend Lead / Frontend Developer</li>
+                    <ul>
+                        <li>Email: klmui@wisc.edu@wisc.edu</li>
+                    </ul>
+
+                    <li>Ilkyu: Frontend Lead / Lead QA Tester</li>
+                    <ul>
+                        <li>Email: iju2@wisc.edu</li>
+                    </ul>
+
+                    <li>Andy: Frontend Developer</li>
                     <ul>
                         <li>Email: lin383@wisc.edu@wisc.edu</li>
                     </ul>
+
                     <li>Gleb: Frontend Developer</li>
                     <ul>
                         <li>Email: tsyganov@wisc.edu</li>
                     </ul>
-                    <li>Ilkyu: Frontend Lead </li>
-                    <ul>
-                        <li>Email: iju2@wisc.edu</li>
-                    </ul>
+
                     <li>Jason: Frontend Developer</li>
                     <ul>
                         <li>Email: jsutanto2@wisc.edu</li>
                     </ul>
-                    <li>Kenny: Project Leader / Backend Lead</li>
-                    <ul>
-                        <li>Email: klmui@wisc.edu@wisc.edu</li>
-                    </ul>
-                    
-                    <li>Sean: Backend Developer</li>
+
+                    <li>Sean: Backend Developer / Database Administrator</li>
                     <ul>
                         <li>Email: sjcunningham@wisc.edu</li>
                     </ul>
