@@ -262,3 +262,25 @@ exports.cancelReservation = async (req, res, food_id, quantity) => {
   const values = [quantity, food_id, req.params.pantry_id];
   return await execQuery("update", query, values);
 }
+
+// Check whether food exists
+exports.foodExists = async (req, res) => {
+  const query = `
+    SELECT COUNT (name)
+    FROM food
+    WHERE name = ?;
+  `;
+  const values = [[req.params.food_name]];
+  return await execQuery("select", query, values);
+}
+
+// Gett food ID
+exports.getFoodId = async (req, res) => {
+  const query = `
+    SELECT id
+    FROM food
+    WHERE name = ?;
+  `;
+  const values = [[req.params.food_name]];
+  return await execQuery("select", query, values);
+}
