@@ -26,6 +26,7 @@ Search for food you need at local food pantries and stay up-to-date on what's av
     
 ### Other Information   
 - Design Document: https://docs.google.com/document/d/1lXOrrndHcP1GTYBJhzM4yFtvriI7gGU7x-HHDS9sx60/edit?usp=sharing
+- Wirefreams: https://www.figma.com/file/1d4cQQ8BKN6v5QrFM2sOku/Scavenge?node-id=85%3A337
 - Postman API Docs: Please contact a developer to add you to our Postman collection.
 
 <h3>Members</h3>
