@@ -223,6 +223,7 @@ describe('Pantries', () => {
   });
 
   before('User-to-Pantry', async () => {
+    //signup sean2
     let data = await (agent
       .post('/signup')
       .send({
@@ -236,6 +237,18 @@ describe('Pantries', () => {
         state: 'wi',
         zipcode: '12345',
         email: 'email@wisc.edu'
+      })
+    );
+    // logout sean2
+    data = await (agent
+      .post('/logout')
+    );
+    // login sean1
+    data = await (agent
+      .post('/login')
+      .send({
+        username: 'sean1',
+        password: 'abc'
       })
     );
   })

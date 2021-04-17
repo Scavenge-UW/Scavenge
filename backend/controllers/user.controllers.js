@@ -53,7 +53,7 @@ exports.reserveAction = async(req, res) => {
   // Update res_food table
   try {
     foods.forEach(async(food_id, index) => {
-      db.updateResFood(req, res, res_id, food_id, quantities[index]);
+      await(db.updateResFood(req, res, res_id, food_id, quantities[index]));
     })
   } catch (error) {
     errorEncountered = 1;
@@ -71,7 +71,7 @@ exports.reserveAction = async(req, res) => {
   // Update inventory
   try {
     foods.forEach(async(food_id, index) => {
-      db.updateResInventory(req, res, food_id, quantities[index]);
+      await(db.updateResInventory(req, res, food_id, quantities[index]));
     })
   } catch (error) {
     errorEncountered = 1;
