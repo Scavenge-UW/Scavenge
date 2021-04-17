@@ -407,7 +407,7 @@ exports.pantryAddEmployeeAction = (req, res) => {
   // Check whether user is emp of this pantry
   let pantryIdInt = parseInt(req.params.pantry_id, 10);
   if (req.isEmployeeOf.indexOf(pantryIdInt) == -1) {
-    return res.status(500).json({ message: "Error. Employee login required" });
+    return res.status(200).json({ message: "Error. Employee login required" });
   }
   db.pantryAddEmployee(req, res).then(data => {
     return res.status(200).json(data);
@@ -419,7 +419,7 @@ exports.pantryAddEmployeeAction = (req, res) => {
 exports.pantryRemoveEmployeeAction = (req, res) => {
   let pantryIdInt = parseInt(req.params.pantry_id, 10);
   if (req.isEmployeeOf.indexOf(pantryIdInt) == -1) {
-    return res.status(500).json({ message: "Error. Employee login required" });
+    return res.status(200).json({ message: "Error. Employee login required" });
   }
   db.pantryRemoveEmployee(req, res).then(data => {
     return res.status(200).json(data);
