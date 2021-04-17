@@ -22,13 +22,41 @@ Search for food you need at local food pantries and stay up-to-date on what's av
 2. Backend: in the root directory (without the server running)
 
     Run `npm run test`
+    
+    
+### Other Information   
+- Design Document: https://docs.google.com/document/d/1lXOrrndHcP1GTYBJhzM4yFtvriI7gGU7x-HHDS9sx60/edit?usp=sharing
+- Postman API Docs: Please contact a developer to add you to our Postman collection.
 
+<h3>Members</h3>
+<ul>
+    <li>Kenny: Project Leader / Backend Lead / Frontend Developer</li>
+    <ul>
+        <li>Email: klmui@wisc.edu@wisc.edu</li>
+    </ul>
+    
+   <li>Ilkyu: Frontend Lead / Lead QA Tester</li>
+   <ul>
+        <li>Email: iju2@wisc.edu</li>
+   </ul>
 
-## Members
-- Kenneth (Kenny) Mui, klmui@wisc.edu
-- Ilkyu Ju
-- Jason Sutanto
-- Gleb Tsyganov
-- Sean Cunningham
-- Yayen (Andy) Lin, lin383@wisc.edu
+   <li>Andy: Frontend Developer</li>
+   <ul>
+        <li>Email: lin383@wisc.edu@wisc.edu</li>
+   </ul>
 
+   <li>Gleb: Frontend Developer</li>
+   <ul>
+        <li>Email: tsyganov@wisc.edu</li>
+   </ul>
+
+   <li>Jason: Frontend Developer</li>
+   <ul>
+        <li>Email: jsutanto2@wisc.edu</li>
+   </ul>
+
+   <li>Sean: Backend Developer / Database Administrator</li>
+   <ul>
+        <li>Email: sjcunningham@wisc.edu</li>
+   </ul>
+</ul>
