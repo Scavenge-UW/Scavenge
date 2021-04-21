@@ -24,14 +24,6 @@ function ViewRsvnMsgModal(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* 
-          not wanted but save for later used
-          <h5>
-            Reservation Detail #{props.selectedID}
-            (<span style={rsvnDetailStyle}>Food Name: Quantity</span>)
-          </h5>
-          <hr /> 
-          */}
           {/* only render the list if selectedResFoods is not `undefined` */}
           {props.show && (
             <ul>
@@ -45,14 +37,6 @@ function ViewRsvnMsgModal(props) {
               ))}
             </ul>
           )}
-          {/* debug purpose - TODO: reomve this paragraph */}
-          {/* <p>
-            reservation ID: {props.selectedID} <br />
-            Marked As Approved: {props.selectedApproved} <br />
-            Marked As Picked Up:{" "}
-            {props.selectedPickedUp ? props.selectedPickedUp : `null`} <br />
-            Marked As Cancelled: {props.selectedCancelled} <br />
-          </p> */}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>

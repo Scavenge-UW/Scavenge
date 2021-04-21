@@ -31,7 +31,7 @@ function PantryDetailView(props) {
    * Fetch pantry detail on init
    *
    */
-  React.useEffect(() => {
+  useEffect(() => {
     fetchPantryDetail();
   }, []);
 

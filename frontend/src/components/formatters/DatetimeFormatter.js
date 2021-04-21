@@ -41,7 +41,6 @@ function FormatTime(time) {
     time[0] = +time[0] % 12 || 12; // Adjust hours
     time.splice(3, 1);
   }
-  console.log("TIME IS - ", time);
 
   return time.join(""); // return adjusted time or original string
 }

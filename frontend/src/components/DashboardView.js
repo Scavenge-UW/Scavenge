@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 
 // import for components
 import DashboardMessages_New from "./DashboardMessages_New";
+import DashboardMessages_All from "./DashboardMessages_All";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
 import DashboardOpenHourCard from "./DashboardOpenHourCard";
 import formatters from "./formatters/DatetimeFormatter";
@@ -189,7 +190,7 @@ class DashboardView extends Component {
   }
 
   // ************************************************************************
-  // ******************* render helper function *****************************
+  // ******************* render helper functions ****************************
   // ************************************************************************
 
   /**
@@ -222,24 +223,15 @@ class DashboardView extends Component {
    */
   getMessageAndFunctions() {
     return (
-      <>
-        {/* message session title */}
-        <Row className="justify-content-center">
-          <h4>Messages</h4>
-        </Row>
-        {/* message session content */}
-        <Row className="justify-content-center">
-          <DashboardMessages_New
-            adminMode
-            // pantry_id={this.state.pantry_id} - TODO: remove this
-            rsvns={this.state.rsvns}
-            // fetchPantryDetail={this.props.fetchPantryDetail} - TODO: remove this
-            markAsApproved={this.markAsApproved.bind(this)}
-            markAsPickedUp={this.markAsPickedUp.bind(this)}
-            markAsCancelled={this.markAsCancelled.bind(this)}
-          />
-        </Row>
-      </>
+      <DashboardMessages_New
+        adminMode
+        pantry_id={this.state.pantry_id}
+        rsvns={this.state.rsvns}
+        // fetchPantryDetail={this.props.fetchPantryDetail} - TODO: remove this
+        markAsApproved={this.markAsApproved.bind(this)}
+        markAsPickedUp={this.markAsPickedUp.bind(this)}
+        markAsCancelled={this.markAsCancelled.bind(this)}
+      />
     );
   }
 

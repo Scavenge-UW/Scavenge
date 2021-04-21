@@ -77,17 +77,15 @@ class MyReservationsView extends Component {
           <h2>My Reservations</h2>
         </Row>
 
-        <Row className="justify-content-center">
-          <DashboardMessages_New
-            // pantry_id={this.state.pantry_id}
-            rsvns={this.state.rsvns}
-            weblink={this.state.weblink}
-            // fetchPantryDetail={this.props.fetchPantryDetail}
-            // markAsApproved={this.markAsApproved.bind(this)}
-            // markAsPickedUp={this.markAsPickedUp.bind(this)}
-            markAsCancelled={this.markAsCancelled.bind(this)}
-          />
-        </Row>
+        <DashboardMessages_New
+          // pantry_id={this.state.pantry_id}
+          rsvns={this.state.rsvns}
+          weblink={this.state.weblink}
+          // fetchPantryDetail={this.props.fetchPantryDetail}
+          // markAsApproved={this.markAsApproved.bind(this)}
+          // markAsPickedUp={this.markAsPickedUp.bind(this)}
+          markAsCancelled={this.markAsCancelled.bind(this)}
+        />
       </Container>
     );
   }

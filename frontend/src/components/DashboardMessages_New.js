@@ -15,6 +15,7 @@ import {
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 
 // other imports
+import { Link } from "react-router-dom";
 import "../css/common.css";
 import formatters from "./formatters/DatetimeFormatter"; // time formatters
 
@@ -406,9 +407,11 @@ class DashboardMessages extends Component {
     TODO: display all messages for admin view in Pagination
     */
     const viewMessagesForToday = [...this.props.rsvns]
+      // filter messages to show only today's reservations
       .filter(
-        (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "hours") < 24
+        (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "hours") < 24 // TODO: for civilian users, use 7 days
       )
+      // sort message by id, from most recent to least
       .sort((a, b) => b.reservation_id - a.reservation_id)
       .map((rsvn) => (
         <ListGroupItem
@@ -463,21 +466,36 @@ class DashboardMessages extends Component {
 
     return (
       <>
-        <ListGroup className="w-responsive w-75 mx-auto">
-          {viewMessagesForToday}
-        </ListGroup>
+        {/* View older messages */}
+        <Row className="justify-content-center mt-2">
+          <Link to={`/messages/ + ${this.props.pantry_id}`}>
+            <strong>View Older Messages</strong>
+          </Link>
+        </Row>
 
-        {/* Reservation Message Modal */}
-        <ViewRsvnMsgModal
-          show={this.state.showRsvnMsg}
-          selectedID={this.state.selectedID}
-          selectedUsername={this.state.selectedUsername}
-          selectedApproved={this.state.selectedApproved}
-          selectedPickedUp={this.state.selectedPickedUp}
-          selectedCancelled={this.state.selectedCancelled}
-          selectedResFoods={this.state.selectedResFoods}
-          onHide={() => this.closeViewRsvnMsgModal()}
-        />
+        {/* message session title */}
+        <Row className="justify-content-center mt-2">
+          <h4>Messages</h4>
+        </Row>
+
+        {/* message session content */}
+        <Row className="justify-content-center">
+          <ListGroup className="w-responsive w-75 mx-auto">
+            {viewMessagesForToday}
+          </ListGroup>
+
+          {/* Reservation Message Modal */}
+          <ViewRsvnMsgModal
+            show={this.state.showRsvnMsg}
+            selectedID={this.state.selectedID}
+            selectedUsername={this.state.selectedUsername}
+            selectedApproved={this.state.selectedApproved}
+            selectedPickedUp={this.state.selectedPickedUp}
+            selectedCancelled={this.state.selectedCancelled}
+            selectedResFoods={this.state.selectedResFoods}
+            onHide={() => this.closeViewRsvnMsgModal()}
+          />
+        </Row>
       </>
     );
   }

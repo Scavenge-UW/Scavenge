@@ -17,12 +17,13 @@ import SignupView from "./components/Authentication/SignupView";
 import HomeView from "./components/HomeView";
 import PantryAdminView from "./components/PantryAdminView";
 import PantryDetailView from "./components/PantryDetailView";
+import DashboardMessages_All from "./components/DashboardMessages_All";
 import MyReservationsView from "./components/MyReservationsView";
 import FoodSearchView from "./components/FoodSearchView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
 import CartView from "./components/CartView";
-import HelpView from "./components/HelpView"
+import HelpView from "./components/HelpView";
 
 import "react-toastify/dist/ReactToastify.css";
 import async from "react-bootstrap-typeahead/lib/behaviors/async";
@@ -136,6 +137,9 @@ function App(props) {
               </Route>
               <Route path="/pantry">
                 <PantryAdminView />
+              </Route>
+              <Route path="/messages">
+                <DashboardMessages_All isAdmin={isAdmin} />
               </Route>
               <Route path="/pantries/:pantry_id">
                 <PantryDetailView
