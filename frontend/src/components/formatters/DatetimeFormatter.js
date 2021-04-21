@@ -109,4 +109,5 @@ const formatters = {
   formatTimeElapsed: FormatTimeElapsed,
   getTimeElapsed: getTimeElapsed,
 };
+
 export default formatters;

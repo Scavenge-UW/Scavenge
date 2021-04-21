@@ -18,6 +18,7 @@ import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 import { Link } from "react-router-dom";
 import "../css/common.css";
 import formatters from "./formatters/DatetimeFormatter"; // time formatters
+import msgFunctions from "./functions/MsgButtons.functions"; // message helper functions
 
 /**
  * Message view for user (admin/staff) to view their reservation messages.
@@ -66,142 +67,11 @@ class DashboardMessages extends Component {
   }
 
   /**
-   * Set pagination to selected page
-   * @param {*} pageNo
-   */
-  setCurrPage(pageNo) {
-    this.setState({
-      currPage: pageNo,
-    });
-  }
-
-  /*
-      TODO: 
-      marked complete reservation with check2-circle icon
-      marked cancelled reservation with x-circle icon
-      - https://icons.getbootstrap.com
-  */
-  /**
-   * @returns the message header (title and reservation time) for each message.
-   */
-  getMessageHeader(rsvn_id) {
-    let rsvn = {};
-    for (const r of this.props.rsvns) {
-      if (r.reservation_id === rsvn_id) {
-        rsvn = { ...r };
-      }
-    }
-
-    const monoStyle = {
-      fontFamily: "monospace",
-      fontSize: "120%",
-      fontWeight: "450",
-    };
-
-    const timeElapsedStyle = {
-      color: "--gray",
-      textAlign: "right",
-      fontSize: "60%",
-      fontWeight: "300",
-      paddingLeft: "2px",
-    };
-
-    const messageStyle = {
-      textAlign: "left",
-      fontSize: "95%",
-      fontWeight: "light",
-      paddingLeft: "2px",
-    };
-
-    const receivedTime = rsvn.order_time;
-    const numItems = (
-      <span style={monoStyle}>{Object.keys(rsvn.res_foods).length}</span>
-    );
-    let message;
-    if (this.props.adminMode) {
-      const username = <span style={monoStyle}>{rsvn.username}</span>;
-      message = ["User ", username, " just reserved ", numItems, " items!"];
-    } else {
-      const pantryname = (
-        <Button
-          tag="a"
-          onClick={() => window.open(this.props.weblink, "_blank")}
-          variant="link"
-          // size="sm"
-        >
-          <em>{rsvn.name}</em>
-        </Button>
-      );
-      message = ["You have  ", numItems, " items reserved at ", pantryname];
-    }
-
-    const messageHeader = (
-      <Row className="align-items-center" style={messageStyle}>
-        <Col xs={10} className="text-left">
-          {message}
-        </Col>
-        <Col xs={2} className="text-right" style={timeElapsedStyle}>
-          {formatters.formatTimeElapsed(receivedTime)} ago.
-        </Col>
-      </Row>
-    );
-
-    return messageHeader;
-  }
-
-  /**
-   * Set visibility of Approved Button
-   */
-  approvedButtonIsHidden(rsvn) {
-    // if rsvn is cancelled, approved button should not be up
-    if (rsvn.cancelled) return true;
-    // if rsvn is approved, approved button should not be up
-    else if (rsvn.approved) return true;
-    // if rsvn is picked up, approved button should not be up
-    else if (rsvn.picked_up_time) return true;
-    else return false;
-  }
-
-  /**
-   * Set visibility of Picked-Up Button
-   */
-  pickedupButtonIsHidden(rsvn) {
-    // if rsvn is cancelled, pickedup button should not be up
-    if (rsvn.cancelled) return true;
-    // if rsvn is not approved, pickedup button should not be up
-    else if (!rsvn.approved) return true;
-    // if rsvn is picked up, pickedup button should not be up
-    else if (rsvn.picked_up_time) return true;
-    else return false;
-  }
-
-  /**
-   * Set visibility of Cancel Button
-   */
-  cancelButtonIsHidden(rsvn) {
-    // if rsvn is cancelled, cancelled button should not be up
-    if (rsvn.cancelled) return true;
-    // if rsvn is picked up, cancelled button should not be up
-    if (rsvn.picked_up_time) return true;
-    else return false;
-  }
-
-  /**
-   * Set visibility of Reset Button
-   */
-  resetButtonIsHidden(rsvn) {
-    // if rsvn is approved and picked up, reset button should not be up
-    if (rsvn.approved && rsvn.picked_up_time) return true;
-    // if rsvn is picked up, cancelled button should not be up
-    else return false;
-  }
-
-  /**
    * Show control buttons based on current mode (adminMode vs userMode)
    */
   showControls(rsvn) {
     var controls;
-    const approveButton = !this.approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
+    const approveButton = !msgFunctions.approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
       <Button
         // variant="outline-primary"
         variant="primary"
@@ -226,7 +96,7 @@ class DashboardMessages extends Component {
       </Button>
     );
 
-    const markAsPickedUpButton = !this.pickedupButtonIsHidden(rsvn) && (
+    const markAsPickedUpButton = !msgFunctions.pickedupButtonIsHidden(rsvn) && (
       // {/* Mark as Picked Up Button */}
       <Button
         // variant="outline-success"
@@ -252,7 +122,9 @@ class DashboardMessages extends Component {
       </Button>
     );
 
-    const cancelReservationButton = !this.cancelButtonIsHidden(rsvn) && (
+    const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
+      rsvn
+    ) && (
       // {/* Cancel this reservation Button */}
       <Button
         // variant="outline-danger"
@@ -286,7 +158,7 @@ class DashboardMessages extends Component {
     cancelled = 1, clicking 'reset' will make
     `marked as picked up` button enabled
     */
-    const resetButton = !this.resetButtonIsHidden(rsvn) && (
+    const resetButton = !msgFunctions.resetButtonIsHidden(rsvn) && (
       <Button
         variant="dark"
         size="sm"
@@ -325,77 +197,6 @@ class DashboardMessages extends Component {
     return controls;
   }
 
-  /*
-    TODO: 
-    marked complete reservation with check2-circle icon
-    marked cancelled reservation with x-circle icon
-    add hover over description
-    - https://icons.getbootstrap.com
-    */
-
-  /**
-   * return formatted reservation status.
-   */
-  getMessageStatus(rsvn) {
-    const keyStyle = {
-      textAlign: "right",
-      paddingRight: "3px",
-      fontWeight: "bold",
-      color: "#A9A9A9",
-    };
-
-    const valStyle = {
-      textAlign: "left",
-      justifyContent: "center",
-      paddingLeft: "3px",
-      fontFamily: "monospace",
-      fontSize: "1.1rem",
-    };
-
-    return [
-      {
-        key: "ID:",
-        value: `#${rsvn.reservation_id}`, // append a # in the front of id number
-        bgColor: "#FFFFFF",
-      },
-      {
-        key: "ORDERED AT:",
-        value: formatters.datetime(rsvn.order_time),
-        bgColor: "#F7F7F7",
-      },
-      {
-        key: "APPROVED:",
-        value: rsvn.approved ? "approved" : "not approved",
-        bgColor: "#FFFFFF",
-      },
-      {
-        key: "ESTIMATED PICK UP AT:",
-        value: formatters.datetime(rsvn.estimated_pick_up),
-        bgColor: "#F7F7F7",
-      },
-      {
-        key: "PICKED UP AT:",
-        value: rsvn.picked_up_time
-          ? formatters.datetime(rsvn.picked_up_time)
-          : "not picked up",
-        bgColor: "#FFFFFF",
-      },
-      {
-        key: "CANCELLED:",
-        value: rsvn.cancelled ? "cancelled" : "not cancelled",
-        bgColor: "#F7F7F7",
-      },
-    ].map((entry, key) => (
-      <Row
-        key={key}
-        style={{ backgroundColor: entry.bgColor, paddingTop: "3px" }}
-      >
-        <Col style={keyStyle}>{entry.key}</Col>
-        <Col style={valStyle}>{entry.value}</Col>
-      </Row>
-    ));
-  }
-
   /**
    * Iteratively returns messages according to the number of reservations received
    * and buttons for some actions.
@@ -422,11 +223,13 @@ class DashboardMessages extends Component {
         >
           {/* Heading */}
           <ListGroupItemHeading className="mb-1">
-            {this.getMessageHeader(rsvn.reservation_id)}
+            {msgFunctions.getMessageHeader(rsvn, this.props.adminMode)}
           </ListGroupItemHeading>
           <hr />
           {/* Body (status) */}
-          <ListGroupItemText>{this.getMessageStatus(rsvn)}</ListGroupItemText>
+          <ListGroupItemText>
+            {msgFunctions.getMessageStatus(rsvn)}
+          </ListGroupItemText>
 
           <Row className="justify-content-center align-items-center">
             {/* Veiw Message Buttons */}

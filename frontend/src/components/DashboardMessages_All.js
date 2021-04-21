@@ -22,7 +22,8 @@ import PantryService from "../services/pantry.service";
 // other imports
 import "../css/common.css";
 import formatters from "./formatters/DatetimeFormatter"; // time formatters
-import GoTop from "../actions/goTopAction";
+import msgFunctions from "./functions/MsgButtons.functions"; // message helper functions
+import ScrollToTop from "./functions/ScrollToTop.function";
 
 /**
  * Message view for user (admin/staff) to view their reservation messages.
@@ -50,6 +51,9 @@ function DashboardMessages_All(props) {
   const [currPage, setCurrPage] = useState(1);
   const paginationCount = 10;
 
+  // get pantry_id in route param
+  // const { pantry_id } = useParams();
+
   /**
    * Fetch pantry detail on init
    *
@@ -67,6 +71,70 @@ function DashboardMessages_All(props) {
     setPantryDetail(detail);
   };
 
+  // /**
+  //  * Mark a reservation as approved
+  //  *
+  //  * @param {*} rsvn_id
+  //  */
+  // const markAsApproved = (rsvn_id) => {
+  //   console.log(rsvn_id);
+
+  //   PantryService.setApproved(this.state.pantry_id, rsvn_id)
+  //     .then(() => {
+  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "You have successfully approved the reservation with ID " + rsvn_id
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error("Error while approving reservation with ID " + rsvn_id);
+  //     });
+  // };
+
+  // /**
+  //  * Mark a reservation as picked up
+  //  *
+  //  * @param {*} rsvn_id
+  //  */
+  // const markAsPickedUp = (rsvn_id) => {
+  //   console.log(rsvn_id);
+  //   PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
+  //     .then(() => {
+  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "reservation with ID " +
+  //           rsvn_id +
+  //           " was successfully marked as picked up!"
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error(
+  //         "Error while marking reservation with ID " +
+  //           rsvn_id +
+  //           " as picked up."
+  //       );
+  //     });
+  // };
+
+  // /**
+  //  *  Mark a reservation as cancelled
+  //  *
+  //  * @param {*} rsvn_id
+  //  */
+  // const markAsCancelled = (rsvn_id) => {
+  //   console.log(rsvn_id);
+  //   PantryService.setCancelled(this.state.pantry_id, rsvn_id)
+  //     .then(() => {
+  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "You have successfully cancelled the reservation with ID " + rsvn_id
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error("Error while cancelling reservation with ID " + rsvn_id);
+  //     });
+  // };
+
   /**
    * Opens View Reservation Message modal.
    *
@@ -83,132 +151,12 @@ function DashboardMessages_All(props) {
     setShowRsvnMsg(false);
   };
 
-  /*
-      TODO:
-      marked complete reservation with check2-circle icon
-      marked cancelled reservation with x-circle icon
-      - https://icons.getbootstrap.com
-  */
-  /**
-   * @returns the message header (title and reservation time) for each message.
-   */
-  const getMessageHeader = (rsvn_id) => {
-    let rsvn = {};
-    for (const r of pantryDetail.reservations) {
-      if (r.reservation_id === rsvn_id) {
-        rsvn = { ...r };
-      }
-    }
-
-    const monoStyle = {
-      fontFamily: "monospace",
-      fontSize: "120%",
-      fontWeight: "450",
-    };
-
-    const timeElapsedStyle = {
-      color: "--gray",
-      textAlign: "right",
-      fontSize: "60%",
-      fontWeight: "300",
-      paddingLeft: "2px",
-    };
-
-    const messageStyle = {
-      textAlign: "left",
-      fontSize: "95%",
-      fontWeight: "light",
-      paddingLeft: "2px",
-    };
-
-    const numItems = (
-      <span style={monoStyle}>{Object.keys(rsvn.res_foods).length}</span>
-    );
-    let message;
-    if (props.isAdmin) {
-      const username = <span style={monoStyle}>{rsvn.username}</span>;
-      message = ["User ", username, " just reserved ", numItems, " items!"];
-    } else {
-      const pantryname = (
-        <Button
-          tag="a"
-          onClick={() => window.open(pantryDetail.website, "_blank")}
-          variant="link"
-          // size="sm"
-        >
-          <em>{rsvn.name}</em>
-        </Button>
-      );
-      message = ["You have  ", numItems, " items reserved at ", pantryname];
-    }
-
-    const messageHeader = (
-      <Row className="align-items-center" style={messageStyle}>
-        <Col xs={10} className="text-left">
-          {message}
-        </Col>
-        <Col xs={2} className="text-right" style={timeElapsedStyle}>
-          {formatters.formatTimeElapsed(rsvn.order_time)} ago.
-        </Col>
-      </Row>
-    );
-
-    return messageHeader;
-  };
-
-  /**
-   * Set visibility of Approved Button
-   */
-  const approvedButtonIsHidden = (rsvn) => {
-    // if rsvn is cancelled, approved button should not be up
-    if (rsvn.cancelled) return true;
-    // if rsvn is approved, approved button should not be up
-    else if (rsvn.approved) return true;
-    // if rsvn is picked up, approved button should not be up
-    else if (rsvn.picked_up_time) return true;
-    else return false;
-  };
-
-  /**
-   * Set visibility of Picked-Up Button
-   */
-  const pickedupButtonIsHidden = (rsvn) => {
-    // if rsvn is cancelled, pickedup button should not be up
-    if (rsvn.cancelled) return true;
-    // if rsvn is not approved, pickedup button should not be up
-    else if (!rsvn.approved) return true;
-    // if rsvn is picked up, pickedup button should not be up
-    else if (rsvn.picked_up_time) return true;
-    else return false;
-  };
-
-  /**
-   * Set visibility of Cancel Button
-   */
-  const cancelButtonIsHidden = (rsvn) => {
-    // if rsvn is cancelled, cancelled button should not be up
-    if (rsvn.cancelled) return true;
-    // if rsvn is picked up, cancelled button should not be up
-    if (rsvn.picked_up_time) return true;
-    else return false;
-  };
-
-  /**
-   * Set visibility of Reset Button
-   */
-  const resetButtonIsHidden = (rsvn) => {
-    // if rsvn is approved and picked up, reset button should not be up
-    if (rsvn.approved && rsvn.picked_up_time) return true;
-    // if rsvn is picked up, cancelled button should not be up
-    else return false;
-  };
-
   /**
    * Show control buttons based on current mode (adminMode vs userMode)
    */
   const showControls = (rsvn) => {
     var controls;
-    const approveButton = !approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
+    const approveButton = !msgFunctions.approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
       <Button
         // variant="outline-primary"
         variant="primary"
@@ -227,7 +175,7 @@ function DashboardMessages_All(props) {
       </Button>
     );
 
-    const markAsPickedUpButton = !pickedupButtonIsHidden(rsvn) && (
+    const markAsPickedUpButton = !msgFunctions.pickedupButtonIsHidden(rsvn) && (
       // {/* Mark as Picked Up Button */}
       <Button
         // variant="outline-success"
@@ -247,7 +195,9 @@ function DashboardMessages_All(props) {
       </Button>
     );
 
-    const cancelReservationButton = !cancelButtonIsHidden(rsvn) && (
+    const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
+      rsvn
+    ) && (
       // {/* Cancel this reservation Button */}
       <Button
         // variant="outline-danger"
@@ -275,7 +225,7 @@ function DashboardMessages_All(props) {
     cancelled = 1, clicking 'reset' will make
     `marked as picked up` button enabled
     */
-    const resetButton = !resetButtonIsHidden(rsvn) && (
+    const resetButton = !msgFunctions.resetButtonIsHidden(rsvn) && (
       <Button
         variant="dark"
         size="sm"
@@ -308,79 +258,6 @@ function DashboardMessages_All(props) {
     return controls;
   };
 
-  /*
-    TODO:
-    marked complete reservation with check2-circle icon
-    marked cancelled reservation with x-circle icon
-    add hover over description
-    - https://icons.getbootstrap.com
-    */
-
-  /**
-   * return formatted reservation status.
-   */
-  const getMessageStatus = (rsvn) => {
-    const keyStyle = {
-      textAlign: "right",
-      paddingRight: "3px",
-      fontWeight: "bold",
-      color: "#A9A9A9",
-    };
-
-    const valStyle = {
-      textAlign: "left",
-      justifyContent: "center",
-      paddingLeft: "3px",
-      fontFamily: "monospace",
-      fontSize: "1.1rem",
-    };
-
-    const formattedData = [
-      {
-        key: "ID:",
-        value: `#${rsvn.reservation_id}`, // append a # in the front of id number
-        bgColor: "#FFFFFF",
-      },
-      {
-        key: "ORDERED AT:",
-        value: formatters.datetime(rsvn.order_time),
-        bgColor: "#F7F7F7",
-      },
-      {
-        key: "APPROVED:",
-        value: rsvn.approved ? "approved" : "not approved",
-        bgColor: "#FFFFFF",
-      },
-      {
-        key: "ESTIMATED PICK UP AT:",
-        value: formatters.datetime(rsvn.estimated_pick_up),
-        bgColor: "#F7F7F7",
-      },
-      {
-        key: "PICKED UP AT:",
-        value: rsvn.picked_up_time
-          ? formatters.datetime(rsvn.picked_up_time)
-          : "not picked up",
-        bgColor: "#FFFFFF",
-      },
-      {
-        key: "CANCELLED:",
-        value: rsvn.cancelled ? "cancelled" : "not cancelled",
-        bgColor: "#F7F7F7",
-      },
-    ];
-
-    return formattedData.map((entry, key) => (
-      <Row
-        key={key}
-        style={{ backgroundColor: entry.bgColor, paddingTop: "3px" }}
-      >
-        <Col style={keyStyle}>{entry.key}</Col>
-        <Col style={valStyle}>{entry.value}</Col>
-      </Row>
-    ));
-  };
-
   const getMessageItems = () => {
     let msgListItems = [];
     if (pantryDetail) {
@@ -398,11 +275,13 @@ function DashboardMessages_All(props) {
           >
             {/* Heading */}
             <ListGroupItemHeading className="mb-1">
-              {getMessageHeader(rsvn.reservation_id)}
+              {msgFunctions.getMessageHeader(rsvn, props.isAdmin)}
             </ListGroupItemHeading>
             <hr />
             {/* Body (status) */}
-            <ListGroupItemText>{getMessageStatus(rsvn)}</ListGroupItemText>
+            <ListGroupItemText>
+              {msgFunctions.getMessageStatus(rsvn)}
+            </ListGroupItemText>
 
             <Row className="justify-content-center align-items-center">
               {/* Veiw Message Buttons */}
@@ -462,70 +341,6 @@ function DashboardMessages_All(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
-  /*
-  TODO: add a expand button to hide some reservation messages when len(messages) > 3
-  TODO: display all messages for admin view in Pagination
-  */
-  /**
-   * Iteratively returns messages according to the number of reservations received
-   * and buttons for some actions.
-   *
-   */
-  // const ViewMessages = () => {
-  //   if (pantryDetail) {
-  //     return [...pantryDetail.reservations]
-  //       .sort((a, b) => b.reservation_id - a.reservation_id)
-  //       .map((rsvn) => (
-  //         <ListGroupItem
-  //           tag="a"
-  //           className="justify-content-center p-3 mt-1"
-  //           key={rsvn.reservation_id}
-  //           action
-  //         >
-  //           {/* Heading */}
-  //           <ListGroupItemHeading className="mb-1">
-  //             {getMessageHeader(rsvn.reservation_id)}
-  //           </ListGroupItemHeading>
-  //           <hr />
-  //           {/* Body (status) */}
-  //           <ListGroupItemText>{getMessageStatus(rsvn)}</ListGroupItemText>
-
-  //           <Row className="justify-content-center align-items-center">
-  //             {/* Veiw Message Buttons */}
-  //             <Button
-  //               // variant="outline-secondary"
-  //               variant="secondary"
-  //               size="sm"
-  //               className="m-2"
-  //               md="auto"
-  //               onClick={() => {
-  //                 setSelectedID(rsvn.reservation_id);
-  //                 setSelectedUsername(rsvn.username);
-  //                 setSelectedApproved(rsvn.approved);
-  //                 setSelectedPickedUp(rsvn.picked_up_time);
-  //                 setSelectedCancelled(rsvn.cancelled);
-  //                 setSelectedResFoods(rsvn.res_foods);
-  //                 openViewRsvnMsgModal();
-  //               }}
-  //             >
-  //               View Reserved Foods
-  //             </Button>
-
-  //             {/*
-  //           approved/pickedup/cancelled/reset buttons for adminMode,
-  //           cancelled buttons for userMode
-  //         */}
-  //             {showControls(rsvn)}
-  //           </Row>
-  //         </ListGroupItem>
-  //       ));
-  //   } else {
-  //     return <></>;
-  //   }
-  // };
-
-  console.log({ pantryDetail });
-
   return (
     <Container>
       <ListGroup className="w-responsive w-75 mx-auto">
@@ -535,7 +350,7 @@ function DashboardMessages_All(props) {
       </ListGroup>
 
       <Row className="justify-content-center mt-4">
-        <GoTop scrollStepInPx="100" delayInMs="10.50" />
+        <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
       </Row>
 
       {/* Reservation Message Modal */}

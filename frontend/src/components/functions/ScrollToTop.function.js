@@ -2,7 +2,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 
-const GoTop = (props) => {
+const ScrollToTop = (props) => {
   const [intervalId, setIntervalId] = React.useState(0);
   const [thePosition, setThePosition] = React.useState(false);
 
@@ -46,4 +46,4 @@ const GoTop = (props) => {
   return <>{renderGoTopIcon()}</>;
 };
 
-export default GoTop;
+export default ScrollToTop;
