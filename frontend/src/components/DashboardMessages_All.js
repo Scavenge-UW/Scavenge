@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // import for bootstrap
+import Pagination from "react-bootstrap/Pagination";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -379,20 +380,15 @@ function DashboardMessages_All(props) {
     ));
   };
 
-  /*
-  TODO: add a expand button to hide some reservation messages when len(messages) > 3
-  TODO: display all messages for admin view in Pagination
-  */
-  /**
-   * Iteratively returns messages according to the number of reservations received
-   * and buttons for some actions.
-   *
-   */
-  const ViewMessages = () => {
+  const getMessageItems = () => {
+    let msgListItems = [];
     if (pantryDetail) {
-      return [...pantryDetail.reservations]
+      const rsvns = [...pantryDetail.reservations]
         .sort((a, b) => b.reservation_id - a.reservation_id)
-        .map((rsvn) => (
+        .slice((currPage - 1) * paginationCount, paginationCount * currPage);
+
+      for (const rsvn of rsvns) {
+        msgListItems.push(
           <ListGroupItem
             tag="a"
             className="justify-content-center p-3 mt-1"
@@ -431,22 +427,110 @@ function DashboardMessages_All(props) {
               {/*
             approved/pickedup/cancelled/reset buttons for adminMode,
             cancelled buttons for userMode
-          */}
+            */}
               {showControls(rsvn)}
             </Row>
           </ListGroupItem>
-        ));
-    } else {
-      return <></>;
+        );
+      }
     }
+    return msgListItems;
   };
+
+  const showPagination = () => {
+    let numItems = 0;
+    if (pantryDetail)
+      numItems = Object.values(pantryDetail.reservations).length;
+    let numPages = Math.ceil(numItems / paginationCount);
+    let paginationItems = [];
+
+    for (let pageNo = 1; pageNo <= numPages; pageNo++) {
+      paginationItems.push(
+        <Pagination.Item
+          key={pageNo}
+          active={pageNo === currPage}
+          onClick={() => {
+            setCurrPage(pageNo);
+          }}
+        >
+          {pageNo}
+        </Pagination.Item>
+      );
+    }
+
+    return <Pagination>{paginationItems}</Pagination>;
+  };
+
+  /*
+  TODO: add a expand button to hide some reservation messages when len(messages) > 3
+  TODO: display all messages for admin view in Pagination
+  */
+  /**
+   * Iteratively returns messages according to the number of reservations received
+   * and buttons for some actions.
+   *
+   */
+  // const ViewMessages = () => {
+  //   if (pantryDetail) {
+  //     return [...pantryDetail.reservations]
+  //       .sort((a, b) => b.reservation_id - a.reservation_id)
+  //       .map((rsvn) => (
+  //         <ListGroupItem
+  //           tag="a"
+  //           className="justify-content-center p-3 mt-1"
+  //           key={rsvn.reservation_id}
+  //           action
+  //         >
+  //           {/* Heading */}
+  //           <ListGroupItemHeading className="mb-1">
+  //             {getMessageHeader(rsvn.reservation_id)}
+  //           </ListGroupItemHeading>
+  //           <hr />
+  //           {/* Body (status) */}
+  //           <ListGroupItemText>{getMessageStatus(rsvn)}</ListGroupItemText>
+
+  //           <Row className="justify-content-center align-items-center">
+  //             {/* Veiw Message Buttons */}
+  //             <Button
+  //               // variant="outline-secondary"
+  //               variant="secondary"
+  //               size="sm"
+  //               className="m-2"
+  //               md="auto"
+  //               onClick={() => {
+  //                 setSelectedID(rsvn.reservation_id);
+  //                 setSelectedUsername(rsvn.username);
+  //                 setSelectedApproved(rsvn.approved);
+  //                 setSelectedPickedUp(rsvn.picked_up_time);
+  //                 setSelectedCancelled(rsvn.cancelled);
+  //                 setSelectedResFoods(rsvn.res_foods);
+  //                 openViewRsvnMsgModal();
+  //               }}
+  //             >
+  //               View Reserved Foods
+  //             </Button>
+
+  //             {/*
+  //           approved/pickedup/cancelled/reset buttons for adminMode,
+  //           cancelled buttons for userMode
+  //         */}
+  //             {showControls(rsvn)}
+  //           </Row>
+  //         </ListGroupItem>
+  //       ));
+  //   } else {
+  //     return <></>;
+  //   }
+  // };
 
   console.log({ pantryDetail });
 
   return (
     <Container>
       <ListGroup className="w-responsive w-75 mx-auto">
-        <ViewMessages />
+        {/* <ViewMessages /> */}
+        <Row className="justify-content-center">{getMessageItems()}</Row>
+        <Row className="justify-content-center mt-4">{showPagination()}</Row>
       </ListGroup>
 
       {/* Reservation Message Modal */}
@@ -460,6 +544,14 @@ function DashboardMessages_All(props) {
         selectedResFoods={selectedResFoods}
         onHide={() => closeViewRsvnMsgModal()}
       />
+
+      {/* footer message */}
+      <Row className="justify-content-center">
+        <p className="mt-4">
+          Time is Money. We provide an efficient way for you to update available
+          items.
+        </p>
+      </Row>
     </Container>
   );
 }
