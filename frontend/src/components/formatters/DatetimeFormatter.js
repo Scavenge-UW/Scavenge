@@ -89,9 +89,25 @@ function FormatTimeElapsed(receivedTime, maxPrecission = 3) {
   return formattedItems.length !== 0 ? formattedItems.join(" ") : "-";
 }
 
+/**
+ * return time elapsed since reservation received time
+ *
+ * @param {*} receivedTime - reservation received time in format as 'yyyy-mm-ddThh:mm:ss.msZ'
+ * @param {*} unit - unit of time like days/hours/minutes/seconds
+ * @returns time elapsed since reservation received time
+ */
+function getTimeElapsed(receivedTime, unit) {
+  // convert receivedTime to moment object
+  const received = moment(new Date(receivedTime), "YYYY/MM/DD HH:mm:ss");
+  const current = moment(new Date(), "YYYY/MM/DD HH:mm:ss");
+
+  return current.diff(received, unit);
+}
+
 const formatters = {
   datetime: FormatDateTime,
   time: FormatTime,
-  timeElapsed: FormatTimeElapsed,
+  formatTimeElapsed: FormatTimeElapsed,
+  getTimeElapsed: getTimeElapsed,
 };
 export default formatters;

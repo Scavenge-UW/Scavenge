@@ -8,9 +8,10 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 // import for components
-import DashboardMessages from "./DashboardMessages";
+import DashboardMessages_New from "./DashboardMessages_New";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
 import DashboardOpenHourCard from "./DashboardOpenHourCard";
+import formatters from "./formatters/DatetimeFormatter";
 
 // import for services
 import PantryService from "../services/pantry.service";
@@ -197,7 +198,9 @@ class DashboardView extends Component {
    * @returns
    */
   getDashboardOverview() {
-    const numReservation = Object.keys(this.state.rsvns).length;
+    const numReservation = [...this.state.rsvns].filter(
+      (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "hours") < 24
+    ).length;
 
     return (
       <>
@@ -215,22 +218,22 @@ class DashboardView extends Component {
   }
 
   /**
-   * render componenet for messages box.
+   * render component for message box.
    */
   getMessageAndFunctions() {
     return (
       <>
-        {/* Sub-session title */}
+        {/* message session title */}
         <Row className="justify-content-center">
-          <h4>Messages </h4>
+          <h4>Messages</h4>
         </Row>
-        {/* Sub-session content */}
+        {/* message session content */}
         <Row className="justify-content-center">
-          <DashboardMessages
+          <DashboardMessages_New
             adminMode
-            // pantry_id={this.state.pantry_id}
+            // pantry_id={this.state.pantry_id} - TODO: remove this
             rsvns={this.state.rsvns}
-            fetchPantryDetail={this.props.fetchPantryDetail}
+            // fetchPantryDetail={this.props.fetchPantryDetail} - TODO: remove this
             markAsApproved={this.markAsApproved.bind(this)}
             markAsPickedUp={this.markAsPickedUp.bind(this)}
             markAsCancelled={this.markAsCancelled.bind(this)}

@@ -8,7 +8,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 // import for components
-import DashboardMessages from "./DashboardMessages";
+import DashboardMessages_New from "./DashboardMessages_New";
 
 // import for services
 import ReservationService from "../services/reservation.service";
@@ -78,7 +78,7 @@ class MyReservationsView extends Component {
         </Row>
 
         <Row className="justify-content-center">
-          <DashboardMessages
+          <DashboardMessages_New
             // pantry_id={this.state.pantry_id}
             rsvns={this.state.rsvns}
             weblink={this.state.weblink}

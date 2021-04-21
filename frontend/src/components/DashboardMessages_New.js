@@ -18,6 +18,13 @@ import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 import "../css/common.css";
 import formatters from "./formatters/DatetimeFormatter"; // time formatters
 
+/**
+ * Message view for user (admin/staff) to view their reservation messages.
+ *
+ * @version 1.0.0
+ * @author [Ilkyu Ju](https://github.com/osori)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
+ */
 class DashboardMessages extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +61,16 @@ class DashboardMessages extends Component {
   closeViewRsvnMsgModal() {
     this.setState({
       showRsvnMsg: false,
+    });
+  }
+
+  /**
+   * Set pagination to selected page
+   * @param {*} pageNo
+   */
+  setCurrPage(pageNo) {
+    this.setState({
+      currPage: pageNo,
     });
   }
 
@@ -123,7 +140,7 @@ class DashboardMessages extends Component {
           {message}
         </Col>
         <Col xs={2} className="text-right" style={timeElapsedStyle}>
-          {formatters.timeElapsed(receivedTime)} ago.
+          {formatters.formatTimeElapsed(receivedTime)} ago.
         </Col>
       </Row>
     );
@@ -131,6 +148,9 @@ class DashboardMessages extends Component {
     return messageHeader;
   }
 
+  /**
+   * Set visibility of Approved Button
+   */
   approvedButtonIsHidden(rsvn) {
     // if rsvn is cancelled, approved button should not be up
     if (rsvn.cancelled) return true;
@@ -141,6 +161,9 @@ class DashboardMessages extends Component {
     else return false;
   }
 
+  /**
+   * Set visibility of Picked-Up Button
+   */
   pickedupButtonIsHidden(rsvn) {
     // if rsvn is cancelled, pickedup button should not be up
     if (rsvn.cancelled) return true;
@@ -151,6 +174,9 @@ class DashboardMessages extends Component {
     else return false;
   }
 
+  /**
+   * Set visibility of Cancel Button
+   */
   cancelButtonIsHidden(rsvn) {
     // if rsvn is cancelled, cancelled button should not be up
     if (rsvn.cancelled) return true;
@@ -159,6 +185,9 @@ class DashboardMessages extends Component {
     else return false;
   }
 
+  /**
+   * Set visibility of Reset Button
+   */
   resetButtonIsHidden(rsvn) {
     // if rsvn is approved and picked up, reset button should not be up
     if (rsvn.approved && rsvn.picked_up_time) return true;
@@ -167,7 +196,7 @@ class DashboardMessages extends Component {
   }
 
   /**
-   * Show control buttons based on current mode (adminMode vs user mode)
+   * Show control buttons based on current mode (adminMode vs userMode)
    */
   showControls(rsvn) {
     var controls;
@@ -248,13 +277,15 @@ class DashboardMessages extends Component {
       </Button>
     );
 
+    /* 
+    reset button is used for making disabled button enabled
+    by marking the reservation as approved
+       
+    e.g. 
+    cancelled = 1, clicking 'reset' will make
+    `marked as picked up` button enabled
+    */
     const resetButton = !this.resetButtonIsHidden(rsvn) && (
-      // {/*
-      // reset button is used for making disabled button enabled
-      // by marking the reservation as approved
-      // e.g. cancelled = 1, clicking 'reset' will make
-      //      `marked as picked up` button enabled
-      // */}
       <Button
         variant="dark"
         size="sm"
@@ -374,7 +405,10 @@ class DashboardMessages extends Component {
     TODO: add a expand button to hide some reservation messages when len(messages) > 3
     TODO: display all messages for admin view in Pagination
     */
-    const viewMessages = [...this.props.rsvns]
+    const viewMessagesForToday = [...this.props.rsvns]
+      .filter(
+        (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "hours") < 24
+      )
       .sort((a, b) => b.reservation_id - a.reservation_id)
       .map((rsvn) => (
         <ListGroupItem
@@ -430,7 +464,7 @@ class DashboardMessages extends Component {
     return (
       <>
         <ListGroup className="w-responsive w-75 mx-auto">
-          {viewMessages}
+          {viewMessagesForToday}
         </ListGroup>
 
         {/* Reservation Message Modal */}
