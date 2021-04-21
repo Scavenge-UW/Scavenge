@@ -208,9 +208,12 @@ class DashboardMessages extends Component {
     TODO: display all messages for admin view in Pagination
     */
     const viewMessagesForToday = [...this.props.rsvns]
-      // filter messages to show only today's reservations
-      .filter(
-        (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "hours") < 24 // TODO: for civilian users, use 7 days
+      // filter messages to show only today's reservations for admin mode
+      // and show this week's reservations for user mode
+      .filter((rsvn) =>
+        this.props.adminMode
+          ? formatters.getTimeElapsed(rsvn.order_time, "hours") < 24
+          : formatters.getTimeElapsed(rsvn.order_time, "days") < 7
       )
       // sort message by id, from most recent to least
       .sort((a, b) => b.reservation_id - a.reservation_id)
@@ -223,7 +226,11 @@ class DashboardMessages extends Component {
         >
           {/* Heading */}
           <ListGroupItemHeading className="mb-1">
-            {msgFunctions.getMessageHeader(rsvn, this.props.adminMode)}
+            {msgFunctions.getMessageHeader(
+              rsvn,
+              this.props.adminMode,
+              this.props.weblink
+            )}
           </ListGroupItemHeading>
           <hr />
           {/* Body (status) */}

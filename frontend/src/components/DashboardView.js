@@ -226,6 +226,7 @@ class DashboardView extends Component {
         adminMode
         pantry_id={this.state.pantry_id}
         rsvns={this.state.rsvns}
+        weblink={this.state.weblink}
         // fetchPantryDetail={this.props.fetchPantryDetail} - TODO: remove this
         markAsApproved={this.markAsApproved.bind(this)}
         markAsPickedUp={this.markAsPickedUp.bind(this)}
