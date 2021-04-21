@@ -70,6 +70,9 @@ class MyReservationsView extends Component {
     if (!this.props.username) {
       return <Redirect push to="/login" />;
     }
+
+    console.log({ ...this.state.rsvns });
+
     return (
       <Container>
         {/* Pantry's name */}

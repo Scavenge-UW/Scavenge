@@ -167,7 +167,7 @@ function getMessageStatus(rsvn) {
     },
     {
       key: "APPROVED:",
-      value: rsvn.approved ? "approved" : "not approved",
+      value: rsvn.approved ? <strong>approved</strong> : "not approved",
       bgColor: "#FFFFFF",
     },
     {
@@ -177,14 +177,16 @@ function getMessageStatus(rsvn) {
     },
     {
       key: "PICKED UP AT:",
-      value: rsvn.picked_up_time
-        ? formatters.datetime(rsvn.picked_up_time)
-        : "not picked up",
+      value: rsvn.picked_up_time ? (
+        <strong>{formatters.datetime(rsvn.picked_up_time)}</strong>
+      ) : (
+        "not picked up"
+      ),
       bgColor: "#FFFFFF",
     },
     {
       key: "CANCELLED:",
-      value: rsvn.cancelled ? "cancelled" : "not cancelled",
+      value: rsvn.cancelled ? <strong>cancelled</strong> : "not cancelled",
       bgColor: "#F7F7F7",
     },
   ].map((entry, key) => (
