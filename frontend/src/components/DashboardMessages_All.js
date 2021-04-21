@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 // import for bootstrap
 import Pagination from "react-bootstrap/Pagination";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import {
   ListGroup,
@@ -21,7 +21,7 @@ import PantryService from "../services/pantry.service";
 
 // other imports
 import "../css/common.css";
-import formatters from "./formatters/DatetimeFormatter"; // time formatters
+import { toast } from "react-toastify";
 import msgFunctions from "./functions/MsgButtons.functions"; // message helper functions
 import ScrollToTop from "./functions/ScrollToTop.function";
 
@@ -52,7 +52,8 @@ function DashboardMessages_All(props) {
   const paginationCount = 10;
 
   // get pantry_id in route param
-  // const { pantry_id } = useParams();
+  const { pantry_id } = useParams();
+  console.log({ ...useParams() });
 
   /**
    * Fetch pantry detail on init
@@ -67,73 +68,72 @@ function DashboardMessages_All(props) {
    *
    */
   const fetchPantryDetail = async () => {
-    const detail = await PantryService.getDetail(1); // TODO: change pantry id based on user's affiliation
+    let detail = await PantryService.getDetail(pantry_id); // TODO: change pantry id based on user's affiliation
     setPantryDetail(detail);
   };
 
-  // /**
-  //  * Mark a reservation as approved
-  //  *
-  //  * @param {*} rsvn_id
-  //  */
-  // const markAsApproved = (rsvn_id) => {
-  //   console.log(rsvn_id);
+  /**
+   * Mark a reservation as approved
+   *
+   * @param {*} rsvn_id
+   */
+  const markAsApproved = (rsvn_id) => {
+    console.log(rsvn_id);
+    PantryService.setApproved(pantry_id, rsvn_id)
+      .then(() => {
+        fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "You have successfully approved the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while approving reservation with ID " + rsvn_id);
+      });
+  };
 
-  //   PantryService.setApproved(this.state.pantry_id, rsvn_id)
-  //     .then(() => {
-  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "You have successfully approved the reservation with ID " + rsvn_id
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error("Error while approving reservation with ID " + rsvn_id);
-  //     });
-  // };
+  /**
+   * Mark a reservation as picked up
+   *
+   * @param {*} rsvn_id
+   */
+  const markAsPickedUp = (rsvn_id) => {
+    console.log(rsvn_id);
+    PantryService.setPickedUp(pantry_id, rsvn_id)
+      .then(() => {
+        fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "reservation with ID " +
+            rsvn_id +
+            " was successfully marked as picked up!"
+        );
+      })
+      .catch(() => {
+        toast.error(
+          "Error while marking reservation with ID " +
+            rsvn_id +
+            " as picked up."
+        );
+      });
+  };
 
-  // /**
-  //  * Mark a reservation as picked up
-  //  *
-  //  * @param {*} rsvn_id
-  //  */
-  // const markAsPickedUp = (rsvn_id) => {
-  //   console.log(rsvn_id);
-  //   PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
-  //     .then(() => {
-  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "reservation with ID " +
-  //           rsvn_id +
-  //           " was successfully marked as picked up!"
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error(
-  //         "Error while marking reservation with ID " +
-  //           rsvn_id +
-  //           " as picked up."
-  //       );
-  //     });
-  // };
-
-  // /**
-  //  *  Mark a reservation as cancelled
-  //  *
-  //  * @param {*} rsvn_id
-  //  */
-  // const markAsCancelled = (rsvn_id) => {
-  //   console.log(rsvn_id);
-  //   PantryService.setCancelled(this.state.pantry_id, rsvn_id)
-  //     .then(() => {
-  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "You have successfully cancelled the reservation with ID " + rsvn_id
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error("Error while cancelling reservation with ID " + rsvn_id);
-  //     });
-  // };
+  /**
+   *  Mark a reservation as cancelled
+   *
+   * @param {*} rsvn_id
+   */
+  const markAsCancelled = (rsvn_id) => {
+    console.log(rsvn_id);
+    PantryService.setCancelled(pantry_id, rsvn_id)
+      .then(() => {
+        fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "You have successfully cancelled the reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error("Error while cancelling reservation with ID " + rsvn_id);
+      });
+  };
 
   /**
    * Opens View Reservation Message modal.
@@ -167,7 +167,7 @@ function DashboardMessages_All(props) {
           if (window.confirm("Approve this reservation?")) {
             setSelectedID(rsvn.reservation_id);
             setSelectedApproved(rsvn.approved);
-            // this.props.markAsApproved(this.state.selectedID);
+            markAsApproved(rsvn.reservation_id);
           }
         }}
       >
@@ -187,7 +187,7 @@ function DashboardMessages_All(props) {
           if (window.confirm("Mark this reservation as picked up?")) {
             setSelectedID(rsvn.reservation_id);
             setSelectedPickedUp(rsvn.picked_up_time);
-            // this.props.markAsPickedUp(this.state.selectedID);
+            markAsPickedUp(rsvn.reservation_id);
           }
         }}
       >
@@ -209,7 +209,7 @@ function DashboardMessages_All(props) {
           if (window.confirm("Cancel this reservation?")) {
             setSelectedID(rsvn.reservation_id);
             setSelectedCancelled(rsvn.cancelled);
-            // this.props.markAsCancelled(this.state.selectedID);
+            markAsCancelled(rsvn.reservation_id);
           }
         }}
       >
@@ -235,7 +235,7 @@ function DashboardMessages_All(props) {
           if (window.confirm("Reset and approve this reservation?")) {
             setSelectedID(rsvn.reservation_id);
             setSelectedCancelled(rsvn.cancelled);
-            // this.props.markAsApproved(this.state.selectedID);
+            markAsApproved(rsvn.reservation_id);
           }
         }}
         disabled={false}

@@ -9,7 +9,6 @@ import Button from "react-bootstrap/Button";
 
 // import for components
 import DashboardMessages_New from "./DashboardMessages_New";
-import DashboardMessages_All from "./DashboardMessages_All";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
 import DashboardOpenHourCard from "./DashboardOpenHourCard";
 import formatters from "./formatters/DatetimeFormatter";
@@ -32,7 +31,7 @@ class DashboardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pantry_id: "", // TODO: Change to actual pantry id
+      pantry_id: null, // TODO: Change to actual pantry id
       pantryName: "",
       rsvns: [],
       description: "",

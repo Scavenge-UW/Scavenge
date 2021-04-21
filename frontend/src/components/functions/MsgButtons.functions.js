@@ -1,3 +1,10 @@
+/**
+ * Helper functions for Message Buttons like approved/pickedup/cancelled/.
+ *
+ * @version 1.0.0
+ * @author [Ilkyu Ju](https://github.com/osori)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
+ */
 // import for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";

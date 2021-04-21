@@ -270,11 +270,13 @@ class DashboardMessages extends Component {
     return (
       <>
         {/* View older messages */}
-        <Row className="justify-content-center mt-2">
-          <Link to={`/messages/ + ${this.props.pantry_id}`}>
-            <strong>View Older Messages</strong>
-          </Link>
-        </Row>
+        {this.props.pantry_id && (
+          <Row className="justify-content-center mt-2">
+            <Link to={"/messages/" + this.props.pantry_id}>
+              <strong>View Older Messages</strong>
+            </Link>
+          </Row>
+        )}
 
         {/* message session title */}
         <Row className="justify-content-center mt-2">

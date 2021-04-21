@@ -138,7 +138,7 @@ function App(props) {
               <Route path="/pantry">
                 <PantryAdminView />
               </Route>
-              <Route path="/messages">
+              <Route path="/messages/:pantry_id">
                 <DashboardMessages_All isAdmin={isAdmin} />
               </Route>
               <Route path="/pantries/:pantry_id">
