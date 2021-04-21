@@ -22,6 +22,7 @@ import PantryService from "../services/pantry.service";
 // other imports
 import "../css/common.css";
 import formatters from "./formatters/DatetimeFormatter"; // time formatters
+import GoTop from "../actions/goTopAction";
 
 /**
  * Message view for user (admin/staff) to view their reservation messages.
@@ -532,6 +533,10 @@ function DashboardMessages_All(props) {
         <Row className="justify-content-center">{getMessageItems()}</Row>
         <Row className="justify-content-center mt-4">{showPagination()}</Row>
       </ListGroup>
+
+      <Row className="justify-content-center mt-4">
+        <GoTop scrollStepInPx="100" delayInMs="10.50" />
+      </Row>
 
       {/* Reservation Message Modal */}
       <ViewRsvnMsgModal
