@@ -349,6 +349,7 @@ function DashboardMessages_All(props) {
         <Row className="justify-content-center mt-4">{showPagination()}</Row>
       </ListGroup>
 
+      {/* Scroll to top button */}
       <Row className="justify-content-center mt-4">
         <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
       </Row>

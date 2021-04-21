@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
  *
  */
 class MyReservationsView extends Component {
@@ -32,6 +33,10 @@ class MyReservationsView extends Component {
   }
 
   componentDidMount() {
+    this.fetchResponse();
+  }
+
+  fetchResponse() {
     const response = ReservationService.getUserReservations(
       this.props.username
     ).then((response) => {
@@ -39,28 +44,28 @@ class MyReservationsView extends Component {
         rsvns: response.reservations,
       });
     });
-    // TODO: load website link for each pantry (to be used in DashboardMessage, and will be shown in My Reservation page)
-    // PantryService.getDetail();
   }
 
-  // TODO: action not functioning
   /**
    *  Mark a reservation as cancelled
    *
    * @param {*} rsvn_id
    */
-  // markAsCancelled(rsvn_id) {
-  //   console.log(rsvn_id);
-  //   PantryService.setCancelled(this.state.pantry_id, rsvn_id)
-  //     .then(() => {
-  //       toast.success(
-  //         "You have successfully cancelled the reservation with ID " + rsvn_id
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error("Error while cancelling reservation with ID " + rsvn_id);
-  //     });
-  // }
+  markWithDraw(pantry_id, rsvn_id) {
+    console.log(rsvn_id);
+    PantryService.setCancelled(pantry_id, rsvn_id)
+      .then(() => {
+        this.fetchResponse();
+        toast.success(
+          "You have successfully withdrawed your reservation with ID " + rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error(
+          "Error while withdrawing your reservation with ID " + rsvn_id
+        );
+      });
+  }
 
   /**
    * Renders components.
@@ -81,14 +86,11 @@ class MyReservationsView extends Component {
         </Row>
 
         <DashboardMessages_New
-          // pantry_id={this.state.pantry_id}
           adminMode={false}
           rsvns={this.state.rsvns}
-          weblink={this.state.weblink}
-          // fetchPantryDetail={this.props.fetchPantryDetail}
-          // markAsApproved={this.markAsApproved.bind(this)}
-          // markAsPickedUp={this.markAsPickedUp.bind(this)}
-          // markAsCancelled={this.markAsCancelled.bind(this)}
+          markWithDraw={(pantry_id, rsvn_id) =>
+            this.markWithDraw(pantry_id, rsvn_id)
+          }
         />
       </Container>
     );

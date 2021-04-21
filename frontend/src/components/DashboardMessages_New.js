@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import "../css/common.css";
 import formatters from "./formatters/DatetimeFormatter"; // time formatters
 import msgFunctions from "./functions/MsgButtons.functions"; // message helper functions
+import ScrollToTop from "./functions/ScrollToTop.function";
 
 /**
  * Message view for user (admin/staff) to view their reservation messages.
@@ -140,13 +141,20 @@ class DashboardMessages extends Component {
                 selectedCancelled: rsvn.cancelled,
               },
               () => {
-                this.props.markAsCancelled(this.state.selectedID);
+                this.props.adminMode
+                  ? this.props.markAsCancelled(this.state.selectedID)
+                  : this.props.markWithDraw(
+                      rsvn.pantry_id,
+                      this.state.selectedID
+                    );
               }
             );
           }
         }}
       >
-        Cancel this reservation
+        {this.props.adminMode
+          ? "Cancel this reservation"
+          : "Withdraw this reservation"}
       </Button>
     );
 
@@ -208,15 +216,14 @@ class DashboardMessages extends Component {
     TODO: display all messages for admin view in Pagination
     */
     const viewMessagesForToday = [...this.props.rsvns]
-      // filter messages to show only today's reservations for admin mode
-      // and show this week's reservations for user mode
       .filter((rsvn) =>
+        // filter messages to show only today's reservations for admin mode
+        // and show this week's reservations for user mode
         this.props.adminMode
           ? formatters.getTimeElapsed(rsvn.order_time, "hours") < 24
           : formatters.getTimeElapsed(rsvn.order_time, "days") < 7
       )
-      // sort message by id, from most recent to least
-      .sort((a, b) => b.reservation_id - a.reservation_id)
+      .sort((a, b) => b.reservation_id - a.reservation_id) // sort message from most recent to least
       .map((rsvn) => (
         <ListGroupItem
           tag="a"
@@ -229,7 +236,7 @@ class DashboardMessages extends Component {
             {msgFunctions.getMessageHeader(
               rsvn,
               this.props.adminMode,
-              this.props.weblink
+              this.props.adminMode ? null : "/pantries/" + rsvn.pantry_id
             )}
           </ListGroupItemHeading>
           <hr />
@@ -277,7 +284,7 @@ class DashboardMessages extends Component {
     return (
       <>
         {/* View older messages */}
-        {this.props.pantry_id && (
+        {this.props.rsvns && (
           <Row className="justify-content-center mt-2">
             <Link to={"/messages/" + this.props.pantry_id}>
               <strong>View Older Messages</strong>
@@ -307,6 +314,11 @@ class DashboardMessages extends Component {
             selectedResFoods={this.state.selectedResFoods}
             onHide={() => this.closeViewRsvnMsgModal()}
           />
+        </Row>
+
+        {/* Scroll to top button */}
+        <Row className="justify-content-center mt-4">
+          <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
         </Row>
       </>
     );
