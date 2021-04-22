@@ -116,11 +116,10 @@ function Dashboard_userAllMsg(props) {
    * Show control buttons for user mode
    */
   const showControls = (rsvn) => {
-    // the only shared component between a user and admin
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
-      // {/* Cancel this reservation Button */}
+      // {/* Withdraw this reservation Button */}
       <Button
         // variant="outline-danger"
         variant="danger"

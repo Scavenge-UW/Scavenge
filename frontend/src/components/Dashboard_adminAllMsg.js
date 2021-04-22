@@ -195,7 +195,6 @@ function Dashboard_adminAllMsg(props) {
       </Button>
     );
 
-    // the only shared component between a user and admin
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
