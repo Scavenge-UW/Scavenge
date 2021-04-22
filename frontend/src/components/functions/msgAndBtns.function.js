@@ -1,5 +1,6 @@
 /**
- * Helper functions for Message Buttons like approved/pickedup/cancelled/.
+ * Helper functions for Messages and functionalities
+ * of Buttons like approved/pickedup/cancelled/reset/.
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
@@ -138,7 +139,6 @@ function cancelButtonIsHidden(rsvn) {
 function resetButtonIsHidden(rsvn) {
   // if rsvn is approved and picked up, reset button should not be up
   if (rsvn.approved && rsvn.picked_up_time) return true;
-  // if rsvn is picked up, cancelled button should not be up
   else return false;
 }
 

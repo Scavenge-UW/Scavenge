@@ -18,7 +18,7 @@ import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 import { Link } from "react-router-dom";
 import "../css/common.css";
 import formatters from "./formatters/DatetimeFormatter"; // time formatters
-import msgFunctions from "./functions/MsgButtons.functions"; // message helper functions
+import msgFunctions from "./functions/msgAndBtns.function"; // message helper functions
 import ScrollToTop from "./functions/ScrollToTop.function";
 
 /**
@@ -28,7 +28,7 @@ import ScrollToTop from "./functions/ScrollToTop.function";
  * @author [Ilkyu Ju](https://github.com/osori)
  * @author [Yayen Lin](https://github.com/yayen-lin)
  */
-class DashboardMessages extends Component {
+class Dashboard_newMsg extends Component {
   constructor(props) {
     super(props);
 
@@ -123,6 +123,7 @@ class DashboardMessages extends Component {
       </Button>
     );
 
+    // the only shared component between a user and admin
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
@@ -158,14 +159,6 @@ class DashboardMessages extends Component {
       </Button>
     );
 
-    /* 
-    reset button is used for making disabled button enabled
-    by marking the reservation as approved
-       
-    e.g. 
-    cancelled = 1, clicking 'reset' will make
-    `marked as picked up` button enabled
-    */
     const resetButton = !msgFunctions.resetButtonIsHidden(rsvn) && (
       <Button
         variant="dark"
@@ -199,7 +192,7 @@ class DashboardMessages extends Component {
         resetButton,
       ];
     } else {
-      controls = [cancelReservationButton]; // TODO: button not functioning
+      controls = [cancelReservationButton];
     }
 
     return controls;
@@ -211,10 +204,6 @@ class DashboardMessages extends Component {
    *
    */
   render() {
-    /*
-    TODO: add a expand button to hide some reservation messages when len(messages) > 3
-    TODO: display all messages for admin view in Pagination
-    */
     const viewMessagesForToday = [...this.props.rsvns]
       .filter((rsvn) =>
         // filter messages to show only today's reservations for admin mode
@@ -283,20 +272,25 @@ class DashboardMessages extends Component {
 
     return (
       <>
-        {/* View older messages */}
-        {this.props.rsvns && (
-          <Row className="justify-content-center mt-2">
-            <Link to={"/messages/" + this.props.pantry_id}>
-              <strong>View Older Messages</strong>
-            </Link>
-          </Row>
-        )}
-
+        <Row className="justify-content-center mt-2">
+          {this.props.adminMode
+            ? // adminMode
+              this.props.pantry_id && (
+                <Link to={"/messages_a/" + this.props.pantry_id}>
+                  <strong>View Older Messages</strong>
+                </Link>
+              )
+            : // userMode
+              this.props.rsvns && (
+                <Link to={"/messages_b/" + this.props.username}>
+                  <strong>View Your Reservation History</strong>
+                </Link>
+              )}
+        </Row>
         {/* message session title */}
         <Row className="justify-content-center mt-2">
           <h4>Messages</h4>
         </Row>
-
         {/* message session content */}
         <Row className="justify-content-center">
           <ListGroup className="w-responsive w-75 mx-auto">
@@ -315,14 +309,15 @@ class DashboardMessages extends Component {
             onHide={() => this.closeViewRsvnMsgModal()}
           />
         </Row>
-
         {/* Scroll to top button */}
-        <Row className="justify-content-center mt-4">
-          <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
-        </Row>
+        {!this.props.adminMode && (
+          <Row className="justify-content-center mt-4">
+            <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
+          </Row>
+        )}
       </>
     );
   }
 }
 
-export default DashboardMessages;
+export default Dashboard_newMsg;

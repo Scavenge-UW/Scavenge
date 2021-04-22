@@ -8,7 +8,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 // import for components
-import DashboardMessages_New from "./DashboardMessages_New";
+import Dashboard_newMsg from "./Dashboard_newMsg";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
 import DashboardOpenHourCard from "./DashboardOpenHourCard";
 import formatters from "./formatters/DatetimeFormatter";
@@ -206,7 +206,7 @@ class DashboardView extends Component {
       <>
         {/* Page title */}
         <Row className="justify-content-center">
-          <h3>Dashboard</h3>
+          <h2>Dashboard</h2>
         </Row>
         <hr />
         {/* Overview message */}
@@ -222,8 +222,8 @@ class DashboardView extends Component {
    */
   getMessageAndFunctions() {
     return (
-      <DashboardMessages_New
-        adminMode
+      <Dashboard_newMsg
+        adminMode={true}
         pantry_id={this.state.pantry_id}
         rsvns={this.state.rsvns}
         markAsApproved={this.markAsApproved.bind(this)}

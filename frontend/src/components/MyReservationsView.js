@@ -8,7 +8,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 // import for components
-import DashboardMessages_New from "./DashboardMessages_New";
+import Dashboard_newMsg from "./Dashboard_newMsg";
 
 // import for services
 import ReservationService from "../services/reservation.service";
@@ -16,6 +16,7 @@ import PantryService from "../services/pantry.service";
 
 // other imports
 import { toast } from "react-toastify";
+import formatters from "./formatters/DatetimeFormatter";
 
 /**
  * MyReservationsView
@@ -29,7 +30,7 @@ import { toast } from "react-toastify";
 class MyReservationsView extends Component {
   constructor(props) {
     super(props);
-    this.state = { rsvns: [], weblink: "" };
+    this.state = { rsvns: [] };
   }
 
   componentDidMount() {
@@ -55,7 +56,7 @@ class MyReservationsView extends Component {
     console.log(rsvn_id);
     PantryService.setCancelled(pantry_id, rsvn_id)
       .then(() => {
-        this.fetchResponse();
+        this.fetchResponse(); // push changes to be displayed by re-rendered
         toast.success(
           "You have successfully withdrawed your reservation with ID " + rsvn_id
         );
@@ -76,18 +77,25 @@ class MyReservationsView extends Component {
       return <Redirect push to="/login" />;
     }
 
-    console.log({ ...this.state.rsvns });
+    const numReservation = [...this.state.rsvns].filter(
+      (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "days") < 7
+    ).length;
 
     return (
       <Container>
-        {/* Pantry's name */}
+        {/* page title */}
         <Row className="justify-content-center">
           <h2>My Reservations</h2>
         </Row>
+        {/* overview message */}
+        <Row className="justify-content-center">
+          You have made {numReservation} reservations this week.
+        </Row>
 
-        <DashboardMessages_New
+        <Dashboard_newMsg
           adminMode={false}
           rsvns={this.state.rsvns}
+          username={this.props.username}
           markWithDraw={(pantry_id, rsvn_id) =>
             this.markWithDraw(pantry_id, rsvn_id)
           }

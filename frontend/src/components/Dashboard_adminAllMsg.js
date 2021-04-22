@@ -22,19 +22,19 @@ import PantryService from "../services/pantry.service";
 // other imports
 import "../css/common.css";
 import { toast } from "react-toastify";
-import msgFunctions from "./functions/MsgButtons.functions"; // message helper functions
+import msgFunctions from "./functions/msgAndBtns.function"; // message helper functions
 import ScrollToTop from "./functions/ScrollToTop.function";
 
 /**
- * Message view for user (admin/staff) to view their reservation messages.
+ * Message view for admin/staff to view all of
+ * their reservation messages in pagination.
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
  * @author [Yayen Lin](https://github.com/yayen-lin)
  */
-function DashboardMessages_All(props) {
-  // pantry info
-  const [pantryDetail, setPantryDetail] = useState(null);
+function Dashboard_adminAllMsg(props) {
+  const [pantryDetail, setPantryDetail] = useState(null); // pantry info
 
   // show reservation message, default false
   const [showRsvnMsg, setShowRsvnMsg] = useState(false);
@@ -117,7 +117,7 @@ function DashboardMessages_All(props) {
   };
 
   /**
-   *  Mark a reservation as cancelled
+   * Mark a reservation as cancelled
    *
    * @param {*} rsvn_id
    */
@@ -152,7 +152,7 @@ function DashboardMessages_All(props) {
   };
 
   /**
-   * Show control buttons based on current mode (adminMode vs userMode)
+   * Show control buttons for admin mode
    */
   const showControls = (rsvn) => {
     var controls;
@@ -195,6 +195,7 @@ function DashboardMessages_All(props) {
       </Button>
     );
 
+    // the only shared component between a user and admin
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
@@ -217,14 +218,6 @@ function DashboardMessages_All(props) {
       </Button>
     );
 
-    /*
-    reset button is used for making disabled button enabled
-    by marking the reservation as approved
-
-    e.g.
-    cancelled = 1, clicking 'reset' will make
-    `marked as picked up` button enabled
-    */
     const resetButton = !msgFunctions.resetButtonIsHidden(rsvn) && (
       <Button
         variant="dark"
@@ -244,83 +237,80 @@ function DashboardMessages_All(props) {
       </Button>
     );
 
-    if (props.isAdmin) {
-      controls = [
-        approveButton,
-        markAsPickedUpButton,
-        cancelReservationButton,
-        resetButton,
-      ];
-    } else {
-      controls = [cancelReservationButton]; // TODO: button not functioning
-    }
+    controls = [
+      approveButton,
+      markAsPickedUpButton,
+      cancelReservationButton,
+      resetButton,
+    ];
 
     return controls;
   };
 
   const getMessageItems = () => {
     let msgListItems = [];
-    if (pantryDetail) {
-      const rsvns = [...pantryDetail.reservations]
+    let rsvns = [];
+    if (pantryDetail)
+      rsvns = [...pantryDetail.reservations]
         .sort((a, b) => b.reservation_id - a.reservation_id)
         .slice((currPage - 1) * paginationCount, paginationCount * currPage);
 
-      for (const rsvn of rsvns) {
-        msgListItems.push(
-          <ListGroupItem
-            tag="a"
-            className="justify-content-center p-3 mt-1"
-            key={rsvn.reservation_id}
-            action
-          >
-            {/* Heading */}
-            <ListGroupItemHeading className="mb-1">
-              {msgFunctions.getMessageHeader(rsvn, props.isAdmin)}
-            </ListGroupItemHeading>
-            <hr />
-            {/* Body (status) */}
-            <ListGroupItemText>
-              {msgFunctions.getMessageStatus(rsvn)}
-            </ListGroupItemText>
+    for (const rsvn of rsvns) {
+      msgListItems.push(
+        <ListGroupItem
+          tag="a"
+          className="justify-content-center p-3 mt-1"
+          key={rsvn.reservation_id}
+          action
+        >
+          {/* Heading */}
+          <ListGroupItemHeading className="mb-1">
+            {msgFunctions.getMessageHeader(rsvn, true)}
+          </ListGroupItemHeading>
+          <hr />
+          {/* Body (status) */}
+          <ListGroupItemText>
+            {msgFunctions.getMessageStatus(rsvn)}
+          </ListGroupItemText>
 
-            <Row className="justify-content-center align-items-center">
-              {/* Veiw Message Buttons */}
-              <Button
-                // variant="outline-secondary"
-                variant="secondary"
-                size="sm"
-                className="m-2"
-                md="auto"
-                onClick={() => {
-                  setSelectedID(rsvn.reservation_id);
-                  setSelectedUsername(rsvn.username);
-                  setSelectedApproved(rsvn.approved);
-                  setSelectedPickedUp(rsvn.picked_up_time);
-                  setSelectedCancelled(rsvn.cancelled);
-                  setSelectedResFoods(rsvn.res_foods);
-                  openViewRsvnMsgModal();
-                }}
-              >
-                View Reserved Foods
-              </Button>
+          <Row className="justify-content-center align-items-center">
+            {/* Veiw Message Buttons */}
+            <Button
+              // variant="outline-secondary"
+              variant="secondary"
+              size="sm"
+              className="m-2"
+              md="auto"
+              onClick={() => {
+                setSelectedID(rsvn.reservation_id);
+                setSelectedUsername(rsvn.username);
+                setSelectedApproved(rsvn.approved);
+                setSelectedPickedUp(rsvn.picked_up_time);
+                setSelectedCancelled(rsvn.cancelled);
+                setSelectedResFoods(rsvn.res_foods);
+                openViewRsvnMsgModal();
+              }}
+            >
+              View Reserved Foods
+            </Button>
 
-              {/*
-            approved/pickedup/cancelled/reset buttons for adminMode,
-            cancelled buttons for userMode
+            {/*
+            approved/pickedup/cancelled/reset buttons for admin mode
             */}
-              {showControls(rsvn)}
-            </Row>
-          </ListGroupItem>
-        );
-      }
+            {showControls(rsvn)}
+          </Row>
+        </ListGroupItem>
+      );
     }
     return msgListItems;
   };
 
   const showPagination = () => {
-    let numItems = 0;
-    if (pantryDetail)
-      numItems = Object.values(pantryDetail.reservations).length;
+    let numItems = pantryDetail
+      ? Object.values(pantryDetail.reservations).length
+      : 0;
+    // if (pantryDetail)
+    //   numItems = Object.values(pantryDetail.reservations).length;
     let numPages = Math.ceil(numItems / paginationCount);
     let paginationItems = [];
 
@@ -377,4 +367,4 @@ function DashboardMessages_All(props) {
   );
 }
 
-export default DashboardMessages_All;
+export default Dashboard_adminAllMsg;
