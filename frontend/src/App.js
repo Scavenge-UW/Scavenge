@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import React, { Component } from "react";
 import { Provider } from "react-redux";
@@ -25,7 +24,6 @@ import CartView from "./components/CartView";
 import HelpView from "./components/HelpView";
 
 import "react-toastify/dist/ReactToastify.css";
-import async from "react-bootstrap-typeahead/lib/behaviors/async";
 
 class App extends Component {
   constructor(props) {
