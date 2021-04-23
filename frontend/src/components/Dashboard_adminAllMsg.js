@@ -311,8 +311,6 @@ function Dashboard_adminAllMsg(props) {
     let numItems = pantryDetail
       ? Object.values(pantryDetail.reservations).length
       : 0;
-    // if (pantryDetail)
-    //   numItems = Object.values(pantryDetail.reservations).length;
     let numPages = Math.ceil(numItems / paginationCount);
     let paginationItems = [];
 
@@ -333,10 +331,53 @@ function Dashboard_adminAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
+  // /**
+  //  *  Message center overview message
+  //  */
+  // const getMessageOverviewAndTitle = () => {
+  //   let numMsgNotApproved = 0;
+  //   let numMsgNotPickedup = 0;
+
+  //   pantryDetail.reservations.forEach((rsvn) => {
+  //     if (rsvn.approved === 0) {
+  //       numMsgNotApproved++;
+  //       return;
+  //     }
+  //     if (rsvn.picked_up_time === null) {
+  //       numMsgNotPickedup++;
+  //       return;
+  //     }
+  //   });
+
+  //   let overviewMsg = (
+  //     <>
+  //       <Row className="justify-content-center mt-4">
+  //         <h2>{pantryDetail.name}</h2>
+  //       </Row>
+  //       <Row className="justify-content-center mt-4">
+  //         <h2>Message Center</h2>
+  //       </Row>
+  //       <hr />
+  //       <Row className="justify-content-center mt-4">
+  //         You have {numMsgNotApproved} reservations to be approved or cancel{" "}
+  //       </Row>
+  //       <Row className="justify-content-center">
+  //         and {numMsgNotPickedup} reservations waiting to be picked up.
+  //       </Row>
+  //     </>
+  //   );
+  //   return overviewMsg;
+  // };
+
   if (pantryDetail) {
     return (
       <Container id="admin-reservations">
-        <ListGroup className="w-responsive w-75 mx-auto">
+        {msgFunctions.getMessageOverviewAndTitle(
+          pantryDetail.reservations,
+          pantryDetail.name,
+          true
+        )}
+        <ListGroup className="w-responsive w-75 mx-auto mt-4">
           {/* <ViewMessages /> */}
           <Row className="justify-content-center">{getMessageItems()}</Row>
           <Row className="justify-content-center mt-4">{showPagination()}</Row>

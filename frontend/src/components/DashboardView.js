@@ -57,25 +57,22 @@ class DashboardView extends Component {
     const pantry = this.props.pantryDetail;
 
     if (pantry) {
-      this.setState(
-        {
-          pantry_id: pantry.pantry_id,
-          pantryName: pantry.name,
-          rsvns: pantry.reservations,
-          description: pantry.details,
-          address: pantry.address,
-          zipcode: pantry.zip,
-          city: pantry.city,
-          stte: pantry.state,
-          phone: pantry.phone_number,
-          weblink: pantry.website,
-          img_src: pantry.img_src,
-          lat: pantry.lat,
-          lon: pantry.lon,
-          hours: pantry.hours,
-        }
-        // () => this.getDashboardOverview() // TODO: not sure if this is needed.
-      );
+      this.setState({
+        pantry_id: pantry.pantry_id,
+        pantryName: pantry.name,
+        rsvns: pantry.reservations,
+        description: pantry.details,
+        address: pantry.address,
+        zipcode: pantry.zip,
+        city: pantry.city,
+        stte: pantry.state,
+        phone: pantry.phone_number,
+        weblink: pantry.website,
+        img_src: pantry.img_src,
+        lat: pantry.lat,
+        lon: pantry.lon,
+        hours: pantry.hours,
+      });
     }
   }
 

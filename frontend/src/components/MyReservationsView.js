@@ -85,11 +85,12 @@ class MyReservationsView extends Component {
       return (
         <Container id="my-reservation">
           {/* page title */}
-          <Row className="justify-content-center">
+          <Row className="justify-content-center mt-4">
             <h2>My Reservations</h2>
           </Row>
+          <hr />
           {/* overview message */}
-          <Row className="justify-content-center">
+          <Row className="justify-content-center mt-4">
             You have made {numReservation} reservations in the last 7 days.
           </Row>
 

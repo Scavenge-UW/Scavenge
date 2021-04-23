@@ -87,19 +87,16 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   }
 
   let message;
-  // adminMode
   if (adminMode) {
+    // adminMode
     const username = <span style={monoStyle}>{rsvn.username}</span>;
-
-    // message = ["User ", username, " just reserved ", numItems, " items!"];
     message = (
       <>
         {icon} User {username} just reserved {numItems} items!
       </>
     );
-
-    // userMode
   } else {
+    // userMode
     const pantryname = (
       <Button
         tag="a"
@@ -110,7 +107,6 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
         <em>{rsvn.name}</em>
       </Button>
     );
-    // message = ["You have  ", numItems, " items reserved at ", pantryname];
     message = (
       <>
         {icon} You have {numItems} tems reserved at {pantryname}
@@ -130,6 +126,56 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   );
 
   return messageHeader;
+}
+
+/**
+ *  Message center overview message and title
+ */
+function getMessageOverviewAndTitle(rsvns, pantryName = null, adminMode) {
+  let numMsgNotApproved = 0;
+  let numMsgNotPickedup = 0;
+
+  rsvns.forEach((rsvn) => {
+    if (rsvn.approved === 0) {
+      numMsgNotApproved++;
+      return;
+    }
+    if (rsvn.picked_up_time === null) {
+      numMsgNotPickedup++;
+      return;
+    }
+  });
+
+  return { adminMode } ? (
+    <>
+      <Row className="justify-content-center mt-4">
+        <h2>{pantryName}</h2>
+      </Row>
+      <Row className="justify-content-center mt-2">
+        <h2>Message Center</h2>
+      </Row>
+      <hr />
+      <Row className="justify-content-center mt-4">
+        You have {numMsgNotApproved} reservations to be approved or cancel
+      </Row>
+      <Row className="justify-content-center">
+        and {numMsgNotPickedup} reservations waiting to be picked up.
+      </Row>
+    </>
+  ) : (
+    <>
+      <Row className="justify-content-center mt-4">
+        <h2>Message Center</h2>
+      </Row>
+      <hr />
+      <Row className="justify-content-center mt-4">
+        You have {numMsgNotApproved} reservations not approved by the pantry
+      </Row>
+      <Row className="justify-content-center">
+        and {numMsgNotPickedup} reservations awaiting you to pick up.
+      </Row>
+    </>
+  );
 }
 
 /**
@@ -239,6 +285,7 @@ function getMessageStatus(rsvn) {
 
 const msgFunctions = {
   getMessageHeader: getMessageHeader,
+  getMessageOverviewAndTitle: getMessageOverviewAndTitle,
   approvedButtonIsHidden: approvedButtonIsHidden,
   pickedupButtonIsHidden: pickedupButtonIsHidden,
   cancelButtonIsHidden: cancelButtonIsHidden,
