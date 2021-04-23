@@ -10,9 +10,11 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+// import { HiOutlineCheckCircle } from "react-icons";
+import { VscCircleFilled } from "react-icons/vsc";
 
 // other imports
-import formatters from "../formatters/DatetimeFormatter"; // time formatters
+import formatters from "./DatetimeFormatter.function"; // time formatters
 
 const monoStyle = {
   fontFamily: "monospace",
@@ -54,7 +56,7 @@ const valStyle = {
       TODO: 
       marked complete reservation with check2-circle icon
       marked cancelled reservation with x-circle icon
-      - https://icons.getbootstrap.com
+      - https://react-icons.github.io/react-icons/search?q=chec
   */
 /**
  * @returns the message header (title and reservation time) for each message.
@@ -85,6 +87,7 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   const messageHeader = (
     <Row className="align-items-center" style={messageStyle}>
       <Col xs={10} className="text-left">
+        <VscCircleFilled />
         {message}
       </Col>
       <Col xs={2} className="text-right" style={timeElapsedStyle}>
@@ -139,6 +142,7 @@ function cancelButtonIsHidden(rsvn) {
 function resetButtonIsHidden(rsvn) {
   // if rsvn is approved and picked up, reset button should not be up
   if (rsvn.approved && rsvn.picked_up_time) return true;
+  if (!rsvn.cancelled) return true;
   else return false;
 }
 

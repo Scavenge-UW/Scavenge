@@ -177,7 +177,11 @@ function App(props) {
                 <HomeView profile={profile} />
               </Route>
               <Route path="*">
-                <div>404 Not Found</div>
+                <div className="container mt-5" style={{ height: "100%" }}>
+                  <div className="row justify-content-center">
+                    <h1>404 Not Found</h1>
+                  </div>
+                </div>
               </Route>
             </Switch>
           </div>

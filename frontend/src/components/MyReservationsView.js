@@ -1,22 +1,23 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-// import for bootstrap
+
+// imports for bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 
-// import for components
+// imports for components
 import Dashboard_newMsg from "./Dashboard_newMsg";
 
-// import for services
+// imports for services
 import ReservationService from "../services/reservation.service";
 import PantryService from "../services/pantry.service";
 
 // other imports
 import { toast } from "react-toastify";
-import formatters from "./formatters/DatetimeFormatter";
+
+// imports for helper functions
+import MySpinner from "./helper_functions/MySpinner";
+import formatters from "./helper_functions/DatetimeFormatter.function";
 
 /**
  * MyReservationsView
@@ -30,7 +31,7 @@ import formatters from "./formatters/DatetimeFormatter";
 class MyReservationsView extends Component {
   constructor(props) {
     super(props);
-    this.state = { rsvns: [] };
+    this.state = { rsvns: [], loaded: false };
   }
 
   componentDidMount() {
@@ -43,6 +44,7 @@ class MyReservationsView extends Component {
     ).then((response) => {
       this.setState({
         rsvns: response.reservations,
+        loaded: true,
       });
     });
   }
@@ -76,32 +78,38 @@ class MyReservationsView extends Component {
     if (!this.props.username) {
       return <Redirect push to="/login" />;
     }
+    if (this.state.loaded) {
+      const numReservation = [...this.state.rsvns].filter(
+        (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "days") < 7
+      ).length;
+      return (
+        <Container id="my-reservation">
+          {/* page title */}
+          <Row className="justify-content-center">
+            <h2>My Reservations</h2>
+          </Row>
+          {/* overview message */}
+          <Row className="justify-content-center">
+            You have made {numReservation} reservations in the last 7 days.
+          </Row>
 
-    const numReservation = [...this.state.rsvns].filter(
-      (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "days") < 7
-    ).length;
-
-    return (
-      <Container>
-        {/* page title */}
-        <Row className="justify-content-center">
-          <h2>My Reservations</h2>
-        </Row>
-        {/* overview message */}
-        <Row className="justify-content-center">
-          You have made {numReservation} reservations this week.
-        </Row>
-
-        <Dashboard_newMsg
-          adminMode={false}
-          rsvns={this.state.rsvns}
-          username={this.props.username}
-          markWithDraw={(pantry_id, rsvn_id) =>
-            this.markWithDraw(pantry_id, rsvn_id)
-          }
-        />
-      </Container>
-    );
+          <Dashboard_newMsg
+            adminMode={false}
+            rsvns={this.state.rsvns}
+            username={this.props.username}
+            markWithDraw={(pantry_id, rsvn_id) =>
+              this.markWithDraw(pantry_id, rsvn_id)
+            }
+          />
+        </Container>
+      );
+    } else {
+      return (
+        <Container id="my-reservation-loading">
+          <MySpinner />
+        </Container>
+      );
+    }
   }
 }
 

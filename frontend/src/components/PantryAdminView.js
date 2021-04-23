@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+
+// imports for react bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,6 +8,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 
+// imports for components and service
 import PantryService from "../services/pantry.service";
 import InventoryView from "./InventoryView";
 import DashboardView from "./DashboardView";
@@ -64,7 +67,7 @@ function PantryAdminView() {
   };
 
   return (
-    <Container>
+    <Container id="pantry-admin-tabs">
       <PantryAdminViewTabs />
     </Container>
   );

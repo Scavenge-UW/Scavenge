@@ -13,7 +13,7 @@ import PantryService from "../services/pantry.service";
 // other imports
 import { toast } from "react-toastify";
 import "../css/common.css";
-import formatters from "./formatters/DatetimeFormatter";
+import formatters from "./helper_functions/DatetimeFormatter.function";
 
 class DashboardOpenHourCard extends Component {
   constructor(props) {

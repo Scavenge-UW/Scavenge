@@ -22,8 +22,11 @@ import PantryService from "../services/pantry.service";
 // other imports
 import "../css/common.css";
 import { toast } from "react-toastify";
-import msgFunctions from "./functions/msgAndBtns.function"; // message helper functions
-import ScrollToTop from "./functions/ScrollToTop.function";
+
+// imports for helper functions
+import MySpinner from "./helper_functions/MySpinner";
+import msgFunctions from "./helper_functions/msgAndBtns.function";
+import ScrollToTop from "./helper_functions/ScrollToTop.function";
 
 /**
  * Message view for admin/staff to view all of
@@ -330,40 +333,48 @@ function Dashboard_adminAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
-  return (
-    <Container>
-      <ListGroup className="w-responsive w-75 mx-auto">
-        {/* <ViewMessages /> */}
-        <Row className="justify-content-center">{getMessageItems()}</Row>
-        <Row className="justify-content-center mt-4">{showPagination()}</Row>
-      </ListGroup>
+  if (pantryDetail) {
+    return (
+      <Container id="admin-reservations">
+        <ListGroup className="w-responsive w-75 mx-auto">
+          {/* <ViewMessages /> */}
+          <Row className="justify-content-center">{getMessageItems()}</Row>
+          <Row className="justify-content-center mt-4">{showPagination()}</Row>
+        </ListGroup>
 
-      {/* Scroll to top button */}
-      <Row className="justify-content-center mt-4">
-        <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
-      </Row>
+        {/* Scroll to top button */}
+        <Row className="justify-content-center mt-4">
+          <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
+        </Row>
 
-      {/* Reservation Message Modal */}
-      <ViewRsvnMsgModal
-        show={showRsvnMsg}
-        selectedID={selectedID}
-        selectedUsername={selectedUsername}
-        selectedApproved={selectedApproved}
-        selectedPickedUp={selectedPickedUp}
-        selectedCancelled={selectedCancelled}
-        selectedResFoods={selectedResFoods}
-        onHide={() => closeViewRsvnMsgModal()}
-      />
+        {/* Reservation Message Modal */}
+        <ViewRsvnMsgModal
+          show={showRsvnMsg}
+          selectedID={selectedID}
+          selectedUsername={selectedUsername}
+          selectedApproved={selectedApproved}
+          selectedPickedUp={selectedPickedUp}
+          selectedCancelled={selectedCancelled}
+          selectedResFoods={selectedResFoods}
+          onHide={() => closeViewRsvnMsgModal()}
+        />
 
-      {/* footer message */}
-      <Row className="justify-content-center">
-        <p className="mt-4">
-          Time is Money. We provide an efficient way for you to update available
-          items.
-        </p>
-      </Row>
-    </Container>
-  );
+        {/* footer message */}
+        <Row className="justify-content-center">
+          <p className="mt-4">
+            Time is Money. We provide an efficient way for you to update
+            available items.
+          </p>
+        </Row>
+      </Container>
+    );
+  } else {
+    return (
+      <Container id="admin-reservations-loading">
+        <MySpinner />
+      </Container>
+    );
+  }
 }
 
 export default Dashboard_adminAllMsg;

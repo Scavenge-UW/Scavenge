@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+// imports for bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,11 +10,14 @@ import Tab from "react-bootstrap/Tab";
 import Image from "react-bootstrap/Image";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
-import { useParams } from "react-router-dom";
 
+// imports for services and components
 import FoodItemCard from "../components/FoodItemCard";
 import PantryService from "../services/pantry.service";
-import formatters from "./formatters/DatetimeFormatter";
+
+// imports for helper functions
+import formatters from "./helper_functions/DatetimeFormatter.function";
+import MySpinner from "./helper_functions/MySpinner";
 
 /**
  * A view for user that displays details and food items in a specific pantry.
@@ -192,7 +198,7 @@ function PantryDetailView(props) {
     );
   };
 
-  if (pantryDetail !== null) {
+  if (pantryDetail) {
     const {
       name,
       address,
@@ -207,7 +213,7 @@ function PantryDetailView(props) {
     } = pantryDetail;
 
     return (
-      <Container>
+      <Container id="pantry-detail-view">
         <Row className="justify-content-center mt-4 mb-4 bg-light">
           <Col className="justify-content-center rounded">
             <Row className="justify-content-center mt-3 text-center">
@@ -244,8 +250,8 @@ function PantryDetailView(props) {
     );
   } else {
     return (
-      <Container>
-        <div className="spinner"></div>
+      <Container id="pantry-detail-view-loading">
+        <MySpinner />
       </Container>
     );
   }
