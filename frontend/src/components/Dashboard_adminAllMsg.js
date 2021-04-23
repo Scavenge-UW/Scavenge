@@ -329,7 +329,6 @@ function Dashboard_adminAllMsg(props) {
             if (selectedTab === "all") return rsvn;
             if (selectedTab === "not_approved")
               return !rsvn.approved && !rsvn.cancelled;
-            // !rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
             if (selectedTab === "approved")
               return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
             if (selectedTab === "cancelled") return rsvn.cancelled;
@@ -404,10 +403,13 @@ function Dashboard_adminAllMsg(props) {
             id="admin-all-rsvns-tab"
             variant="pills"
             defaultActiveKey={tab}
-            onSelect={(t) => setTab(t)}
+            onSelect={(t) => {
+              setTab(t);
+              setCurrPage(1); // set page to 1 on tab-click
+            }}
             className="justify-content-center nav-justified mb-4 mt-4"
           >
-            <Tab eventKey="all" title="all-messages">
+            <Tab eventKey="all" title="All Messages">
               {renderMsg("all")}
             </Tab>
             <Tab eventKey="not_approved" title="To Be Approved">
