@@ -330,6 +330,10 @@ function Dashboard_adminAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
+  if (pantryDetail === null) {
+    return <div class="spinner" />;
+  }
+
   return (
     <Container>
       <ListGroup className="w-responsive w-75 mx-auto">
