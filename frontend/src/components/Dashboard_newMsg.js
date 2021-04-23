@@ -213,6 +213,7 @@ class Dashboard_newMsg extends Component {
           : formatters.getTimeElapsed(rsvn.order_time, "days") < 7
       )
       .sort((a, b) => b.reservation_id - a.reservation_id) // sort message from most recent to least
+      .slice(0, this.props.adminMode ? 2 : 5) // show only 2 messages at most
       .map((rsvn) => (
         <ListGroupItem
           tag="a"
@@ -276,12 +277,12 @@ class Dashboard_newMsg extends Component {
           {this.props.adminMode ? (
             // adminMode
             <Link to={"/messages_a/" + this.props.pantry_id}>
-              <strong>View Older Messages</strong>
+              <strong>View All Messages</strong>
             </Link>
           ) : (
             // userMode
             <Link to={"/messages_b/" + this.props.username}>
-              <strong>View Your Reservation History</strong>
+              <strong>View All Reservations</strong>
             </Link>
           )}
         </Row>
