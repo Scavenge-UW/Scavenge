@@ -14,6 +14,8 @@ const MySpinner = (props) => {
   return (
     <div style={style}>
       <Spinner animation="grow" />
+      <br />
+      loading ...
     </div>
   );
 };

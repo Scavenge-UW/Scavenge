@@ -11,7 +11,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 // import { HiOutlineCheckCircle } from "react-icons";
-import { VscCircleFilled } from "react-icons/vsc";
+import { IoCheckmarkSharp, IoCheckmarkDoneSharp } from "react-icons/io5";
+import { MdRadioButtonUnchecked } from "react-icons/md";
+import { ImCancelCircle } from "react-icons/im";
+// import { RiCheckboxCircleFill } from "react-icons/ri";
 
 // other imports
 import formatters from "./DatetimeFormatter.function"; // time formatters
@@ -66,10 +69,36 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   const numItems = (
     <span style={monoStyle}>{Object.keys(rsvn.res_foods).length}</span>
   );
+
+  // rsvn needs to be approved
+  let icon = <MdRadioButtonUnchecked color="#FF5C00" size="1.65rem" />;
+
+  // rsvn is approved but not picked up yet
+  if (rsvn.approved) {
+    icon = <IoCheckmarkSharp color="#63C5DA" size="1.8rem" />;
+  }
+  // rsvn is done (approved and picked up)
+  if (rsvn.picked_up_time) {
+    icon = <IoCheckmarkDoneSharp color="#03C04A" size="1.8rem" />;
+  }
+
+  if (rsvn.cancelled) {
+    icon = <ImCancelCircle color="#E3242B" size="1.65rem" />;
+  }
+
   let message;
+  // adminMode
   if (adminMode) {
     const username = <span style={monoStyle}>{rsvn.username}</span>;
-    message = ["User ", username, " just reserved ", numItems, " items!"];
+
+    // message = ["User ", username, " just reserved ", numItems, " items!"];
+    message = (
+      <>
+        {icon} User {username} just reserved {numItems} items!
+      </>
+    );
+
+    // userMode
   } else {
     const pantryname = (
       <Button
@@ -81,13 +110,17 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
         <em>{rsvn.name}</em>
       </Button>
     );
-    message = ["You have  ", numItems, " items reserved at ", pantryname];
+    // message = ["You have  ", numItems, " items reserved at ", pantryname];
+    message = (
+      <>
+        {icon} You have {numItems} tems reserved at {pantryname}
+      </>
+    );
   }
 
   const messageHeader = (
-    <Row className="align-items-center" style={messageStyle}>
+    <Row className="justify-contnet-center" style={messageStyle}>
       <Col xs={10} className="text-left">
-        <VscCircleFilled />
         {message}
       </Col>
       <Col xs={2} className="text-right" style={timeElapsedStyle}>
