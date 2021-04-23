@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import FoodItemCard from "./FoodItemCard";
 import AddItemModal from "./modals/AddItemModal";
 import PantryService from "../services/pantry.service";
+import MySpinner from "./helper_functions/MySpinner";
 
 // used to initialize itemToBeAdded
 const emptyItem = {
@@ -30,6 +31,7 @@ class InventoryView extends Component {
        * Dummy food items.
        */
       foods: [],
+      pantryName: "",
       addItemModalShow: false, // determines the visibility of the Item Add modal
       itemToBeAdded: emptyItem, // stores the item to be added from the Item Add modal
     };
@@ -40,6 +42,7 @@ class InventoryView extends Component {
       console.log(this.props.pantryDetail);
       this.setState({
         foods: this.props.pantryDetail.foods,
+        pantryName: this.props.pantryDetail.name,
       });
     }
   }
@@ -179,7 +182,7 @@ class InventoryView extends Component {
     return (
       <>
         <Row className="justify-content-center">
-          <h2>{this.props.pantryDetail.name}</h2>
+          <h2>{this.state.pantryName}</h2>
         </Row>
         <Row className="justify-content-center">
           <h3>Current Inventory</h3>
@@ -196,31 +199,40 @@ class InventoryView extends Component {
   }
 
   render() {
+    if (this.state.pantryName) {
+      return (
+        <Container>
+          {this.getInventoryOverview()}
+          <Row className="justify-content-end">
+            <Button
+              id="btn-add-item"
+              onClick={() => {
+                this.openAddItemModal();
+              }}
+            >
+              Add item
+            </Button>
+          </Row>
+          <Row className="justify-content-center">
+            {this.getFoodItemCards()}
+          </Row>
+          <AddItemModal
+            show={this.state.addItemModalShow}
+            onHide={() => this.closeAddItemModal()}
+            setItemToBeAdded={this.setItemToBeAdded.bind(this)}
+          />
+          <Row className="justify-content-center">
+            <p className="mt-4">
+              Time is Money. We provide an efficient way for you to update
+              available items.
+            </p>
+          </Row>
+        </Container>
+      );
+    }
     return (
-      <Container>
-        {this.getInventoryOverview()}
-        <Row className="justify-content-end">
-          <Button
-            id="btn-add-item"
-            onClick={() => {
-              this.openAddItemModal();
-            }}
-          >
-            Add item
-          </Button>
-        </Row>
-        <Row className="justify-content-center">{this.getFoodItemCards()}</Row>
-        <AddItemModal
-          show={this.state.addItemModalShow}
-          onHide={() => this.closeAddItemModal()}
-          setItemToBeAdded={this.setItemToBeAdded.bind(this)}
-        />
-        <Row className="justify-content-center">
-          <p className="mt-4">
-            Time is Money. We provide an efficient way for you to update
-            available items.
-          </p>
-        </Row>
+      <Container id="inventory-view-loading">
+        <MySpinner />
       </Container>
     );
   }
