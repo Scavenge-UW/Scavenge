@@ -277,12 +277,16 @@ class Dashboard_newMsg extends Component {
           {this.props.adminMode ? (
             // adminMode
             <Link to={"/messages_a/" + this.props.pantry_id}>
-              <strong>View All Messages</strong>
+              <text style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                View All Messages
+              </text>
             </Link>
           ) : (
             // userMode
             <Link to={"/messages_b/" + this.props.username}>
-              <strong>View All Reservations</strong>
+              <text style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                View All Reservations
+              </text>
             </Link>
           )}
         </Row>

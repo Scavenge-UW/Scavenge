@@ -295,7 +295,7 @@ function Dashboard_userAllMsg(props) {
     if (userRsvns) {
       return (
         <Container id="user-reservations">
-          {msgFunctions.getMessageOverviewAndTitle(userRsvns, null, true)}
+          {msgFunctions.getMessageOverviewAndTitle(userRsvns, null, false)}
           <Tabs
             id="admin-all-rsvns-tab"
             variant="pills"

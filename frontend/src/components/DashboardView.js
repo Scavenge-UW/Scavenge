@@ -209,7 +209,7 @@ class DashboardView extends Component {
         <hr />
         {/* Overview message */}
         <Row className="justify-content-center">
-          You have {numReservation} new reservations today.
+          <h6>You have {numReservation} new reservations today.</h6>
         </Row>
       </>
     );

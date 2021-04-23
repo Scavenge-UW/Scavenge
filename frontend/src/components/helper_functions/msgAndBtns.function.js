@@ -10,11 +10,9 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-// import { HiOutlineCheckCircle } from "react-icons";
 import { IoCheckmarkSharp, IoCheckmarkDoneSharp } from "react-icons/io5";
 import { MdRadioButtonUnchecked } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
-// import { RiCheckboxCircleFill } from "react-icons/ri";
 
 // other imports
 import formatters from "./DatetimeFormatter.function"; // time formatters
@@ -131,7 +129,11 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
 /**
  *  Message center overview message and title
  */
-function getMessageOverviewAndTitle(rsvns, pantryName = null, adminMode) {
+function getMessageOverviewAndTitle(
+  rsvns,
+  pantryName = null,
+  adminMode = true
+) {
   let numMsgNotApproved = 0;
   let numMsgNotPickedup = 0;
 
@@ -146,36 +148,48 @@ function getMessageOverviewAndTitle(rsvns, pantryName = null, adminMode) {
     }
   });
 
-  return { adminMode } ? (
-    <>
-      <Row className="justify-content-center mt-4">
-        <h2>{pantryName}</h2>
-      </Row>
-      <Row className="justify-content-center mt-2">
-        <h2>Message Center</h2>
-      </Row>
-      <hr />
-      <Row className="justify-content-center mt-4">
-        You have {numMsgNotApproved} reservations to be approved or cancel
-      </Row>
-      <Row className="justify-content-center">
-        and {numMsgNotPickedup} reservations waiting to be picked up.
-      </Row>
-    </>
-  ) : (
-    <>
-      <Row className="justify-content-center mt-4">
-        <h2>Message Center</h2>
-      </Row>
-      <hr />
-      <Row className="justify-content-center mt-4">
-        You have {numMsgNotApproved} reservations not approved by the pantry
-      </Row>
-      <Row className="justify-content-center">
-        and {numMsgNotPickedup} reservations awaiting you to pick up.
-      </Row>
-    </>
-  );
+  if (adminMode) {
+    return (
+      // admin mode
+      <>
+        <Row className="justify-content-center mt-4">
+          <h2>{pantryName}</h2>
+        </Row>
+        <Row className="justify-content-center mt-2">
+          <h2>Message Center</h2>
+        </Row>
+        <hr />
+        <Row className="justify-content-center mt-4">
+          <h6>
+            You have {numMsgNotApproved} reservations to be approved or
+            cancelled,
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <h6>and {numMsgNotPickedup} reservations waiting to be picked up.</h6>
+        </Row>
+      </>
+    );
+  } else {
+    return (
+      // user mode
+      <>
+        <Row className="justify-content-center mt-4">
+          <h2>Message Center</h2>
+        </Row>
+        <hr />
+        <Row className="justify-content-center mt-4">
+          <h6>
+            You have {numMsgNotApproved} reservations not approved by the
+            pantry,
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <h6>and {numMsgNotPickedup} reservations awaiting you to pick up.</h6>
+        </Row>
+      </>
+    );
+  }
 }
 
 /**

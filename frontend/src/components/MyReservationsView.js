@@ -70,6 +70,31 @@ class MyReservationsView extends Component {
       });
   }
 
+  myReservationOverview() {
+    const numReservation = [...this.state.rsvns].filter(
+      (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "days") < 7
+    ).length;
+
+    return (
+      <>
+        {/* page title */}
+        <Row className="justify-content-center mt-4">
+          <h2>My Reservations</h2>
+        </Row>
+        <hr />
+        {/* overview message */}
+        <Row className="justify-content-center mt-4">
+          <h6>
+            You have made {numReservation} reservations in the last 7 days.
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <h6>Here are your 5 most recent reservations.</h6>
+        </Row>
+      </>
+    );
+  }
+
   /**
    * Renders components.
    *
@@ -79,24 +104,9 @@ class MyReservationsView extends Component {
       return <Redirect push to="/login" />;
     }
     if (this.state.loaded) {
-      const numReservation = [...this.state.rsvns].filter(
-        (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "days") < 7
-      ).length;
       return (
         <Container id="my-reservation">
-          {/* page title */}
-          <Row className="justify-content-center mt-4">
-            <h2>My Reservations</h2>
-          </Row>
-          <hr />
-          {/* overview message */}
-          <Row className="justify-content-center mt-4">
-            You have made {numReservation} reservations in the last 7 days.
-          </Row>
-          <Row className="justify-content-center">
-            Here are your 5 most recent reservations.
-          </Row>
-
+          {this.myReservationOverview()}
           <Dashboard_newMsg
             adminMode={false}
             rsvns={this.state.rsvns}
