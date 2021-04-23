@@ -302,6 +302,13 @@ class DashboardView extends Component {
    *
    */
   render() {
+    if (this.state.pantryName === "") {
+      return (
+        <Container>
+          <div class="spinner" />
+        </Container>
+      );
+    }
     return (
       <Container>
         {/* Pantry's name */}
