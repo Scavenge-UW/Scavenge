@@ -8,9 +8,10 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 // import for components
-import DashboardMessages from "./DashboardMessages";
+import Dashboard_newMsg from "./Dashboard_newMsg";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
 import DashboardOpenHourCard from "./DashboardOpenHourCard";
+import formatters from "./formatters/DatetimeFormatter";
 
 // import for services
 import PantryService from "../services/pantry.service";
@@ -30,7 +31,7 @@ class DashboardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pantry_id: "", // TODO: Change to actual pantry id
+      pantry_id: null, // TODO: Change to actual pantry id
       pantryName: "",
       rsvns: [],
       description: "",
@@ -188,7 +189,7 @@ class DashboardView extends Component {
   }
 
   // ************************************************************************
-  // ******************* render helper function *****************************
+  // ******************* render helper functions ****************************
   // ************************************************************************
 
   /**
@@ -197,13 +198,15 @@ class DashboardView extends Component {
    * @returns
    */
   getDashboardOverview() {
-    const numReservation = Object.keys(this.state.rsvns).length;
+    const numReservation = [...this.state.rsvns].filter(
+      (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "hours") < 24
+    ).length;
 
     return (
       <>
         {/* Page title */}
         <Row className="justify-content-center">
-          <h3>Dashboard</h3>
+          <h2>Dashboard</h2>
         </Row>
         <hr />
         {/* Overview message */}
@@ -215,28 +218,18 @@ class DashboardView extends Component {
   }
 
   /**
-   * render componenet for messages box.
+   * render component for message box.
    */
   getMessageAndFunctions() {
     return (
-      <>
-        {/* Sub-session title */}
-        <Row className="justify-content-center">
-          <h4>Messages </h4>
-        </Row>
-        {/* Sub-session content */}
-        <Row className="justify-content-center">
-          <DashboardMessages
-            adminMode
-            // pantry_id={this.state.pantry_id}
-            rsvns={this.state.rsvns}
-            fetchPantryDetail={this.props.fetchPantryDetail}
-            markAsApproved={this.markAsApproved.bind(this)}
-            markAsPickedUp={this.markAsPickedUp.bind(this)}
-            markAsCancelled={this.markAsCancelled.bind(this)}
-          />
-        </Row>
-      </>
+      <Dashboard_newMsg
+        adminMode={true}
+        pantry_id={this.state.pantry_id}
+        rsvns={this.state.rsvns}
+        markAsApproved={this.markAsApproved.bind(this)}
+        markAsPickedUp={this.markAsPickedUp.bind(this)}
+        markAsCancelled={this.markAsCancelled.bind(this)}
+      />
     );
   }
 
@@ -309,6 +302,13 @@ class DashboardView extends Component {
    *
    */
   render() {
+    if (this.state.pantryName === "") {
+      return (
+        <Container>
+          <div class="spinner" />
+        </Container>
+      );
+    }
     return (
       <Container>
         {/* Pantry's name */}

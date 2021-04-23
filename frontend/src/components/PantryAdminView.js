@@ -24,7 +24,7 @@ function PantryAdminView() {
    * Fetch pantry detail on init
    *
    */
-  React.useEffect(() => {
+  useEffect(() => {
     fetchPantryDetail();
   }, []);
 
