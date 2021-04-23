@@ -28,25 +28,8 @@ class InventoryView extends Component {
     this.state = {
       /**
        * Dummy food items.
-       * TODO: Fetch actual inventory from the API
        */
-      foods: [
-        // {
-        //   food_id: 1,
-        //   name: "Apple",
-        //   quantity: 123,
-        // },
-        // {
-        //   food_id: 2,
-        //   name: "Banana",
-        //   quantity: 0,
-        // },
-        // {
-        //   food_id: 3,
-        //   name: "Edit Me!",
-        //   quantity: 5,
-        // },
-      ],
+      foods: [],
       addItemModalShow: false, // determines the visibility of the Item Add modal
       itemToBeAdded: emptyItem, // stores the item to be added from the Item Add modal
     };
@@ -194,23 +177,28 @@ class InventoryView extends Component {
     }).length;
 
     return (
-      <p id="inventory-overview" className="text-center mt-4">
-        There are {numItems} items in total in your food pantry.
-        <br />
-        {numOutOfStockItems} items are currently out of stock.
-      </p>
+      <>
+        <Row className="justify-content-center">
+          <h2>{this.props.pantryDetail.name}</h2>
+        </Row>
+        <Row className="justify-content-center">
+          <h3>Current Inventory</h3>
+        </Row>
+        <hr />
+        <Row id="inventory-overview-1" className="justify-content-center mt-2">
+          <h6>There are {numItems} items in total in your food pantry.</h6>
+        </Row>
+        <Row id="inventory-overview-2" className="justify-content-center">
+          <h6>{numOutOfStockItems} items are currently out of stock.</h6>
+        </Row>
+      </>
     );
   }
 
   render() {
     return (
       <Container>
-        <Row className="justify-content-center">
-          <h2>Current Inventory</h2>
-        </Row>
-        <Row className="justify-content-center">
-          {this.getInventoryOverview()}
-        </Row>
+        {this.getInventoryOverview()}
         <Row className="justify-content-end">
           <Button
             id="btn-add-item"

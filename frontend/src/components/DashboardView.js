@@ -202,9 +202,13 @@ class DashboardView extends Component {
 
     return (
       <>
+        {/* Pantry's name */}
+        <Row className="justify-content-center">
+          <h2>{this.state.pantryName}</h2>
+        </Row>
         {/* Page title */}
         <Row className="justify-content-center">
-          <h2>Dashboard</h2>
+          <h3>Dashboard</h3>
         </Row>
         <hr />
         {/* Overview message */}
@@ -304,10 +308,6 @@ class DashboardView extends Component {
     if (this.state.pantry_id) {
       return (
         <Container id="dashboard-view-loading">
-          {/* Pantry's name */}
-          <Row className="justify-content-center">
-            <h2>{this.state.pantryName}</h2>
-          </Row>
           {/* dashboard and dashboard messages */}
           {this.getDashboardOverview()}
 

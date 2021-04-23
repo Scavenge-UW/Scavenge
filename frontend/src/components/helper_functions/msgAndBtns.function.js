@@ -156,7 +156,7 @@ function getMessageOverviewAndTitle(
           <h2>{pantryName}</h2>
         </Row>
         <Row className="justify-content-center mt-2">
-          <h2>Message Center</h2>
+          <h3>Message Center</h3>
         </Row>
         <hr />
         <Row className="justify-content-center mt-4">
@@ -175,7 +175,7 @@ function getMessageOverviewAndTitle(
       // user mode
       <>
         <Row className="justify-content-center mt-4">
-          <h2>Message Center</h2>
+          <h3>Message Center</h3>
         </Row>
         <hr />
         <Row className="justify-content-center mt-4">
