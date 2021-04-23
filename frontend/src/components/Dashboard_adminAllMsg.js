@@ -331,44 +331,6 @@ function Dashboard_adminAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
-  // /**
-  //  *  Message center overview message
-  //  */
-  // const getMessageOverviewAndTitle = () => {
-  //   let numMsgNotApproved = 0;
-  //   let numMsgNotPickedup = 0;
-
-  //   pantryDetail.reservations.forEach((rsvn) => {
-  //     if (rsvn.approved === 0) {
-  //       numMsgNotApproved++;
-  //       return;
-  //     }
-  //     if (rsvn.picked_up_time === null) {
-  //       numMsgNotPickedup++;
-  //       return;
-  //     }
-  //   });
-
-  //   let overviewMsg = (
-  //     <>
-  //       <Row className="justify-content-center mt-4">
-  //         <h2>{pantryDetail.name}</h2>
-  //       </Row>
-  //       <Row className="justify-content-center mt-4">
-  //         <h2>Message Center</h2>
-  //       </Row>
-  //       <hr />
-  //       <Row className="justify-content-center mt-4">
-  //         You have {numMsgNotApproved} reservations to be approved or cancel{" "}
-  //       </Row>
-  //       <Row className="justify-content-center">
-  //         and {numMsgNotPickedup} reservations waiting to be picked up.
-  //       </Row>
-  //     </>
-  //   );
-  //   return overviewMsg;
-  // };
-
   if (pantryDetail) {
     return (
       <Container id="admin-reservations">

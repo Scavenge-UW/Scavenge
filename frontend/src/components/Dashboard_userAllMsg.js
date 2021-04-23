@@ -226,38 +226,6 @@ function Dashboard_userAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
-  // const getMessageOverviewAndTitle = () => {
-  //   let numMsgNotApproved = 0;
-  //   let numMsgNotPickedup = 0;
-
-  //   userRsvns.forEach((rsvn) => {
-  //     if (rsvn.approved === 0) {
-  //       numMsgNotApproved++;
-  //       return;
-  //     }
-  //     if (rsvn.picked_up_time === null) {
-  //       numMsgNotPickedup++;
-  //       return;
-  //     }
-  //   });
-
-  //   let overviewMsg = (
-  //     <>
-  //       <Row className="justify-content-center mt-4">
-  //         <h2>Message Center</h2>
-  //       </Row>
-  //       <hr />
-  //       <Row className="justify-content-center mt-4">
-  //         You have {numMsgNotApproved} reservations not approved by the pantry
-  //       </Row>
-  //       <Row className="justify-content-center">
-  //         and {numMsgNotPickedup} reservations awaiting you to pick up.
-  //       </Row>
-  //     </>
-  //   );
-  //   return overviewMsg;
-  // };
-
   if (userRsvns) {
     return (
       <Container id="user-reservations">
