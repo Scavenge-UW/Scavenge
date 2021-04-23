@@ -93,6 +93,9 @@ class MyReservationsView extends Component {
           <Row className="justify-content-center mt-4">
             You have made {numReservation} reservations in the last 7 days.
           </Row>
+          <Row className="justify-content-center">
+            Here are your 5 most recent reservations.
+          </Row>
 
           <Dashboard_newMsg
             adminMode={false}

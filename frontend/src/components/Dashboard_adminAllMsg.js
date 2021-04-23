@@ -6,6 +6,8 @@ import Pagination from "react-bootstrap/Pagination";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 import {
   ListGroup,
   ListGroupItem,
@@ -54,9 +56,11 @@ function Dashboard_adminAllMsg(props) {
   const [currPage, setCurrPage] = useState(1);
   const paginationCount = 10;
 
+  // tabs
+  const [tab, setTab] = useState("all");
+
   // get pantry_id in route param
   const { pantry_id } = useParams();
-  console.log({ ...useParams() });
 
   /**
    * Fetch pantry detail on init
@@ -249,11 +253,22 @@ function Dashboard_adminAllMsg(props) {
     return controls;
   };
 
-  const getMessageItems = () => {
+  const getMessageItems = (selectedTab) => {
     let msgListItems = [];
     let rsvns = [];
     if (pantryDetail)
       rsvns = [...pantryDetail.reservations]
+        // condition for tabs to load messages based on rsvn status
+        .filter((rsvn) => {
+          if (selectedTab === "all") return rsvn;
+          if (selectedTab === "not_approved")
+            return !rsvn.approved && !rsvn.cancelled;
+          if (selectedTab === "approved")
+            return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+          if (selectedTab === "cancelled") return rsvn.cancelled;
+          if (selectedTab === "complete")
+            return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+        })
         .sort((a, b) => b.reservation_id - a.reservation_id)
         .slice((currPage - 1) * paginationCount, paginationCount * currPage);
 
@@ -307,9 +322,21 @@ function Dashboard_adminAllMsg(props) {
     return msgListItems;
   };
 
-  const showPagination = () => {
+  const showPagination = (selectedTab) => {
     let numItems = pantryDetail
-      ? Object.values(pantryDetail.reservations).length
+      ? Object.values(
+          pantryDetail.reservations.filter((rsvn) => {
+            if (selectedTab === "all") return rsvn;
+            if (selectedTab === "not_approved")
+              return !rsvn.approved && !rsvn.cancelled;
+            // !rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+            if (selectedTab === "approved")
+              return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+            if (selectedTab === "cancelled") return rsvn.cancelled;
+            if (selectedTab === "complete")
+              return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+          })
+        ).length
       : 0;
     let numPages = Math.ceil(numItems / paginationCount);
     let paginationItems = [];
@@ -331,18 +358,17 @@ function Dashboard_adminAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
-  if (pantryDetail) {
+  const renderMsg = (selectedTab) => {
     return (
-      <Container id="admin-reservations">
-        {msgFunctions.getMessageOverviewAndTitle(
-          pantryDetail.reservations,
-          pantryDetail.name,
-          true
-        )}
+      <>
         <ListGroup className="w-responsive w-75 mx-auto mt-4">
           {/* <ViewMessages /> */}
-          <Row className="justify-content-center">{getMessageItems()}</Row>
-          <Row className="justify-content-center mt-4">{showPagination()}</Row>
+          <Row className="justify-content-center">
+            {getMessageItems(selectedTab)}
+          </Row>
+          <Row className="justify-content-center mt-4">
+            {showPagination(selectedTab)}
+          </Row>
         </ListGroup>
 
         {/* Scroll to top button */}
@@ -361,23 +387,62 @@ function Dashboard_adminAllMsg(props) {
           selectedResFoods={selectedResFoods}
           onHide={() => closeViewRsvnMsgModal()}
         />
+      </>
+    );
+  };
 
-        {/* footer message */}
-        <Row className="justify-content-center">
-          <p className="mt-4">
-            Time is Money. We provide an efficient way for you to update
-            available items.
-          </p>
-        </Row>
-      </Container>
-    );
-  } else {
-    return (
-      <Container id="admin-reservations-loading">
-        <MySpinner />
-      </Container>
-    );
-  }
+  const adminAllMsgTab = () => {
+    if (pantryDetail) {
+      return (
+        <Container id="admin-reservations">
+          {msgFunctions.getMessageOverviewAndTitle(
+            pantryDetail.reservations,
+            pantryDetail.name,
+            true
+          )}
+          <Tabs
+            id="admin-all-rsvns-tab"
+            variant="pills"
+            defaultActiveKey={tab}
+            onSelect={(t) => setTab(t)}
+            className="justify-content-center nav-justified mb-4 mt-4"
+          >
+            <Tab eventKey="all" title="all-messages">
+              {renderMsg("all")}
+            </Tab>
+            <Tab eventKey="not_approved" title="To Be Approved">
+              {renderMsg("not_approved")}
+            </Tab>
+            <Tab eventKey="approved" title="Approved Reservations">
+              {renderMsg("approved")}
+            </Tab>
+            <Tab eventKey="cancelled" title="Cancelled Reservations">
+              {renderMsg("cancelled")}
+            </Tab>
+            <Tab eventKey="complete" title="Complete Reservations">
+              {renderMsg("complete")}
+            </Tab>
+          </Tabs>
+
+          {/* footer message */}
+          <Row className="justify-content-center">
+            <p className="mt-4">
+              Time is Money. We provide an efficient way for you to update
+              available items.
+            </p>
+          </Row>
+        </Container>
+      );
+    } else {
+      return (
+        <Container id="admin-reservations-loading">
+          <MySpinner />
+        </Container>
+      );
+    }
+  };
+
+  return adminAllMsgTab();
 }
 
 export default Dashboard_adminAllMsg;
