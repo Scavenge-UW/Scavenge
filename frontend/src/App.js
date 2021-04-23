@@ -172,7 +172,7 @@ class App extends Component {
                   <PantryAdminView />
                 </Route>
                 <Route path="/messages_a/:pantry_id">
-                  <Dashboard_adminAllMsg isAdmin={isAdmin} />
+                  <Dashboard_adminAllMsg isAdmin={this.isAdmin.bind(this)} />
                 </Route>
                 <Route path="/messages_b/:username">
                   <Dashboard_userAllMsg />
