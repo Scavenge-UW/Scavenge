@@ -6,6 +6,8 @@ import Pagination from "react-bootstrap/Pagination";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 import {
   ListGroup,
   ListGroupItem,
@@ -22,8 +24,11 @@ import PantryService from "../services/pantry.service";
 // other imports
 import "../css/common.css";
 import { toast } from "react-toastify";
-import msgFunctions from "./functions/msgAndBtns.function"; // message helper functions
-import ScrollToTop from "./functions/ScrollToTop.function";
+
+// imports for helper functions
+import MySpinner from "./helper_functions/MySpinner";
+import msgFunctions from "./helper_functions/msgAndBtns.function";
+import ScrollToTop from "./helper_functions/ScrollToTop.function";
 
 /**
  * Message view for admin/staff to view all of
@@ -51,9 +56,11 @@ function Dashboard_adminAllMsg(props) {
   const [currPage, setCurrPage] = useState(1);
   const paginationCount = 10;
 
+  // tabs
+  const [tab, setTab] = useState("all");
+
   // get pantry_id in route param
   const { pantry_id } = useParams();
-  console.log({ ...useParams() });
 
   /**
    * Fetch pantry detail on init
@@ -246,11 +253,22 @@ function Dashboard_adminAllMsg(props) {
     return controls;
   };
 
-  const getMessageItems = () => {
+  const getMessageItems = (selectedTab) => {
     let msgListItems = [];
     let rsvns = [];
     if (pantryDetail)
       rsvns = [...pantryDetail.reservations]
+        // condition for tabs to load messages based on rsvn status
+        .filter((rsvn) => {
+          if (selectedTab === "all") return rsvn;
+          if (selectedTab === "not_approved")
+            return !rsvn.approved && !rsvn.cancelled;
+          if (selectedTab === "approved")
+            return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+          if (selectedTab === "cancelled") return rsvn.cancelled;
+          if (selectedTab === "complete")
+            return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+        })
         .sort((a, b) => b.reservation_id - a.reservation_id)
         .slice((currPage - 1) * paginationCount, paginationCount * currPage);
 
@@ -304,12 +322,21 @@ function Dashboard_adminAllMsg(props) {
     return msgListItems;
   };
 
-  const showPagination = () => {
+  const showPagination = (selectedTab) => {
     let numItems = pantryDetail
-      ? Object.values(pantryDetail.reservations).length
+      ? Object.values(
+          pantryDetail.reservations.filter((rsvn) => {
+            if (selectedTab === "all") return rsvn;
+            if (selectedTab === "not_approved")
+              return !rsvn.approved && !rsvn.cancelled;
+            if (selectedTab === "approved")
+              return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+            if (selectedTab === "cancelled") return rsvn.cancelled;
+            if (selectedTab === "complete")
+              return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+          })
+        ).length
       : 0;
-    // if (pantryDetail)
-    //   numItems = Object.values(pantryDetail.reservations).length;
     let numPages = Math.ceil(numItems / paginationCount);
     let paginationItems = [];
 
@@ -330,44 +357,94 @@ function Dashboard_adminAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
-  if (pantryDetail === null) {
-    return <div class="spinner" />;
-  }
+  const renderMsg = (selectedTab) => {
+    return (
+      <>
+        <ListGroup className="w-responsive w-75 mx-auto mt-4">
+          {/* <ViewMessages /> */}
+          <Row className="justify-content-center">
+            {getMessageItems(selectedTab)}
+          </Row>
+          <Row className="justify-content-center mt-4">
+            {showPagination(selectedTab)}
+          </Row>
+        </ListGroup>
 
-  return (
-    <Container>
-      <ListGroup className="w-responsive w-75 mx-auto">
-        {/* <ViewMessages /> */}
-        <Row className="justify-content-center">{getMessageItems()}</Row>
-        <Row className="justify-content-center mt-4">{showPagination()}</Row>
-      </ListGroup>
+        {/* Scroll to top button */}
+        <Row className="justify-content-center mt-4">
+          <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
+        </Row>
 
-      {/* Scroll to top button */}
-      <Row className="justify-content-center mt-4">
-        <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
-      </Row>
+        {/* Reservation Message Modal */}
+        <ViewRsvnMsgModal
+          show={showRsvnMsg}
+          selectedID={selectedID}
+          selectedUsername={selectedUsername}
+          selectedApproved={selectedApproved}
+          selectedPickedUp={selectedPickedUp}
+          selectedCancelled={selectedCancelled}
+          selectedResFoods={selectedResFoods}
+          onHide={() => closeViewRsvnMsgModal()}
+        />
+      </>
+    );
+  };
 
-      {/* Reservation Message Modal */}
-      <ViewRsvnMsgModal
-        show={showRsvnMsg}
-        selectedID={selectedID}
-        selectedUsername={selectedUsername}
-        selectedApproved={selectedApproved}
-        selectedPickedUp={selectedPickedUp}
-        selectedCancelled={selectedCancelled}
-        selectedResFoods={selectedResFoods}
-        onHide={() => closeViewRsvnMsgModal()}
-      />
+  const adminAllMsgTab = () => {
+    if (pantryDetail) {
+      return (
+        <Container id="admin-reservations">
+          {msgFunctions.getMessageOverviewAndTitle(
+            pantryDetail.reservations,
+            pantryDetail.name,
+            true
+          )}
+          <Tabs
+            id="admin-all-rsvns-tab"
+            variant="pills"
+            defaultActiveKey={tab}
+            onSelect={(t) => {
+              setTab(t);
+              setCurrPage(1); // set page to 1 on tab-click
+            }}
+            className="justify-content-center nav-justified mb-4 mt-4"
+          >
+            <Tab eventKey="all" title="All Messages">
+              {renderMsg("all")}
+            </Tab>
+            <Tab eventKey="not_approved" title="To Be Approved">
+              {renderMsg("not_approved")}
+            </Tab>
+            <Tab eventKey="approved" title="Approved Reservations">
+              {renderMsg("approved")}
+            </Tab>
+            <Tab eventKey="cancelled" title="Cancelled Reservations">
+              {renderMsg("cancelled")}
+            </Tab>
+            <Tab eventKey="complete" title="Complete Reservations">
+              {renderMsg("complete")}
+            </Tab>
+          </Tabs>
 
-      {/* footer message */}
-      <Row className="justify-content-center">
-        <p className="mt-4">
-          Time is Money. We provide an efficient way for you to update available
-          items.
-        </p>
-      </Row>
-    </Container>
-  );
+          {/* footer message */}
+          <Row className="justify-content-center">
+            <p className="mt-4">
+              Time is Money. We provide an efficient way for you to update
+              available items.
+            </p>
+          </Row>
+        </Container>
+      );
+    } else {
+      return (
+        <Container id="admin-reservations-loading">
+          <MySpinner />
+        </Container>
+      );
+    }
+  };
+
+  return adminAllMsgTab();
 }
 
 export default Dashboard_adminAllMsg;

@@ -10,9 +10,12 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import { IoCheckmarkSharp, IoCheckmarkDoneSharp } from "react-icons/io5";
+import { MdRadioButtonUnchecked } from "react-icons/md";
+import { ImCancelCircle } from "react-icons/im";
 
 // other imports
-import formatters from "../formatters/DatetimeFormatter"; // time formatters
+import formatters from "./DatetimeFormatter.function"; // time formatters
 
 const monoStyle = {
   fontFamily: "monospace",
@@ -54,7 +57,7 @@ const valStyle = {
       TODO: 
       marked complete reservation with check2-circle icon
       marked cancelled reservation with x-circle icon
-      - https://icons.getbootstrap.com
+      - https://react-icons.github.io/react-icons/search?q=chec
   */
 /**
  * @returns the message header (title and reservation time) for each message.
@@ -64,11 +67,34 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   const numItems = (
     <span style={monoStyle}>{Object.keys(rsvn.res_foods).length}</span>
   );
+
+  // rsvn needs to be approved
+  let icon = <MdRadioButtonUnchecked color="#FF5C00" size="1.65rem" />;
+
+  // rsvn is approved but not picked up yet
+  if (rsvn.approved) {
+    icon = <IoCheckmarkSharp color="#63C5DA" size="1.8rem" />;
+  }
+  // rsvn is done (approved and picked up)
+  if (rsvn.picked_up_time) {
+    icon = <IoCheckmarkDoneSharp color="#03C04A" size="1.8rem" />;
+  }
+
+  if (rsvn.cancelled) {
+    icon = <ImCancelCircle color="#E3242B" size="1.65rem" />;
+  }
+
   let message;
   if (adminMode) {
+    // adminMode
     const username = <span style={monoStyle}>{rsvn.username}</span>;
-    message = ["User ", username, " just reserved ", numItems, " items!"];
+    message = (
+      <>
+        {icon} User {username} just reserved {numItems} items!
+      </>
+    );
   } else {
+    // userMode
     const pantryname = (
       <Button
         tag="a"
@@ -79,11 +105,15 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
         <em>{rsvn.name}</em>
       </Button>
     );
-    message = ["You have  ", numItems, " items reserved at ", pantryname];
+    message = (
+      <>
+        {icon} You have {numItems} tems reserved at {pantryname}
+      </>
+    );
   }
 
   const messageHeader = (
-    <Row className="align-items-center" style={messageStyle}>
+    <Row className="justify-contnet-center" style={messageStyle}>
       <Col xs={10} className="text-left">
         {message}
       </Col>
@@ -94,6 +124,72 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   );
 
   return messageHeader;
+}
+
+/**
+ *  Message center overview message and title
+ */
+function getMessageOverviewAndTitle(
+  rsvns,
+  pantryName = null,
+  adminMode = true
+) {
+  let numMsgNotApproved = 0;
+  let numMsgNotPickedup = 0;
+
+  rsvns.forEach((rsvn) => {
+    if (rsvn.approved === 0) {
+      numMsgNotApproved++;
+      return;
+    }
+    if (rsvn.picked_up_time === null) {
+      numMsgNotPickedup++;
+      return;
+    }
+  });
+
+  if (adminMode) {
+    return (
+      // admin mode
+      <>
+        <Row className="justify-content-center mt-4">
+          <h2>{pantryName}</h2>
+        </Row>
+        <Row className="justify-content-center mt-2">
+          <h3>Message Center</h3>
+        </Row>
+        <hr />
+        <Row className="justify-content-center mt-4">
+          <h6>
+            You have {numMsgNotApproved} reservations to be approved or
+            cancelled,
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <h6>and {numMsgNotPickedup} reservations waiting to be picked up.</h6>
+        </Row>
+      </>
+    );
+  } else {
+    return (
+      // user mode
+      <>
+        <Row className="justify-content-center mt-4">
+          <h3>Message Center</h3>
+        </Row>
+        <hr />
+        <Row className="justify-content-center mt-4">
+          <h6>
+            You have {numMsgNotApproved} reservations not approved by the
+            pantry,
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <h6>and {numMsgNotPickedup} reservations awaiting you to pick up.</h6>
+        </Row>
+      </>
+    );
+  }
 }
 
 /**
@@ -139,6 +235,7 @@ function cancelButtonIsHidden(rsvn) {
 function resetButtonIsHidden(rsvn) {
   // if rsvn is approved and picked up, reset button should not be up
   if (rsvn.approved && rsvn.picked_up_time) return true;
+  if (!rsvn.cancelled) return true;
   else return false;
 }
 
@@ -202,6 +299,7 @@ function getMessageStatus(rsvn) {
 
 const msgFunctions = {
   getMessageHeader: getMessageHeader,
+  getMessageOverviewAndTitle: getMessageOverviewAndTitle,
   approvedButtonIsHidden: approvedButtonIsHidden,
   pickedupButtonIsHidden: pickedupButtonIsHidden,
   cancelButtonIsHidden: cancelButtonIsHidden,

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 // import for bootstrap
 import Row from "react-bootstrap/Row";
@@ -15,11 +16,10 @@ import {
 import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
 
 // other imports
-import { Link } from "react-router-dom";
 import "../css/common.css";
-import formatters from "./formatters/DatetimeFormatter"; // time formatters
-import msgFunctions from "./functions/msgAndBtns.function"; // message helper functions
-import ScrollToTop from "./functions/ScrollToTop.function";
+import formatters from "./helper_functions/DatetimeFormatter.function"; // time formatters
+import msgFunctions from "./helper_functions/msgAndBtns.function"; // message helper functions
+import ScrollToTop from "./helper_functions/ScrollToTop.function";
 
 /**
  * Message view for user (admin/staff) to view their reservation messages.
@@ -213,6 +213,7 @@ class Dashboard_newMsg extends Component {
           : formatters.getTimeElapsed(rsvn.order_time, "days") < 7
       )
       .sort((a, b) => b.reservation_id - a.reservation_id) // sort message from most recent to least
+      .slice(0, this.props.adminMode ? 2 : 5) // show only 2 messages at most
       .map((rsvn) => (
         <ListGroupItem
           tag="a"
@@ -273,19 +274,21 @@ class Dashboard_newMsg extends Component {
     return (
       <>
         <Row className="justify-content-center mt-2">
-          {this.props.adminMode
-            ? // adminMode
-              this.props.pantry_id && (
-                <Link to={"/messages_a/" + this.props.pantry_id}>
-                  <strong>View Older Messages</strong>
-                </Link>
-              )
-            : // userMode
-              this.props.rsvns && (
-                <Link to={"/messages_b/" + this.props.username}>
-                  <strong>View Your Reservation History</strong>
-                </Link>
-              )}
+          {this.props.adminMode ? (
+            // adminMode
+            <Link to={"/messages_a/" + this.props.pantry_id}>
+              <text style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                View All Messages
+              </text>
+            </Link>
+          ) : (
+            // userMode
+            <Link to={"/messages_b/" + this.props.username}>
+              <text style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                View All Reservations
+              </text>
+            </Link>
+          )}
         </Row>
         {/* message session title */}
         <Row className="justify-content-center mt-2">
@@ -309,7 +312,7 @@ class Dashboard_newMsg extends Component {
             onHide={() => this.closeViewRsvnMsgModal()}
           />
         </Row>
-        {/* Scroll to top button */}
+        {/* Scroll to top button for user to view their reservations */}
         {!this.props.adminMode && (
           <Row className="justify-content-center mt-4">
             <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />

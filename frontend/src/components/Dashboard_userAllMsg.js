@@ -6,6 +6,8 @@ import Pagination from "react-bootstrap/Pagination";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 import {
   ListGroup,
   ListGroupItem,
@@ -23,8 +25,11 @@ import ReservationService from "../services/reservation.service";
 // other imports
 import "../css/common.css";
 import { toast } from "react-toastify";
-import msgFunctions from "./functions/msgAndBtns.function"; // message helper functions
-import ScrollToTop from "./functions/ScrollToTop.function";
+
+// imports for helper functions
+import MySpinner from "./helper_functions/MySpinner";
+import msgFunctions from "./helper_functions/msgAndBtns.function";
+import ScrollToTop from "./helper_functions/ScrollToTop.function";
 
 /**
  * Message view for user to view all of
@@ -52,6 +57,9 @@ function Dashboard_userAllMsg(props) {
   const [currPage, setCurrPage] = useState(1);
   const paginationCount = 10;
 
+  // tabs
+  const [tab, setTab] = useState("all");
+
   // get username in route param
   const { username } = useParams();
   console.log({ ...useParams() });
@@ -71,9 +79,6 @@ function Dashboard_userAllMsg(props) {
     const response = await ReservationService.getUserReservations(username);
     setUserRsvns(response.reservations);
   };
-
-  console.log("1");
-  console.log("userRsvns is = ", { ...userRsvns });
 
   /**
    * Mark a reservation as withdrawed
@@ -141,11 +146,22 @@ function Dashboard_userAllMsg(props) {
     return [cancelReservationButton];
   };
 
-  const getMessageItems = () => {
+  const getMessageItems = (selectedTab) => {
     let msgListItems = [];
     let rsvns = [];
     if (userRsvns)
       rsvns = Object.values(userRsvns)
+        // condition for tabs to load messages based on rsvn status
+        .filter((rsvn) => {
+          if (selectedTab === "all") return rsvn;
+          if (selectedTab === "not_approved")
+            return !rsvn.approved && !rsvn.cancelled;
+          if (selectedTab === "approved")
+            return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+          if (selectedTab === "cancelled") return rsvn.cancelled;
+          if (selectedTab === "complete")
+            return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+        })
         .sort((a, b) => b.reservation_id - a.reservation_id)
         .slice((currPage - 1) * paginationCount, paginationCount * currPage);
 
@@ -203,8 +219,23 @@ function Dashboard_userAllMsg(props) {
     return msgListItems;
   };
 
-  const showPagination = () => {
-    let numItems = userRsvns ? Object.values(userRsvns).length : 0;
+  const showPagination = (selectedTab) => {
+    let numItems = userRsvns
+      ? Object.values(
+          userRsvns
+            // condition for tabs to load messages based on rsvn status
+            .filter((rsvn) => {
+              if (selectedTab === "all") return rsvn;
+              if (selectedTab === "not_approved")
+                return !rsvn.approved && !rsvn.cancelled;
+              if (selectedTab === "approved")
+                return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+              if (selectedTab === "cancelled") return rsvn.cancelled;
+              if (selectedTab === "complete")
+                return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+            })
+        ).length
+      : 0;
     // if (userRsvns) numItems = Object.values(userRsvns).length;
     let numPages = Math.ceil(numItems / paginationCount);
     let paginationItems = [];
@@ -226,43 +257,91 @@ function Dashboard_userAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
-  console.log("2");
-  console.log("userRsvns is = ", { ...userRsvns });
+  const renderMsg = (selectedTab) => {
+    if (userRsvns) {
+      return (
+        <>
+          <ListGroup className="w-responsive w-75 mx-auto mt-4">
+            {/* <ViewMessages /> */}
+            <Row className="justify-content-center">
+              {getMessageItems(selectedTab)}
+            </Row>
+            <Row className="justify-content-center mt-4">
+              {showPagination(selectedTab)}
+            </Row>
+          </ListGroup>
 
-  return (
-    <Container>
-      <ListGroup className="w-responsive w-75 mx-auto">
-        {/* <ViewMessages /> */}
-        <Row className="justify-content-center">{getMessageItems()}</Row>
-        <Row className="justify-content-center mt-4">{showPagination()}</Row>
-      </ListGroup>
+          {/* Scroll to top button */}
+          <Row className="justify-content-center mt-4">
+            <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
+          </Row>
 
-      {/* Scroll to top button */}
-      <Row className="justify-content-center mt-4">
-        <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
-      </Row>
+          {/* Reservation Message Modal */}
+          <ViewRsvnMsgModal
+            show={showRsvnMsg}
+            selectedID={selectedID}
+            selectedUsername={selectedUsername}
+            selectedApproved={selectedApproved}
+            selectedPickedUp={selectedPickedUp}
+            selectedCancelled={selectedCancelled}
+            selectedResFoods={selectedResFoods}
+            onHide={() => closeViewRsvnMsgModal()}
+          />
+        </>
+      );
+    }
+  };
+  const userAllMsgTab = () => {
+    if (userRsvns) {
+      return (
+        <Container id="user-reservations">
+          {msgFunctions.getMessageOverviewAndTitle(userRsvns, null, false)}
+          <Tabs
+            id="admin-all-rsvns-tab"
+            variant="pills"
+            defaultActiveKey={tab}
+            onSelect={(t) => {
+              setTab(t);
+              setCurrPage(1); // set page to 1 on tab-click
+            }}
+            className="justify-content-center nav-justified mb-4 mt-4"
+          >
+            <Tab eventKey="all" title="All Reservations">
+              {renderMsg("all")}
+            </Tab>
+            <Tab eventKey="not_approved" title="Pending Reservations">
+              {renderMsg("not_approved")}
+            </Tab>
+            <Tab eventKey="approved" title="Need Pickup">
+              {renderMsg("approved")}
+            </Tab>
+            <Tab eventKey="cancelled" title="Cancelled Reservations">
+              {renderMsg("cancelled")}
+            </Tab>
+            <Tab eventKey="complete" title="Complete Reservations">
+              {renderMsg("complete")}
+            </Tab>
+          </Tabs>
 
-      {/* Reservation Message Modal */}
-      <ViewRsvnMsgModal
-        show={showRsvnMsg}
-        selectedID={selectedID}
-        selectedUsername={selectedUsername}
-        selectedApproved={selectedApproved}
-        selectedPickedUp={selectedPickedUp}
-        selectedCancelled={selectedCancelled}
-        selectedResFoods={selectedResFoods}
-        onHide={() => closeViewRsvnMsgModal()}
-      />
+          {/* footer message */}
+          <Row className="justify-content-center">
+            <p className="mt-4">
+              Time is Money. We provide an efficient way for you to update
+              available items.
+            </p>
+          </Row>
+        </Container>
+      );
+    } else {
+      return (
+        <Container id="user-reservations-loading">
+          <MySpinner />
+        </Container>
+      );
+    }
+  };
 
-      {/* footer message */}
-      <Row className="justify-content-center">
-        <p className="mt-4">
-          Time is Money. We provide an efficient way for you to update available
-          items.
-        </p>
-      </Row>
-    </Container>
-  );
+  return userAllMsgTab();
 }
 
 export default Dashboard_userAllMsg;

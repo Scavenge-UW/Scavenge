@@ -11,13 +11,14 @@ import Button from "react-bootstrap/Button";
 import Dashboard_newMsg from "./Dashboard_newMsg";
 import DashboardDescriptionCard from "./DashboardDescriptionCard";
 import DashboardOpenHourCard from "./DashboardOpenHourCard";
-import formatters from "./formatters/DatetimeFormatter";
+import formatters from "./helper_functions/DatetimeFormatter.function";
 
 // import for services
 import PantryService from "../services/pantry.service";
 
 // other imports
 import { toast } from "react-toastify";
+import MySpinner from "./helper_functions/MySpinner";
 
 /**
  * Dashboard View
@@ -56,25 +57,22 @@ class DashboardView extends Component {
     const pantry = this.props.pantryDetail;
 
     if (pantry) {
-      this.setState(
-        {
-          pantry_id: pantry.pantry_id,
-          pantryName: pantry.name,
-          rsvns: pantry.reservations,
-          description: pantry.details,
-          address: pantry.address,
-          zipcode: pantry.zip,
-          city: pantry.city,
-          stte: pantry.state,
-          phone: pantry.phone_number,
-          weblink: pantry.website,
-          img_src: pantry.img_src,
-          lat: pantry.lat,
-          lon: pantry.lon,
-          hours: pantry.hours,
-        },
-        () => this.getDashboardOverview() // TODO: not sure if this is needed.
-      );
+      this.setState({
+        pantry_id: pantry.pantry_id,
+        pantryName: pantry.name,
+        rsvns: pantry.reservations,
+        description: pantry.details,
+        address: pantry.address,
+        zipcode: pantry.zip,
+        city: pantry.city,
+        stte: pantry.state,
+        phone: pantry.phone_number,
+        weblink: pantry.website,
+        img_src: pantry.img_src,
+        lat: pantry.lat,
+        lon: pantry.lon,
+        hours: pantry.hours,
+      });
     }
   }
 
@@ -204,14 +202,18 @@ class DashboardView extends Component {
 
     return (
       <>
+        {/* Pantry's name */}
+        <Row className="justify-content-center">
+          <h2>{this.state.pantryName}</h2>
+        </Row>
         {/* Page title */}
         <Row className="justify-content-center">
-          <h2>Dashboard</h2>
+          <h3>Dashboard</h3>
         </Row>
         <hr />
         {/* Overview message */}
         <Row className="justify-content-center">
-          You have {numReservation} new reservations today.
+          <h6>You have {numReservation} new reservations today.</h6>
         </Row>
       </>
     );
@@ -269,6 +271,7 @@ class DashboardView extends Component {
       <Row className="justify-content-center pt-4">
         <Card bg="light" className="w-responsive w-75 text-center mx-auto mt-2">
           <Card.Header as="h5">
+            {/* TODO: fix */}
             <Row className="justify-content-between align-items-center">
               <Col className="text-left">Operating Hours</Col>
             </Row>
@@ -302,37 +305,33 @@ class DashboardView extends Component {
    *
    */
   render() {
-    if (this.state.pantryName === "") {
+    if (this.state.pantry_id) {
       return (
-        <Container>
-          <div class="spinner" />
+        <Container id="dashboard-view-loading">
+          {/* dashboard and dashboard messages */}
+          {this.getDashboardOverview()}
+
+          {/* messages displayed and buttons for actions */}
+          {this.getMessageAndFunctions()}
+
+          {/* pantry description card and edits */}
+          {this.getDescriptionCards()}
+
+          {/* Open Hours */}
+          {this.getOpenHoursCards()}
+
+          <Row className="justify-content-center">
+            <p className="mt-4">
+              Time is Money. We provide an efficient way for you to update
+              available items.
+            </p>
+          </Row>
         </Container>
       );
     }
     return (
-      <Container>
-        {/* Pantry's name */}
-        <Row className="justify-content-center">
-          <h2>{this.state.pantryName}</h2>
-        </Row>
-        {/* dashboard and dashboard messages */}
-        {this.getDashboardOverview()}
-
-        {/* messages displayed and buttons for actions */}
-        {this.getMessageAndFunctions()}
-
-        {/* pantry description card and edits */}
-        {this.getDescriptionCards()}
-
-        {/* Open Hours */}
-        {this.getOpenHoursCards()}
-
-        <Row className="justify-content-center">
-          <p className="mt-4">
-            Time is Money. We provide an efficient way for you to update
-            available items.
-          </p>
-        </Row>
+      <Container id="dashboard-view-loading">
+        <MySpinner />
       </Container>
     );
   }
