@@ -89,7 +89,10 @@ class MyReservationsView extends Component {
           </h6>
         </Row>
         <Row className="justify-content-center">
-          <h6>Here are your 5 most recent reservations.</h6>
+          <h6>
+            Here are your {numReservation >= 5 ? 5 : numReservation} most recent
+            reservations.
+          </h6>
         </Row>
       </>
     );

@@ -260,7 +260,50 @@ function Dashboard_userAllMsg(props) {
       );
     }
 
-    return <Pagination>{paginationItems}</Pagination>;
+    // previous button
+    paginationItems.unshift(
+      <Pagination.Prev
+        onClick={() => {
+          setCurrPage(currPage - 1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // go to page 1 button
+    paginationItems.unshift(
+      <Pagination.First
+        onClick={() => {
+          setCurrPage(1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // next page button
+    paginationItems.push(
+      <Pagination.Next
+        onClick={() => {
+          setCurrPage(currPage + 1);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+    // go to last page button
+    paginationItems.push(
+      <Pagination.Last
+        onClick={() => {
+          setCurrPage(numPages);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+
+    return paginationItems.length > 0 ? (
+      <Pagination>{paginationItems}</Pagination>
+    ) : (
+      <>
+        <h4>You have 0 reservation here</h4>
+      </>
+    );
   };
 
   /**

@@ -371,7 +371,46 @@ function Dashboard_adminAllMsg(props) {
       );
     }
 
-    return <Pagination>{paginationItems}</Pagination>;
+    paginationItems.unshift(
+      <Pagination.Prev
+        onClick={() => {
+          setCurrPage(currPage - 1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    paginationItems.unshift(
+      <Pagination.First
+        onClick={() => {
+          setCurrPage(1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    paginationItems.push(
+      <Pagination.Next
+        onClick={() => {
+          setCurrPage(currPage + 1);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+    paginationItems.push(
+      <Pagination.Last
+        onClick={() => {
+          setCurrPage(numPages);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+
+    return paginationItems.length > 0 ? (
+      <Pagination>{paginationItems}</Pagination>
+    ) : (
+      <>
+        <h4>You have 0 reservation here</h4>
+      </>
+    );
   };
 
   /**
