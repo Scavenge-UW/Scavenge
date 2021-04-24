@@ -161,6 +161,17 @@ exports.pantryUpdateHours = async (req, res) => {
   return await execQuery("update", query, values);
 }
 
+exports.updateEstimatedPickUp = async (req, res) => {
+  const query = `
+    UPDATE reservation
+    SET
+      estimated_pick_up = ?
+    WHERE pantry_id = ? AND id = ?;
+  `;
+  const values = [req.body.estimated_pick_up, req.params.pantry_id, req.params.reservation_id];
+  return await execQuery("update", query, values);
+}
+
 exports.updateReservation = async (req, res) => {
   if (req.params.action === 'complete') {
     const query = `

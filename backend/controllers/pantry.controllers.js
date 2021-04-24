@@ -301,9 +301,17 @@ exports.pantryUpdateHoursAction = (req, res) => {
   });
 }
 
+exports.updateEstimatedPickUpAction = (req, res) => {
+  db.updateEstimatedPickUp(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Error in query. Failed to update pantry hours." });
+  });
+}
+
 exports.updateReservationAction = (req, res) => {
   db.updateReservation(req, res).then(async data => {
-    if (req.params.action = "cancel") {
+    if (req.params.action == "cancel") {
       try {
         var resFood = await(db.getResFood(req, res));
         resFood.forEach(async(element, index) => {
