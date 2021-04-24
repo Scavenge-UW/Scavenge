@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 // imports for components
 import PantryCard from "./PantryDetailCard";
 import FoodService from "../../services/food.service";
+import MySpinner from "../helper_functions/MySpinner";
 
 // imports for css
 import "../../css/FoodSearch.css";
@@ -37,7 +38,7 @@ function FoodSearchView() {
   const { query } = useParams(); // get query from route param
   const [allFoods, setAllFoods] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
-  const [searchFound, setSearchFound] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selection, setSelection] = useState([]);
 
   useEffect(() => {
@@ -63,7 +64,6 @@ function FoodSearchView() {
       });
       const response = await FoodService.searchFood(selection);
       setSearchResult(response);
-      setSearchFound(true);
     }
   };
 
@@ -112,16 +112,29 @@ function FoodSearchView() {
   };
 
   const showSearchResults = () => {
+    // return a Spinner when loading is true
+    if (loading) return <MySpinner />;
+
     if (searchResult.length > 0) {
-      return getPantryCards();
+      return (
+        <Row className="justify-content-center mt-4">{getPantryCards()}</Row>
+      );
     } else {
-      return <h6>No results</h6>;
+      return (
+        <Row className="justify-content-center mt-4">
+          <h6>No results</h6>
+        </Row>
+      );
     }
   };
 
   const onClickSearchButton = async (e) => {
     e.preventDefault();
+    // set loading to true before calling API
+    setLoading(true);
     await getSearchResults();
+    // switch loading to false after fetch is complete
+    setLoading(false);
   };
 
   return (
@@ -157,7 +170,7 @@ function FoodSearchView() {
           <em>Tab to autocomplete food</em>
         </small>
       </Row>
-      <Row className="justify-content-center mt-4">{showSearchResults()}</Row>
+      {showSearchResults()}
     </Container>
   );
 }
