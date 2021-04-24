@@ -412,7 +412,14 @@ exports.pantryAddEmployeeAction = (req, res) => {
   db.pantryAddEmployee(req, res).then(data => {
     return res.status(200).json(data);
   }).catch(error => {
-    return res.status(500).json({ message: "Error in query. Failed to add employee." });
+  let sqlMessage;
+    if (error.err['code'] === 'ER_NO_REFERENCED_ROW_2') {
+      sqlMessage = "User does not exist."
+    } else if (error.err['code'] === 'ER_DUP_ENTRY') {
+      sqlMessage = "Duplicate entry. User is already employee.";
+    }
+    return res.status(500).json({ message: "Error in query. Failed to add employee.",
+    detail: sqlMessage });
   });
 }
 
