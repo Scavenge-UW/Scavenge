@@ -121,6 +121,7 @@ function Dashboard_userAllMsg(props) {
    * Show control buttons for user mode
    */
   const showControls = (rsvn) => {
+    // enabel cancel button
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
@@ -219,6 +220,11 @@ function Dashboard_userAllMsg(props) {
     return msgListItems;
   };
 
+  /**
+   * put messages into pagination
+   *
+   * @param {*} selectedTab - Tabs for 'Pending Reservations', 'Need Pickup', 'Cancelled Reservations', 'Complete Reservations'
+   */
   const showPagination = (selectedTab) => {
     let numItems = userRsvns
       ? Object.values(
@@ -257,6 +263,11 @@ function Dashboard_userAllMsg(props) {
     return <Pagination>{paginationItems}</Pagination>;
   };
 
+  /**
+   * render message in ListGroupItems and display in pagination.
+   *
+   * @param {*} selectedTab - Tabs for 'Pending Reservations', 'Need Pickup', 'Cancelled Reservations', 'Complete Reservations'
+   */
   const renderMsg = (selectedTab) => {
     if (userRsvns) {
       return (
@@ -291,6 +302,10 @@ function Dashboard_userAllMsg(props) {
       );
     }
   };
+
+  /**
+   * categorized messages by tab and displayed by tab based on reservation status
+   */
   const userAllMsgTab = () => {
     if (userRsvns) {
       return (
