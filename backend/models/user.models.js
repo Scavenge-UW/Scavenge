@@ -92,7 +92,7 @@ exports.getWishlist = async (req, res) => {
       h.open,
       h.close,
       h.detail,  
-      p.name as pantry_name,
+      p.name as name,
       p.website,
       p.address,
       p.city,
