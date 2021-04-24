@@ -1,24 +1,25 @@
 import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
+
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Accordion from "react-bootstrap/Accordion";
 
-import { faSearch, faCircle } from "@fortawesome/free-solid-svg-icons";
+// imports for fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { Link } from "react-router-dom";
+import { faSearch, faCircle } from "@fortawesome/free-solid-svg-icons";
 
 // Redux
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { fetchPantries } from "../actions/pantryActions";
+import { fetchPantries } from "../../actions/pantryActions";
 
+// other imports
 import Fuse from "fuse.js";
-
-import "../css/ListView.css";
+import "../../css/ListView.css";
 
 class ListView extends Component {
   constructor(props) {
@@ -41,13 +42,11 @@ class ListView extends Component {
       typeof this.props.pantries.result !== "undefined"
     ) {
       let pantries = [];
-      //console.log(this.props.pantries);
       Object.values(this.props.pantries.result).map((pantry) => {
         pantries.push(pantry);
       });
 
       if (!pattern) {
-        //console.log("HRE1")
         this.setState({ matchedPantries: pantries });
         return;
       }
@@ -61,7 +60,6 @@ class ListView extends Component {
 
       if (!result.length) {
         // No matches
-        //console.log("HRE3");
         this.setState({ matchedPantries: [] });
       } else {
         pantries = [];
@@ -69,7 +67,6 @@ class ListView extends Component {
           pantries.push(item);
         });
         this.setState({ matchedPantries: pantries });
-        //console.log(this.state.matchedPantries);
       }
     }
   }

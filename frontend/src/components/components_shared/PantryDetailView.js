@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 // imports for bootstrap
@@ -12,12 +12,12 @@ import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 
 // imports for services and components
-import FoodItemCard from "../components/FoodItemCard";
-import PantryService from "../services/pantry.service";
+import FoodItemCard from "./FoodItemCard";
+import PantryService from "../../services/pantry.service";
 
 // imports for helper functions
-import formatters from "./helper_functions/DatetimeFormatter.function";
-import MySpinner from "./helper_functions/MySpinner";
+import formatters from "../helper_functions/DatetimeFormatter.function";
+import MySpinner from "../helper_functions/MySpinner";
 
 /**
  * A view for user that displays details and food items in a specific pantry.

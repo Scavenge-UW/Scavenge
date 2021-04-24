@@ -1,23 +1,28 @@
 import React, { Component } from "react";
-import Card from "react-bootstrap/Card";
+
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import { VscCircleFilled } from "react-icons/vsc";
+
+// other imports
 import { toast } from "react-toastify";
+import "../../css/common.css";
+
+// imports for actions and helpere function
+import store from "../../store";
+import PantryService from "../../services/pantry.service";
+import OneClickReserveModal from "../modals/OneClickReserveModal";
 import {
   addToCart,
   deleteFromCart,
   updateQuantity,
-} from "../actions/cart.actions";
-import store from "../store";
-
-import "../css/common.css";
-import PantryService from "../services/pantry.service";
-import OneClickReserveModal from "./modals/OneClickReserveModal";
+} from "../../actions/cart.actions";
 
 class FoodItemCard extends Component {
   constructor(props) {

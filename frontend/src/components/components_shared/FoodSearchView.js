@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Tabs from "react-bootstrap/Tabs";
-import Tab from "react-bootstrap/Tab";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Table from "react-bootstrap/Table";
+import { useParams } from "react-router-dom";
 
-import { useParams, Link } from "react-router-dom";
+// imports for bootstrap
+import Row from "react-bootstrap/Row";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 import { Typeahead } from "react-bootstrap-typeahead";
+
+// imports for fontawesome
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// redux
+import store from "../../store";
 import { useSelector } from "react-redux";
 
-import store from "../store";
+// imports for components
+import PantryCard from "./PantryDetailCard";
+import FoodService from "../../services/food.service";
 
-import FoodService from "../services/food.service";
-import PantryCard from "../components/PantryCard";
+// imports for css
+import "../../css/FoodSearch.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-
-import "../css/FoodSearch.css";
 
 /**
  * FoodSearchView where users can search for a specific food item
@@ -36,20 +38,6 @@ function FoodSearchView() {
   const [allFoods, setAllFoods] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [selection, setSelection] = useState([]);
-  const dummySearchResult = [
-    {
-      id: 1,
-      food_name: "Apple",
-      qr_code: null,
-      NUTRITION_COLUMNS_PLACEHOLDER: null,
-    },
-    {
-      id: 3,
-      food_name: "Avocado",
-      qr_code: 123123123,
-      NUTRITION_COLUMNS_PLACEHOLDER: null,
-    },
-  ];
 
   useEffect(() => {
     if (query !== undefined) {

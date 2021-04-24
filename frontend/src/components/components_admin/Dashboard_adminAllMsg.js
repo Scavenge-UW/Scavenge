@@ -16,19 +16,19 @@ import {
 } from "reactstrap";
 
 // import for components
-import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
+import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
-import PantryService from "../services/pantry.service";
+import PantryService from "../../services/pantry.service";
 
 // other imports
-import "../css/common.css";
+import "../../css/common.css";
 import { toast } from "react-toastify";
 
 // imports for helper functions
-import MySpinner from "./helper_functions/MySpinner";
-import msgFunctions from "./helper_functions/msgAndBtns.function";
-import ScrollToTop from "./helper_functions/ScrollToTop.function";
+import MySpinner from "../helper_functions/MySpinner";
+import msgFunctions from "../helper_functions/msgAndBtns.function";
+import ScrollToTop from "../helper_functions/ScrollToTop.function";
 
 /**
  * Message view for admin/staff to view all of

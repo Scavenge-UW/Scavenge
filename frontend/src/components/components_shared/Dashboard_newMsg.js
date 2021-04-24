@@ -13,13 +13,13 @@ import {
 } from "reactstrap";
 
 // import for components
-import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
+import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // other imports
-import "../css/common.css";
-import formatters from "./helper_functions/DatetimeFormatter.function"; // time formatters
-import msgFunctions from "./helper_functions/msgAndBtns.function"; // message helper functions
-import ScrollToTop from "./helper_functions/ScrollToTop.function";
+import "../../css/common.css";
+import msgFunctions from "../helper_functions/msgAndBtns.function"; // message helper functions
+import ScrollToTop from "../helper_functions/ScrollToTop.function";
+import formatters from "../helper_functions/DatetimeFormatter.function"; // time formatters
 
 /**
  * Message view for user (admin/staff) to view their reservation messages.

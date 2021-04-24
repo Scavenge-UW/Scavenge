@@ -9,9 +9,9 @@ import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 
 // imports for components and service
-import PantryService from "../services/pantry.service";
+import PantryService from "../../services/pantry.service";
 import InventoryView from "./InventoryView";
-import DashboardView from "./DashboardView";
+import DashboardView from "../components_shared/DashboardView";
 
 /**
  * PantryAdminView that consists of PantryDashboardView and InventoryView

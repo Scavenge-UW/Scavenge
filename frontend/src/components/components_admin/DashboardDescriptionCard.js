@@ -8,11 +8,11 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 // import for services
-import PantryService from "../services/pantry.service";
+import PantryService from "../../services/pantry.service";
 
 // other imports
 import { toast } from "react-toastify";
-import "../css/common.css";
+import "../../css/common.css";
 
 class DashboardDescriptionCard extends Component {
   constructor(props) {

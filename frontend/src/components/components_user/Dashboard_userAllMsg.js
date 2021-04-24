@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 // import for bootstrap
-import Pagination from "react-bootstrap/Pagination";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
-import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Pagination from "react-bootstrap/Pagination";
 import {
   ListGroup,
   ListGroupItem,
@@ -16,20 +16,20 @@ import {
 } from "reactstrap";
 
 // import for components
-import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
+import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
-import PantryService from "../services/pantry.service";
-import ReservationService from "../services/reservation.service";
+import PantryService from "../../services/pantry.service";
+import ReservationService from "../../services/reservation.service";
 
 // other imports
-import "../css/common.css";
+import "../../css/common.css";
 import { toast } from "react-toastify";
 
 // imports for helper functions
-import MySpinner from "./helper_functions/MySpinner";
-import msgFunctions from "./helper_functions/msgAndBtns.function";
-import ScrollToTop from "./helper_functions/ScrollToTop.function";
+import MySpinner from "../helper_functions/MySpinner";
+import msgFunctions from "../helper_functions/msgAndBtns.function";
+import ScrollToTop from "../helper_functions/ScrollToTop.function";
 
 /**
  * Message view for user to view all of

@@ -1,15 +1,18 @@
 import React, { Component } from "react";
-import Card from "react-bootstrap/Card";
+import { Link } from "react-router-dom";
+
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
-import "../css/common.css";
+// other imports
+import "../../css/common.css";
+import { toast } from "react-toastify";
 
 class PantryCard extends Component {
   constructor(props) {

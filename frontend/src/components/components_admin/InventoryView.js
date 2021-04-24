@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 
-import FoodItemCard from "./FoodItemCard";
-import AddItemModal from "./modals/AddItemModal";
-import PantryService from "../services/pantry.service";
-import MySpinner from "./helper_functions/MySpinner";
+import FoodItemCard from "../components_shared/FoodItemCard";
+import AddItemModal from "../modals/AddItemModal";
+import PantryService from "../../services/pantry.service";
+import MySpinner from "../helper_functions/MySpinner";
 
 // used to initialize itemToBeAdded
 const emptyItem = {
