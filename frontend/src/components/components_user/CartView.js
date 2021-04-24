@@ -1,17 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Container from "react-bootstrap/Container";
+
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import moment from "moment";
-import { toast } from "react-toastify";
+import Container from "react-bootstrap/Container";
 
+// imports for services, components, and actions
 import { clearCart } from "../../actions/cart.actions";
 import { fetchPantries } from "../../actions/pantryActions";
-import store from "../../store";
 import ReservationService from "../../services/reservation.service";
 import FoodItemCard from "../components_shared/FoodItemCard";
+
+// other imports
+import moment from "moment";
+import store from "../../store";
+import { toast } from "react-toastify";
 
 function CartView(props) {
   const cart = useSelector((store) => store.cart);

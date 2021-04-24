@@ -17,6 +17,7 @@ import { VscCircleFilled } from "react-icons/vsc";
 // imports for actions and helper function
 import store from "../../store";
 import PantryService from "../../services/pantry.service";
+import WishlistService from "../../services/wishlist.service";
 import OneClickReserveModal from "../modals/OneClickReserveModal";
 import {
   addToCart,
@@ -35,6 +36,7 @@ class FoodItemCard extends Component {
       editMode: false,
       showOneClickReserveModal: false,
       cartQuantity: 0,
+      decrementBtnDisabled: false,
     };
   }
 
@@ -117,6 +119,23 @@ class FoodItemCard extends Component {
         })
       );
       toast.info("🛒 " + itemName + " was added to your cart!");
+    }
+  }
+
+  onClickAddToWishlist() {
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to add items to wishlist.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can add items to wishlist."
+      );
+    } else {
+      let itemName = this.props.foodItem.food_name;
+
+      WishlistService.addToWishlist(this.props.username, {
+        // TODO: data for POSTS request
+      });
+      toast.info("🛒 " + itemName + " was added to your wishlist!");
     }
   }
 
@@ -313,13 +332,18 @@ class FoodItemCard extends Component {
             <Row>
               <Col className="col-8">
                 <InputGroup>
+                  {/* Increment Button */}
                   <InputGroup.Prepend>
                     <Button
                       className="increment-cart-item"
                       variant="outline-primary"
                       onClick={() => {
+                        // increment cartQuantity by 1
                         this.cartQuantity.current.value =
-                          parseInt(this.cartQuantity.current.value) + 1; // increment cartQuantity by 1
+                          parseInt(this.cartQuantity.current.value) + 1;
+                        // set decrement button to enabled if quantity > 0
+                        if (parseInt(this.cartQuantity.current.value) > 0)
+                          this.setState({ decrementBtnDisabled: false });
                         this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
@@ -327,25 +351,39 @@ class FoodItemCard extends Component {
                       +
                     </Button>
                   </InputGroup.Prepend>
-                  {/* TODO: validate valid input quantity number */}
+
+                  {/* Display quantity form */}
                   <FormControl
                     type="number"
-                    onChange={this.onUpdateCartItemQuantity.bind(this)}
+                    onChange={() => {
+                      this.onUpdateCartItemQuantity();
+                      if (parseInt(this.cartQuantity.current.value) > 0)
+                        this.setState({ decrementBtnDisabled: false });
+                    }}
                     disabled={!this.isInStock()}
                     defaultValue={1}
                     ref={this.cartQuantity}
-                    min="1" // test
+                    min="0" // VALIDATE: set min to 0
                   />
+
+                  {/* Decrement Button */}
                   <InputGroup.Append>
                     <Button
                       className="decrement-cart-item"
                       variant="outline-primary"
                       onClick={() => {
+                        // decrement cartQuantity by 1
                         this.cartQuantity.current.value =
-                          parseInt(this.cartQuantity.current.value) - 1; // decrement cartQuantity by 1
+                          parseInt(this.cartQuantity.current.value) - 1;
+                        // VALIDATE: set decrement button to disabled if quantity <= 1
+                        if (parseInt(this.cartQuantity.current.value) < 1)
+                          this.setState({ decrementBtnDisabled: true });
+                        // update quantity displayed
                         this.onUpdateCartItemQuantity();
                       }}
-                      disabled={!this.isInStock()}
+                      disabled={
+                        !this.isInStock() || this.state.decrementBtnDisabled
+                      }
                     >
                       -
                     </Button>
@@ -355,27 +393,45 @@ class FoodItemCard extends Component {
             </Row>
           </Col>
           <Col className="col-6 text-right">
-            <Row className="justify-content-end mb-1">
-              <Button
-                id="btn-one-click-reserve"
-                block
-                variant="success"
-                onClick={this.onClickOneClickReserve.bind(this)}
-                disabled={!this.isInStock()}
-              >
-                One Click Reserve
-              </Button>
-            </Row>
-            <Row className="justify-content-end">
-              <Button
-                block
-                variant="primary"
-                onClick={this.onClickAddToCart.bind(this)}
-                disabled={!this.isInStock()}
-              >
-                Add to Cart
-              </Button>
-            </Row>
+            {/* display One Click Reserve buttons if item is in stock */}
+            {this.isInStock() && (
+              <Row className="justify-content-end mb-1">
+                <Button
+                  id="btn-one-click-reserve"
+                  block
+                  variant="success"
+                  onClick={this.onClickOneClickReserve.bind(this)}
+                >
+                  One Click Reserve
+                </Button>
+              </Row>
+            )}
+            {/* display Add to Cart buttons if item is in stock */}
+            {this.isInStock() && (
+              <Row className="justify-content-end mb-1">
+                <Button
+                  id="btn-add-to-cart"
+                  block
+                  variant="info"
+                  onClick={this.onClickAddToCart.bind(this)}
+                >
+                  Add to Cart
+                </Button>
+              </Row>
+            )}
+            {/* display Add to Wishlist buttons if item is out of stock */}
+            {!this.isInStock() && (
+              <Row className="justify-content-end">
+                <Button
+                  id="btn-add-to-wishlist"
+                  block
+                  variant="dark"
+                  onClick={this.onClickAddToWishlist.bind(this)}
+                >
+                  Add to Wishlist
+                </Button>
+              </Row>
+            )}
           </Col>
         </Row>
       );
