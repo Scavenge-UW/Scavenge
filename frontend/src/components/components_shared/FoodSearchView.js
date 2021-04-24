@@ -17,7 +17,7 @@ import store from "../../store";
 import { useSelector } from "react-redux";
 
 // imports for components
-import PantryCard from "./PantryDetailCard";
+import SearchResultPantryCard from "./SearchResultPantryCard";
 import FoodService from "../../services/food.service";
 import MySpinner from "../helper_functions/MySpinner";
 
@@ -38,7 +38,7 @@ function FoodSearchView() {
   const { query } = useParams(); // get query from route param
   const [allFoods, setAllFoods] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // params for setting spinner
   const [selection, setSelection] = useState([]);
 
   useEffect(() => {
@@ -92,7 +92,7 @@ function FoodSearchView() {
     for (const pantry of searchResult) {
       // TODO: Change to props when API is implemented
       pantryCards.push(
-        <PantryCard pantry={pantry} />
+        <SearchResultPantryCard pantry={pantry} />
         // <tr key={pantry.pantry_id}>
         //   <td>
         //     <Link to={"/pantries/" + pantry.pantry_id}>
