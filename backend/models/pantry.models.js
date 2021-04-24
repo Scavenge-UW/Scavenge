@@ -16,6 +16,7 @@ exports.getAllPantries = async (req, res) => {
       p.lat,
       p.website,
       p.approved,
+      p.time_to_add,
       f.id as food_id,
       f.name as food_name,
       f.qr_code,
@@ -62,6 +63,7 @@ exports.getPantryDetail = async (req, res) => {
       p.lat,
       p.website,
       p.approved,
+      p.time_to_add,
       f.id as food_id,
       f.name as food_name,
       f.qr_code,
@@ -117,12 +119,13 @@ exports.pantryUpdateDetail = async (req, res) => {
       img_src = ?,
       lon = ?,
       lat = ?,
-      website = ?
+      website = ?,
+      time_to_add = ?
     WHERE id = ?;
   `;
   const values = [req.body.name, req.body.address, req.body.city, req.body.state, req.body.zip,
     req.body.phone_number, req.body.details, req.body.img_src, req.body.lon, req.body.lat, 
-    req.body.website, req.params.pantry_id];
+    req.body.website, req.body.time_to_add, req.params.pantry_id];
   return await execQuery("update", query, values);
 }
 
@@ -163,7 +166,7 @@ exports.updateReservation = async (req, res) => {
     const query = `
       UPDATE reservation
       SET
-        picked_up_time = NOW()
+        picked_up_time = date_add(NOW(), INTERVAL -5 HOUR)
       WHERE id = ? AND pantry_id = ?;
     `;
     // pantry_id is determined by id, but since it's in the route we'll use it in the query
@@ -175,10 +178,15 @@ exports.updateReservation = async (req, res) => {
       UPDATE reservation
       SET
         cancelled = 0,
-        approved = 1
+        approved = 1,
+        estimated_pick_up = date_add(NOW(), INTERVAL (
+          SELECT time_to_add
+          FROM pantry
+          WHERE id = ?) 
+          - 300 MINUTE)
       WHERE id = ? AND pantry_id = ?;
     `;
-    const values = [req.params.reservation_id, req.params.pantry_id];
+    const values = [req.params.pantry_id, req.params.reservation_id, req.params.pantry_id];
     return await execQuery("update", query, values);
   } else if (req.params.action === 'cancel') {
     const query = `

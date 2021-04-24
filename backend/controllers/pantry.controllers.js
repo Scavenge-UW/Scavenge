@@ -31,6 +31,7 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['lon']           = element['lon'];
       result[element['pantry_id']]['website']       = element['website'];
       result[element['pantry_id']]['approved']      = element['approved'];
+      result[element['pantry_id']]['time_to_add']   = element['time_to_add'];
       result[element['pantry_id']]['foods'][element['food_id']] = {};
       result[element['pantry_id']]['foods'][element['food_id']]['food_id']    = element['food_id'];
       result[element['pantry_id']]['foods'][element['food_id']]['food_name']  = element['food_name'];
@@ -75,6 +76,7 @@ exports.getAllPantriesAction = (req, res) => {
       pantryInfo['lat'] = pantry['lat'];
       pantryInfo['lon'] = pantry['lon'];
       pantryInfo['website'] = pantry['website'];
+      pantryInfo['time_to_add'] = pantry['time_to_add'];
 
       //pantryInfo['reservations'] = []; we don't want to give everyone access to the reservations
       pantryInfo['foods'] = [];
@@ -163,6 +165,7 @@ exports.getPantryDetailAction = (req, res) => {
       result['lon']           = element['lon'];
       result['website']       = element['website'];
       result['approved']      = element['approved'];
+      result['time_to_add']   = element['time_to_add'];
       result['foods'][element['food_id']] = {};
       result['foods'][element['food_id']]['food_id']    = element['food_id'];
       result['foods'][element['food_id']]['food_name']  = element['food_name'];
@@ -205,6 +208,7 @@ exports.getPantryDetailAction = (req, res) => {
     pantryInfo['lat'] = pantry['lat'];
     pantryInfo['lon'] = pantry['lon'];
     pantryInfo['website'] = pantry['website'];
+    pantryInfo['time_to_add'] = pantry['time_to_add'];
 
     pantryInfo['reservations'] = [];
     pantryInfo['foods'] = [];
