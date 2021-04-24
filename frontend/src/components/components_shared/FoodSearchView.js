@@ -37,6 +37,7 @@ function FoodSearchView() {
   const { query } = useParams(); // get query from route param
   const [allFoods, setAllFoods] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
+  const [searchFound, setSearchFound] = useState(false);
   const [selection, setSelection] = useState([]);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ function FoodSearchView() {
       });
       const response = await FoodService.searchFood(selection);
       setSearchResult(response);
+      setSearchFound(true);
     }
   };
 

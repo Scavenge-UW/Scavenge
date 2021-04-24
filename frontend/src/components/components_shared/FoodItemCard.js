@@ -8,13 +8,13 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import { VscCircleFilled } from "react-icons/vsc";
 
 // other imports
-import { toast } from "react-toastify";
 import "../../css/common.css";
+import { toast } from "react-toastify";
+import { VscCircleFilled } from "react-icons/vsc";
 
-// imports for actions and helpere function
+// imports for actions and helper function
 import store from "../../store";
 import PantryService from "../../services/pantry.service";
 import OneClickReserveModal from "../modals/OneClickReserveModal";
