@@ -9,8 +9,9 @@ import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 
 // imports for components and service
-import PantryService from "../../services/pantry.service";
 import InventoryView from "./InventoryView";
+import MySpinner from "../helper_functions/MySpinner";
+import PantryService from "../../services/pantry.service";
 import DashboardView from "../components_shared/DashboardView";
 
 /**
@@ -22,6 +23,7 @@ import DashboardView from "../components_shared/DashboardView";
 
 function PantryAdminView() {
   const [pantryDetail, setPantryDetail] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   /**
    * Fetch pantry detail on init
@@ -36,13 +38,21 @@ function PantryAdminView() {
    *
    */
   const fetchPantryDetail = async () => {
+    setIsLoaded(false);
     const detail = await PantryService.getDetail(1); // TODO: change pantry id based on user's affiliation
     setPantryDetail(detail);
+    setIsLoaded(true);
   };
 
   const PantryAdminViewTabs = () => {
     const [tab, setTab] = useState("dashboard");
-
+    if (!isLoaded) {
+      return (
+        <Container id="my-wishlist-loading">
+          <MySpinner />
+        </Container>
+      );
+    }
     return (
       <Tabs
         variant="pills"

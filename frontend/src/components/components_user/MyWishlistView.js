@@ -2,22 +2,19 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 
 // imports for bootstrap
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
 
 // imports for components
-import Dashboard_newMsg from "../components_shared/Dashboard_newMsg";
+import FoodItemCard from "../components_shared/FoodItemCard";
 
 // imports for services
 // import ReservationService from "../../services/reservation.service";
 import WishlistService from "../../services/wishlist.service";
 
-// other imports
-import { toast } from "react-toastify";
-
 // imports for helper functions
 import MySpinner from "../helper_functions/MySpinner";
-import formatters from "../helper_functions/DatetimeFormatter.function";
 
 /**
  * MyReservationsView
@@ -31,7 +28,7 @@ import formatters from "../helper_functions/DatetimeFormatter.function";
 class MyWishlistsView extends Component {
   constructor(props) {
     super(props);
-    this.state = { wishlist: [] };
+    this.state = { resp: [], loaded: false };
   }
 
   componentDidMount() {
@@ -42,7 +39,7 @@ class MyWishlistsView extends Component {
     const response = WishlistService.getUserWishlist(this.props.username).then(
       (response) => {
         this.setState({
-          wishlist: response,
+          resp: response,
           loaded: true,
         });
       }
@@ -70,30 +67,63 @@ class MyWishlistsView extends Component {
   //     });
   // }
 
-  // myReservationOverview() {
-  //   const numReservation = [...this.state.rsvns].filter(
-  //     (rsvn) => formatters.getTimeElapsed(rsvn.order_time, "days") < 7
-  //   ).length;
+  myWishlistOverview() {
+    let numWishlist = 0;
 
-  //   return (
-  //     <>
-  //       {/* page title */}
-  //       <Row className="justify-content-center mt-4">
-  //         <h2>My Reservations</h2>
-  //       </Row>
-  //       <hr />
-  //       {/* overview message */}
-  //       <Row className="justify-content-center mt-4">
-  //         <h6>
-  //           You have made {numReservation} reservations in the last 7 days.
-  //         </h6>
-  //       </Row>
-  //       <Row className="justify-content-center">
-  //         <h6>Here are your 5 most recent reservations.</h6>
-  //       </Row>
-  //     </>
-  //   );
-  // }
+    for (const wishlist of this.state.resp) {
+      numWishlist += wishlist.foods.length;
+    }
+
+    console.log(this.state.resp);
+
+    return (
+      <>
+        {/* page title */}
+        <Row className="justify-content-center mt-4">
+          <h2>My Wishlist</h2>
+        </Row>
+        <hr />
+        {/* overview message */}
+        <Row className="justify-content-center mt-4">
+          <h6>You have {numWishlist} items in your wishlist.</h6>
+        </Row>
+      </>
+    );
+  }
+
+  myWishlistItems() {
+    let wishlists = [];
+    for (const wishlist of this.state.resp) {
+      let pantryId = wishlist.pantry_id;
+      // let pantryName = wishlist.name;
+      for (const food of wishlist.foods) {
+        let wishlistItem = (
+          <Row className="ml-5 mr-5 align-items-center">
+            <Col>
+              <FoodItemCard
+                wishlistMode
+                foodItem={food} // contains food_id, food_name, wishlist_id
+                pantry_id={pantryId}
+                // pantry_name={}
+                username={this.props.username}
+                fetchResponse={() => this.fetchResponse()}
+              />
+            </Col>
+          </Row>
+        );
+
+        wishlists.push(wishlistItem);
+      }
+    }
+
+    return wishlists.length > 0 ? (
+      wishlists
+    ) : (
+      <Row className="ml-5 mr-5 justify-content-center align-items-center">
+        <h4>Your cart is empty.</h4>
+      </Row>
+    );
+  }
 
   /**
    * Renders components.
@@ -104,8 +134,11 @@ class MyWishlistsView extends Component {
       return <Redirect push to="/login" />;
     }
     if (this.state.loaded) {
-      // return <Container id="my-wishlist">{this.state.wishlist}</Container>;
-      return <h1>My WishList</h1>;
+      return (
+        <Container id="my-wishlist">
+          {this.myWishlistOverview()} {this.myWishlistItems()}
+        </Container>
+      );
     } else {
       return (
         <Container id="my-wishlist-loading">

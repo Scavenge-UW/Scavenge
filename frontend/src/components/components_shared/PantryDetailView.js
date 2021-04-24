@@ -77,6 +77,7 @@ function PantryDetailView(props) {
       (currPage - 1) * paginationCount,
       paginationCount * currPage
     );
+
     for (const foodItem of Object.values(foods)) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
@@ -87,6 +88,7 @@ function PantryDetailView(props) {
           key={foodItem.food_id}
           foodItem={foodItem}
           pantry={pantryDetail}
+          numFoodItems={foodItemCards.length}
           pantryDetailMode
         />
       );

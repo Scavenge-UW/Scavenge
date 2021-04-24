@@ -133,9 +133,32 @@ class FoodItemCard extends Component {
       let itemName = this.props.foodItem.food_name;
 
       WishlistService.addToWishlist(this.props.username, {
-        // TODO: data for POSTS request
+        food_id: this.props.foodItem.food_id,
+        pantry_id: this.props.pantry.pantry_id,
       });
-      toast.info("🛒 " + itemName + " was added to your wishlist!");
+      toast.info("🎁 " + itemName + " was added to your wishlist!");
+    }
+  }
+
+  onClickDeleteWishlistItem(username, wishlist_id) {
+    // TODO: chagne wishlist_id to Food name
+    if (
+      window.confirm(
+        "Are you sure you want to remove " +
+          { wishlist_id } +
+          "from your wishlist?"
+      )
+    ) {
+      WishlistService.removeFromWishlist(username, wishlist_id)
+        .then(() => {
+          this.props.fetchResponse();
+          toast.success("🗑️ Removed " + { wishlist_id } + ".");
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
     }
   }
 
@@ -322,7 +345,11 @@ class FoodItemCard extends Component {
    *
    */
   showReserveControls() {
-    if (!this.props.cartMode && !this.props.adminMode) {
+    if (
+      !this.props.cartMode &&
+      !this.props.adminMode &&
+      !this.props.wishlistMode
+    ) {
       return (
         <Row className="mt-4 justify-content-end align-items-end">
           <Col>
@@ -525,6 +552,39 @@ class FoodItemCard extends Component {
     }
   }
 
+  /**
+   * Returns controls used in wishlist mode.
+   *
+   * @returns Controls used in wishlist mode
+   */
+  showWishlistControls() {
+    // wishlistMode
+    // food={food} // contains food_id, food_name, wishlist_id
+    // pantry_id={pantryId}
+    // username={this.props.username}
+    if (this.props.wishlistMode) {
+      return (
+        <Row className="mt-4 justify-content-center" md={6}>
+          {/* <Col className="text-center" md={3}> */}
+          <Button
+            size="sm"
+            block
+            variant="danger"
+            onClick={(username, wishlist_id) =>
+              this.onClickDeleteWishlistItem(
+                this.props.username,
+                this.props.foodItem.wishlist_id
+              )
+            }
+          >
+            Remove from Wishlist
+          </Button>
+          {/* </Col> */}
+        </Row>
+      );
+    }
+  }
+
   showPantryName() {
     if (this.props.cartMode) {
       return (
@@ -532,6 +592,18 @@ class FoodItemCard extends Component {
           <Col>
             <span style={{ fontSize: "1rem" }}>
               from {this.props.pantry.name}
+            </span>
+          </Col>
+        </Row>
+      );
+    }
+    if (this.props.wishlistMode) {
+      // TODO: change pantry_id to pantry name
+      return (
+        <Row className="justify-content-center text-center mt-4">
+          <Col>
+            <span style={{ fontSize: "1rem" }}>
+              from {this.props.pantry_id}
             </span>
           </Col>
         </Row>
@@ -555,9 +627,9 @@ class FoodItemCard extends Component {
   }
 
   render() {
-    if (this.props.type === "filler") {
+    if (this.props.type === "filler")
       return <Card className="filler food-item" />;
-    } else {
+    else {
       const { food_id, food_name, quantity } = this.props.foodItem;
       return (
         <>
@@ -575,6 +647,7 @@ class FoodItemCard extends Component {
                 </Row>
                 {this.showReserveControls()}
                 {this.showAdminControls()}
+                {this.showWishlistControls()}
                 {this.showCartControls()}
                 {this.showPantryName()}
               </Card.Title>

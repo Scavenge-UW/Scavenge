@@ -8,15 +8,23 @@ function getUserWishlist(username) {
   });
 }
 
-function addToWishlist(username, data) {
+function addToWishlist(username, updData) {
   return request({
-    url: "/user/" + username + "/wishlist",
+    url: "/user/" + username + "/wishlist/add",
     method: "POST",
-    data: data,
+    data: updData,
     withCredentials: true,
   });
 }
 
-const WishlistService = { getUserWishlist, addToWishlist };
+function removeFromWishlist(username, wishlist_id) {
+  return request({
+    url: "/user/" + username + "/wishlist/remove/" + wishlist_id,
+    method: "DELETE",
+    withCredentials: true,
+  });
+}
+
+const WishlistService = { getUserWishlist, addToWishlist, removeFromWishlist };
 
 export default WishlistService;
