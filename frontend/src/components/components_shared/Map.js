@@ -207,7 +207,7 @@ class Map extends React.PureComponent {
     // </div>
     //<button className="sidebar" onClick={this.setUserLocation}>Pantries Near Me</button>
     return (
-      <div className="mapContainer">
+      <Container id="mapbox" className="mapContainer">
         <ReactMapGL
           ref={this.mapRef}
           {...this.state.viewport}
@@ -267,7 +267,7 @@ class Map extends React.PureComponent {
             </Popup>
           ) : null}
         </ReactMapGL>
-      </div>
+      </Container>
     );
   }
 }

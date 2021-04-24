@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 import Accordion from "react-bootstrap/Accordion";
 
 // imports for fontawesome
@@ -140,18 +141,17 @@ class ListView extends Component {
       this.state.matchedPantries.map((pantry) => {
         cards.push(
           <Card key={pantry.pantry_id}>
-            <Card.Header className="d-inline align-middle card-header">
+            {/* className="d-inline align-middle card-header" */}
+            <Card.Header>
               <Accordion.Toggle
                 as={Button}
                 variant="link"
                 eventKey={pantry.pantry_id}
               >
                 <Row>
-                  <Col md={2}>
-                    <span>{this.renderHourCircle(pantry)}</span>
-                  </Col>
-                  <Col md={10} className="p-0">
-                    <span className="pantry-link">{pantry.name}</span>
+                  <Col className="text-left">
+                    {this.renderHourCircle(pantry)}
+                    {pantry.name}
                   </Col>
                 </Row>
               </Accordion.Toggle>
@@ -180,11 +180,15 @@ class ListView extends Component {
     }
 
     return (
-      <div className="search-wrapper">
-        <h4 className="text-center">All Food Pantries</h4>
-        <div className="Search">
+      <Container className="search-wrapper w-responsive w-75 mx-auto">
+        <Row>
+          <Col className="text-center">
+            <h4>All Food Pantries</h4>
+          </Col>
+        </Row>
+        <Row className="Search justify-content-center mb-2">
           <input
-            className="searchInput"
+            className="searchInput w-responsive w-75"
             type="text"
             onChange={(e) => this.searchData(e.target.value)}
             placeholder="Search by name or location"
@@ -192,9 +196,9 @@ class ListView extends Component {
           <span className="SearchSpan">
             <FontAwesomeIcon className="pin" icon={faSearch} />
           </span>
-        </div>
+        </Row>
         <Accordion className="listGroup">{cards}</Accordion>
-      </div>
+      </Container>
     );
   }
 }

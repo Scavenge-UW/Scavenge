@@ -370,7 +370,7 @@ function Dashboard_adminAllMsg(props) {
         </Pagination.Item>
       );
     }
-
+    // previous button
     paginationItems.unshift(
       <Pagination.Prev
         onClick={() => {
@@ -379,6 +379,7 @@ function Dashboard_adminAllMsg(props) {
         disabled={currPage === 1}
       />
     );
+    // go to page 1 button
     paginationItems.unshift(
       <Pagination.First
         onClick={() => {
@@ -387,6 +388,7 @@ function Dashboard_adminAllMsg(props) {
         disabled={currPage === 1}
       />
     );
+    // next page button
     paginationItems.push(
       <Pagination.Next
         onClick={() => {
@@ -395,6 +397,7 @@ function Dashboard_adminAllMsg(props) {
         disabled={currPage === numPages}
       />
     );
+    // go to last page button
     paginationItems.push(
       <Pagination.Last
         onClick={() => {
