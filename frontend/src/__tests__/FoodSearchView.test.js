@@ -2,7 +2,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import FoodSearchView from "../components/FoodSearchView";
+import FoodSearchView from "../components/components_shared/FoodSearchView";
 import "../setupTests";
 import store from "../store";
 

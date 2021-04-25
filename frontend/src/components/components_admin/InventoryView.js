@@ -187,11 +187,15 @@ class InventoryView extends Component {
           <h3>Current Inventory</h3>
         </Row>
         <hr />
-        <Row id="inventory-overview-1" className="justify-content-center mt-2">
-          <h6>There are {numItems} items in total in your food pantry.</h6>
+        <Row className="justify-content-center mt-2">
+          <h6 id="inventory-overview-1">
+            There are {numItems} items in total in your food pantry.
+          </h6>
         </Row>
-        <Row id="inventory-overview-2" className="justify-content-center">
-          <h6>{numOutOfStockItems} items are currently out of stock.</h6>
+        <Row className="justify-content-center">
+          <h6 id="inventory-overview-2">
+            {numOutOfStockItems} items are currently out of stock.
+          </h6>
         </Row>
       </>
     );

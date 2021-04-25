@@ -4,7 +4,7 @@ import { shallow, mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MemoryRouter, Route, Link } from "react-router-dom";
 
-import DashboardView from "../components/DashboardView";
+import DashboardView from "../components/components_shared/DashboardView";
 import "../setupTests";
 
 import pantryDetail from "../__mocks__/pantryDetailMock";
@@ -31,7 +31,7 @@ describe("PantryDetailView tests", () => {
   );
 
   it("should display menu title", () => {
-    expect(wrapper.find("h2")).toHaveLength(2);
+    expect(wrapper.find("h2")).toHaveLength(1);
   });
 
   it("should display <DashboardDescriptionCard />", () => {

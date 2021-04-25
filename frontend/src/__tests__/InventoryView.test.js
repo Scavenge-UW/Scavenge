@@ -2,23 +2,28 @@ import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 import { mount } from "enzyme";
 
-import InventoryView from "../components/InventoryView";
+import InventoryView from "../components/components_admin/InventoryView";
 import "../setupTests";
 
-const { pantryDetail } = require("../__mocks__/pantryDetailMock");
+import pantryDetail from "../__mocks__/pantryDetailMock";
 
 describe("InventoryView tests", () => {
-  const wrapper = mount(<InventoryView pantryDetail={pantryDetail} />);
+  const wrapper = mount(
+    <InventoryView pantryDetail={pantryDetail.pantryDetail} />
+  );
   wrapper.instance().addItem = jest.fn();
   wrapper.update();
 
-  it("should display title", () => {
-    expect(wrapper.find("h2").text()).toEqual("Current Inventory");
+  it("should display title", async () => {
+    expect(wrapper.find("h3").text()).toEqual("Current Inventory");
   });
 
   it("should display inventory overview", () => {
-    expect(wrapper.find("p#inventory-overview").text()).toEqual(
-      "There are 0 items in total in your food pantry.0 items are currently out of stock."
+    expect(wrapper.find("h6#inventory-overview-1").text()).toEqual(
+      "There are 4 items in total in your food pantry."
+    );
+    expect(wrapper.find("h6#inventory-overview-2").text()).toEqual(
+      "0 items are currently out of stock."
     );
   });
 
@@ -29,7 +34,7 @@ describe("InventoryView tests", () => {
       food_id: "",
     };
 
-    expect(wrapper.state("foods")).toEqual([]);
+    expect(wrapper.state("foods")).toHaveLength(4);
     expect(wrapper.state("addItemModalShow")).toEqual(false);
     expect(wrapper.state("itemToBeAdded")).toEqual(emptyItem);
   });
@@ -51,14 +56,18 @@ describe("InventoryView tests", () => {
         },
       ],
     });
+    await wrapper.update();
 
-    expect(wrapper.find("p#inventory-overview").text()).toEqual(
-      "There are 2 items in total in your food pantry.1 items are currently out of stock."
+    expect(wrapper.find("h6#inventory-overview-1").text()).toEqual(
+      "There are 2 items in total in your food pantry."
+    );
+    expect(wrapper.find("h6#inventory-overview-2").text()).toEqual(
+      "1 items are currently out of stock."
     );
   });
 
   it("should update foods state correctly", async () => {
-    await wrapper.instance().componentDidMount();
+    await wrapper.update();
     expect(wrapper.state("foods")).toHaveLength(2);
   });
 
