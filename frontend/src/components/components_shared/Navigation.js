@@ -6,7 +6,7 @@ import Row from "react-bootstrap/Row";
 import { LinkContainer } from "react-router-bootstrap";
 
 import { BsGift } from "react-icons/bs";
-
+import { IoHomeOutline } from "react-icons/io5";
 import {
   FiUser,
   FiEdit,
@@ -195,7 +195,11 @@ class Navigation extends Component {
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>Scavenge</Navbar.Brand>
+            <Navbar.Brand>
+              <h3>
+                <IoHomeOutline /> Scavenge
+              </h3>
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
