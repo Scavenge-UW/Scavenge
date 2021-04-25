@@ -16,8 +16,6 @@ import Button from "react-bootstrap/Button";
 function EditEstModal(props) {
   const [estTime, setEstTime] = useState("");
 
-  console.log(props.selectedEstPickup);
-
   useEffect(() => {
     if (!props.show) {
       clearForm();

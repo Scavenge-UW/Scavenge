@@ -143,9 +143,10 @@ class DashboardView extends Component {
   }
 
   /**
+   * Update estimated pickup time to server and prompt message accordingly
    *
-   * @param {*} rsvn_id
-   * @param {*} updTime
+   * @param {*} rsvn_id - reservation id that is to be updated
+   * @param {*} updTime - the updated estimated pickup time
    */
   setEstPickupTime(rsvn_id, updTime) {
     console.log("3. ", this.state.pantry_id);

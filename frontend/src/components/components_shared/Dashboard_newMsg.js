@@ -13,8 +13,8 @@ import {
 } from "reactstrap";
 
 // import for components
-import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 import EditEstModal from "../modals/EditEstModal";
+import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // other imports
 import "../../css/common.css";
@@ -126,7 +126,7 @@ class Dashboard_newMsg extends Component {
           }
         }}
       >
-        Approve this reservation
+        Approve This Reservation
       </Button>
     );
 
@@ -186,8 +186,8 @@ class Dashboard_newMsg extends Component {
         }}
       >
         {this.props.adminMode
-          ? "Cancel this reservation"
-          : "Withdraw this reservation"}
+          ? "Cancel This Reservation"
+          : "Withdraw This Reservation"}
       </Button>
     );
 

@@ -16,6 +16,7 @@ import {
 } from "reactstrap";
 
 // import for components
+import EditEstModal from "../modals/EditEstModal";
 import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
@@ -39,10 +40,14 @@ import ScrollToTop from "../helper_functions/ScrollToTop.function";
  * @author [Yayen Lin](https://github.com/yayen-lin)
  */
 function Dashboard_adminAllMsg(props) {
-  const [pantryDetail, setPantryDetail] = useState(null); // pantry info
+  // pantry info
+  const [pantryDetail, setPantryDetail] = useState(null);
 
   // show reservation message, default false
   const [showRsvnMsg, setShowRsvnMsg] = useState(false);
+
+  // used for spinner
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // used to passing information to ViewRsvnMsgModal
   const [selectedID, setSelectedID] = useState(null);
@@ -51,6 +56,9 @@ function Dashboard_adminAllMsg(props) {
   const [selectedPickedUp, setSelectedPickedUp] = useState(null);
   const [selectedCancelled, setSelectedCancelled] = useState(null);
   const [selectedResFoods, setSelectedResFoods] = useState(null);
+  // used by EditEstModal
+  const [showEditEst, setShowEditEst] = useState(null);
+  const [selectedEstPickup, setSelectedEstPickup] = useState(null);
 
   // pagination
   const [currPage, setCurrPage] = useState(1);
@@ -75,8 +83,40 @@ function Dashboard_adminAllMsg(props) {
    *
    */
   const fetchPantryDetail = async () => {
+    setIsLoaded(false);
     let detail = await PantryService.getDetail(pantry_id); // TODO: change pantry id based on user's affiliation
     setPantryDetail(detail);
+    setIsLoaded(true);
+  };
+
+  /**
+   * Opens View Reservation Message modal.
+   *
+   */
+  const openViewRsvnMsgModal = () => {
+    setShowRsvnMsg(true);
+  };
+
+  /**
+   * Closes View Reservation Message modal.
+   *
+   */
+  const closeViewRsvnMsgModal = () => {
+    setShowRsvnMsg(false);
+  };
+
+  /**
+   * opens edit est pickup time modal
+   */
+  const openEditEstModal = () => {
+    setShowEditEst(true);
+  };
+
+  /**
+   * closes edit est pickup time modal
+   */
+  const closeEditEstModal = () => {
+    setShowEditEst(false);
   };
 
   /**
@@ -143,19 +183,28 @@ function Dashboard_adminAllMsg(props) {
   };
 
   /**
-   * Opens View Reservation Message modal.
+   * Update estimated pickup time to server and prompt message accordingly
    *
+   * @param {*} rsvn_id - reservation id that is to be updated
+   * @param {*} updTime - the updated estimated pickup time
    */
-  const openViewRsvnMsgModal = () => {
-    setShowRsvnMsg(true);
-  };
-
-  /**
-   * Closes View Reservation Message modal.
-   *
-   */
-  const closeViewRsvnMsgModal = () => {
-    setShowRsvnMsg(false);
+  const setEstPickupTime = (updTime) => {
+    console.log("3-1. ", pantry_id);
+    console.log("3-2. ", selectedID);
+    console.log("3-3. ", updTime);
+    PantryService.updateEstPickupTime(pantry_id, selectedID, updTime)
+      .then(() => {
+        fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "You have successfully updated the estimated pick up time for reservation #" +
+            selectedID
+        );
+      })
+      .catch(() => {
+        toast.error(
+          "Error while updating pick up time for reservation #" + selectedID
+        );
+      });
   };
 
   /**
@@ -242,9 +291,25 @@ function Dashboard_adminAllMsg(props) {
             markAsApproved(rsvn.reservation_id);
           }
         }}
-        disabled={false}
       >
         Reset and Approve
+      </Button>
+    );
+
+    // edit estimated puckup time button
+    const editEstButton = !msgFunctions.editEstButtonIsHidden(rsvn) && (
+      <Button
+        variant="dark"
+        size="sm"
+        className="m-2"
+        md="auto"
+        onClick={() => {
+          setSelectedID(rsvn.reservation_id);
+          setSelectedEstPickup(rsvn.estimated_pick_up);
+          openEditEstModal();
+        }}
+      >
+        Edit Estimated Pickup Time
       </Button>
     );
 
@@ -253,6 +318,7 @@ function Dashboard_adminAllMsg(props) {
       markAsPickedUpButton,
       cancelReservationButton,
       resetButton,
+      editEstButton,
     ];
 
     return controls;
@@ -450,6 +516,14 @@ function Dashboard_adminAllMsg(props) {
           selectedResFoods={selectedResFoods}
           onHide={() => closeViewRsvnMsgModal()}
         />
+
+        {/* Edit Est Pickup Time Modal */}
+        <EditEstModal
+          show={showEditEst}
+          selectedEstPickup={selectedEstPickup}
+          updateEstPickupTime={(estTime) => setEstPickupTime(estTime)}
+          onHide={() => closeEditEstModal()}
+        />
       </>
     );
   };
@@ -458,7 +532,7 @@ function Dashboard_adminAllMsg(props) {
    * categorized messages by tab and displayed by tab based on reservation status
    */
   const adminAllMsgTab = () => {
-    if (pantryDetail) {
+    if (isLoaded) {
       return (
         <Container id="admin-reservations">
           {msgFunctions.getMessageOverviewAndTitle(
@@ -502,13 +576,13 @@ function Dashboard_adminAllMsg(props) {
           </Row>
         </Container>
       );
-    } else {
-      return (
-        <Container id="admin-reservations-loading">
-          <MySpinner />
-        </Container>
-      );
     }
+
+    return (
+      <Container id="admin-reservations-loading">
+        <MySpinner />
+      </Container>
+    );
   };
 
   return adminAllMsgTab();
