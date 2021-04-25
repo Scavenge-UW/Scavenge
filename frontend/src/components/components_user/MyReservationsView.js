@@ -39,14 +39,15 @@ class MyReservationsView extends Component {
   }
 
   fetchResponse() {
-    const response = ReservationService.getUserReservations(
-      this.props.username
-    ).then((response) => {
-      this.setState({
-        rsvns: response.reservations,
-        loaded: true,
-      });
-    });
+    // const response = ReservationService.getUserReservations(
+    ReservationService.getUserReservations(this.props.username).then(
+      (response) => {
+        this.setState({
+          rsvns: response.reservations,
+          loaded: true,
+        });
+      }
+    );
   }
 
   /**

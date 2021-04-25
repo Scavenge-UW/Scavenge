@@ -35,6 +35,7 @@ class MyWishlistsView extends Component {
     this.fetchResponse();
   }
 
+  // get wishlist info for user from server
   fetchResponse() {
     const response = WishlistService.getUserWishlist(this.props.username).then(
       (response) => {

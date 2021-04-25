@@ -6,16 +6,20 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Tooltip from "react-bootstrap/Tooltip";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 // other imports
 import "../../css/common.css";
 import { toast } from "react-toastify";
 import { VscCircleFilled } from "react-icons/vsc";
+import { BsInfoCircle } from "react-icons/bs";
 
 // imports for actions and helper function
 import store from "../../store";
+import FoodService from "../../services/food.service";
 import PantryService from "../../services/pantry.service";
 import WishlistService from "../../services/wishlist.service";
 import OneClickReserveModal from "../modals/OneClickReserveModal";
@@ -37,7 +41,20 @@ class FoodItemCard extends Component {
       showOneClickReserveModal: false,
       cartQuantity: 0,
       decrementBtnDisabled: false,
+      foodsInfo: [],
     };
+  }
+
+  componentDidMount() {
+    this.fetchFoodsInfo();
+  }
+
+  fetchFoodsInfo() {
+    FoodService.getFoods().then((foods) => {
+      this.setState({
+        foodsInfo: foods,
+      });
+    });
   }
 
   /**
@@ -70,6 +87,44 @@ class FoodItemCard extends Component {
         </>
       );
     }
+  }
+
+  /**
+   * Return nutrition tooltip and on hover over display nutrition index
+   *
+   * @returns nutrition tool tip on hover over
+   */
+  showNutritionTooltip() {
+    const getNutrition = (id) => {
+      let nutrition = -1;
+      if (this.state.foodsInfo.length) {
+        for (const info of this.state.foodsInfo) {
+          if (id === info.id) return info.NUTRITION_COLUMNS_PLACEHOLDER;
+        }
+      }
+      return nutrition;
+    };
+
+    const renderTooltip = () => (
+      <Tooltip id="nutrition-info-tooltip">
+        Nutrition index: {getNutrition(this.props.foodItem.food_id)}
+      </Tooltip>
+    );
+
+    return (
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 150, hide: 400 }} // delay for show and hide the tooltip
+        overlay={renderTooltip()}
+      >
+        <BsInfoCircle
+          size="1.3rem"
+          onClick={() => {
+            console.log("hello");
+          }}
+        />
+      </OverlayTrigger>
+    );
   }
 
   setShowOneClickReserveModal(show) {
@@ -387,10 +442,10 @@ class FoodItemCard extends Component {
                     type="number"
                     onChange={() => {
                       this.onUpdateCartItemQuantity();
+                      // VALIDATE: disabled decrement button accordingly
                       if (parseInt(this.cartQuantity.current.value) < 1)
                         this.setState({ decrementBtnDisabled: true });
                       else this.setState({ decrementBtnDisabled: false });
-                      console.log(this.state.decrementBtnDisabled);
                     }}
                     disabled={!this.isInStock()}
                     defaultValue={1}
@@ -639,7 +694,9 @@ class FoodItemCard extends Component {
               <Card.Title className="mb-4">
                 <Row className="justify-content-between align-items-center">
                   <Col className="text-left">
-                    <span id="food_name">{food_name}</span>
+                    <span id="food_name">
+                      {food_name} {this.showNutritionTooltip()}
+                    </span>
                   </Col>
                   <Col className="text-right">
                     {/* Show if Item is in stock */}
