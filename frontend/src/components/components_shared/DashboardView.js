@@ -10,6 +10,7 @@ import Card from "react-bootstrap/Card";
 import Dashboard_newMsg from "./Dashboard_newMsg";
 import DashboardDescriptionCard from "../components_admin/DashboardDescriptionCard";
 import DashboardOpenHourCard from "../components_admin/DashboardOpenHourCard";
+import FooterMsg from "../helper_functions/FooterMsg";
 import formatters from "../helper_functions/DatetimeFormatter.function";
 
 // import for services
@@ -350,10 +351,7 @@ class DashboardView extends Component {
           {this.getOpenHoursCards()}
 
           <Row className="justify-content-center">
-            <p className="mt-4">
-              Time is Money. We provide an efficient way for you to update
-              available items.
-            </p>
+            <FooterMsg />
           </Row>
         </Container>
       );

@@ -8,6 +8,7 @@ import FoodItemCard from "../components_shared/FoodItemCard";
 import AddItemModal from "../modals/AddItemModal";
 import PantryService from "../../services/pantry.service";
 import MySpinner from "../helper_functions/MySpinner";
+import FooterMsg from "../helper_functions/FooterMsg";
 
 // used to initialize itemToBeAdded
 const emptyItem = {
@@ -225,10 +226,7 @@ class InventoryView extends Component {
             setItemToBeAdded={this.setItemToBeAdded.bind(this)}
           />
           <Row className="justify-content-center">
-            <p className="mt-4">
-              Time is Money. We provide an efficient way for you to update
-              available items.
-            </p>
+            <FooterMsg />
           </Row>
         </Container>
       );

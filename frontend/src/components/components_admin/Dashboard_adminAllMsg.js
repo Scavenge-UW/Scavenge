@@ -17,6 +17,7 @@ import {
 
 // import for components
 import EditEstModal from "../modals/EditEstModal";
+import RsvnSearchView from "../components_shared/RsvnSearchView";
 import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
@@ -27,6 +28,7 @@ import "../../css/common.css";
 import { toast } from "react-toastify";
 
 // imports for helper functions
+import FooterMsg from "../helper_functions/FooterMsg";
 import MySpinner from "../helper_functions/MySpinner";
 import msgFunctions from "../helper_functions/msgAndBtns.function";
 import ScrollToTop from "../helper_functions/ScrollToTop.function";
@@ -550,29 +552,32 @@ function Dashboard_adminAllMsg(props) {
             }}
             className="justify-content-center nav-justified mb-4 mt-4"
           >
-            <Tab eventKey="all" title="All Messages">
+            <Tab eventKey="search" title={<strong>Search Messages</strong>}>
+              <RsvnSearchView rsvns={pantryDetail.reservations} />
+            </Tab>
+            <Tab eventKey="all" title={<strong>All Messages</strong>}>
               {renderMsg("all")}
             </Tab>
-            <Tab eventKey="not_approved" title="To Be Approved">
+            <Tab
+              eventKey="not_approved"
+              title={<strong>To Be Approved</strong>}
+            >
               {renderMsg("not_approved")}
             </Tab>
-            <Tab eventKey="approved" title="Approved Reservations">
+            <Tab eventKey="approved" title={<strong>Approved</strong>}>
               {renderMsg("approved")}
             </Tab>
-            <Tab eventKey="cancelled" title="Cancelled Reservations">
+            <Tab eventKey="cancelled" title={<strong>Cancelled</strong>}>
               {renderMsg("cancelled")}
             </Tab>
-            <Tab eventKey="complete" title="Complete Reservations">
+            <Tab eventKey="complete" title={<strong>Complete</strong>}>
               {renderMsg("complete")}
             </Tab>
           </Tabs>
 
           {/* footer message */}
           <Row className="justify-content-center">
-            <p className="mt-4">
-              Time is Money. We provide an efficient way for you to update
-              available items.
-            </p>
+            <FooterMsg />
           </Row>
         </Container>
       );
