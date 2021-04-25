@@ -13,7 +13,7 @@ import PantryService from "../../services/pantry.service";
 // other imports
 import "../../css/common.css";
 import { toast } from "react-toastify";
-import { BsInfoCircle } from "react-icons/bs";
+import ddtooltip from "../helper_functions/DashboardDescriptionTooltip";
 
 class DashboardDescriptionCard extends Component {
   constructor(props) {
@@ -167,7 +167,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formDescription">
                     <Form.Label>
-                      <strong>- description: </strong>
+                      <strong>
+                        - Description: {ddtooltip.getTooltip("description")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       as="textarea"
@@ -184,7 +186,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formAddress">
                     <Form.Label>
-                      <strong>- address: </strong>
+                      <strong>
+                        - Address: {ddtooltip.getTooltip("address")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -201,7 +205,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formZipcode">
                     <Form.Label>
-                      <strong>- zipcode: </strong>
+                      <strong>
+                        - Zipcode: {ddtooltip.getTooltip("zipcode")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="number"
@@ -218,7 +224,7 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formCity">
                     <Form.Label>
-                      <strong>- city: </strong>
+                      <strong>- City: {ddtooltip.getTooltip("city")}</strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -235,7 +241,7 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formState">
                     <Form.Label>
-                      <strong>- state: </strong>
+                      <strong>- State: {ddtooltip.getTooltip("state")}</strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -252,7 +258,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formPhone">
                     <Form.Label>
-                      <strong>- phone number: </strong>
+                      <strong>
+                        - Phone number: {ddtooltip.getTooltip("phone")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -269,7 +277,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formWeblink">
                     <Form.Label>
-                      <strong>- weblink: </strong>
+                      <strong>
+                        - Weblink: {ddtooltip.getTooltip("weblink")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -286,7 +296,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formImgSrc">
                     <Form.Label>
-                      <strong>- Image Source: </strong>
+                      <strong>
+                        - Image Source: {ddtooltip.getTooltip("img_src")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -303,7 +315,10 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formTimeTOAdd">
                     <Form.Label>
-                      <strong>- Time To Add: </strong>
+                      <strong>
+                        - Time To Add (in hours):{" "}
+                        {ddtooltip.getTooltip("time_to_add")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
