@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
+
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Container from "react-bootstrap/Container";
 import { LinkContainer } from "react-router-bootstrap";
 
+// imports for icons
 import { BsGift } from "react-icons/bs";
 import { IoHomeOutline } from "react-icons/io5";
 import {

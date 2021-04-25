@@ -185,7 +185,7 @@ function Dashboard_userAllMsg(props) {
           <hr />
           {/* Body (status) */}
           <ListGroupItemText>
-            {msgFunctions.getMessageStatus(rsvn)}
+            {msgFunctions.getMessageStatus(rsvn, false)}
           </ListGroupItemText>
 
           <Row className="justify-content-center align-items-center">

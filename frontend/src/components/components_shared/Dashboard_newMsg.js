@@ -178,9 +178,14 @@ class Dashboard_newMsg extends Component {
             );
           }
         }}
-        disabled={false}
       >
         Reset and Approve
+      </Button>
+    );
+
+    const editEstButton = !msgFunctions.editEstButtonIsHidden(rsvn) && (
+      <Button variant="dark" size="sm" className="m-2" md="auto">
+        Edit Estimated Pickup Time
       </Button>
     );
 
@@ -190,6 +195,7 @@ class Dashboard_newMsg extends Component {
         markAsPickedUpButton,
         cancelReservationButton,
         resetButton,
+        editEstButton,
       ];
     } else {
       controls = [cancelReservationButton];

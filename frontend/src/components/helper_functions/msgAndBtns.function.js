@@ -6,6 +6,9 @@
  * @author [Ilkyu Ju](https://github.com/osori)
  * @author [Yayen Lin](https://github.com/yayen-lin)
  */
+
+import React, { useState, useEffect } from "react";
+
 // import for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -236,6 +239,17 @@ function resetButtonIsHidden(rsvn) {
   // if rsvn is approved and picked up, reset button should not be up
   if (rsvn.approved && rsvn.picked_up_time) return true;
   if (!rsvn.cancelled) return true;
+  // if rsvn ordered time is mroe than 10 days ago, reset button should not be up
+  if (formatters.getTimeElapsed(rsvn.order_time, "days") > 10) return true;
+  else return false;
+}
+
+/**
+ * Set visibility of Estimate Pickup Time Button
+ */
+function editEstButtonIsHidden(rsvn) {
+  // if rsvn is cancelled or picked up (complete), buttons should not be up
+  if (rsvn.cancelled || rsvn.picked_up_time) return true;
   else return false;
 }
 
@@ -304,6 +318,7 @@ const msgFunctions = {
   pickedupButtonIsHidden: pickedupButtonIsHidden,
   cancelButtonIsHidden: cancelButtonIsHidden,
   resetButtonIsHidden: resetButtonIsHidden,
+  editEstButtonIsHidden: editEstButtonIsHidden,
   getMessageStatus: getMessageStatus,
 };
 
