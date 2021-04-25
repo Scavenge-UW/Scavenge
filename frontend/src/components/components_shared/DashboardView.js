@@ -31,7 +31,7 @@ class DashboardView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pantry_id: null, // TODO: Change to actual pantry id
+      pantry_id: null,
       pantryName: "",
       rsvns: [],
       description: "",
@@ -46,6 +46,9 @@ class DashboardView extends Component {
       img_src: "",
       lat: "",
       lon: "",
+
+      //
+      timeToAdd: null,
 
       // used by DashboardOpenHourCard
       hours: [],
@@ -71,6 +74,7 @@ class DashboardView extends Component {
         lat: pantry.lat,
         lon: pantry.lon,
         hours: pantry.hours,
+        timeToAdd: pantry.time_to_add,
       });
     }
   }
@@ -90,11 +94,11 @@ class DashboardView extends Component {
       .then(() => {
         this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(
-          "You have successfully approved the reservation with ID " + rsvn_id
+          "You have successfully approved the reservation #" + rsvn_id
         );
       })
       .catch(() => {
-        toast.error("Error while approving reservation with ID " + rsvn_id);
+        toast.error("Error while approving reservation #" + rsvn_id);
       });
   }
 
@@ -109,16 +113,12 @@ class DashboardView extends Component {
       .then(() => {
         this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(
-          "reservation with ID " +
-            rsvn_id +
-            " was successfully marked as picked up!"
+          "reservation #" + rsvn_id + " was successfully marked as picked up!"
         );
       })
       .catch(() => {
         toast.error(
-          "Error while marking reservation with ID " +
-            rsvn_id +
-            " as picked up."
+          "Error while marking reservation #" + rsvn_id + " as picked up."
         );
       });
   }
@@ -134,11 +134,35 @@ class DashboardView extends Component {
       .then(() => {
         this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(
-          "You have successfully cancelled the reservation with ID " + rsvn_id
+          "You have successfully cancelled the reservation #" + rsvn_id
         );
       })
       .catch(() => {
-        toast.error("Error while cancelling reservation with ID " + rsvn_id);
+        toast.error("Error while cancelling reservation #" + rsvn_id);
+      });
+  }
+
+  /**
+   *
+   * @param {*} rsvn_id
+   * @param {*} updTime
+   */
+  setEstPickupTime(rsvn_id, updTime) {
+    console.log("3. ", this.state.pantry_id);
+    console.log("3. ", rsvn_id);
+    console.log("3. ", updTime);
+    PantryService.updateEstPickupTime(this.state.pantry_id, rsvn_id, updTime)
+      .then(() => {
+        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+        toast.success(
+          "You have successfully updated the estimated pick up time for reservation #" +
+            rsvn_id
+        );
+      })
+      .catch(() => {
+        toast.error(
+          "Error while updating pick up time for reservation #" + rsvn_id
+        );
       });
   }
 
@@ -227,9 +251,11 @@ class DashboardView extends Component {
         adminMode={true}
         pantry_id={this.state.pantry_id}
         rsvns={this.state.rsvns}
+        timeToAdd={this.state.timeToAdd}
         markAsApproved={this.markAsApproved.bind(this)}
         markAsPickedUp={this.markAsPickedUp.bind(this)}
         markAsCancelled={this.markAsCancelled.bind(this)}
+        setEstPickupTime={this.setEstPickupTime.bind(this)}
       />
     );
   }

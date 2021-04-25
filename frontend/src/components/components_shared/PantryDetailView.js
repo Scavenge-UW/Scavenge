@@ -240,7 +240,7 @@ function PantryDetailView(props) {
   if (pantryDetail) {
     const {
       name,
-      // address,zip,city,state,lat,lon,phone_number,website,
+      // unused: address,zip,city,state,lat,lon,phone_number,website,
       img_src,
     } = pantryDetail;
 

@@ -56,12 +56,6 @@ const valStyle = {
   fontSize: "1.1rem",
 };
 
-/*
-      TODO: 
-      marked complete reservation with check2-circle icon
-      marked cancelled reservation with x-circle icon
-      - https://react-icons.github.io/react-icons/search?q=chec
-  */
 /**
  * @returns the message header (title and reservation time) for each message.
  */
@@ -252,14 +246,6 @@ function editEstButtonIsHidden(rsvn) {
   if (rsvn.cancelled || rsvn.picked_up_time) return true;
   else return false;
 }
-
-/*
-  TODO: 
-  marked complete reservation with check2-circle icon
-  marked cancelled reservation with x-circle icon
-  add hover over description
-  - https://icons.getbootstrap.com
-  */
 
 /**
  * return formatted reservation status.

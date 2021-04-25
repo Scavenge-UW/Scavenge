@@ -14,6 +14,7 @@ import {
 
 // import for components
 import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
+import EditEstModal from "../modals/EditEstModal";
 
 // other imports
 import "../../css/common.css";
@@ -35,15 +36,19 @@ class Dashboard_newMsg extends Component {
     this.state = {
       // show reservation message, default false
       showRsvnMsg: false,
+      // show edit est pickup time modal, default false
+      showEditEst: false,
 
       // default selectedID = null,
-      // this is used to passing information to ViewRsvnMsgModal
+      // this is used to passing information to ViewRsvnMsgModal and EditEstModal
       selectedID: null,
+      selectedRsvn: null,
       selecedUsername: "",
       selectedApproved: null,
       selectedPickedUp: null,
       selectedCancelled: null,
       selectedResFoods: null,
+      selectedEstPickup: null,
     };
   }
 
@@ -68,10 +73,38 @@ class Dashboard_newMsg extends Component {
   }
 
   /**
+   * opens edit est pickup time modal
+   */
+  openEditEstModal() {
+    this.setState({
+      showEditEst: true,
+    });
+  }
+
+  /**
+   * closes edit est pickup time modal
+   */
+  closeEditEstModal() {
+    this.setState({
+      showEditEst: false,
+    });
+  }
+
+  updateEstPickupTime(estTime) {
+    console.log("1. ", estTime);
+    this.props.setEstPickupTime(this.state.selectedID, estTime);
+    this.setState({
+      selectedEstPickup: estTime,
+    });
+  }
+
+  /**
    * Show control buttons based on current mode (adminMode vs userMode)
    */
   showControls(rsvn) {
     var controls;
+
+    // approved button
     const approveButton = !msgFunctions.approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
       <Button
         // variant="outline-primary"
@@ -97,8 +130,8 @@ class Dashboard_newMsg extends Component {
       </Button>
     );
 
+    // Mark as Picked Up Button
     const markAsPickedUpButton = !msgFunctions.pickedupButtonIsHidden(rsvn) && (
-      // {/* Mark as Picked Up Button */}
       <Button
         // variant="outline-success"
         variant="success"
@@ -123,11 +156,10 @@ class Dashboard_newMsg extends Component {
       </Button>
     );
 
-    // the only shared component between a user and admin
+    // Cancel this reservation Button
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
-      // {/* Cancel this reservation Button */}
       <Button
         // variant="outline-danger"
         variant="danger"
@@ -159,6 +191,7 @@ class Dashboard_newMsg extends Component {
       </Button>
     );
 
+    // reset button
     const resetButton = !msgFunctions.resetButtonIsHidden(rsvn) && (
       <Button
         variant="dark"
@@ -183,8 +216,25 @@ class Dashboard_newMsg extends Component {
       </Button>
     );
 
+    // edit estimated puckup time button
     const editEstButton = !msgFunctions.editEstButtonIsHidden(rsvn) && (
-      <Button variant="dark" size="sm" className="m-2" md="auto">
+      <Button
+        variant="dark"
+        size="sm"
+        className="m-2"
+        md="auto"
+        onClick={() => {
+          this.setState(
+            {
+              selectedID: rsvn.reservation_id,
+              selectedEstPickup: rsvn.estimated_pick_up,
+            },
+            () => {
+              this.openEditEstModal();
+            }
+          );
+        }}
+      >
         Edit Estimated Pickup Time
       </Button>
     );
@@ -316,6 +366,14 @@ class Dashboard_newMsg extends Component {
             selectedCancelled={this.state.selectedCancelled}
             selectedResFoods={this.state.selectedResFoods}
             onHide={() => this.closeViewRsvnMsgModal()}
+          />
+
+          {/* Edit Est Pickup Time Modal */}
+          <EditEstModal
+            show={this.state.showEditEst}
+            selectedEstPickup={this.state.selectedEstPickup}
+            updateEstPickupTime={(estTime) => this.updateEstPickupTime(estTime)}
+            onHide={() => this.closeEditEstModal()}
           />
         </Row>
         {/* Scroll to top button for user to view their reservations */}

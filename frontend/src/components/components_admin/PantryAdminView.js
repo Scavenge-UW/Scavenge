@@ -19,6 +19,7 @@ import DashboardView from "../components_shared/DashboardView";
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
  */
 
 function PantryAdminView() {
