@@ -3,7 +3,7 @@ import Adapter from "enzyme-adapter-react-16";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import ProfileView from "../components/ProfileView";
+import ProfileView from "../components/components_shared/ProfileView";
 import "../setupTests";
 import store from "../store";
 

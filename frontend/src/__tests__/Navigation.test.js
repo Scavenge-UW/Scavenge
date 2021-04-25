@@ -3,7 +3,7 @@ import Adapter from "enzyme-adapter-react-16";
 import { shallow } from "enzyme";
 import { Provider } from "react-redux";
 
-import Navigation from "../components/Navigation";
+import Navigation from "../components/components_shared/Navigation";
 import "../setupTests";
 import store from "../store";
 
@@ -48,7 +48,7 @@ describe("Navigation tests", () => {
 
   it("should have all buttons for civilian users", () => {
     // There should be one button in LoginView
-    expect(nonAdminWrapper.find("NavLink")).toHaveLength(6);
+    expect(nonAdminWrapper.find("NavLink")).toHaveLength(7);
     expect(
       nonAdminWrapper.findWhere((n) => n.key() === "Search Foods")
     ).toHaveLength(1);
