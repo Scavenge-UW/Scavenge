@@ -8,11 +8,11 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 // import for services
-import PantryService from "../services/pantry.service";
+import PantryService from "../../services/pantry.service";
 
 // other imports
 import { toast } from "react-toastify";
-import "../css/common.css";
+import "../../css/common.css";
 
 class DashboardDescriptionCard extends Component {
   constructor(props) {
@@ -67,16 +67,16 @@ class DashboardDescriptionCard extends Component {
       )
     ) {
       PantryService.updatePantryInfo(pid, {
-        name: this.props.pantryName, // TODO: this shouldn't be updated
+        name: this.props.pantryName, // remain unchanged
         address: this.newAddress.current.value,
         zip: this.newZipcode.current.value,
         city: this.newCity.current.value,
         state: this.newStte.current.value,
         phone_number: this.newPhone.current.value,
         details: this.newDetail.current.value,
-        img_src: this.props.img_src, // TODO: this shouldn't be updated
-        lat: this.props.lat, // TODO: this shouldn't be updated
-        lon: this.props.lon, // TODO: this shouldn't be updated
+        img_src: this.props.img_src, // remain unchanged
+        lat: this.props.lat, // remain unchanged
+        lon: this.props.lon, // remain unchanged
         website: this.newWeblink.current.value,
       })
         .then(() => {

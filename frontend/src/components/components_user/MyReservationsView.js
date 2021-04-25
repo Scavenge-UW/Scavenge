@@ -6,18 +6,18 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
 // imports for components
-import Dashboard_newMsg from "./Dashboard_newMsg";
+import Dashboard_newMsg from "../components_shared/Dashboard_newMsg";
 
 // imports for services
-import ReservationService from "../services/reservation.service";
-import PantryService from "../services/pantry.service";
+import ReservationService from "../../services/reservation.service";
+import PantryService from "../../services/pantry.service";
 
 // other imports
 import { toast } from "react-toastify";
 
 // imports for helper functions
-import MySpinner from "./helper_functions/MySpinner";
-import formatters from "./helper_functions/DatetimeFormatter.function";
+import MySpinner from "../helper_functions/MySpinner";
+import formatters from "../helper_functions/DatetimeFormatter.function";
 
 /**
  * MyReservationsView
@@ -89,7 +89,10 @@ class MyReservationsView extends Component {
           </h6>
         </Row>
         <Row className="justify-content-center">
-          <h6>Here are your 5 most recent reservations.</h6>
+          <h6>
+            Here are your {numReservation >= 5 ? 5 : numReservation} most recent
+            reservations.
+          </h6>
         </Row>
       </>
     );

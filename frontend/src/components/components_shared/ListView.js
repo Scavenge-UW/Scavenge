@@ -1,24 +1,26 @@
 import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
+
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Accordion from "react-bootstrap/Accordion";
 
-import { faSearch, faCircle } from "@fortawesome/free-solid-svg-icons";
+// imports for fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { Link } from "react-router-dom";
+import { faSearch, faCircle } from "@fortawesome/free-solid-svg-icons";
 
 // Redux
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { fetchPantries } from "../actions/pantryActions";
+import { fetchPantries } from "../../actions/pantryActions";
 
+// other imports
 import Fuse from "fuse.js";
-
-import "../css/ListView.css";
+import "../../css/ListView.css";
 
 class ListView extends Component {
   constructor(props) {
@@ -41,13 +43,11 @@ class ListView extends Component {
       typeof this.props.pantries.result !== "undefined"
     ) {
       let pantries = [];
-      //console.log(this.props.pantries);
       Object.values(this.props.pantries.result).map((pantry) => {
         pantries.push(pantry);
       });
 
       if (!pattern) {
-        //console.log("HRE1")
         this.setState({ matchedPantries: pantries });
         return;
       }
@@ -61,7 +61,6 @@ class ListView extends Component {
 
       if (!result.length) {
         // No matches
-        //console.log("HRE3");
         this.setState({ matchedPantries: [] });
       } else {
         pantries = [];
@@ -69,7 +68,6 @@ class ListView extends Component {
           pantries.push(item);
         });
         this.setState({ matchedPantries: pantries });
-        //console.log(this.state.matchedPantries);
       }
     }
   }
@@ -143,18 +141,17 @@ class ListView extends Component {
       this.state.matchedPantries.map((pantry) => {
         cards.push(
           <Card key={pantry.pantry_id}>
-            <Card.Header className="d-inline align-middle card-header">
+            {/* className="d-inline align-middle card-header" */}
+            <Card.Header>
               <Accordion.Toggle
                 as={Button}
                 variant="link"
                 eventKey={pantry.pantry_id}
               >
                 <Row>
-                  <Col md={2}>
-                    <span>{this.renderHourCircle(pantry)}</span>
-                  </Col>
-                  <Col md={10} className="p-0">
-                    <span className="pantry-link">{pantry.name}</span>
+                  <Col className="text-left">
+                    {this.renderHourCircle(pantry)}
+                    {pantry.name}
                   </Col>
                 </Row>
               </Accordion.Toggle>
@@ -183,11 +180,15 @@ class ListView extends Component {
     }
 
     return (
-      <div className="search-wrapper">
-        <h4 className="text-center">All Food Pantries</h4>
-        <div className="Search">
+      <Container className="search-wrapper w-responsive w-75 mx-auto">
+        <Row>
+          <Col className="text-center">
+            <h4>All Food Pantries</h4>
+          </Col>
+        </Row>
+        <Row className="Search justify-content-center mb-2">
           <input
-            className="searchInput"
+            className="searchInput w-responsive w-75"
             type="text"
             onChange={(e) => this.searchData(e.target.value)}
             placeholder="Search by name or location"
@@ -195,9 +196,9 @@ class ListView extends Component {
           <span className="SearchSpan">
             <FontAwesomeIcon className="pin" icon={faSearch} />
           </span>
-        </div>
+        </Row>
         <Accordion className="listGroup">{cards}</Accordion>
-      </div>
+      </Container>
     );
   }
 }

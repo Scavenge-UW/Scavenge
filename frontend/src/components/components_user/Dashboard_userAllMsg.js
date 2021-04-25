@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 // import for bootstrap
-import Pagination from "react-bootstrap/Pagination";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
-import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Pagination from "react-bootstrap/Pagination";
 import {
   ListGroup,
   ListGroupItem,
@@ -16,20 +16,20 @@ import {
 } from "reactstrap";
 
 // import for components
-import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
+import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
-import PantryService from "../services/pantry.service";
-import ReservationService from "../services/reservation.service";
+import PantryService from "../../services/pantry.service";
+import ReservationService from "../../services/reservation.service";
 
 // other imports
-import "../css/common.css";
+import "../../css/common.css";
 import { toast } from "react-toastify";
 
 // imports for helper functions
-import MySpinner from "./helper_functions/MySpinner";
-import msgFunctions from "./helper_functions/msgAndBtns.function";
-import ScrollToTop from "./helper_functions/ScrollToTop.function";
+import MySpinner from "../helper_functions/MySpinner";
+import msgFunctions from "../helper_functions/msgAndBtns.function";
+import ScrollToTop from "../helper_functions/ScrollToTop.function";
 
 /**
  * Message view for user to view all of
@@ -121,6 +121,7 @@ function Dashboard_userAllMsg(props) {
    * Show control buttons for user mode
    */
   const showControls = (rsvn) => {
+    // enabel cancel button
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
@@ -219,6 +220,11 @@ function Dashboard_userAllMsg(props) {
     return msgListItems;
   };
 
+  /**
+   * put messages into pagination
+   *
+   * @param {*} selectedTab - Tabs for 'Pending Reservations', 'Need Pickup', 'Cancelled Reservations', 'Complete Reservations'
+   */
   const showPagination = (selectedTab) => {
     let numItems = userRsvns
       ? Object.values(
@@ -254,9 +260,57 @@ function Dashboard_userAllMsg(props) {
       );
     }
 
-    return <Pagination>{paginationItems}</Pagination>;
+    // previous button
+    paginationItems.unshift(
+      <Pagination.Prev
+        onClick={() => {
+          setCurrPage(currPage - 1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // go to page 1 button
+    paginationItems.unshift(
+      <Pagination.First
+        onClick={() => {
+          setCurrPage(1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // next page button
+    paginationItems.push(
+      <Pagination.Next
+        onClick={() => {
+          setCurrPage(currPage + 1);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+    // go to last page button
+    paginationItems.push(
+      <Pagination.Last
+        onClick={() => {
+          setCurrPage(numPages);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+
+    return paginationItems.length > 0 ? (
+      <Pagination>{paginationItems}</Pagination>
+    ) : (
+      <>
+        <h4>You have 0 reservation here</h4>
+      </>
+    );
   };
 
+  /**
+   * render message in ListGroupItems and display in pagination.
+   *
+   * @param {*} selectedTab - Tabs for 'Pending Reservations', 'Need Pickup', 'Cancelled Reservations', 'Complete Reservations'
+   */
   const renderMsg = (selectedTab) => {
     if (userRsvns) {
       return (
@@ -291,6 +345,10 @@ function Dashboard_userAllMsg(props) {
       );
     }
   };
+
+  /**
+   * categorized messages by tab and displayed by tab based on reservation status
+   */
   const userAllMsgTab = () => {
     if (userRsvns) {
       return (

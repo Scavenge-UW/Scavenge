@@ -6,7 +6,7 @@ import { MemoryRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import App from "../App";
-import ListView from "../components/ListView";
+import ListView from "../components/components_shared/ListView";
 import store from "../store";
 
 import "../setupTests";
@@ -33,7 +33,7 @@ jest.mock("react-router-dom", () => ({
   useParams: () => jest.fn().mockReturnValue({ pantry_id: 2 }),
 }));
 
-jest.mock("../components/Map", () => {
+jest.mock("../components/components_shared/Map", () => {
   const MapMock = () => <div />;
   return MapMock;
 });

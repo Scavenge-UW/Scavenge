@@ -5,20 +5,19 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 
 // import for components
 import Dashboard_newMsg from "./Dashboard_newMsg";
-import DashboardDescriptionCard from "./DashboardDescriptionCard";
-import DashboardOpenHourCard from "./DashboardOpenHourCard";
-import formatters from "./helper_functions/DatetimeFormatter.function";
+import DashboardDescriptionCard from "../components_admin/DashboardDescriptionCard";
+import DashboardOpenHourCard from "../components_admin/DashboardOpenHourCard";
+import formatters from "../helper_functions/DatetimeFormatter.function";
 
 // import for services
-import PantryService from "../services/pantry.service";
+import PantryService from "../../services/pantry.service";
 
 // other imports
 import { toast } from "react-toastify";
-import MySpinner from "./helper_functions/MySpinner";
+import MySpinner from "../helper_functions/MySpinner";
 
 /**
  * Dashboard View

@@ -29,7 +29,7 @@ jest.mock("react-router-dom", () => ({
   useParams: () => jest.fn().mockReturnValue({ pantry_id: 2 }),
 }));
 
-jest.mock("../components/Map", () => {
+jest.mock("../components/components_shared/Map", () => {
   const MapMock = () => <div />;
   return MapMock;
 });

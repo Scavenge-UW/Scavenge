@@ -16,19 +16,19 @@ import {
 } from "reactstrap";
 
 // import for components
-import ViewRsvnMsgModal from "./modals/ViewRsvnMsgModal";
+import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
-import PantryService from "../services/pantry.service";
+import PantryService from "../../services/pantry.service";
 
 // other imports
-import "../css/common.css";
+import "../../css/common.css";
 import { toast } from "react-toastify";
 
 // imports for helper functions
-import MySpinner from "./helper_functions/MySpinner";
-import msgFunctions from "./helper_functions/msgAndBtns.function";
-import ScrollToTop from "./helper_functions/ScrollToTop.function";
+import MySpinner from "../helper_functions/MySpinner";
+import msgFunctions from "../helper_functions/msgAndBtns.function";
+import ScrollToTop from "../helper_functions/ScrollToTop.function";
 
 /**
  * Message view for admin/staff to view all of
@@ -163,6 +163,8 @@ function Dashboard_adminAllMsg(props) {
    */
   const showControls = (rsvn) => {
     var controls;
+
+    // enable approved button
     const approveButton = !msgFunctions.approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
       <Button
         // variant="outline-primary"
@@ -182,6 +184,7 @@ function Dashboard_adminAllMsg(props) {
       </Button>
     );
 
+    // enable mark as picked up button
     const markAsPickedUpButton = !msgFunctions.pickedupButtonIsHidden(rsvn) && (
       // {/* Mark as Picked Up Button */}
       <Button
@@ -202,6 +205,7 @@ function Dashboard_adminAllMsg(props) {
       </Button>
     );
 
+    // enable cancel reservation button
     const cancelReservationButton = !msgFunctions.cancelButtonIsHidden(
       rsvn
     ) && (
@@ -224,6 +228,7 @@ function Dashboard_adminAllMsg(props) {
       </Button>
     );
 
+    // enable reset button
     const resetButton = !msgFunctions.resetButtonIsHidden(rsvn) && (
       <Button
         variant="dark"
@@ -253,6 +258,13 @@ function Dashboard_adminAllMsg(props) {
     return controls;
   };
 
+  /**
+   * filtered messages, sort by reservation_id in descending order, and slice by page,
+   * and return a list of ListGroupItems containing reservation messages (header, status, etc)
+   *
+   * @param {*} selectedTab - Tabs for 'To Be Approved', 'Approved Reservations', 'Cancelled Reservations', 'Complete Reservations'
+   * @returns
+   */
   const getMessageItems = (selectedTab) => {
     let msgListItems = [];
     let rsvns = [];
@@ -322,6 +334,11 @@ function Dashboard_adminAllMsg(props) {
     return msgListItems;
   };
 
+  /**
+   * put messages into pagination
+   *
+   * @param {*} selectedTab - Tabs for 'To Be Approved', 'Approved Reservations', 'Cancelled Reservations', 'Complete Reservations'
+   */
   const showPagination = (selectedTab) => {
     let numItems = pantryDetail
       ? Object.values(
@@ -353,10 +370,57 @@ function Dashboard_adminAllMsg(props) {
         </Pagination.Item>
       );
     }
+    // previous button
+    paginationItems.unshift(
+      <Pagination.Prev
+        onClick={() => {
+          setCurrPage(currPage - 1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // go to page 1 button
+    paginationItems.unshift(
+      <Pagination.First
+        onClick={() => {
+          setCurrPage(1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // next page button
+    paginationItems.push(
+      <Pagination.Next
+        onClick={() => {
+          setCurrPage(currPage + 1);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+    // go to last page button
+    paginationItems.push(
+      <Pagination.Last
+        onClick={() => {
+          setCurrPage(numPages);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
 
-    return <Pagination>{paginationItems}</Pagination>;
+    return paginationItems.length > 0 ? (
+      <Pagination>{paginationItems}</Pagination>
+    ) : (
+      <>
+        <h4>You have 0 reservation here</h4>
+      </>
+    );
   };
 
+  /**
+   * render message in ListGroupItems and display in pagination.
+   *
+   * @param {*} selectedTab - Tabs for 'To Be Approved', 'Approved Reservations', 'Cancelled Reservations', 'Complete Reservations'
+   */
   const renderMsg = (selectedTab) => {
     return (
       <>
@@ -390,6 +454,9 @@ function Dashboard_adminAllMsg(props) {
     );
   };
 
+  /**
+   * categorized messages by tab and displayed by tab based on reservation status
+   */
   const adminAllMsgTab = () => {
     if (pantryDetail) {
       return (

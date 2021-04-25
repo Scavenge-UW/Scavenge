@@ -1,11 +1,19 @@
 import React, { Component } from "react";
-import { Col, Form, Button, Container } from "react-bootstrap";
-import { connect } from "react-redux";
-import { editProf } from "../actions/profileAction";
-import PropTypes from "prop-types";
-import "bootstrap/dist/css/bootstrap.css";
-import { toast } from "react-toastify";
 import { Redirect } from "react-router-dom";
+
+// imports for bootstrap
+import { Col, Form, Button, Container } from "react-bootstrap";
+
+// redux
+import { connect } from "react-redux";
+
+// imports for components and actions
+import PropTypes from "prop-types";
+import { editProf } from "../../actions/profileAction";
+
+// other imporst
+import { toast } from "react-toastify";
+import "bootstrap/dist/css/bootstrap.css";
 
 class ProfileView extends Component {
   constructor(props) {
@@ -55,12 +63,10 @@ class ProfileView extends Component {
       this.state.first_name &&
       this.state.last_name
     ) {
-
       this.props.editProf(user);
-      this.setState({toHomeView: true});
-      toast.success("You succesfully updated your profile")
+      this.setState({ toHomeView: true });
+      toast.success("You succesfully updated your profile");
       this.props.setProfile(user);
-
     } else {
       let errors = [];
 
@@ -100,8 +106,8 @@ class ProfileView extends Component {
         errors.push("Last Name field is empty");
       }
 
-      if(!this.state.zipcode){
-        errors.push("Zipcode field is empty")
+      if (!this.state.zipcode) {
+        errors.push("Zipcode field is empty");
       }
 
       toast.error(

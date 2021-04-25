@@ -4,7 +4,7 @@ import { shallow, mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MemoryRouter, Route } from "react-router-dom";
 
-import PantryDetailView from "../components/PantryDetailView";
+import PantryDetailView from "../components/components_shared/PantryDetailView";
 import "../setupTests";
 
 import pantryDetail from "../__mocks__/pantryDetailMock";
@@ -30,7 +30,7 @@ describe("PantryDetailView tests", () => {
   const wrapper = shallow(<PantryDetailView />);
 
   it("should display spinner on init", () => {
-    expect(wrapper.find("div.spinner")).toHaveLength(1);
+    expect(wrapper.find("MySpinner")).toHaveLength(1);
   });
 
   // it("should display spinner on init", async () => {

@@ -2,7 +2,7 @@ import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 import { shallow, mount } from "enzyme";
 
-import FoodItemCard from "../components/FoodItemCard";
+import FoodItemCard from "../components/components_shared/FoodItemCard";
 import "../setupTests";
 import pantryDetail from "../__mocks__/pantryDetailMock";
 
@@ -41,9 +41,9 @@ describe("FoodItemCard tests", () => {
     expect(wrapper2.find("VscCircleFilled").prop("color")).toEqual("red");
   });
 
-  it("should have four buttons", () => {
-    expect(wrapper1.find("Button")).toHaveLength(4);
-    expect(wrapper2.find("Button")).toHaveLength(4);
+  it("should have correct number of buttons", () => {
+    expect(wrapper1.find("Button")).toHaveLength(4); // in stock (increment, decrement, reserve, add to cart)
+    expect(wrapper2.find("Button")).toHaveLength(3); // out of stock (increment, decrement, add to wishlist)
   });
 
   // Cart Mode

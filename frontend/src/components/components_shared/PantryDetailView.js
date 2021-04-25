@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 // imports for bootstrap
@@ -12,12 +12,12 @@ import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 
 // imports for services and components
-import FoodItemCard from "../components/FoodItemCard";
-import PantryService from "../services/pantry.service";
+import FoodItemCard from "./FoodItemCard";
+import PantryService from "../../services/pantry.service";
 
 // imports for helper functions
-import formatters from "./helper_functions/DatetimeFormatter.function";
-import MySpinner from "./helper_functions/MySpinner";
+import formatters from "../helper_functions/DatetimeFormatter.function";
+import MySpinner from "../helper_functions/MySpinner";
 
 /**
  * A view for user that displays details and food items in a specific pantry.
@@ -77,6 +77,7 @@ function PantryDetailView(props) {
       (currPage - 1) * paginationCount,
       paginationCount * currPage
     );
+
     for (const foodItem of Object.values(foods)) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
@@ -87,6 +88,7 @@ function PantryDetailView(props) {
           key={foodItem.food_id}
           foodItem={foodItem}
           pantry={pantryDetail}
+          numFoodItems={foodItemCards.length}
           pantryDetailMode
         />
       );
@@ -119,6 +121,43 @@ function PantryDetailView(props) {
         </Pagination.Item>
       );
     }
+
+    // previous button
+    paginationItems.unshift(
+      <Pagination.Prev
+        onClick={() => {
+          setCurrPage(currPage - 1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // go to page 1 button
+    paginationItems.unshift(
+      <Pagination.First
+        onClick={() => {
+          setCurrPage(1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // next page button
+    paginationItems.push(
+      <Pagination.Next
+        onClick={() => {
+          setCurrPage(currPage + 1);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+    // go to last page button
+    paginationItems.push(
+      <Pagination.Last
+        onClick={() => {
+          setCurrPage(numPages);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
 
     return <Pagination>{paginationItems}</Pagination>;
   };

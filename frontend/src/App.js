@@ -11,19 +11,28 @@ import { ToastContainer, toast } from "react-toastify";
 
 import store from "./store";
 import AuthService from "./services/auth.service";
+
+// auth
 import LoginView from "./components/Authentication/LoginView";
 import SignupView from "./components/Authentication/SignupView";
-import HomeView from "./components/HomeView";
-import PantryAdminView from "./components/PantryAdminView";
-import PantryDetailView from "./components/PantryDetailView";
-import Dashboard_adminAllMsg from "./components/Dashboard_adminAllMsg";
-import Dashboard_userAllMsg from "./components/Dashboard_userAllMsg";
-import MyReservationsView from "./components/MyReservationsView";
-import FoodSearchView from "./components/FoodSearchView";
-import Navigation from "./components/Navigation";
-import ProfileView from "./components/ProfileView";
-import CartView from "./components/CartView";
-import HelpView from "./components/HelpView";
+
+// admin
+import PantryAdminView from "./components/components_admin/PantryAdminView";
+import Dashboard_adminAllMsg from "./components/components_admin/Dashboard_adminAllMsg";
+
+// user
+import CartView from "./components/components_user/CartView";
+import MyWishlistView from "./components/components_user/MyWishlistView";
+import MyReservationsView from "./components/components_user/MyReservationsView";
+import Dashboard_userAllMsg from "./components/components_user/Dashboard_userAllMsg";
+
+// shared
+import HomeView from "./components/components_shared/HomeView";
+import HelpView from "./components/components_shared/HelpView";
+import Navigation from "./components/components_shared/Navigation";
+import ProfileView from "./components/components_shared/ProfileView";
+import FoodSearchView from "./components/components_shared/FoodSearchView";
+import PantryDetailView from "./components/components_shared/PantryDetailView";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -204,6 +213,9 @@ class App extends Component {
                 </Route>
                 <Route path="/reservations">
                   <MyReservationsView username={this.state.username} />
+                </Route>
+                <Route path="/wishlist">
+                  <MyWishlistView username={this.state.username} />
                 </Route>
                 <Route path="/logout">
                   <Redirect push to="/" />
