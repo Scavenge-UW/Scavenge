@@ -254,11 +254,9 @@ function PantryDetailView(props) {
               <h3>{name}</h3>
             </Row>
             <Row className="justify-content-center mx-auto mb-4">
-              <Card.Img
-                as={Image}
+              <img
                 src={img_src}
-                fluid={true}
-                rounded={true}
+                className="img-fluid"
                 alt="holder.js/100px240"
               />
             </Row>

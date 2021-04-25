@@ -11,8 +11,9 @@ import Button from "react-bootstrap/Button";
 import PantryService from "../../services/pantry.service";
 
 // other imports
-import { toast } from "react-toastify";
 import "../../css/common.css";
+import { toast } from "react-toastify";
+import { BsInfoCircle } from "react-icons/bs";
 
 class DashboardDescriptionCard extends Component {
   constructor(props) {
@@ -290,7 +291,7 @@ class DashboardDescriptionCard extends Component {
                     <Form.Control
                       type="text"
                       ref={this.newImgSrc}
-                      disabled={!this.state.editMode}
+                      disabled={true} // not yet implemented
                       defaultValue={this.props.img_src}
                     />
                   </Form.Group>
