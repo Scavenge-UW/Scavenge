@@ -24,7 +24,7 @@ jest.mock("../services/pantry.service", () => ({
       return Promise.resolve(mockPantryDetail).then((response) => response);
     }),
   getPantries: () => {
-    return Promise.resolve(mockPantries);
+    return Promise.resolve({ result: mockPantries });
   },
 }));
 
