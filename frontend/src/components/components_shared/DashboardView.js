@@ -186,6 +186,8 @@ class DashboardView extends Component {
       stte: updates[4],
       phone: updates[5],
       weblink: updates[6],
+      img_src: updates[7],
+      timeToAdd: updates[8],
     });
   }
 
@@ -283,6 +285,7 @@ class DashboardView extends Component {
             img_src={this.state.img_src}
             lat={this.state.lat}
             lon={this.state.lon}
+            time_to_add={this.state.timeToAdd}
           />
         </Row>
       </>

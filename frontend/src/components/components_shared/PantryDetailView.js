@@ -5,10 +5,12 @@ import { useParams } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 import Table from "react-bootstrap/Table";
+import Figure from "react-bootstrap/Figure";
 import Pagination from "react-bootstrap/Pagination";
 
 // imports for services and components
@@ -252,7 +254,13 @@ function PantryDetailView(props) {
               <h3>{name}</h3>
             </Row>
             <Row className="justify-content-center mx-auto mb-4">
-              <Image fluid rounded src={img_src} />
+              <Card.Img
+                as={Image}
+                src={img_src}
+                fluid={true}
+                rounded={true}
+                alt="holder.js/100px240"
+              />
             </Row>
           </Col>
           <Col>

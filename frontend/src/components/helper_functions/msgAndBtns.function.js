@@ -247,6 +247,7 @@ function editEstButtonIsHidden(rsvn) {
   else return false;
 }
 
+// TODO: added bold text for changed estimated pickup time
 /**
  * return formatted reservation status.
  */

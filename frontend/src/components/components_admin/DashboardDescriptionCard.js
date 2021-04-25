@@ -25,6 +25,8 @@ class DashboardDescriptionCard extends Component {
     this.newStte = React.createRef();
     this.newPhone = React.createRef();
     this.newWeblink = React.createRef();
+    this.newImgSrc = React.createRef();
+    this.newTimeToAdd = React.createRef();
 
     this.state = {
       // used by in 'editModeControl'
@@ -51,6 +53,8 @@ class DashboardDescriptionCard extends Component {
       this.newStte.current.value = this.props.stte;
       this.newPhone.current.value = this.props.phone;
       this.newWeblink.current.value = this.props.weblink;
+      this.newImgSrc = this.props.img_src;
+      this.newTimeToAdd = this.props.time_to_add;
     }
   }
 
@@ -74,10 +78,11 @@ class DashboardDescriptionCard extends Component {
         state: this.newStte.current.value,
         phone_number: this.newPhone.current.value,
         details: this.newDetail.current.value,
-        img_src: this.props.img_src, // remain unchanged
+        img_src: this.newImgSrc.current.value,
         lat: this.props.lat, // remain unchanged
         lon: this.props.lon, // remain unchanged
         website: this.newWeblink.current.value,
+        time_to_add: this.newTimeToAdd.current.value,
       })
         .then(() => {
           // propogate updates back to parent component
@@ -89,6 +94,8 @@ class DashboardDescriptionCard extends Component {
             this.newStte.current.value,
             this.newPhone.current.value,
             this.newWeblink.current.value,
+            this.props.img_src,
+            this.newImgSrc.current.value,
           ]);
 
           this.editModeControl(false);
@@ -268,6 +275,40 @@ class DashboardDescriptionCard extends Component {
                       ref={this.newWeblink}
                       disabled={!this.state.editMode}
                       defaultValue={this.props.weblink}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+            </Row>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left">
+                <Form>
+                  <Form.Group controlId="formImgSrc">
+                    <Form.Label>
+                      <strong>- Image Source: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      ref={this.newImgSrc}
+                      disabled={!this.state.editMode}
+                      defaultValue={this.props.img_src}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+            </Row>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left">
+                <Form>
+                  <Form.Group controlId="formTimeTOAdd">
+                    <Form.Label>
+                      <strong>- Time To Add: </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      ref={this.newTimeToAdd}
+                      disabled={!this.state.editMode}
+                      defaultValue={this.props.time_to_add}
                     />
                   </Form.Group>
                 </Form>
