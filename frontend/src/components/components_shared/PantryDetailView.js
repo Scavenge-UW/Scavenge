@@ -42,7 +42,7 @@ function PantryDetailView(props) {
   }, []);
 
   /**
-   * Fetch pantry detail and food information
+   * Fetch pantry detail
    *
    */
   const fetchPantryDetail = async () => {
@@ -82,7 +82,6 @@ function PantryDetailView(props) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
-          pantryDetailMode
           isLoggedIn={props.isLoggedIn}
           isAdmin={props.isAdmin}
           username={props.username}
@@ -90,6 +89,7 @@ function PantryDetailView(props) {
           foodItem={foodItem}
           pantry={pantryDetail}
           numFoodItems={foodItemCards.length}
+          pantryDetailMode
         />
       );
     }
@@ -240,8 +240,15 @@ function PantryDetailView(props) {
   if (pantryDetail) {
     const {
       name,
-      // address,zip,city,state,lat,lon,phone_number,website,
+      address,
+      zip,
+      city,
+      state,
+      lat,
+      lon,
+      phone_number,
       img_src,
+      website,
     } = pantryDetail;
 
     return (
@@ -280,12 +287,13 @@ function PantryDetailView(props) {
         <Row className="justify-content-center mt-4">{showPagination()}</Row>
       </Container>
     );
+  } else {
+    return (
+      <Container id="pantry-detail-view-loading">
+        <MySpinner />
+      </Container>
+    );
   }
-  return (
-    <Container id="pantry-detail-view-loading">
-      <MySpinner />
-    </Container>
-  );
 }
 
 export default PantryDetailView;

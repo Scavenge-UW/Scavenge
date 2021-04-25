@@ -2,22 +2,7 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Row from "react-bootstrap/Row";
 import { LinkContainer } from "react-router-bootstrap";
-
-import { BsGift } from "react-icons/bs";
-import { IoHomeOutline } from "react-icons/io5";
-import {
-  FiUser,
-  FiEdit,
-  FiLogIn,
-  FiLogOut,
-  FiSearch,
-  FiUserPlus,
-  FiClipboard,
-  FiHelpCircle,
-  FiShoppingCart,
-} from "react-icons/fi";
 
 class Navigation extends Component {
   constructor(props) {
@@ -42,77 +27,6 @@ class Navigation extends Component {
       ],
       navbar4NotLoggedIn: ["Search Foods", "Help", "Login", "Signup"],
     };
-  }
-
-  /*
-   * returns:
-   *   the href (route) of the given content.
-   */
-  getIcons(content) {
-    switch (content) {
-      case "Logout":
-        return (
-          <>
-            <FiLogOut size="1.3rem" />
-          </>
-        ); // will be redirected to '/' upon successful logout
-      case "Login":
-        return (
-          <>
-            <FiLogIn size="1.3rem" />
-          </>
-        );
-      case "Signup":
-        return (
-          <>
-            <FiUserPlus size="1.3rem" />
-          </>
-        );
-      case "Manage Pantry":
-        return (
-          <>
-            <FiEdit size="1.3rem" />
-          </>
-        );
-      case "Search Foods":
-        return (
-          <>
-            <FiSearch size="1.3rem" />
-          </>
-        );
-      case "Cart":
-        return (
-          <>
-            <FiShoppingCart size="1.3rem" />
-          </>
-        );
-      case "Profile":
-        return (
-          <>
-            <FiUser size="1.3rem" />
-          </>
-        );
-      case "Reservations":
-        return (
-          <>
-            <FiClipboard size="1.3rem" />
-          </>
-        );
-      case "Wishlist":
-        return (
-          <>
-            <BsGift size="1.3rem" />
-          </>
-        );
-      case "Help":
-        return (
-          <>
-            <FiHelpCircle size="1.3rem" />
-          </>
-        );
-      default:
-        return "/";
-    }
   }
 
   /*
@@ -149,8 +63,7 @@ class Navigation extends Component {
   /*
    * returns:
    *   multiple bootstrap component by mapping
-   *   each content to the corresponding href (route)
-   *   and corresponding icon.
+   *   each content to the corresponding href (route).
    */
   renderRoute(navbarContent) {
     // console.log(navbarContent);
@@ -161,17 +74,11 @@ class Navigation extends Component {
           to={this.getRoute(content)}
           onClick={() => this.props.logout()}
         >
-          <Nav.Link>
-            {this.getIcons(content)}
-            {"  " + content}
-          </Nav.Link>
+          <Nav.Link>{content}</Nav.Link>
         </LinkContainer>
       ) : (
         <LinkContainer key={content} to={this.getRoute(content)}>
-          <Nav.Link>
-            {this.getIcons(content)}
-            {"  " + content}
-          </Nav.Link>
+          <Nav.Link>{content}</Nav.Link>
         </LinkContainer>
       )
     );
@@ -195,11 +102,7 @@ class Navigation extends Component {
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>
-              <h3>
-                <IoHomeOutline /> Scavenge
-              </h3>
-            </Navbar.Brand>
+            <Navbar.Brand>Scavenge</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
