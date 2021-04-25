@@ -46,27 +46,6 @@ class MyWishlistsView extends Component {
     );
   }
 
-  // /**
-  //  *  Mark a reservation as cancelled
-  //  *
-  //  * @param {*} rsvn_id
-  //  */
-  // markWithDraw(pantry_id, rsvn_id) {
-  //   console.log(rsvn_id);
-  //   PantryService.setCancelled(pantry_id, rsvn_id)
-  //     .then(() => {
-  //       this.fetchResponse(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "You have successfully withdrawed your reservation with ID " + rsvn_id
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error(
-  //         "Error while withdrawing your reservation with ID " + rsvn_id
-  //       );
-  //     });
-  // }
-
   myWishlistOverview() {
     let numWishlist = 0;
 
@@ -95,7 +74,7 @@ class MyWishlistsView extends Component {
     let wishlists = [];
     for (const wishlist of this.state.resp) {
       let pantryId = wishlist.pantry_id;
-      // let pantryName = wishlist.name;
+      let pantryName = wishlist.name;
       for (const food of wishlist.foods) {
         let wishlistItem = (
           <Row className="ml-5 mr-5 align-items-center">
@@ -104,9 +83,9 @@ class MyWishlistsView extends Component {
                 wishlistMode
                 foodItem={food} // contains food_id, food_name, wishlist_id
                 pantry_id={pantryId}
-                // pantry_name={}
+                pantry_name={pantryName}
                 username={this.props.username}
-                fetchResponse={() => this.fetchResponse()}
+                fetchResponse={() => this.fetchResponse()} // used to re-render changes user made (e.g. remove)
               />
             </Col>
           </Row>

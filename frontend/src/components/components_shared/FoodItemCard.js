@@ -122,6 +122,9 @@ class FoodItemCard extends Component {
     }
   }
 
+  /**
+   * Add item to wishlsit and prompt messages for invalid user type
+   */
   onClickAddToWishlist() {
     if (!this.props.isLoggedIn()) {
       toast.info("Please log in to add items to wishlist.");
@@ -140,19 +143,19 @@ class FoodItemCard extends Component {
     }
   }
 
-  onClickDeleteWishlistItem(username, wishlist_id) {
-    // TODO: chagne wishlist_id to Food name
+  onClickDeleteWishlistItem() {
+    let username = this.props.username;
+    let wishlist_id = this.props.foodItem.wishlist_id;
+    let food_name = this.props.foodItem.food_name;
     if (
       window.confirm(
-        "Are you sure you want to remove " +
-          { wishlist_id } +
-          "from your wishlist?"
+        "Are you sure you want to remove " + food_name + " from your wishlist?"
       )
     ) {
       WishlistService.removeFromWishlist(username, wishlist_id)
         .then(() => {
           this.props.fetchResponse();
-          toast.success("🗑️ Removed " + { wishlist_id } + ".");
+          toast.success("🗑️ Removed " + food_name + " from your wishlist.");
         })
         .catch((response) => {
           if (response.message) {
@@ -384,8 +387,10 @@ class FoodItemCard extends Component {
                     type="number"
                     onChange={() => {
                       this.onUpdateCartItemQuantity();
-                      if (parseInt(this.cartQuantity.current.value) > 0)
-                        this.setState({ decrementBtnDisabled: false });
+                      if (parseInt(this.cartQuantity.current.value) < 1)
+                        this.setState({ decrementBtnDisabled: true });
+                      else this.setState({ decrementBtnDisabled: false });
+                      console.log(this.state.decrementBtnDisabled);
                     }}
                     disabled={!this.isInStock()}
                     defaultValue={1}
@@ -571,10 +576,7 @@ class FoodItemCard extends Component {
             block
             variant="danger"
             onClick={(username, wishlist_id) =>
-              this.onClickDeleteWishlistItem(
-                this.props.username,
-                this.props.foodItem.wishlist_id
-              )
+              this.onClickDeleteWishlistItem()
             }
           >
             Remove from Wishlist
@@ -598,12 +600,11 @@ class FoodItemCard extends Component {
       );
     }
     if (this.props.wishlistMode) {
-      // TODO: change pantry_id to pantry name
       return (
         <Row className="justify-content-center text-center mt-4">
           <Col>
             <span style={{ fontSize: "1rem" }}>
-              from {this.props.pantry_id}
+              from {this.props.pantry_name}
             </span>
           </Col>
         </Row>
