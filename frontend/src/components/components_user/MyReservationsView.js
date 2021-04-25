@@ -39,7 +39,6 @@ class MyReservationsView extends Component {
   }
 
   fetchResponse() {
-    // const response = ReservationService.getUserReservations(
     ReservationService.getUserReservations(this.props.username).then(
       (response) => {
         this.setState({

@@ -45,6 +45,7 @@ class FoodItemCard extends Component {
     };
   }
 
+  // used to load food info to display food nutrition info
   componentDidMount() {
     this.fetchFoodsInfo();
   }
@@ -96,18 +97,19 @@ class FoodItemCard extends Component {
    */
   showNutritionTooltip() {
     const getNutrition = (id) => {
-      let nutrition = -1;
       if (this.state.foodsInfo.length) {
         for (const info of this.state.foodsInfo) {
           if (id === info.id) return info.NUTRITION_COLUMNS_PLACEHOLDER;
         }
       }
-      return nutrition;
+      return -1;
     };
 
     const renderTooltip = () => (
       <Tooltip id="nutrition-info-tooltip">
-        Nutrition index: {getNutrition(this.props.foodItem.food_id)}
+        <strong>
+          Nutrition index: {getNutrition(this.props.foodItem.food_id)}
+        </strong>
       </Tooltip>
     );
 
@@ -119,6 +121,7 @@ class FoodItemCard extends Component {
       >
         <BsInfoCircle
           size="1.3rem"
+          color="#48AAAD"
           onClick={() => {
             console.log("hello");
           }}
