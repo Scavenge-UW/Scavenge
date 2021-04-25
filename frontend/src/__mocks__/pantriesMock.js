@@ -139,8 +139,8 @@ export default {
         },
         {
           day: 5,
-          open: "10:00:00",
-          close: "15:00:00",
+          open: "00:00:00",
+          close: "00:00:00",
           detail: "By Appointment Only",
         },
         {
