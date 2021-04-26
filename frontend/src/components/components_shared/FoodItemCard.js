@@ -697,8 +697,9 @@ class FoodItemCard extends Component {
               <Card.Title className="mb-4">
                 <Row className="justify-content-between align-items-center">
                   <Col className="text-left">
-                    <span id="food_name">
-                      {food_name} {this.showNutritionTooltip()}
+                    <span>
+                      <span id="food_name">{food_name}</span>{" "}
+                      {this.showNutritionTooltip()}
                     </span>
                   </Col>
                   <Col className="text-right">
