@@ -5,11 +5,9 @@ import { shallow, mount } from "enzyme";
 import FoodItemCard from "../components/components_shared/FoodItemCard";
 import "../setupTests";
 import pantryDetail from "../__mocks__/pantryDetailMock";
-import foods from "../__mocks__/foodsMock";
 
 const mockPantryDetail = pantryDetail.pantryDetail;
 
-const mockFoods = foods.foods;
 jest.mock("../services/pantry.service", () => ({
   ...jest.requireActual("../services/pantry.service"),
   getDetail: (pantry_id) =>
@@ -104,6 +102,7 @@ describe("FoodItemCard tests", () => {
       isAdmin={() => {
         return false;
       }}
+      pantry={mockPantryDetail}
     />
   );
 
@@ -134,6 +133,41 @@ describe("FoodItemCard tests", () => {
     expect(wrapper4.state("cartQuantity")).toEqual(3);
   });
 
+  it("should add item to cart", async () => {
+    // 1. not logged in
+    wrapper4.setProps({
+      isLoggedIn() {
+        return false;
+      },
+    });
+    await wrapper4.update();
+    await wrapper4.find("Button#btn-add-to-cart").simulate("click");
+
+    // 2. logged in, but admin
+    wrapper4.setProps({
+      isLoggedIn() {
+        return true;
+      },
+      isAdmin() {
+        return false;
+      },
+    });
+    await wrapper4.update();
+    await wrapper4.find("Button#btn-add-to-cart").simulate("click");
+
+    // 3 logged in as user
+    wrapper4.setProps({
+      isLoggedIn() {
+        return true;
+      },
+      isAdmin() {
+        return false;
+      },
+    });
+    await wrapper4.update();
+    await wrapper4.find("Button#btn-add-to-cart").simulate("click");
+  });
+
   // Admin Inventory Mode
   const wrapper5 = mount(<FoodItemCard adminMode foodItem={foodItem1} />);
 
@@ -144,6 +178,9 @@ describe("FoodItemCard tests", () => {
 
     await wrapper5.find("Button#btn-cancel-edit-quantity").simulate("click");
     expect(wrapper5.state("editMode")).toEqual(false);
+
+    wrapper5.instance().onChangeItemQuantity(100);
+    expect(wrapper5.state("newQuantity")).toEqual(100);
   });
 
   // it("should correctly remove an item from inventory", async () => {
@@ -151,4 +188,24 @@ describe("FoodItemCard tests", () => {
   //   await wrapper5.find("Button#btn-remove-item").simulate("click");
   //   expect(wrapper5.state("editMode")).toEqual(true);
   // });
+
+  // Wishlist Mode
+  const wrapper6 = mount(
+    <FoodItemCard
+      foodItem={foodItem1}
+      isLoggedIn={() => {
+        return true;
+      }}
+      isAdmin={() => {
+        return false;
+      }}
+      wishlistMode
+      pantry={mockPantryDetail}
+    />
+  );
+
+  it("should show a modal when user clicks on One Click Reserve", async () => {
+    await wrapper6.update();
+    expect(wrapper6.find("Button").text()).toEqual("Remove from Wishlist");
+  });
 });
