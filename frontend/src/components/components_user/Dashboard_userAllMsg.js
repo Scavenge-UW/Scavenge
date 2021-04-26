@@ -16,6 +16,7 @@ import {
 } from "reactstrap";
 
 // import for components
+import RsvnSearchView from "../components_shared/RsvnSearchView";
 import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
@@ -27,6 +28,7 @@ import "../../css/common.css";
 import { toast } from "react-toastify";
 
 // imports for helper functions
+import FooterMsg from "../helper_functions/FooterMsg";
 import MySpinner from "../helper_functions/MySpinner";
 import msgFunctions from "../helper_functions/msgAndBtns.function";
 import ScrollToTop from "../helper_functions/ScrollToTop.function";
@@ -185,7 +187,7 @@ function Dashboard_userAllMsg(props) {
           <hr />
           {/* Body (status) */}
           <ListGroupItemText>
-            {msgFunctions.getMessageStatus(rsvn)}
+            {msgFunctions.getMessageStatus(rsvn, false)}
           </ListGroupItemText>
 
           <Row className="justify-content-center align-items-center">
@@ -364,29 +366,29 @@ function Dashboard_userAllMsg(props) {
             }}
             className="justify-content-center nav-justified mb-4 mt-4"
           >
-            <Tab eventKey="all" title="All Reservations">
+            <Tab eventKey="search" title={<strong>Search</strong>}>
+              <RsvnSearchView rsvns={userRsvns} />
+            </Tab>
+            <Tab eventKey="all" title={<strong>All Reservations</strong>}>
               {renderMsg("all")}
             </Tab>
-            <Tab eventKey="not_approved" title="Pending Reservations">
+            <Tab eventKey="not_approved" title={<strong>pending</strong>}>
               {renderMsg("not_approved")}
             </Tab>
-            <Tab eventKey="approved" title="Need Pickup">
+            <Tab eventKey="approved" title={<strong>Need Pickup</strong>}>
               {renderMsg("approved")}
             </Tab>
-            <Tab eventKey="cancelled" title="Cancelled Reservations">
+            <Tab eventKey="cancelled" title={<strong>Cancelled</strong>}>
               {renderMsg("cancelled")}
             </Tab>
-            <Tab eventKey="complete" title="Complete Reservations">
+            <Tab eventKey="complete" title={<strong>Complete</strong>}>
               {renderMsg("complete")}
             </Tab>
           </Tabs>
 
           {/* footer message */}
           <Row className="justify-content-center">
-            <p className="mt-4">
-              Time is Money. We provide an efficient way for you to update
-              available items.
-            </p>
+            <FooterMsg />
           </Row>
         </Container>
       );

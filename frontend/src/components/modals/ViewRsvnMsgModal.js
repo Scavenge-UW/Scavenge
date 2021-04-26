@@ -20,7 +20,6 @@ function ViewRsvnMsgModal(props) {
           <Modal.Title id="ViewRsvnMsgModal">
             Reservation for User{" "}
             <span style={usernameStyle}>{props.selectedUsername}</span>
-            {/* Reservation for User <span style={usernameStyle}>hi</span> */}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
