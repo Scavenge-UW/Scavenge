@@ -19,11 +19,12 @@ import DashboardView from "../components_shared/DashboardView";
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
  */
 
 function PantryAdminView() {
   const [pantryDetail, setPantryDetail] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false); // used for spinner
 
   /**
    * Fetch pantry detail on init

@@ -6,6 +6,9 @@
  * @author [Ilkyu Ju](https://github.com/osori)
  * @author [Yayen Lin](https://github.com/yayen-lin)
  */
+
+import React, { useState, useEffect } from "react";
+
 // import for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -53,12 +56,6 @@ const valStyle = {
   fontSize: "1.1rem",
 };
 
-/*
-      TODO: 
-      marked complete reservation with check2-circle icon
-      marked cancelled reservation with x-circle icon
-      - https://react-icons.github.io/react-icons/search?q=chec
-  */
 /**
  * @returns the message header (title and reservation time) for each message.
  */
@@ -236,17 +233,21 @@ function resetButtonIsHidden(rsvn) {
   // if rsvn is approved and picked up, reset button should not be up
   if (rsvn.approved && rsvn.picked_up_time) return true;
   if (!rsvn.cancelled) return true;
+  // if rsvn ordered time is mroe than 10 days ago, reset button should not be up
+  if (formatters.getTimeElapsed(rsvn.order_time, "days") > 10) return true;
   else return false;
 }
 
-/*
-  TODO: 
-  marked complete reservation with check2-circle icon
-  marked cancelled reservation with x-circle icon
-  add hover over description
-  - https://icons.getbootstrap.com
-  */
+/**
+ * Set visibility of Estimate Pickup Time Button
+ */
+function editEstButtonIsHidden(rsvn) {
+  // if rsvn is cancelled or picked up (complete), buttons should not be up
+  if (rsvn.cancelled || rsvn.picked_up_time) return true;
+  else return false;
+}
 
+// TODO: added bold text for changed estimated pickup time
 /**
  * return formatted reservation status.
  */
@@ -304,6 +305,7 @@ const msgFunctions = {
   pickedupButtonIsHidden: pickedupButtonIsHidden,
   cancelButtonIsHidden: cancelButtonIsHidden,
   resetButtonIsHidden: resetButtonIsHidden,
+  editEstButtonIsHidden: editEstButtonIsHidden,
   getMessageStatus: getMessageStatus,
 };
 

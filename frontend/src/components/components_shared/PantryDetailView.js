@@ -5,9 +5,9 @@ import { useParams } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import Image from "react-bootstrap/Image";
+import Tabs from "react-bootstrap/Tabs";
+// import Image from "react-bootstrap/Image";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 
@@ -42,7 +42,7 @@ function PantryDetailView(props) {
   }, []);
 
   /**
-   * Fetch pantry detail
+   * Fetch pantry detail and food information
    *
    */
   const fetchPantryDetail = async () => {
@@ -82,6 +82,7 @@ function PantryDetailView(props) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
+          pantryDetailMode
           isLoggedIn={props.isLoggedIn}
           isAdmin={props.isAdmin}
           username={props.username}
@@ -89,7 +90,6 @@ function PantryDetailView(props) {
           foodItem={foodItem}
           pantry={pantryDetail}
           numFoodItems={foodItemCards.length}
-          pantryDetailMode
         />
       );
     }
@@ -240,15 +240,8 @@ function PantryDetailView(props) {
   if (pantryDetail) {
     const {
       name,
-      address,
-      zip,
-      city,
-      state,
-      lat,
-      lon,
-      phone_number,
+      // unused: address,zip,city,state,lat,lon,phone_number,website,
       img_src,
-      website,
     } = pantryDetail;
 
     return (
@@ -259,7 +252,11 @@ function PantryDetailView(props) {
               <h3>{name}</h3>
             </Row>
             <Row className="justify-content-center mx-auto mb-4">
-              <Image fluid rounded src={img_src} />
+              <img
+                src={img_src}
+                className="img-fluid"
+                alt="holder.js/100px240"
+              />
             </Row>
           </Col>
           <Col>
@@ -287,13 +284,12 @@ function PantryDetailView(props) {
         <Row className="justify-content-center mt-4">{showPagination()}</Row>
       </Container>
     );
-  } else {
-    return (
-      <Container id="pantry-detail-view-loading">
-        <MySpinner />
-      </Container>
-    );
   }
+  return (
+    <Container id="pantry-detail-view-loading">
+      <MySpinner />
+    </Container>
+  );
 }
 
 export default PantryDetailView;
