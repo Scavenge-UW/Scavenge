@@ -57,7 +57,7 @@ describe('Pantries', () => {
       data = JSON.parse(data.text);
       //console.log(data);
       const length = Object.keys(data).length;
-      assert.equal(length, 15, "The pantry details does not have 15 keys");
+      assert.equal(length, 16, "The pantry details does not have 16 keys");
     });
   });
 
@@ -80,7 +80,8 @@ describe('Pantries', () => {
           "img_src": "new.img_src.png",
           "lon": "99.99",
           "lat": "99.99",
-          "website": "www.new-website.com"
+          "website": "www.new-website.com",
+          "time_to_add": 60
         })
       );
       
@@ -96,7 +97,8 @@ describe('Pantries', () => {
         "img_src": "https://lh5.googleusercontent.com/p/AF1QipM6UYI64xgIkJx1w_t7RLh8eVCjelB9ogeoW_A3=w426-h240-k-no",
         "lat": -89.4,
         "lon": 43.07,
-        "website": "https://www.riverfoodpantry.org/"
+        "website": "https://www.riverfoodpantry.org/",
+        "time_to_add": 90
       }
 
       data = await(agent
