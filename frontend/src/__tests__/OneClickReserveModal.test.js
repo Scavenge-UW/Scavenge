@@ -26,7 +26,7 @@ describe("OneClickReserveModal tests", () => {
       onHide={() => {}}
       cartQuantity={1}
       pantry={mockPantryDetail}
-      username="sean3"
+      username={mockUsername}
     />
   );
 
@@ -37,14 +37,6 @@ describe("OneClickReserveModal tests", () => {
   });
 
   it("should call ReservationService when Proceed button is clicked", async () => {
-    jest.mock("../services/reservation.service", () => ({
-      ...jest.requireActual("../services/reservation.service"),
-      makeReservation: (pantry_id, data) =>
-        jest.fn().mockImplementation((pantry_id, data) => {
-          return Promise.resolve(mockFoodItem);
-        }),
-    }));
-
     await wrapper.find("Button").simulate("click");
   });
 });
