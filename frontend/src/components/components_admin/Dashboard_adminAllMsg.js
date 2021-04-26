@@ -194,7 +194,9 @@ function Dashboard_adminAllMsg(props) {
     console.log("3-1. ", pantry_id);
     console.log("3-2. ", selectedID);
     console.log("3-3. ", updTime);
-    PantryService.updateEstPickupTime(pantry_id, selectedID, updTime)
+    PantryService.updateEstPickupTime(pantry_id, selectedID, {
+      estimated_pick_up: updTime,
+    })
       .then(() => {
         fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(

@@ -153,7 +153,9 @@ class DashboardView extends Component {
     console.log("3. ", this.state.pantry_id);
     console.log("3. ", rsvn_id);
     console.log("3. ", updTime);
-    PantryService.updateEstPickupTime(this.state.pantry_id, rsvn_id, updTime)
+    PantryService.updateEstPickupTime(this.state.pantry_id, rsvn_id, {
+      estimated_pick_up: updTime,
+    })
       .then(() => {
         this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
         toast.success(
