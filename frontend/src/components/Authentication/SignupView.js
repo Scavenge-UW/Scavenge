@@ -18,7 +18,7 @@ class SignupView extends Component {
       zipcode: "",
       email: "",
       type: "",
-      toHomeView: "",
+      toHomeView: false,
       // used for redirection on signup success
     };
     this.submitForm = this.submitForm.bind(this);
@@ -42,59 +42,59 @@ class SignupView extends Component {
 
     let errors = [];
 
-    if (this.state.username.length == 0 ) {
-      errors.push("Username field is empty")
+    if (this.state.username.length == 0) {
+      errors.push("Username field is empty");
     }
 
-    if(this.state.password.length == 0){
-
-      errors.push("Password field is empty")
+    if (this.state.password.length == 0) {
+      errors.push("Password field is empty");
     }
 
-    if(this.state.phone.length == 0){
-
-      errors.push("Phone Number field is empty")
+    if (this.state.phone.length == 0) {
+      errors.push("Phone Number field is empty");
     }
 
-    if(this.state.address.length == 0 ){
-
-      errors.push("Address field is empty")
+    if (this.state.address.length == 0) {
+      errors.push("Address field is empty");
     }
 
-    if(this.state.city.length == 0){
-
-      errors.concat("City field is empty")
+    if (this.state.city.length == 0) {
+      errors.concat("City field is empty");
     }
 
-    if(this.state.state == 0){
-      errors.push("State Field is empty")
+    if (this.state.state == 0) {
+      errors.push("State Field is empty");
     }
 
-    if( this.state.zipcode.length == 0 ){
-      errors.push("Zipcode field is empty")
+    if (this.state.zipcode.length == 0) {
+      errors.push("Zipcode field is empty");
     }
 
-    if(this.state.email.length == 0){
-      errors.push("Email field is empty")
-    }
-    
-    if(this.state.firstName.length == 0){
-      errors.push("First name is field empty")
+    if (this.state.email.length == 0) {
+      errors.push("Email field is empty");
     }
 
-    if(this.state.lastName.length == 0){
-      errors.push("Last name is field empty")
+    if (this.state.firstName.length == 0) {
+      errors.push("First name is field empty");
     }
 
-    if(this.state.zipcode.length == 0){
-      errors.push("Zipcode field is empty")
+    if (this.state.lastName.length == 0) {
+      errors.push("Last name is field empty");
     }
 
-    if(errors.length != 0){
+    if (this.state.zipcode.length == 0) {
+      errors.push("Zipcode field is empty");
+    }
 
-      toast.error(<ul>{errors.map(er =>{return <li>{er}</li>})}</ul>)
-
-    } else{
+    if (errors.length != 0) {
+      toast.error(
+        <ul>
+          {errors.map((er) => {
+            return <li>{er}</li>;
+          })}
+        </ul>
+      );
+    } else {
       let signupResult = await this.props.signup(user);
       if (signupResult === 0) {
         // Successful signup
@@ -116,11 +116,11 @@ class SignupView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridEmail"
               style={{ paddingTop: "10px", paddingLeft: "20px" }}
             >
               <Form.Label>Username</Form.Label>
               <Form.Control
+                id="username"
                 type={"text"}
                 placeholder="Enter username"
                 value={this.state.username}
@@ -130,7 +130,6 @@ class SignupView extends Component {
 
             <Form.Group
               as={Col}
-              controlId="formGridPassword"
               style={{
                 paddingTop: "10px",
                 paddingLeft: "10px",
@@ -139,6 +138,7 @@ class SignupView extends Component {
             >
               <Form.Label>Password</Form.Label>
               <Form.Control
+                id="password"
                 type={"password"}
                 placeholder="Password"
                 value={this.state.password}
@@ -150,11 +150,11 @@ class SignupView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formGridFirstName"
               style={{ paddingTop: "10px", paddingLeft: "20px" }}
             >
               <Form.Label>First Name</Form.Label>
               <Form.Control
+                id="firstname"
                 type={"text"}
                 placeholder="John"
                 value={this.state.firstName}
@@ -164,7 +164,6 @@ class SignupView extends Component {
 
             <Form.Group
               as={Col}
-              controlId="formGridLastName"
               style={{
                 paddingTop: "10px",
                 paddingLeft: "10px",
@@ -173,6 +172,7 @@ class SignupView extends Component {
             >
               <Form.Label>Last Name</Form.Label>
               <Form.Control
+                id="lastname"
                 type={"text"}
                 placeholder="Smith"
                 value={this.state.lastName}
@@ -184,11 +184,11 @@ class SignupView extends Component {
           <Form.Row>
             <Form.Group
               as={Col}
-              controlId="formControlsEmail"
               style={{ paddingLeft: "20px", paddingRight: "20px" }}
             >
               <Form.Label>Email</Form.Label>
               <Form.Control
+                id="email"
                 type={"email"}
                 value={this.state.email}
                 placeholder="Email"
@@ -205,6 +205,7 @@ class SignupView extends Component {
             >
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
+                id="phone"
                 type={"text"}
                 value={this.state.phone}
                 placeholder="Phone"
@@ -221,6 +222,7 @@ class SignupView extends Component {
             >
               <Form.Label>Address</Form.Label>
               <Form.Control
+                id="address"
                 type={"text"}
                 value={this.state.address}
                 placeholder="Address"
@@ -237,6 +239,7 @@ class SignupView extends Component {
             >
               <Form.Label>City</Form.Label>
               <Form.Control
+                id="city"
                 type={"text"}
                 value={this.state.city}
                 placeholder="City"
@@ -247,6 +250,7 @@ class SignupView extends Component {
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>State</Form.Label>
               <Form.Control
+                id="state"
                 type={"text"}
                 value={this.state.state}
                 placeholder="State"
@@ -261,6 +265,7 @@ class SignupView extends Component {
             >
               <Form.Label>Zip</Form.Label>
               <Form.Control
+                id="zip"
                 type={"number"}
                 value={this.state.zipcode}
                 placeholder="Zip"
