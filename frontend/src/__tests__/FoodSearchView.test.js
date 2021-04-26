@@ -20,13 +20,6 @@ jest.mock("../services/pantry.service", () => ({
     }),
 }));
 
-jest.mock("../services/food.service", () => ({
-  ...jest.requireActual("../services/food.service"),
-  getFoods: () => {
-    return Promise.resolve(mockFoods);
-  },
-}));
-
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useParams: () => jest.fn().mockReturnValue({ query: "" }),

@@ -18,13 +18,6 @@ jest.mock("../services/pantry.service", () => ({
     }),
 }));
 
-jest.mock("../services/food.service", () => ({
-  ...jest.requireActual("../services/food.service"),
-  getFoods: () => {
-    return Promise.resolve(mockFoods);
-  },
-}));
-
 describe("FoodItemCard tests", () => {
   const foodItem1 = {
     food_id: 4,
@@ -145,6 +138,7 @@ describe("FoodItemCard tests", () => {
   const wrapper5 = mount(<FoodItemCard adminMode foodItem={foodItem1} />);
 
   it("should correctly switch between editMode and non-editMode", async () => {
+    await wrapper5.update();
     await wrapper5.find("Button#btn-edit-quantity").simulate("click");
     expect(wrapper5.state("editMode")).toEqual(true);
 
