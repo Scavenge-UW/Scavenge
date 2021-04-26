@@ -5,8 +5,25 @@ import { shallow, mount } from "enzyme";
 import FoodItemCard from "../components/components_shared/FoodItemCard";
 import "../setupTests";
 import pantryDetail from "../__mocks__/pantryDetailMock";
+import foods from "../__mocks__/foodsMock";
 
 const mockPantryDetail = pantryDetail.pantryDetail;
+
+const mockFoods = foods.foods;
+jest.mock("../services/pantry.service", () => ({
+  ...jest.requireActual("../services/pantry.service"),
+  getDetail: (pantry_id) =>
+    jest.fn().mockImplementation((pantry_id) => {
+      return Promise.resolve(mockPantryDetail).then((response) => response);
+    }),
+}));
+
+jest.mock("../services/food.service", () => ({
+  ...jest.requireActual("../services/food.service"),
+  getFoods: () => {
+    return Promise.resolve(mockFoods);
+  },
+}));
 
 describe("FoodItemCard tests", () => {
   const foodItem1 = {
@@ -26,7 +43,9 @@ describe("FoodItemCard tests", () => {
   const wrapper1 = shallow(<FoodItemCard foodItem={foodItem1} />);
   const wrapper2 = shallow(<FoodItemCard foodItem={foodItem2} />);
 
-  it("should display food name", () => {
+  it("should display food name", async () => {
+    await wrapper1.update();
+    await wrapper2.update();
     expect(wrapper1.find("#food_name").text()).toEqual("Swiss Cheese");
     expect(wrapper2.find("#food_name").text()).toEqual("Orange");
   });
@@ -51,7 +70,8 @@ describe("FoodItemCard tests", () => {
     <FoodItemCard cartMode pantry={mockPantryDetail} foodItem={foodItem1} />
   );
 
-  it("should have three buttons in Cart mode", () => {
+  it("should have three buttons in Cart mode", async () => {
+    await wrapper3.update();
     expect(wrapper3.find("Button")).toHaveLength(3);
   });
 
@@ -95,6 +115,7 @@ describe("FoodItemCard tests", () => {
   );
 
   it("should show a modal when user clicks on One Click Reserve", async () => {
+    await wrapper4.update();
     await wrapper4.find("Button#btn-one-click-reserve").simulate("click");
     expect(wrapper4.state("showOneClickReserveModal")).toEqual(true);
   });
