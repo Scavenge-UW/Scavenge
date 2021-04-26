@@ -13,7 +13,7 @@ import pantries from "./__mocks__/pantriesMock";
 const mockPantryDetail = pantryDetail.pantryDetail;
 const mockPantries = pantries.pantries;
 const mockFoods = foods.foods;
-const mockReservations = reservations.reservations;
+const mockReservations = reservations;
 const mockFoodItem = {
   food_id: 2,
   food_name: "Orange",
@@ -33,6 +33,9 @@ jest.mock("./services/pantry.service", () => ({
     }),
   getPantries: () => {
     return Promise.resolve(mockPantries);
+  },
+  setCancelled: (pantry_id, rsvn_id) => {
+    return Promise.resolve({});
   },
 }));
 
