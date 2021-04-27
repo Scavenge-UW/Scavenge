@@ -102,6 +102,15 @@ async function updateOpenHours(pantry_id, updDay, updHours) {
   });
 }
 
+async function addUser(pantry_id, userName, userInfo){
+  return request({
+    url: "pantries/" + pantry_id + "/hours/" + userName,
+    method: "POST",
+    data: userInfo,
+    withCredentials: true,
+  });
+}
+
 const PantryService = {
   getPantries,
   getDetail,
@@ -120,6 +129,7 @@ const PantryService = {
 
   // update open hours
   updateOpenHours,
+  addUser
 };
 
 export default PantryService;

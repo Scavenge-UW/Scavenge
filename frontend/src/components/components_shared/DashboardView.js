@@ -5,12 +5,14 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/button";
 
 // import for components
 import Dashboard_newMsg from "./Dashboard_newMsg";
 import DashboardDescriptionCard from "../components_admin/DashboardDescriptionCard";
 import DashboardOpenHourCard from "../components_admin/DashboardOpenHourCard";
 import formatters from "../helper_functions/DatetimeFormatter.function";
+import AddUserModal from "../modals/AddUserModal"
 
 // import for services
 import PantryService from "../../services/pantry.service";
@@ -18,6 +20,21 @@ import PantryService from "../../services/pantry.service";
 // other imports
 import { toast } from "react-toastify";
 import MySpinner from "../helper_functions/MySpinner";
+
+const emptyUser = {
+  username: "",
+  password: "",
+  firstName: "",
+  lastName: "",
+  phone: "",
+  address: "",
+  city: "",
+  state: "",
+  zipcode: "",
+  email: ""
+};
+
+
 
 /**
  * Dashboard View
@@ -49,6 +66,9 @@ class DashboardView extends Component {
 
       // used by DashboardOpenHourCard
       hours: [],
+      users: [],
+      userToBeAdded: emptyUser,
+      addUserModalShow: false
     };
   }
 
@@ -73,6 +93,58 @@ class DashboardView extends Component {
         hours: pantry.hours,
       });
     }
+  }
+
+
+  /**
+   * Opens Add User modal.
+   *
+   */
+  openAddUserModal() {
+    this.setState({
+      addUserModalShow: true,
+    });
+  }
+
+  /**
+   * Closes Add User modal.
+   *
+   */
+  closeAddUserModal() {
+    this.setState({
+      addUserModalShow: false,
+      userToBeAdded: emptyUser, // initialize the item for next modal open
+    });
+  }
+
+  setUserToBeAdded(data) {
+    this.setState({
+      userToBeAdded: data,
+    });
+  
+    this.addUser(data);
+  }
+
+   /**
+   * Add an item to the foodItems state.
+   *
+   * @param {Object} data data of the item containing food_id, name, and quantity
+   */
+  addUser(data) {
+    PantryService.addUser(
+      1, // TODO: Change to actual pantry id
+      data
+    )
+      .then(() => {
+        toast.success(data.userName + " was successfully added!");
+        // Add the item in the state
+        this.setState((prevState) => ({
+          users: [...prevState.users, data],
+        }));
+      })
+      .catch(() => {
+        toast.error("Error while adding " + data.userName + " to pantry.");
+      });
   }
 
   // ************************************************************************
@@ -257,6 +329,9 @@ class DashboardView extends Component {
             lat={this.state.lat}
             lon={this.state.lon}
           />
+
+          <Button onClick={this.openAddUserModal}> Add Users </Button>
+          <AddUserModal show={this.state.addUserModalShow} onHide={()=>this.closeAddUserModal()} setItemToBeAdded={this.setUserToBeAdded.bind(this)}/> 
         </Row>
       </>
     );

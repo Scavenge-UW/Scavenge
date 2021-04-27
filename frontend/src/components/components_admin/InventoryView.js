@@ -67,6 +67,8 @@ class InventoryView extends Component {
     });
   }
 
+  
+
   /**
    * Set method for itemsToBeAdded state.
    *

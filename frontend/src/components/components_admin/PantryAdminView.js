@@ -20,6 +20,11 @@ import DashboardView from "../components_shared/DashboardView";
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
  */
+const emptyItem = {
+  name: "",
+  quantity: 1,
+  food_id: "",
+};
 
 function PantryAdminView() {
   const [pantryDetail, setPantryDetail] = useState(null);
@@ -27,7 +32,7 @@ function PantryAdminView() {
 
   /**
    * Fetch pantry detail on init
-   *
+   * 
    */
   useEffect(() => {
     fetchPantryDetail();
