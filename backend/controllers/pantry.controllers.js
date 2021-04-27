@@ -9,6 +9,7 @@ exports.getAllPantriesAction = (req, res) => {
         result[element['pantry_id']]['foods'] = {};
         result[element['pantry_id']]['reservations'] = {};
         result[element['pantry_id']]['hours'] = {};
+        result[element['pantry_id']]['employees'] = {};
       }
       if ('reservation_id' in element) {
         result[element['pantry_id']]['reservations'][element['reservation_id']] = {};
@@ -56,6 +57,12 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['hours'][element['day']]['open']    = element['open'];
       result[element['pantry_id']]['hours'][element['day']]['close']   = element['close'];
       result[element['pantry_id']]['hours'][element['day']]['detail']  = element['detail'];
+
+      result[element['pantry_id']]['employees'][element['first_name']] = {};
+      result[element['pantry_id']]['employees'][element['first_name']]['first_name']  = element['first_name'];
+      result[element['pantry_id']]['employees'][element['first_name']]['last_name']   = element['last_name'];
+      result[element['pantry_id']]['employees'][element['first_name']]['email']       = element['email'];
+
     });
 
     // Convert into array format without using ids as keys
@@ -81,6 +88,7 @@ exports.getAllPantriesAction = (req, res) => {
       //pantryInfo['reservations'] = []; we don't want to give everyone access to the reservations
       pantryInfo['foods'] = [];
       pantryInfo['hours'] = [];
+      pantryInfo['employees'] = [];
 
       // if ('reservations' in pantry) {
       //   for (const [reservationKey, reservationData] of Object.entries(pantry['reservations'])) {
@@ -125,6 +133,15 @@ exports.getAllPantriesAction = (req, res) => {
 
         pantryInfo['hours'].push(hour);
       }
+
+      for (const [empKey, empData] of Object.entries(pantry['employees'])) {
+        let employees = {};
+        employees['first_name'] = empData['first_name'];
+        employees['last_name']  = empData['last_name'];
+        employees['email']      = empData['email'];
+
+        pantryInfo['employees'].push(employees);
+      }      
       resultsArr.push(pantryInfo);
     }
     result = resultsArr;
@@ -143,6 +160,7 @@ exports.getPantryDetailAction = (req, res) => {
     result['foods'] = {};
     result['reservations'] = {};
     result['hours'] = {};
+    result['employees'] = {};
     pantryDetail.forEach(element => {
       if ('reservation_id' in element) {
         result['reservations'][element['reservation_id']] = {};
@@ -190,6 +208,12 @@ exports.getPantryDetailAction = (req, res) => {
       result['hours'][element['day']]['open']    = element['open'];
       result['hours'][element['day']]['close']   = element['close'];
       result['hours'][element['day']]['detail']  = element['detail'];
+
+      result['employees'][element['first_name']] = {};
+      result['employees'][element['first_name']]['first_name']  = element['first_name'];
+      result['employees'][element['first_name']]['last_name']  = element['last_name'];
+      result['employees'][element['first_name']]['email']  = element['email'];
+
     });
 
     // Format the data
@@ -213,6 +237,7 @@ exports.getPantryDetailAction = (req, res) => {
     pantryInfo['reservations'] = [];
     pantryInfo['foods'] = [];
     pantryInfo['hours'] = [];
+    pantryInfo['employees'] = [];
 
     // Only include the reservations if the user is signed in and part of the pantry
     if (req.user && req.isEmployeeOf.includes(pantryInfo['pantry_id']) && 'reservations' in pantry) {
@@ -258,6 +283,15 @@ exports.getPantryDetailAction = (req, res) => {
 
       pantryInfo['hours'].push(hour);
     }
+
+    for (const [empKey, empData] of Object.entries(pantry['employees'])) {
+      let employees = {};
+      employees['first_name'] = empData['first_name'];
+      employees['last_name']  = empData['last_name'];
+      employees['email']      = empData['email'];
+
+      pantryInfo['employees'].push(employees);
+    }     
 
     return res.status(200).json(pantryInfo);
   }).catch(error => {
