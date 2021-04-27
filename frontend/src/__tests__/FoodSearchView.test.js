@@ -2,9 +2,23 @@ import React from "react";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import FoodSearchView from "../components/FoodSearchView";
+import FoodSearchView from "../components/components_shared/FoodSearchView";
 import "../setupTests";
 import store from "../store";
+import pantryDetail from "../__mocks__/pantryDetailMock";
+import foods from "../__mocks__/foodsMock";
+
+const mockPantryDetail = pantryDetail.pantryDetail;
+
+const mockFoods = foods.foods;
+
+jest.mock("../services/pantry.service", () => ({
+  ...jest.requireActual("../services/pantry.service"),
+  getDetail: (pantry_id) =>
+    jest.fn().mockImplementation((pantry_id) => {
+      return Promise.resolve(mockPantryDetail).then((response) => response);
+    }),
+}));
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
@@ -18,8 +32,9 @@ describe("FoodSearchView tests", () => {
     </Provider>
   );
 
-  it("should have display No results on init", () => {
+  it("should have display No results on init", async () => {
     // There should be one button in LoginView
+    await wrapper.update();
     expect(wrapper.find("h6").text()).toEqual("No results");
   });
 

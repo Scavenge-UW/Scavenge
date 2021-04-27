@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 
-import FoodItemCard from "./FoodItemCard";
-import AddItemModal from "./modals/AddItemModal";
-import PantryService from "../services/pantry.service";
+import FoodItemCard from "../components_shared/FoodItemCard";
+import AddItemModal from "../modals/AddItemModal";
+import PantryService from "../../services/pantry.service";
+import MySpinner from "../helper_functions/MySpinner";
+import FooterMsg from "../helper_functions/FooterMsg";
 
 // used to initialize itemToBeAdded
 const emptyItem = {
@@ -28,25 +29,9 @@ class InventoryView extends Component {
     this.state = {
       /**
        * Dummy food items.
-       * TODO: Fetch actual inventory from the API
        */
-      foods: [
-        // {
-        //   food_id: 1,
-        //   name: "Apple",
-        //   quantity: 123,
-        // },
-        // {
-        //   food_id: 2,
-        //   name: "Banana",
-        //   quantity: 0,
-        // },
-        // {
-        //   food_id: 3,
-        //   name: "Edit Me!",
-        //   quantity: 5,
-        // },
-      ],
+      foods: [],
+      pantryName: "",
       addItemModalShow: false, // determines the visibility of the Item Add modal
       itemToBeAdded: emptyItem, // stores the item to be added from the Item Add modal
     };
@@ -57,6 +42,7 @@ class InventoryView extends Component {
       console.log(this.props.pantryDetail);
       this.setState({
         foods: this.props.pantryDetail.foods,
+        pantryName: this.props.pantryDetail.name,
       });
     }
   }
@@ -194,45 +180,60 @@ class InventoryView extends Component {
     }).length;
 
     return (
-      <p id="inventory-overview" className="text-center mt-4">
-        There are {numItems} items in total in your food pantry.
-        <br />
-        {numOutOfStockItems} items are currently out of stock.
-      </p>
+      <>
+        <Row className="justify-content-center">
+          <h2>{this.state.pantryName}</h2>
+        </Row>
+        <Row className="justify-content-center">
+          <h3>Current Inventory</h3>
+        </Row>
+        <hr />
+        <Row className="justify-content-center mt-2">
+          <h6 id="inventory-overview-1">
+            There are {numItems} items in total in your food pantry.
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <h6 id="inventory-overview-2">
+            {numOutOfStockItems} items are currently out of stock.
+          </h6>
+        </Row>
+      </>
     );
   }
 
   render() {
-    return (
-      <Container>
-        <Row className="justify-content-center">
-          <h2>Current Inventory</h2>
-        </Row>
-        <Row className="justify-content-center">
+    if (this.state.pantryName) {
+      return (
+        <Container>
           {this.getInventoryOverview()}
-        </Row>
-        <Row className="justify-content-end">
-          <Button
-            id="btn-add-item"
-            onClick={() => {
-              this.openAddItemModal();
-            }}
-          >
-            Add item
-          </Button>
-        </Row>
-        <Row className="justify-content-center">{this.getFoodItemCards()}</Row>
-        <AddItemModal
-          show={this.state.addItemModalShow}
-          onHide={() => this.closeAddItemModal()}
-          setItemToBeAdded={this.setItemToBeAdded.bind(this)}
-        />
-        <Row className="justify-content-center">
-          <p className="mt-4">
-            Time is Money. We provide an efficient way for you to update
-            available items.
-          </p>
-        </Row>
+          <Row className="justify-content-end">
+            <Button
+              id="btn-add-item"
+              onClick={() => {
+                this.openAddItemModal();
+              }}
+            >
+              Add item
+            </Button>
+          </Row>
+          <Row className="justify-content-center">
+            {this.getFoodItemCards()}
+          </Row>
+          <AddItemModal
+            show={this.state.addItemModalShow}
+            onHide={() => this.closeAddItemModal()}
+            setItemToBeAdded={this.setItemToBeAdded.bind(this)}
+          />
+          <Row className="justify-content-center">
+            <FooterMsg />
+          </Row>
+        </Container>
+      );
+    }
+    return (
+      <Container id="inventory-view-loading">
+        <MySpinner />
       </Container>
     );
   }

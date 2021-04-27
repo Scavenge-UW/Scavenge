@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Tabs from "react-bootstrap/Tabs";
-import Tab from "react-bootstrap/Tab";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Table from "react-bootstrap/Table";
+import { useParams } from "react-router-dom";
 
-import { useParams, Link } from "react-router-dom";
+// imports for bootstrap
+import Row from "react-bootstrap/Row";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 import { Typeahead } from "react-bootstrap-typeahead";
+
+// imports for fontawesome
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// redux
+import store from "../../store";
 import { useSelector } from "react-redux";
 
-import store from "../store";
+// imports for components
+import SearchResultPantryCard from "./SearchResultPantryCard";
+import FoodService from "../../services/food.service";
+import MySpinner from "../helper_functions/MySpinner";
 
-import FoodService from "../services/food.service";
-import PantryCard from "../components/PantryCard";
+// imports for css
+import "../../css/FoodSearch.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-
-import "../css/FoodSearch.css";
 
 /**
  * FoodSearchView where users can search for a specific food item
@@ -35,21 +38,8 @@ function FoodSearchView() {
   const { query } = useParams(); // get query from route param
   const [allFoods, setAllFoods] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(false); // params for setting spinner
   const [selection, setSelection] = useState([]);
-  const dummySearchResult = [
-    {
-      id: 1,
-      food_name: "Apple",
-      qr_code: null,
-      NUTRITION_COLUMNS_PLACEHOLDER: null,
-    },
-    {
-      id: 3,
-      food_name: "Avocado",
-      qr_code: 123123123,
-      NUTRITION_COLUMNS_PLACEHOLDER: null,
-    },
-  ];
 
   useEffect(() => {
     if (query !== undefined) {
@@ -102,7 +92,7 @@ function FoodSearchView() {
     for (const pantry of searchResult) {
       // TODO: Change to props when API is implemented
       pantryCards.push(
-        <PantryCard pantry={pantry} />
+        <SearchResultPantryCard pantry={pantry} />
         // <tr key={pantry.pantry_id}>
         //   <td>
         //     <Link to={"/pantries/" + pantry.pantry_id}>
@@ -122,16 +112,29 @@ function FoodSearchView() {
   };
 
   const showSearchResults = () => {
+    // return a Spinner when loading is true
+    if (loading) return <MySpinner />;
+
     if (searchResult.length > 0) {
-      return getPantryCards();
+      return (
+        <Row className="justify-content-center mt-4">{getPantryCards()}</Row>
+      );
     } else {
-      return <h6>No results</h6>;
+      return (
+        <Row className="justify-content-center mt-4">
+          <h6>No results</h6>
+        </Row>
+      );
     }
   };
 
   const onClickSearchButton = async (e) => {
     e.preventDefault();
+    // set loading to true before calling API
+    setLoading(true);
     await getSearchResults();
+    // switch loading to false after fetch is complete
+    setLoading(false);
   };
 
   return (
@@ -167,7 +170,7 @@ function FoodSearchView() {
           <em>Tab to autocomplete food</em>
         </small>
       </Row>
-      <Row className="justify-content-center mt-4">{showSearchResults()}</Row>
+      {showSearchResults()}
     </Container>
   );
 }

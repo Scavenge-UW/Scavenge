@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
@@ -13,13 +13,6 @@ function ViewRsvnMsgModal(props) {
     fontFamily: "monospace",
   };
 
-  /*
-    TODO: 
-    marked complete reservation with check2-circle icon
-    marked cancelled reservation with x-circle icon
-    - https://icons.getbootstrap.com
-    */
-
   return (
     <>
       <Modal {...props} size="lg" aria-labelledby="ViewRsvnMsgModal" centered>
@@ -27,15 +20,9 @@ function ViewRsvnMsgModal(props) {
           <Modal.Title id="ViewRsvnMsgModal">
             Reservation for User{" "}
             <span style={usernameStyle}>{props.selectedUsername}</span>
-            {/* Reservation for User <span style={usernameStyle}>hi</span> */}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5>
-            Reservation Detail (
-            <span style={rsvnDetailStyle}>Food Name: Quantity</span>)
-          </h5>
-          <hr />
           {/* only render the list if selectedResFoods is not `undefined` */}
           {props.show && (
             <ul>
@@ -49,14 +36,6 @@ function ViewRsvnMsgModal(props) {
               ))}
             </ul>
           )}
-          {/* debug purpose - TODO: reomve this paragraph */}
-          {/* <p>
-            reservation ID: {props.selectedID} <br />
-            Marked As Approved: {props.selectedApproved} <br />
-            Marked As Picked Up:{" "}
-            {props.selectedPickedUp ? props.selectedPickedUp : `null`} <br />
-            Marked As Cancelled: {props.selectedCancelled} <br />
-          </p> */}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>

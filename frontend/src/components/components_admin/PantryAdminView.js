@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+
+// imports for react bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,25 +8,29 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 
-import PantryService from "../services/pantry.service";
+// imports for components and service
 import InventoryView from "./InventoryView";
-import DashboardView from "./DashboardView";
+import MySpinner from "../helper_functions/MySpinner";
+import PantryService from "../../services/pantry.service";
+import DashboardView from "../components_shared/DashboardView";
 
 /**
  * PantryAdminView that consists of PantryDashboardView and InventoryView
  *
  * @version 1.0.0
  * @author [Ilkyu Ju](https://github.com/osori)
+ * @author [Yayen Lin](https://github.com/yayen-lin)
  */
 
 function PantryAdminView() {
   const [pantryDetail, setPantryDetail] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false); // used for spinner
 
   /**
    * Fetch pantry detail on init
    *
    */
-  React.useEffect(() => {
+  useEffect(() => {
     fetchPantryDetail();
   }, []);
 
@@ -33,13 +39,21 @@ function PantryAdminView() {
    *
    */
   const fetchPantryDetail = async () => {
+    setIsLoaded(false);
     const detail = await PantryService.getDetail(1); // TODO: change pantry id based on user's affiliation
     setPantryDetail(detail);
+    setIsLoaded(true);
   };
 
   const PantryAdminViewTabs = () => {
     const [tab, setTab] = useState("dashboard");
-
+    if (!isLoaded) {
+      return (
+        <Container id="my-wishlist-loading">
+          <MySpinner />
+        </Container>
+      );
+    }
     return (
       <Tabs
         variant="pills"
@@ -64,7 +78,7 @@ function PantryAdminView() {
   };
 
   return (
-    <Container>
+    <Container id="pantry-admin-tabs">
       <PantryAdminViewTabs />
     </Container>
   );

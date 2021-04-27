@@ -2,7 +2,7 @@ import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 import { shallow, mount } from "enzyme";
 
-import PantryAdminView from "../components/PantryAdminView";
+import PantryAdminView from "../components/components_admin/PantryAdminView";
 import "../setupTests";
 import pantryDetail from "../__mocks__/pantryDetailMock";
 

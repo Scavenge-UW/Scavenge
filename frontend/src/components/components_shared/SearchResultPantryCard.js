@@ -1,17 +1,15 @@
 import React, { Component } from "react";
-import Card from "react-bootstrap/Card";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
-import "../css/common.css";
+// imports for bootstrap
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
+import Table from "react-bootstrap/Table";
 
-class PantryCard extends Component {
+// other imports
+import "../../css/common.css";
+
+class SearchResultPantryCard extends Component {
   constructor(props) {
     super(props);
 
@@ -45,26 +43,26 @@ class PantryCard extends Component {
 
   render() {
     if (this.props.type === "filler") {
-      return <Card className="filler food-item" />;
+      return (
+        <Card
+          className="filler food-item"
+          border="dark"
+          style={{ width: "18rem" }}
+        />
+      );
     } else {
-      const { pantry_id, name, website } = this.props.pantry;
+      const { pantry_id, name } = this.props.pantry;
       return (
         <>
-          <Card className="food-item">
-            <Card.Body>
-              <Card.Title className="mb-4">
-                <Row className="justify-content-between align-items-center">
-                  <Link push to={"/pantries/" + pantry_id}>
-                    {name}
-                  </Link>
-                </Row>
-              </Card.Title>
-              <Row>
-                <p>
-                  <strong>Address: </strong>
-                  <span>{this.getAddress()}</span>
-                </p>
+          <Card className="food-item" border="dark" style={{ width: "18rem" }}>
+            <Card.Header as="h5">
+              <Row className="justify-content-between align-items-center">
+                <Link push to={"/pantries/" + pantry_id}>
+                  {name}
+                </Link>
               </Row>
+            </Card.Header>
+            <Card.Body style={{ padding: "0" }}>
               <Table>
                 <tr>
                   <th>Food</th>
@@ -73,6 +71,10 @@ class PantryCard extends Component {
                 {this.showFoods()}
               </Table>
             </Card.Body>
+            <Card.Footer className="text-muted">
+              <strong>Address: </strong>
+              <span>{this.getAddress()}</span>
+            </Card.Footer>
           </Card>
         </>
       );
@@ -80,4 +82,4 @@ class PantryCard extends Component {
   }
 }
 
-export default PantryCard;
+export default SearchResultPantryCard;

@@ -1,9 +1,9 @@
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
-import { mount } from "enzyme";
+import { shallow, mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import ProfileView from "../components/ProfileView";
+import ProfileView from "../components/components_shared/ProfileView";
 import "../setupTests";
 import store from "../store";
 
@@ -21,9 +21,30 @@ describe("Profile tests", () => {
     type: "user",
   };
 
+  const mockEmptyProfile = {
+    username: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipcode: 0,
+    type: "",
+  };
+
   const wrapper = mount(
     <Provider store={store}>
-      <ProfileView profile={mockProfile} />
+      <ProfileView
+        profile={mockProfile}
+        editProf={(user) => {
+          jest.fn();
+        }}
+        setProfile={(user) => {
+          jest.fn();
+        }}
+      />
     </Provider>
   );
 
@@ -48,5 +69,31 @@ describe("Profile tests", () => {
     expect(getProfileView.state("email")).toEqual("sjcunningham@wisc.edu");
     expect(getProfileView.state("first_name")).toEqual("sean");
     expect(getProfileView.state("last_name")).toEqual("cunningham");
+  });
+
+  it("should toast errors when fields are empty", () => {
+    const getProfileView = wrapper.find("ProfileView");
+    const mockOnSubmitEvent = { preventDefault() {} };
+    const mockOnChangeEvent = {
+      preventDefault() {},
+      target: { value: "" },
+    };
+    // console.log(wrapper.debug());
+    wrapper.find("FormControl").forEach((node) => {
+      node.simulate("change", mockOnChangeEvent);
+    });
+
+    wrapper.update();
+    expect(getProfileView.state("username")).toEqual("");
+    expect(getProfileView.state("password")).toEqual("");
+    expect(getProfileView.state("phone")).toEqual("");
+    expect(getProfileView.state("address")).toEqual("");
+    expect(getProfileView.state("city")).toEqual("");
+    expect(getProfileView.state("state")).toEqual("");
+    expect(getProfileView.state("zipcode")).toEqual("");
+    expect(getProfileView.state("email")).toEqual("");
+    expect(getProfileView.state("first_name")).toEqual("");
+    expect(getProfileView.state("last_name")).toEqual("");
+    wrapper.find("ProfileView").instance().onSubmit(mockOnSubmitEvent);
   });
 });
