@@ -1,8 +1,12 @@
 import request from './request';
 
-function getWishList(user) {
+/**
+  @param {string} username
+*/
+
+function getWishList(username) {
   return request({
-    url: '/user/' + user.username + '/' + 'wishlist',
+    url: '/user/' + username + '/' + 'wishlist',
     method: 'GET',
     withCredentials: true
   });

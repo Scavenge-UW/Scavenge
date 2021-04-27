@@ -22,11 +22,9 @@ import FoodSearchView from "./components/FoodSearchView";
 import Navigation from "./components/Navigation";
 import ProfileView from "./components/ProfileView";
 import CartView from "./components/CartView";
-<<<<<<< HEAD
 import WishListView from "./components/WishListView";
-=======
 import HelpView from "./components/HelpView"
->>>>>>> main
+
 
 import "react-toastify/dist/ReactToastify.css";
 import async from "react-bootstrap-typeahead/lib/behaviors/async";
