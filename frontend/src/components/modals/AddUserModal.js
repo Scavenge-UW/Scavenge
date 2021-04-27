@@ -8,15 +8,6 @@ import Form from "react-bootstrap/Form";
 function AddUserModal(props){
     
     const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddress] = useState("");
-    const [city, setCity] = useState("");
-    const [state, setState] = useState("");
-    const [zipcode, setZipcode] = useState("");
-    const [email, setEmail] = useState("");
 
 
     useEffect(() => {
@@ -27,29 +18,11 @@ function AddUserModal(props){
 
       const clearForm = () => {
         setUsername("");
-        setPassword("");
-        setFirstName("");
-        setLastName("");
-        setPhone("");
-        setAddress("");
-        setCity("");
-        setState("");
-        setZipcode("");
-        setEmail("");
       };
 
       const addUser = () => {
         props.setItemToBeAdded({
           username: username,
-          password: password,
-          firstName: firstName,
-          lastName: lastName,
-          phone: phone,
-          address: address,
-          city: city,
-          state: state,
-          zipcode: zipcode,
-          email: email
         });
     
         props.onHide(); // close the modal
@@ -73,126 +46,7 @@ function AddUserModal(props){
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </Form.Group>
-
-                <Form.Group as={Col}>
-                  <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      id="user-pass"
-                      type="text"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                </Form.Group>
               </Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control
-                    id="first-name"
-                    type="text"
-                    value={firstName}
-                    onChange={(e)=> setFirstName(e.target.value)}
-                  />
-                </Form.Group>
-              
-              <Form.Row>
-                <Form.Group as={Col}> 
-                  <Form.Control
-                      id="last-name"
-                      type="text"
-                      value={lastName}
-                      onChange={(e)=> setLastName(e.target.value)}
-                  />
-                </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="phone"
-                        type="text"
-                        value={phone}
-                        onChange={(e)=> setPhone(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="address"
-                        type="text"
-                        value={address}
-                        onChange={(e)=> setAddress(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="phone"
-                        type="text"
-                        value={phone}
-                        onChange={(e)=> setPhone(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="city"
-                        type="text"
-                        value={city}
-                        onChange={(e)=> setCity(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="state"
-                        type="text"
-                        value={state}
-                        onChange={(e)=> setState(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-                 
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="state"
-                        type="text"
-                        value={state}
-                        onChange={(e)=> setState(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="zipcode"
-                        type="text"
-                        value={zipcode}
-                        onChange={(e)=> setZipcode(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-
-              <Form.Row>
-                <Form.Group as={Col}> 
-                    <Form.Control
-                        id="email"
-                        type="text"
-                        value={email}
-                        onChange={(e)=> setEmail(e.target.value)}
-                    />
-                  </Form.Group>
-              </Form.Row>
-
             </Form>
           </Modal.Body>
           <Modal.Footer>

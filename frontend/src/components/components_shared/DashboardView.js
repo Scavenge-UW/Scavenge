@@ -23,15 +23,6 @@ import MySpinner from "../helper_functions/MySpinner";
 
 const emptyUser = {
   username: "",
-  password: "",
-  firstName: "",
-  lastName: "",
-  phone: "",
-  address: "",
-  city: "",
-  state: "",
-  zipcode: "",
-  email: ""
 };
 
 
