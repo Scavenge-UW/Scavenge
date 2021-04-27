@@ -49,9 +49,8 @@ class WishListView extends Component {
     let foodItemCards = [];
     for (const foodItem of this.state.foods) {
       foodItemCards.push(
-        <WishListItemCard
-          key={foodItem.food_id}
-          foodItem={foodItem}
+        <PantryCard
+          
         />
       )
     }
