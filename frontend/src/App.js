@@ -81,9 +81,16 @@ class App extends Component {
    */
   async signup(user) {
     return AuthService.signup(user).then((response) => {
+      console.log('res', response)
       if (response.message) {
         // When the API returns `message`,
         // that means the signup has failed
+        if (response.message.failureMsg) {
+          // Duplicate username
+          toast.error(response.message.failureMsg);
+          return -1;
+        }
+
         toast.error(response.message);
         return -1;
       } else {

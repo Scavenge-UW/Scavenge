@@ -40,7 +40,7 @@ exports.signup = async (req, res, newUser) => {
       ]
     ];
 
-  return await execQuery("insert", query, values);
+  return await execQuery("insert", query, values, 'Duplicate username. Please choose another one.');
 }
 
 exports.updateUser = async (req, res, newInfo) => {

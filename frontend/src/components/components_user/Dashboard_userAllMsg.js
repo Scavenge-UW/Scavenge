@@ -16,7 +16,6 @@ import {
 } from "reactstrap";
 
 // import for components
-import RsvnSearchView from "../components_shared/RsvnSearchView";
 import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
@@ -366,13 +365,10 @@ function Dashboard_userAllMsg(props) {
             }}
             className="justify-content-center nav-justified mb-4 mt-4"
           >
-            <Tab eventKey="search" title={<strong>Search</strong>}>
-              <RsvnSearchView rsvns={userRsvns} />
-            </Tab>
             <Tab eventKey="all" title={<strong>All Reservations</strong>}>
               {renderMsg("all")}
             </Tab>
-            <Tab eventKey="not_approved" title={<strong>pending</strong>}>
+            <Tab eventKey="not_approved" title={<strong>Pending</strong>}>
               {renderMsg("not_approved")}
             </Tab>
             <Tab eventKey="approved" title={<strong>Need Pickup</strong>}>
