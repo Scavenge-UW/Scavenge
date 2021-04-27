@@ -61,7 +61,7 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['employees'][element['first_name']] = {};
       result[element['pantry_id']]['employees'][element['first_name']]['first_name']  = element['first_name'];
       result[element['pantry_id']]['employees'][element['first_name']]['last_name']   = element['last_name'];
-      result[element['pantry_id']]['employees'][element['first_name']]['email']       = element['email'];
+      result[element['pantry_id']]['employees'][element['first_name']]['user_email']  = element['user_email'];
 
     });
 
@@ -138,7 +138,7 @@ exports.getAllPantriesAction = (req, res) => {
         let employees = {};
         employees['first_name'] = empData['first_name'];
         employees['last_name']  = empData['last_name'];
-        employees['email']      = empData['email'];
+        employees['emauser_emailil']      = empData['user_email'];
 
         pantryInfo['employees'].push(employees);
       }      
@@ -212,7 +212,7 @@ exports.getPantryDetailAction = (req, res) => {
       result['employees'][element['first_name']] = {};
       result['employees'][element['first_name']]['first_name']  = element['first_name'];
       result['employees'][element['first_name']]['last_name']  = element['last_name'];
-      result['employees'][element['first_name']]['email']  = element['email'];
+      result['employees'][element['first_name']]['user_email']  = element['user_email'];
 
     });
 
@@ -288,7 +288,7 @@ exports.getPantryDetailAction = (req, res) => {
       let employees = {};
       employees['first_name'] = empData['first_name'];
       employees['last_name']  = empData['last_name'];
-      employees['email']      = empData['email'];
+      employees['user_email']      = empData['user_email'];
 
       pantryInfo['employees'].push(employees);
     }     

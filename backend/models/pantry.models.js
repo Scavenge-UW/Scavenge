@@ -38,7 +38,7 @@ exports.getAllPantries = async (req, res) => {
       h.detail,
       u.first_name,
       u.last_name,
-      u.email
+      u.email as user_email
     FROM pantry p
     LEFT JOIN inventory i ON p.id = i.pantry_id
     LEFT JOIN food f ON f.id = i.food_id
@@ -90,7 +90,7 @@ exports.getPantryDetail = async (req, res) => {
       h.detail,
       u.first_name,
       u.last_name,
-      u.email      
+      u.email as user_email   
     FROM pantry p
     LEFT JOIN inventory i ON p.id = i.pantry_id
     LEFT JOIN food f ON f.id = i.food_id
