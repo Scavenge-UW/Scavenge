@@ -27,10 +27,9 @@ window.URL.createObjectURL = function () {};
 
 jest.mock("./services/pantry.service", () => ({
   ...jest.requireActual("./services/pantry.service"),
-  getDetail: (pantry_id) =>
-    jest.fn().mockImplementation((pantry_id) => {
-      return Promise.resolve(mockPantryDetail).then((response) => response);
-    }),
+  getDetail: (pantry_id) => {
+    return Promise.resolve(mockPantryDetail);
+  },
   getPantries: () => {
     return Promise.resolve(mockPantries);
   },
