@@ -1,23 +1,23 @@
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router-dom";
+import MyWishlistView from "../components/components_user/MyWishlistView";
 
-import SearchResultPantryCard from "../components/components_shared/SearchResultPantryCard";
 import "../setupTests";
 import pantryDetail from "../__mocks__/pantryDetailMock";
 
 const mockPantryDetail = pantryDetail.pantryDetail;
+const mockUsername = "ilkyu";
 
-describe("SearchResultPantryCard tests", () => {
+describe("MyWishlistView tests", () => {
   // empty cart
   const wrapper1 = mount(
     <MemoryRouter>
-      <SearchResultPantryCard pantry={mockPantryDetail} />
+      <MyWishlistView username={mockUsername} />
     </MemoryRouter>
   );
 
-  it("should load a Card", () => {
-    // There should be one button in LoginView
-    expect(wrapper1.find("Card")).toHaveLength(1);
+  it("should load a spinner on init", () => {
+    expect(wrapper1.find("MySpinner")).toHaveLength(1);
   });
 });

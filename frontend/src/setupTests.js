@@ -9,10 +9,12 @@ import foods from "./__mocks__/foodsMock";
 import reservations from "./__mocks__/reservationsMock";
 import pantryDetail from "./__mocks__/pantryDetailMock";
 import pantries from "./__mocks__/pantriesMock";
+import wishlist from "./__mocks__/wishlistMock";
 
 const mockPantryDetail = pantryDetail.pantryDetail;
 const mockPantries = pantries.pantries;
 const mockFoods = foods.foods;
+const mockWishlist = wishlist.wishlist;
 const mockReservations = reservations;
 const mockFoodItem = {
   food_id: 2,
@@ -52,5 +54,12 @@ jest.mock("./services/reservation.service", () => ({
   },
   makeReservation: (pantry_id, data) => {
     return Promise.resolve(mockFoodItem);
+  },
+}));
+
+jest.mock("./services/wishlist.service", () => ({
+  ...jest.requireActual("./services/wishlist.service"),
+  getUserWishlist: (username) => {
+    return Promise.resolve(mockWishlist);
   },
 }));
