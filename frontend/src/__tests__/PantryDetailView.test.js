@@ -10,13 +10,6 @@ import "../setupTests";
 import pantryDetail from "../__mocks__/pantryDetailMock";
 
 const mockPantryDetail = pantryDetail.pantryDetail;
-jest.mock("../services/pantry.service", () => ({
-  ...jest.requireActual("../services/pantry.service"),
-  getDetail: (pantry_id) =>
-    jest.fn().mockImplementation((pantry_id) => {
-      return Promise.resolve(mockPantryDetail).then((response) => response);
-    }),
-}));
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
@@ -27,7 +20,7 @@ jest.mock("react-router-dom", () => ({
 // });
 
 describe("PantryDetailView tests", () => {
-  const wrapper = shallow(<PantryDetailView />);
+  const wrapper = mount(<PantryDetailView />);
 
   it("should display spinner on init", () => {
     expect(wrapper.find("MySpinner")).toHaveLength(1);
