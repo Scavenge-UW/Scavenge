@@ -107,7 +107,7 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
     );
     message = (
       <>
-        {icon} You have {numItems} tems reserved at {pantryname}
+        {icon} You have {numItems} items reserved at {pantryname}
       </>
     );
   }
