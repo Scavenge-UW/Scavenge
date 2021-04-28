@@ -30,8 +30,9 @@ import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 // imports for service
 import PantryService from "../../services/pantry.service";
 
+// This is needed for production
 // eslint-disable-next-line import/no-webpack-loader-syntax
-// mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const geolocateControlStyle = {
   left: 10,
