@@ -16,6 +16,7 @@ import Button from "react-bootstrap/Button";
 import { IoCheckmarkSharp, IoCheckmarkDoneSharp } from "react-icons/io5";
 import { MdRadioButtonUnchecked } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
+import { Link } from "react-router-dom";
 
 // other imports
 import formatters from "./DatetimeFormatter.function"; // time formatters
@@ -93,14 +94,16 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   } else {
     // userMode
     const pantryname = (
-      <Button
-        tag="a"
-        onClick={() => window.open(weblink, "_blank")}
-        variant="link"
-        // size="sm"
-      >
-        <em>{rsvn.name}</em>
-      </Button>
+      <Link to={weblink}>
+        <Button
+          // tag="a"
+          // onClick={() => window.open(weblink, "_blank")}
+          variant="link"
+          // size="sm"
+        >
+          <em>{rsvn.name}</em>
+        </Button>
+      </Link>
     );
     message = (
       <>
