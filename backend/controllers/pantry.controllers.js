@@ -365,7 +365,7 @@ exports.updateReservationAction = (req, res) => {
         service: 'gmail',
         auth: {
           user: 'scavenge.uw@gmail.com',
-          pass: 'Scavenge951!'
+          pass: process.env.EMAIL_PASSWORD
         }
       });
 
