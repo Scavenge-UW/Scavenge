@@ -8,15 +8,15 @@ import pantryDetail from "../__mocks__/pantryDetailMock";
 
 const mockPantryDetail = pantryDetail.pantryDetail;
 
-describe("HelpView tests", () => {
+describe("SearchResultPantryCard tests", () => {
   // empty cart
   const wrapper1 = mount(
     <MemoryRouter>
-      <SearchResultPantryCard pantry={mockPantryDetail} />
+      <MyWishlistView pantry={mockPantryDetail} />
     </MemoryRouter>
   );
 
-  it("should have one button when cart is empty", () => {
+  it("should load a Card", () => {
     // There should be one button in LoginView
     expect(wrapper1.find("Card")).toHaveLength(1);
   });
