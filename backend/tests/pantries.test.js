@@ -57,7 +57,7 @@ describe('Pantries', () => {
       data = JSON.parse(data.text);
       //console.log(data);
       const length = Object.keys(data).length;
-      assert.equal(length, 17, "The pantry details does not have 17 keys");
+      assert.equal(length, 16, "The pantry details does not have 16 keys");
     });
   });
 
@@ -114,13 +114,6 @@ describe('Pantries', () => {
         "zip": 53704,
         "phone_number": "6084428815",
         "details": "Here to serve!",
-        "employees": [
-          {
-            "first_name": "sean",
-            "last_name": "cunningham",
-            "user_email": "sjcunningham@wisc.edu"
-          }
-        ],
         "img_src": "https://lh5.googleusercontent.com/p/AF1QipM6UYI64xgIkJx1w_t7RLh8eVCjelB9ogeoW_A3=w426-h240-k-no",
         "lat": -89.4,
         "lon": 43.07,

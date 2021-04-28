@@ -43,7 +43,7 @@ describe("ListView tests", () => {
   });
 
   it("should have a correctly working searchData()", () => {
-    wrapper.find("input.searchInput").simulate("change", {
+    wrapper.find("input.SearchInput").simulate("change", {
       target: {
         value: "River",
       },
@@ -100,7 +100,7 @@ describe("ListView tests", () => {
   it("should call searchData() on onChange event", () => {
     const mockSearch = jest.spyOn(listViewWrapper.instance(), "searchData");
 
-    listViewWrapper.find("input.searchInput").simulate("change", {
+    listViewWrapper.find("input.SearchInput").simulate("change", {
       target: {
         value: "The",
       },
