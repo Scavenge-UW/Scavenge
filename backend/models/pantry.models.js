@@ -35,13 +35,18 @@ exports.getAllPantries = async (req, res) => {
       h.day,
       h.open,
       h.close,
-      h.detail      
+      h.detail,
+      u.first_name,
+      u.last_name,
+      u.email as user_email
     FROM pantry p
     LEFT JOIN inventory i ON p.id = i.pantry_id
     LEFT JOIN food f ON f.id = i.food_id
     LEFT JOIN reservation r ON r.pantry_id = p.id
     LEFT JOIN res_food rf ON r.id = rf.reservation_id
     LEFT JOIN food f2 on rf.food_id = f2.id
+    JOIN user_to_pantry utp on utp.pantry_id = p.id
+    JOIN user u on u.username = utp.username
     JOIN hours h ON p.id = h.pantry_id;
   `;
   return await execQuery("select", query);
@@ -82,7 +87,10 @@ exports.getPantryDetail = async (req, res) => {
       h.day,
       h.open,
       h.close,
-      h.detail      
+      h.detail,
+      u.first_name,
+      u.last_name,
+      u.email as user_email   
     FROM pantry p
     LEFT JOIN inventory i ON p.id = i.pantry_id
     LEFT JOIN food f ON f.id = i.food_id
@@ -90,6 +98,8 @@ exports.getPantryDetail = async (req, res) => {
     LEFT JOIN res_food rf ON r.id = rf.reservation_id
     LEFT JOIN food f2 on rf.food_id = f2.id
     JOIN hours h ON p.id = h.pantry_id
+    JOIN user_to_pantry utp on utp.pantry_id = p.id
+    JOIN user u on u.username = utp.username
     WHERE p.id = ?;
   `;
   const values = [[req.params.pantry_id]];
