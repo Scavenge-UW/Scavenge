@@ -134,7 +134,7 @@ class DashboardView extends Component {
         }));
       })
       .catch(() => {
-        toast.error("Error while adding " + data.userName + " to pantry.");
+        toast.error("user is added already or is invalid");
       });
   }
 
