@@ -17,7 +17,6 @@ import {
 
 // import for components
 import EditEstModal from "../modals/EditEstModal";
-import RsvnSearchView from "../components_shared/RsvnSearchView";
 import ViewRsvnMsgModal from "../modals/ViewRsvnMsgModal";
 
 // import for services
@@ -554,9 +553,6 @@ function Dashboard_adminAllMsg(props) {
             }}
             className="justify-content-center nav-justified mb-4 mt-4"
           >
-            <Tab eventKey="search" title={<strong>Search Messages</strong>}>
-              <RsvnSearchView rsvns={pantryDetail.reservations} />
-            </Tab>
             <Tab eventKey="all" title={<strong>All Messages</strong>}>
               {renderMsg("all")}
             </Tab>
