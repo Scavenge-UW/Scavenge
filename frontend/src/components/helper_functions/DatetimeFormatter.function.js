@@ -1,4 +1,4 @@
-import moment from "moment";
+var moment = require("moment-timezone");
 
 // reference: https://stackoverflow.com/questions/50430968/converting-string-date-in-react-javascript
 /**
@@ -16,7 +16,7 @@ function FormatDateTime(timeString) {
     hour: "numeric",
     minute: "numeric",
   };
-  options.timeZone = "UTC";
+  options.timeZone = moment.tz.guess(); // get user's timezone
   // options.timeZoneName = "short";
   return new Date(timeString).toLocaleDateString(["en-US"], options);
 }
