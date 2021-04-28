@@ -12,7 +12,7 @@ describe("SearchResultPantryCard tests", () => {
   // empty cart
   const wrapper1 = mount(
     <MemoryRouter>
-      <MyWishlistView pantry={mockPantryDetail} />
+      <SearchResultPantryCard pantry={mockPantryDetail} />
     </MemoryRouter>
   );
 
