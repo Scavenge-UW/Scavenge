@@ -42,6 +42,7 @@ class MyReservationsView extends Component {
     ReservationService.getUserReservations(this.props.username).then(
       (response) => {
         this.setState({
+          rsvns: response.reservations,
           loaded: true,
         });
       }
