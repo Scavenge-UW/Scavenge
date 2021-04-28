@@ -206,7 +206,7 @@ class SignupView extends Component {
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 id="phone"
-                type={"text"}
+                type={"number"}
                 value={this.state.phone}
                 placeholder="Phone"
                 onChange={(e) => this.setState({ phone: e.target.value })}
