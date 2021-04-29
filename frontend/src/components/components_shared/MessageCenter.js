@@ -42,7 +42,7 @@ import ScrollToTop from "../helper_functions/ScrollToTop.function";
  */
 function MessageCenter(props) {
   // get pantry_id/username, either one must be null
-  const p = useParams().pantry_id;
+  const p = useParams().param;
   let pantry_id;
   let username;
 
@@ -53,8 +53,6 @@ function MessageCenter(props) {
     pantry_id = null;
     username = p;
   }
-  console.log(pantry_id);
-  console.log(username);
 
   const [pantryDetail, setPantryDetail] = useState(null); // pantry info
   const [userRsvns, setUserRsvns] = useState(null); // user reservation info

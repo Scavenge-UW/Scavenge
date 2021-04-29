@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 
 // import for bootstrap
 import Container from "react-bootstrap/Container";
@@ -34,6 +34,9 @@ class DashboardView extends Component {
   constructor(props) {
     super(props);
 
+    // used by admin who is emplpoyee of multiple pantries
+    this.currentPantryName = createRef();
+
     const pantry = this.props.pantryDetail;
     this.state = {
       pantry_id: pantry.pantry_id,
@@ -59,96 +62,6 @@ class DashboardView extends Component {
       hours: pantry.hours,
     };
   }
-
-  // ************************************************************************
-  // ************************ DashboardMessages *****************************
-  // ************************************************************************
-  // /**
-  //  * Mark a reservation as approved
-  //  *
-  //  * @param {*} rsvn_id
-  //  */
-  // markAsApproved(rsvn_id) {
-  //   console.log(rsvn_id);
-
-  //   PantryService.setApproved(this.state.pantry_id, rsvn_id)
-  //     .then(() => {
-  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "You have successfully approved the reservation #" + rsvn_id
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error("Error while approving reservation #" + rsvn_id);
-  //     });
-  // }
-
-  // /**
-  //  * Mark a reservation as picked up
-  //  *
-  //  * @param {*} rsvn_id
-  //  */
-  // markAsPickedUp(rsvn_id) {
-  //   console.log(rsvn_id);
-  //   PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
-  //     .then(() => {
-  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "reservation #" + rsvn_id + " was successfully marked as picked up!"
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error(
-  //         "Error while marking reservation #" + rsvn_id + " as picked up."
-  //       );
-  //     });
-  // }
-
-  // /**
-  //  *  Mark a reservation as cancelled
-  //  *
-  //  * @param {*} rsvn_id
-  //  */
-  // markAsCancelled(rsvn_id) {
-  //   console.log(rsvn_id);
-  //   PantryService.setCancelled(this.state.pantry_id, rsvn_id)
-  //     .then(() => {
-  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "You have successfully cancelled the reservation #" + rsvn_id
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error("Error while cancelling reservation #" + rsvn_id);
-  //     });
-  // }
-
-  // /**
-  //  * Update estimated pickup time to server and prompt message accordingly
-  //  *
-  //  * @param {*} rsvn_id - reservation id that is to be updated
-  //  * @param {*} updTime - the updated estimated pickup time
-  //  */
-  // setEstPickupTime(rsvn_id, updTime) {
-  //   console.log("3. ", this.state.pantry_id);
-  //   console.log("3. ", rsvn_id);
-  //   console.log("3. ", updTime);
-  //   PantryService.updateEstPickupTime(this.state.pantry_id, rsvn_id, {
-  //     estimated_pick_up: updTime,
-  //   })
-  //     .then(() => {
-  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-  //       toast.success(
-  //         "You have successfully updated the estimated pick up time for reservation #" +
-  //           rsvn_id
-  //       );
-  //     })
-  //     .catch(() => {
-  //       toast.error(
-  //         "Error while updating pick up time for reservation #" + rsvn_id
-  //       );
-  //     });
-  // }
 
   // ************************************************************************
   // ******************* DashboardDescriptionCard.js ************************
@@ -213,24 +126,24 @@ class DashboardView extends Component {
       <>
         {/* Pantry's name */}
         <Row className="justify-content-center">
-          <h2>{this.state.pantryName}</h2>
-          {/* <Form.Group controlId="pantry-manage-form">
+          {/* <h2>{this.state.pantryName}</h2> */}
+          <Form.Group controlId="pantry-manage-form">
             <Form.Label>
               <h2>{this.state.pantryName}</h2>
             </Form.Label>
             <Form.Control
               as="select"
-              // ref={this.newDetail}
-              // disabled={this.props.employeeOf.length < 2}
-              // defaultValue={this.props.description}
+              ref={this.currentPantryName}
+              disabled={this.props.employeeOf.length < 2}
+              defaultValue={this.state.pantryName}
             >
-              <option>1</option>
+              <option>{this.state.pantryName}</option>
               <option>2</option>
               <option>3</option>
               <option>4</option>
               <option>5</option>
             </Form.Control>
-          </Form.Group> */}
+          </Form.Group>
         </Row>
         {/* Page title */}
         <Row className="justify-content-center">

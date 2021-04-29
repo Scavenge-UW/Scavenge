@@ -189,11 +189,9 @@ class App extends Component {
                 <Route path="/pantry/:pantry_id">
                   <PantryAdminView owns={[...this.state.employeeOf]} />
                 </Route>
-                <Route path="/messageCenter/:pantry_id">
+                <Route path="/messageCenter/:param">
+                  {/* param: either username or pantry_id based on user type */}
                   <MessageCenter isAdmin={() => this.isAdmin()} />
-                </Route>
-                <Route path="/messageCenter/:username">
-                  <MessageCenter />
                 </Route>
                 <Route path="/pantries/:pantry_id">
                   <PantryDetailView
