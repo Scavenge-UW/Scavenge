@@ -96,7 +96,7 @@ class Dashboard_newMsg extends Component {
    * @param {*} estTime - desire est pickup time to update
    */
   updateEstPickupTime(estTime) {
-    msgFunctions.updateEstPickupTime(
+    msgFunctions.setEstPickupTime(
       this.state.selectedID,
       estTime,
       this.props.pantry_id,

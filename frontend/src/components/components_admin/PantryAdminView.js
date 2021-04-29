@@ -55,12 +55,6 @@ function PantryAdminView(props) {
     // setPantries(all_pantries.result);
     setPantries([...Object.values(all_pantries.result)]);
 
-    // console.log("DEBUG-01: ");
-    // console.log(pantries);
-
-    // console.log("DEBUG-02: ");
-    // console.log(all_pantries);
-
     // set isLoaded to true
     setIsLoaded(true);
   };
@@ -91,7 +85,6 @@ function PantryAdminView(props) {
             fetchPantryDetail={() => fetchPantryDetail()}
             employeeOf={employeeOf}
             setPantryId={(id) => {
-              console.log("RECEIVED ID: ", id);
               setPantryId(id);
               fetchPantryDetail(id);
             }}

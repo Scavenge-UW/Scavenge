@@ -139,7 +139,7 @@ function MessageCenter(props) {
    * @param {*} estTime - desire est pickup time to update
    */
   const updateEstPickupTime = (estTime) => {
-    msgFunctions.updateEstPickupTime(selectedID, estTime, pantry_id, () =>
+    msgFunctions.setEstPickupTime(selectedID, estTime, pantry_id, () =>
       fetchResponse()
     );
     setSelectedEstPickup(estTime);
@@ -443,6 +443,7 @@ function MessageCenter(props) {
           active={pageNo === currPage}
           onClick={() => {
             setCurrPage(pageNo);
+            window.scrollTo(0, 0); // move page to top
           }}
         >
           {pageNo}
@@ -454,6 +455,7 @@ function MessageCenter(props) {
       <Pagination.Prev
         onClick={() => {
           setCurrPage(currPage - 1);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === 1}
       />
@@ -463,6 +465,7 @@ function MessageCenter(props) {
       <Pagination.First
         onClick={() => {
           setCurrPage(1);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === 1}
       />
@@ -472,6 +475,7 @@ function MessageCenter(props) {
       <Pagination.Next
         onClick={() => {
           setCurrPage(currPage + 1);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === numPages}
       />
@@ -481,6 +485,7 @@ function MessageCenter(props) {
       <Pagination.Last
         onClick={() => {
           setCurrPage(numPages);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === numPages}
       />
@@ -504,11 +509,16 @@ function MessageCenter(props) {
     return (
       <>
         <ListGroup className="w-responsive w-75 mx-auto mt-4">
+          <Row className="justify-content-center mt-4">
+            {/* top pagination */}
+            {showPagination(selectedTab)}
+          </Row>
           {/* <ViewMessages /> */}
           <Row className="justify-content-center">
             {getMessageItems(selectedTab)}
           </Row>
           <Row className="justify-content-center mt-4">
+            {/* buttom pagination */}
             {showPagination(selectedTab)}
           </Row>
         </ListGroup>

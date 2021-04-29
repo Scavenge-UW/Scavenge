@@ -137,6 +137,7 @@ class DashboardView extends Component {
    * propogates onChange pantry id back to pantry admin view and reload the data
    */
   onChangeSwitchPantry() {
+    console.log("Switching to - ", this.currentPantryName.current.value);
     this.props.setPantryId(
       this.getPantryIdByName(this.currentPantryName.current.value)
     );
