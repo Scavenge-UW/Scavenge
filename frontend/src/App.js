@@ -81,7 +81,7 @@ class App extends Component {
    */
   async signup(user) {
     return AuthService.signup(user).then((response) => {
-      console.log('res', response)
+      console.log("res", response);
       if (response.message) {
         // When the API returns `message`,
         // that means the signup has failed
@@ -172,6 +172,7 @@ class App extends Component {
             <div>
               <Navigation
                 profile={this.state.profile}
+                pantry_id={this.state.employeeOf[0]}
                 logout={this.logout.bind(this)}
                 isAdmin={this.isAdmin.bind(this)}
               />
@@ -184,8 +185,8 @@ class App extends Component {
                 <Route path="/signup">
                   <SignupView signup={this.signup.bind(this)} />
                 </Route>
-                <Route path="/pantry">
-                  <PantryAdminView />
+                <Route path="/pantry/:pantry_id">
+                  <PantryAdminView owns={[...this.state.employeeOf]} />
                 </Route>
                 <Route path="/messages_a/:pantry_id">
                   <Dashboard_adminAllMsg isAdmin={this.isAdmin.bind(this)} />

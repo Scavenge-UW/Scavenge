@@ -131,7 +131,7 @@ class Navigation extends Component {
       case "Signup":
         return "/signup";
       case "Manage Pantry":
-        return "/pantry";
+        return "/pantry/" + this.props.pantry_id;
       case "Search Foods":
         return "/search-food";
       case "Cart":

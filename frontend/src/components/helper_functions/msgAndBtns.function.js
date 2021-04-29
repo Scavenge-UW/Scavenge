@@ -152,9 +152,7 @@ function getMessageOverviewAndTitle(
     return (
       // admin mode
       <>
-        <Row className="justify-content-center mt-4">
-          <h2>{pantryName}</h2>
-        </Row>
+        <Row className="justify-content-center mt-4"></Row>
         <Row className="justify-content-center mt-2">
           <h3>Message Center</h3>
         </Row>

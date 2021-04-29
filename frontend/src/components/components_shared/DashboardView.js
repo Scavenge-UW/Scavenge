@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
 
 // import for components
 import Dashboard_newMsg from "./Dashboard_newMsg";
@@ -234,6 +235,23 @@ class DashboardView extends Component {
         {/* Pantry's name */}
         <Row className="justify-content-center">
           <h2>{this.state.pantryName}</h2>
+          {/* <Form.Group controlId="pantry-manage-form">
+            <Form.Label>
+              <h2>{this.state.pantryName}</h2>
+            </Form.Label>
+            <Form.Control
+              as="select"
+              // ref={this.newDetail}
+              // disabled={this.props.employeeOf.length < 2}
+              // defaultValue={this.props.description}
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </Form.Control>
+          </Form.Group> */}
         </Row>
         {/* Page title */}
         <Row className="justify-content-center">
