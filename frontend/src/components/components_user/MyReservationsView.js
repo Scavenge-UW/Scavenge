@@ -52,26 +52,26 @@ class MyReservationsView extends Component {
     );
   }
 
-  /**
-   *  Mark a reservation as cancelled
-   *
-   * @param {*} rsvn_id
-   */
-  markWithDraw(pantry_id, rsvn_id) {
-    console.log(rsvn_id);
-    PantryService.setCancelled(pantry_id, rsvn_id)
-      .then(() => {
-        this.fetchResponse(); // push changes to be displayed by re-rendered
-        toast.success(
-          "You have successfully withdrawed your reservation with ID " + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error(
-          "Error while withdrawing your reservation with ID " + rsvn_id
-        );
-      });
-  }
+  // /**
+  //  *  Mark a reservation as cancelled
+  //  *
+  //  * @param {*} rsvn_id
+  //  */
+  // markWithDraw(pantry_id, rsvn_id) {
+  //   console.log(rsvn_id);
+  //   PantryService.setCancelled(pantry_id, rsvn_id)
+  //     .then(() => {
+  //       this.fetchResponse(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "You have successfully withdrawed your reservation with ID " + rsvn_id
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error(
+  //         "Error while withdrawing your reservation with ID " + rsvn_id
+  //       );
+  //     });
+  // }
 
   myReservationOverview() {
     const numReservation = [...this.state.rsvns].filter(

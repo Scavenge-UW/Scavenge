@@ -20,6 +20,7 @@ import PantryService from "../../services/pantry.service";
 // other imports
 import { toast } from "react-toastify";
 import MySpinner from "../helper_functions/MySpinner";
+import msgFunctions from "../helper_functions/msgAndBtns.function"; // message helper functions
 
 /**
  * Dashboard View
@@ -32,144 +33,122 @@ import MySpinner from "../helper_functions/MySpinner";
 class DashboardView extends Component {
   constructor(props) {
     super(props);
+
+    const pantry = this.props.pantryDetail;
     this.state = {
-      pantry_id: null,
-      pantryName: "",
-      rsvns: [],
-      description: "",
-      address: "",
-      zipcode: "",
-      city: "",
-      stte: "",
-      phone: "",
-      weblink: "",
+      pantry_id: pantry.pantry_id,
+      pantryName: pantry.name,
+      rsvns: pantry.reservations,
+      description: pantry.details,
+      address: pantry.address,
+      zipcode: pantry.zip,
+      city: pantry.city,
+      stte: pantry.state,
+      phone: pantry.phone_number,
+      weblink: pantry.website,
       // these are needed for 'DashboardDescription Card
       // but not sure if we want to edit this data
-      img_src: "",
-      lat: "",
-      lon: "",
+      img_src: pantry.img_src,
+      lat: pantry.lat,
+      lon: pantry.lon,
 
-      //
-      timeToAdd: null,
+      // time to add
+      timeToAdd: pantry.time_to_add,
 
       // used by DashboardOpenHourCard
-      hours: [],
+      hours: pantry.hours,
     };
-  }
-
-  componentDidMount() {
-    const pantry = this.props.pantryDetail;
-
-    if (pantry) {
-      this.setState({
-        pantry_id: pantry.pantry_id,
-        pantryName: pantry.name,
-        rsvns: pantry.reservations,
-        description: pantry.details,
-        address: pantry.address,
-        zipcode: pantry.zip,
-        city: pantry.city,
-        stte: pantry.state,
-        phone: pantry.phone_number,
-        weblink: pantry.website,
-        img_src: pantry.img_src,
-        lat: pantry.lat,
-        lon: pantry.lon,
-        hours: pantry.hours,
-        timeToAdd: pantry.time_to_add,
-      });
-    }
   }
 
   // ************************************************************************
   // ************************ DashboardMessages *****************************
   // ************************************************************************
-  /**
-   * Mark a reservation as approved
-   *
-   * @param {*} rsvn_id
-   */
-  markAsApproved(rsvn_id) {
-    console.log(rsvn_id);
+  // /**
+  //  * Mark a reservation as approved
+  //  *
+  //  * @param {*} rsvn_id
+  //  */
+  // markAsApproved(rsvn_id) {
+  //   console.log(rsvn_id);
 
-    PantryService.setApproved(this.state.pantry_id, rsvn_id)
-      .then(() => {
-        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-        toast.success(
-          "You have successfully approved the reservation #" + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error("Error while approving reservation #" + rsvn_id);
-      });
-  }
+  //   PantryService.setApproved(this.state.pantry_id, rsvn_id)
+  //     .then(() => {
+  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "You have successfully approved the reservation #" + rsvn_id
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error("Error while approving reservation #" + rsvn_id);
+  //     });
+  // }
 
-  /**
-   * Mark a reservation as picked up
-   *
-   * @param {*} rsvn_id
-   */
-  markAsPickedUp(rsvn_id) {
-    console.log(rsvn_id);
-    PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
-      .then(() => {
-        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-        toast.success(
-          "reservation #" + rsvn_id + " was successfully marked as picked up!"
-        );
-      })
-      .catch(() => {
-        toast.error(
-          "Error while marking reservation #" + rsvn_id + " as picked up."
-        );
-      });
-  }
+  // /**
+  //  * Mark a reservation as picked up
+  //  *
+  //  * @param {*} rsvn_id
+  //  */
+  // markAsPickedUp(rsvn_id) {
+  //   console.log(rsvn_id);
+  //   PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
+  //     .then(() => {
+  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "reservation #" + rsvn_id + " was successfully marked as picked up!"
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error(
+  //         "Error while marking reservation #" + rsvn_id + " as picked up."
+  //       );
+  //     });
+  // }
 
-  /**
-   *  Mark a reservation as cancelled
-   *
-   * @param {*} rsvn_id
-   */
-  markAsCancelled(rsvn_id) {
-    console.log(rsvn_id);
-    PantryService.setCancelled(this.state.pantry_id, rsvn_id)
-      .then(() => {
-        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-        toast.success(
-          "You have successfully cancelled the reservation #" + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error("Error while cancelling reservation #" + rsvn_id);
-      });
-  }
+  // /**
+  //  *  Mark a reservation as cancelled
+  //  *
+  //  * @param {*} rsvn_id
+  //  */
+  // markAsCancelled(rsvn_id) {
+  //   console.log(rsvn_id);
+  //   PantryService.setCancelled(this.state.pantry_id, rsvn_id)
+  //     .then(() => {
+  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "You have successfully cancelled the reservation #" + rsvn_id
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error("Error while cancelling reservation #" + rsvn_id);
+  //     });
+  // }
 
-  /**
-   * Update estimated pickup time to server and prompt message accordingly
-   *
-   * @param {*} rsvn_id - reservation id that is to be updated
-   * @param {*} updTime - the updated estimated pickup time
-   */
-  setEstPickupTime(rsvn_id, updTime) {
-    console.log("3. ", this.state.pantry_id);
-    console.log("3. ", rsvn_id);
-    console.log("3. ", updTime);
-    PantryService.updateEstPickupTime(this.state.pantry_id, rsvn_id, {
-      estimated_pick_up: updTime,
-    })
-      .then(() => {
-        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-        toast.success(
-          "You have successfully updated the estimated pick up time for reservation #" +
-            rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error(
-          "Error while updating pick up time for reservation #" + rsvn_id
-        );
-      });
-  }
+  // /**
+  //  * Update estimated pickup time to server and prompt message accordingly
+  //  *
+  //  * @param {*} rsvn_id - reservation id that is to be updated
+  //  * @param {*} updTime - the updated estimated pickup time
+  //  */
+  // setEstPickupTime(rsvn_id, updTime) {
+  //   console.log("3. ", this.state.pantry_id);
+  //   console.log("3. ", rsvn_id);
+  //   console.log("3. ", updTime);
+  //   PantryService.updateEstPickupTime(this.state.pantry_id, rsvn_id, {
+  //     estimated_pick_up: updTime,
+  //   })
+  //     .then(() => {
+  //       this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
+  //       toast.success(
+  //         "You have successfully updated the estimated pick up time for reservation #" +
+  //           rsvn_id
+  //       );
+  //     })
+  //     .catch(() => {
+  //       toast.error(
+  //         "Error while updating pick up time for reservation #" + rsvn_id
+  //       );
+  //     });
+  // }
 
   // ************************************************************************
   // ******************* DashboardDescriptionCard.js ************************
@@ -276,10 +255,8 @@ class DashboardView extends Component {
         pantry_id={this.state.pantry_id}
         rsvns={this.state.rsvns}
         timeToAdd={this.state.timeToAdd}
-        markAsApproved={this.markAsApproved.bind(this)}
-        markAsPickedUp={this.markAsPickedUp.bind(this)}
-        markAsCancelled={this.markAsCancelled.bind(this)}
-        setEstPickupTime={this.setEstPickupTime.bind(this)}
+        pantryDetail={this.pantry}
+        fetchPantryDetail={() => this.props.fetchPantryDetail()}
       />
     );
   }

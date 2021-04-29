@@ -18,19 +18,20 @@ import SignupView from "./components/Authentication/SignupView";
 
 // admin
 import PantryAdminView from "./components/components_admin/PantryAdminView";
-import Dashboard_adminAllMsg from "./components/components_admin/Dashboard_adminAllMsg";
+// import Dashboard_adminAllMsg from "./components/components_admin/Dashboard_adminAllMsg";
 
 // user
 import CartView from "./components/components_user/CartView";
 import MyWishlistView from "./components/components_user/MyWishlistView";
 import MyReservationsView from "./components/components_user/MyReservationsView";
-import Dashboard_userAllMsg from "./components/components_user/Dashboard_userAllMsg";
+// import Dashboard_userAllMsg from "./components/components_user/Dashboard_userAllMsg";
 
 // shared
 import HomeView from "./components/components_shared/HomeView";
 import HelpView from "./components/components_shared/HelpView";
 import Navigation from "./components/components_shared/Navigation";
 import ProfileView from "./components/components_shared/ProfileView";
+import MessageCenter from "./components/components_shared/MessageCenter";
 import FoodSearchView from "./components/components_shared/FoodSearchView";
 import PantryDetailView from "./components/components_shared/PantryDetailView";
 
@@ -188,11 +189,11 @@ class App extends Component {
                 <Route path="/pantry/:pantry_id">
                   <PantryAdminView owns={[...this.state.employeeOf]} />
                 </Route>
-                <Route path="/messages_a/:pantry_id">
-                  <Dashboard_adminAllMsg isAdmin={this.isAdmin.bind(this)} />
+                <Route path="/messageCenter/:pantry_id">
+                  <MessageCenter isAdmin={() => this.isAdmin()} />
                 </Route>
-                <Route path="/messages_b/:username">
-                  <Dashboard_userAllMsg />
+                <Route path="/messageCenter/:username">
+                  <MessageCenter />
                 </Route>
                 <Route path="/pantries/:pantry_id">
                   <PantryDetailView
