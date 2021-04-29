@@ -14,13 +14,8 @@ import DashboardOpenHourCard from "../components_admin/DashboardOpenHourCard";
 import FooterMsg from "../helper_functions/FooterMsg";
 import formatters from "../helper_functions/DatetimeFormatter.function";
 
-// import for services
-import PantryService from "../../services/pantry.service";
-
 // other imports
-import { toast } from "react-toastify";
 import MySpinner from "../helper_functions/MySpinner";
-import msgFunctions from "../helper_functions/msgAndBtns.function"; // message helper functions
 
 /**
  * Dashboard View
@@ -37,30 +32,55 @@ class DashboardView extends Component {
     // used by admin who is emplpoyee of multiple pantries
     this.currentPantryName = createRef();
 
-    const pantry = this.props.pantryDetail;
     this.state = {
-      pantry_id: pantry.pantry_id,
-      pantryName: pantry.name,
-      rsvns: pantry.reservations,
-      description: pantry.details,
-      address: pantry.address,
-      zipcode: pantry.zip,
-      city: pantry.city,
-      stte: pantry.state,
-      phone: pantry.phone_number,
-      weblink: pantry.website,
+      pantry_id: null,
+      pantryName: "",
+      rsvns: [],
+      description: "",
+      address: "",
+      zipcode: "",
+      city: "",
+      stte: "",
+      phone: "",
+      weblink: "",
       // these are needed for 'DashboardDescription Card
       // but not sure if we want to edit this data
-      img_src: pantry.img_src,
-      lat: pantry.lat,
-      lon: pantry.lon,
+      img_src: "",
+      lat: "",
+      lon: "",
 
       // time to add
-      timeToAdd: pantry.time_to_add,
+      timeToAdd: null,
 
       // used by DashboardOpenHourCard
-      hours: pantry.hours,
+      hours: [],
     };
+  }
+
+  // need a componentDidMount to reflect the change on the DashboardView
+  // (e.g. update detail, switch between pantry)
+  componentDidMount() {
+    const pantry = this.props.pantryDetail;
+
+    if (pantry) {
+      this.setState({
+        pantry_id: pantry.pantry_id,
+        pantryName: pantry.name,
+        rsvns: pantry.reservations,
+        description: pantry.details,
+        address: pantry.address,
+        zipcode: pantry.zip,
+        city: pantry.city,
+        stte: pantry.state,
+        phone: pantry.phone_number,
+        weblink: pantry.website,
+        img_src: pantry.img_src,
+        lat: pantry.lat,
+        lon: pantry.lon,
+        timeToAdd: pantry.time_to_add,
+        hours: pantry.hours,
+      });
+    }
   }
 
   // ************************************************************************
@@ -113,9 +133,37 @@ class DashboardView extends Component {
   // ************************************************************************
 
   /**
+   * helper function for switching pantry
+   * propogates onChange pantry id back to pantry admin view and reload the data
+   */
+  onChangeSwitchPantry() {
+    this.props.setPantryId(
+      this.getPantryIdByName(this.currentPantryName.current.value)
+    );
+  }
+
+  /**
+   * Returns the name of the pantry, given pantry_id
+   */
+  getPantryNameById(id) {
+    for (const p of this.props.pantries) {
+      if (p.pantry_id === id) return p.name;
+    }
+    return "pantry name not found.";
+  }
+
+  /**
+   * Returns the id of the pantry, given pantry_name
+   */
+  getPantryIdByName(name) {
+    for (const p of this.props.pantries) {
+      if (p.name === name) return p.pantry_id;
+    }
+    return -1;
+  }
+
+  /**
    * Returns the textual description of the current dashboard.
-   *
-   * @returns
    */
   getDashboardOverview() {
     const numReservation = [...this.state.rsvns].filter(
@@ -126,24 +174,27 @@ class DashboardView extends Component {
       <>
         {/* Pantry's name */}
         <Row className="justify-content-center">
-          {/* <h2>{this.state.pantryName}</h2> */}
-          <Form.Group controlId="pantry-manage-form">
-            <Form.Label>
-              <h2>{this.state.pantryName}</h2>
-            </Form.Label>
-            <Form.Control
-              as="select"
-              ref={this.currentPantryName}
-              disabled={this.props.employeeOf.length < 2}
-              defaultValue={this.state.pantryName}
-            >
-              <option>{this.state.pantryName}</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </Form.Control>
-          </Form.Group>
+          {this.props.employeeOf.length > 1 ? (
+            // if the account owner has work at more than 1 pantries
+            <Form.Group controlId="pantry-manage-form">
+              <Form.Label>
+                <h2>{this.state.pantryName}</h2>
+              </Form.Label>
+              <Form.Control
+                as="select"
+                ref={this.currentPantryName}
+                onChange={() => this.onChangeSwitchPantry()}
+                defaultValue={this.getPantryNameById(this.state.pantry_id)}
+              >
+                {this.props.employeeOf.map((pid) => (
+                  <option key={pid}>{this.getPantryNameById(pid)}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          ) : (
+            // if the account owner has only 1 pantries
+            <h2>{this.state.pantryName}</h2>
+          )}
         </Row>
         {/* Page title */}
         <Row className="justify-content-center">

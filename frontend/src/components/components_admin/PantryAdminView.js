@@ -27,10 +27,10 @@ function PantryAdminView(props) {
   const [pantryDetail, setPantryDetail] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false); // used for spinner
 
-  const default_pantry_id = parseInt(useParams().pantry_id); // set default pantry id on first load
   const employeeOf = props.owns; // list of pantries
-  const [pantry_id, setPantry_id] = useState(default_pantry_id); // admin can switch between pantry
-
+  const default_pantry_id = parseInt(useParams().pantry_id); // set default pantry id on first load
+  const [pantry_id, setPantryId] = useState(default_pantry_id); // admin can switch between pantry
+  const [pantries, setPantries] = useState([]);
   /**
    * Fetch pantry detail on init
    *
@@ -41,15 +41,27 @@ function PantryAdminView(props) {
 
   /**
    * Fetch pantry detail
-   *
    */
-  const fetchPantryDetail = async (pantry_id = null) => {
+  const fetchPantryDetail = async (id = null) => {
     setIsLoaded(false);
-    const detail = await PantryService.getDetail(
-      pantry_id ? pantry_id : default_pantry_id
-    );
-    console.log(employeeOf);
+    const detail = await PantryService.getDetail(id ? id : pantry_id);
     setPantryDetail(detail);
+
+    // set current pantry_id
+    setPantryId(id ? id : pantry_id);
+
+    // get all pantries to load panty names to switching pantry profiles
+    const all_pantries = await PantryService.getPantries();
+    // setPantries(all_pantries.result);
+    setPantries([...Object.values(all_pantries.result)]);
+
+    // console.log("DEBUG-01: ");
+    // console.log(pantries);
+
+    // console.log("DEBUG-02: ");
+    // console.log(all_pantries);
+
+    // set isLoaded to true
     setIsLoaded(true);
   };
 
@@ -74,10 +86,15 @@ function PantryAdminView(props) {
       >
         <Tab eventKey="dashboard" title="Pantry Dashboard">
           <DashboardView
+            pantries={pantries}
             pantryDetail={pantryDetail}
-            fetchPantryDetail={fetchPantryDetail}
+            fetchPantryDetail={() => fetchPantryDetail()}
             employeeOf={employeeOf}
-            setPantry_id={() => setPantry_id()}
+            setPantryId={(id) => {
+              console.log("RECEIVED ID: ", id);
+              setPantryId(id);
+              fetchPantryDetail(id);
+            }}
           />
         </Tab>
         <Tab eventKey="inventory" title="Manage Inventory">
