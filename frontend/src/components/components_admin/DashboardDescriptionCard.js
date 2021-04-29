@@ -316,7 +316,7 @@ class DashboardDescriptionCard extends Component {
                   <Form.Group controlId="formTimeTOAdd">
                     <Form.Label>
                       <strong>
-                        - Time To Add (in hours):{" "}
+                        - Time To Add (in minutes):{" "}
                         {ddtooltip.getTooltip("time_to_add")}
                       </strong>
                     </Form.Label>

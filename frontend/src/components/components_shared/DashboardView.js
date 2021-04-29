@@ -218,10 +218,10 @@ class DashboardView extends Component {
     return (
       <Dashboard_newMsg
         adminMode={true}
-        pantry_id={this.state.pantry_id}
         rsvns={this.state.rsvns}
-        timeToAdd={this.state.timeToAdd}
         pantryDetail={this.pantry}
+        pantry_id={this.state.pantry_id}
+        timeToAdd={this.state.timeToAdd}
         fetchPantryDetail={() => this.props.fetchPantryDetail()}
       />
     );

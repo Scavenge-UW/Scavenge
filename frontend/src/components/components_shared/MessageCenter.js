@@ -24,6 +24,7 @@ import PantryService from "../../services/pantry.service";
 import ReservationService from "../../services/reservation.service";
 
 // other imports
+import Fuse from "fuse.js"; // for searching reservations
 import "../../css/common.css";
 
 // imports for helper functions
@@ -149,8 +150,6 @@ function MessageCenter(props) {
    * Show control buttons for admin mode
    */
   const showControls = (rsvn) => {
-    var controls;
-
     // enable approved button
     const approveButton = !msgFunctions.approvedButtonIsHidden(rsvn) && ( // Approve this reservation Button
       <Button
@@ -251,8 +250,8 @@ function MessageCenter(props) {
         md="auto"
         onClick={() => {
           setSelectedID(rsvn.reservation_id);
-          setSelectedEstPickup(rsvn.estimated_pick_up);
           openEditEstModal();
+          // updateEstPickupTime(rsvn.estimated_pick_up);
         }}
       >
         Edit Estimated Pickup Time
@@ -348,11 +347,13 @@ function MessageCenter(props) {
           <hr />
           {/* Body (status) */}
           <ListGroupItemText>
-            {username
-              ? // food seeker user
-                msgFunctions.getMessageStatus(rsvn, false) // rsvn, adminMode
-              : // admin user
-                msgFunctions.getMessageStatus(rsvn)}
+            {
+              username
+                ? // food seeker user
+                  msgFunctions.getMessageStatus(rsvn, null) // rsvn, time_to_add
+                : // admin user
+                  msgFunctions.getMessageStatus(rsvn, pantryDetail.time_to_add) // rsvn, time_to_add
+            }
           </ListGroupItemText>
 
           <Row className="justify-content-center align-items-center">

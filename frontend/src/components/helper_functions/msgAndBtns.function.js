@@ -254,11 +254,28 @@ function editEstButtonIsHidden(rsvn) {
   else return false;
 }
 
-// TODO: added bold text for changed estimated pickup time
 /**
- * return formatted reservation status.
+ * return formatted reservation status with updates shown in bold, default shown in regular font.
  */
-function getMessageStatus(rsvn) {
+function getMessageStatus(rsvn, time_to_add) {
+  let isModified = false;
+  // if est pickup time - order time !== time_to_add, then it's val has been updated
+  if (time_to_add) {
+    if (
+      formatters.getTimeElapsed(rsvn.order_time, "minutes") -
+        formatters.getTimeElapsed(rsvn.estimated_pick_up, "minutes") !==
+      time_to_add
+    )
+      isModified = true;
+  }
+  // console.log("id = ", rsvn.reservation_id);
+  // console.log("time_to_add = ", time_to_add);
+  // console.log(
+  //   "time diff = ",
+  //   formatters.getTimeElapsed(rsvn.order_time, "minutes") -
+  //     formatters.getTimeElapsed(rsvn.estimated_pick_up, "minutes")
+  // );
+
   return [
     {
       key: "ID:",
@@ -277,7 +294,13 @@ function getMessageStatus(rsvn) {
     },
     {
       key: "ESTIMATED PICK UP AT:",
-      value: formatters.datetime(rsvn.estimated_pick_up),
+      value: isModified ? (
+        // est pickup is modified, show in bold text
+        <strong>{formatters.datetime(rsvn.estimated_pick_up)}</strong>
+      ) : (
+        // not midified, show in regular text
+        formatters.datetime(rsvn.estimated_pick_up)
+      ),
       bgColor: "#F7F7F7",
     },
     {

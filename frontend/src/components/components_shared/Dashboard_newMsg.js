@@ -290,7 +290,10 @@ class Dashboard_newMsg extends Component {
           <hr />
           {/* Body (status) */}
           <ListGroupItemText>
-            {msgFunctions.getMessageStatus(rsvn)}
+            {msgFunctions.getMessageStatus(
+              rsvn,
+              this.props.adminMode ? this.props.timeToAdd : null
+            )}
           </ListGroupItemText>
 
           <Row className="justify-content-center align-items-center">
