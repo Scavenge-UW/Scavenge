@@ -180,7 +180,9 @@ class DashboardView extends Component {
             // if the account owner has work at more than 1 pantries
             <Form.Group controlId="pantry-manage-form">
               <Form.Label>
-                <h2>{this.state.pantryName}</h2>
+                <Col className="text-center">
+                  <h2>{this.state.pantryName}</h2>
+                </Col>
               </Form.Label>
               <Form.Control
                 as="select"
@@ -195,7 +197,9 @@ class DashboardView extends Component {
             </Form.Group>
           ) : (
             // if the account owner has only 1 pantries
-            <h2>{this.state.pantryName}</h2>
+            <Col className="text-center">
+              <h2>{this.state.pantryName}</h2>
+            </Col>
           )}
         </Row>
         {/* Page title */}
