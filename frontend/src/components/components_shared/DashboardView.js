@@ -16,6 +16,7 @@ import formatters from "../helper_functions/DatetimeFormatter.function";
 
 // other imports
 import MySpinner from "../helper_functions/MySpinner";
+import ScrollToTop from "../helper_functions/ScrollToTop.function";
 
 /**
  * Dashboard View
@@ -311,6 +312,11 @@ class DashboardView extends Component {
 
           {/* Open Hours */}
           {this.getOpenHoursCards()}
+
+          {/* scroll to top button */}
+          <Row className="justify-content-center mt-4">
+            <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
+          </Row>
 
           <Row className="justify-content-center">
             <FooterMsg />

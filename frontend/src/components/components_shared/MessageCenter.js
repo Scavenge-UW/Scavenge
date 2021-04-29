@@ -445,6 +445,7 @@ function MessageCenter(props) {
             setCurrPage(pageNo);
             window.scrollTo(0, 0); // move page to top
           }}
+          className="mr-1"
         >
           {pageNo}
         </Pagination.Item>
@@ -458,6 +459,7 @@ function MessageCenter(props) {
           window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === 1}
+        className="mr-1"
       />
     );
     // go to page 1 button
@@ -468,6 +470,7 @@ function MessageCenter(props) {
           window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === 1}
+        className="mr-1"
       />
     );
     // next page button
@@ -478,6 +481,7 @@ function MessageCenter(props) {
           window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === numPages}
+        className="mr-1"
       />
     );
     // go to last page button
@@ -488,6 +492,7 @@ function MessageCenter(props) {
           window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === numPages}
+        className="mr-1"
       />
     );
 
