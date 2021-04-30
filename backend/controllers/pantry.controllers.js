@@ -1,4 +1,7 @@
+require('dotenv').config();
 const db = require('../models/pantry.models.js');
+const nodemailer = require('nodemailer');
+const userDb = require('../models/user.models.js');
 
 exports.getAllPantriesAction = (req, res) => {
   let result = {};
@@ -9,6 +12,7 @@ exports.getAllPantriesAction = (req, res) => {
         result[element['pantry_id']]['foods'] = {};
         result[element['pantry_id']]['reservations'] = {};
         result[element['pantry_id']]['hours'] = {};
+        result[element['pantry_id']]['employees'] = {};
       }
       if ('reservation_id' in element) {
         result[element['pantry_id']]['reservations'][element['reservation_id']] = {};
@@ -56,6 +60,7 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['hours'][element['day']]['open']    = element['open'];
       result[element['pantry_id']]['hours'][element['day']]['close']   = element['close'];
       result[element['pantry_id']]['hours'][element['day']]['detail']  = element['detail'];
+      
     });
 
     // Convert into array format without using ids as keys
@@ -125,6 +130,7 @@ exports.getAllPantriesAction = (req, res) => {
 
         pantryInfo['hours'].push(hour);
       }
+  
       resultsArr.push(pantryInfo);
     }
     result = resultsArr;
@@ -143,6 +149,7 @@ exports.getPantryDetailAction = (req, res) => {
     result['foods'] = {};
     result['reservations'] = {};
     result['hours'] = {};
+    result['employees'] = {};
     pantryDetail.forEach(element => {
       if ('reservation_id' in element) {
         result['reservations'][element['reservation_id']] = {};
@@ -190,6 +197,7 @@ exports.getPantryDetailAction = (req, res) => {
       result['hours'][element['day']]['open']    = element['open'];
       result['hours'][element['day']]['close']   = element['close'];
       result['hours'][element['day']]['detail']  = element['detail'];
+
     });
 
     // Format the data
@@ -257,7 +265,7 @@ exports.getPantryDetailAction = (req, res) => {
       hour['detail'] = hourData['detail'];
 
       pantryInfo['hours'].push(hour);
-    }
+    }  
 
     return res.status(200).json(pantryInfo);
   }).catch(error => {
@@ -312,6 +320,7 @@ exports.updateEstimatedPickUpAction = (req, res) => {
 exports.updateReservationAction = (req, res) => {
   db.updateReservation(req, res).then(async data => {
     if (req.params.action == "cancel") {
+      // Add foods back into DB that they reserved
       try {
         var resFood = await(db.getResFood(req, res));
         resFood.forEach(async(element, index) => {
@@ -321,9 +330,40 @@ exports.updateReservationAction = (req, res) => {
         console.log(error);
         return res.status(500).json({ message: "Error in query. Failed to cancel reservation." });
       }
+    } else if (req.params.action == "approve") {
+      // Send approval email to user
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'scavenge.uw@gmail.com',
+          pass: process.env.EMAIL_PASSWORD
+        }
+      });
+
+      let resInfo = await userDb.getUserProfileFromRes(req.params.pantry_id, req.params.reservation_id);
+      resInfo = JSON.parse(JSON.stringify(resInfo));
+      const userEmail = resInfo[0]['email'];
+      const userFirstName = resInfo[0]['first_name'];
+      const pantryName = resInfo[0]['name'];
+      
+      const mailOptions = {
+        from: 'scavenge.uw@gmail.com',
+        to: userEmail,
+        subject: 'Scavenge - Reservation Approved',
+        html: `<p>Hi, ${userFirstName},</p><p>Your reservation at <strong>${pantryName}</strong> has been approved! Please view it at <a>https://scavenge-uw.herokuapp.com/</a>.</p><p>Thanks, </p><p>Scavenge UW Team</p>`
+      };
+      
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
     }
     return res.status(200).json(data);
   }).catch(error => {
+    console.log(error);
     return res.status(500).json({ message: "Error in query. Failed to update reservation." });
   });
 }

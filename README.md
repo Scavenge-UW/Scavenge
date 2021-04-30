@@ -17,7 +17,7 @@ Search for food you need at local food pantries and stay up-to-date on what's av
 ### Testing Instructions
 1. Frontend: in /frontend/
 
-   Run `npm run test -- --coverage --watchAll=false --silent`
+   Run `npm run test-coverage`
    
 2. Backend: in the root directory (without the server running)
 

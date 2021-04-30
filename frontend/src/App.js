@@ -18,19 +18,20 @@ import SignupView from "./components/Authentication/SignupView";
 
 // admin
 import PantryAdminView from "./components/components_admin/PantryAdminView";
-import Dashboard_adminAllMsg from "./components/components_admin/Dashboard_adminAllMsg";
+// import Dashboard_adminAllMsg from "./components/components_admin/Dashboard_adminAllMsg";
 
 // user
 import CartView from "./components/components_user/CartView";
 import MyWishlistView from "./components/components_user/MyWishlistView";
 import MyReservationsView from "./components/components_user/MyReservationsView";
-import Dashboard_userAllMsg from "./components/components_user/Dashboard_userAllMsg";
+// import Dashboard_userAllMsg from "./components/components_user/Dashboard_userAllMsg";
 
 // shared
 import HomeView from "./components/components_shared/HomeView";
 import HelpView from "./components/components_shared/HelpView";
 import Navigation from "./components/components_shared/Navigation";
 import ProfileView from "./components/components_shared/ProfileView";
+import MessageCenter from "./components/components_shared/MessageCenter";
 import FoodSearchView from "./components/components_shared/FoodSearchView";
 import PantryDetailView from "./components/components_shared/PantryDetailView";
 
@@ -81,9 +82,16 @@ class App extends Component {
    */
   async signup(user) {
     return AuthService.signup(user).then((response) => {
+      console.log("res", response);
       if (response.message) {
         // When the API returns `message`,
         // that means the signup has failed
+        if (response.message.failureMsg) {
+          // Duplicate username
+          toast.error(response.message.failureMsg);
+          return -1;
+        }
+
         toast.error(response.message);
         return -1;
       } else {
@@ -165,6 +173,7 @@ class App extends Component {
             <div>
               <Navigation
                 profile={this.state.profile}
+                pantry_id={this.state.employeeOf[0]}
                 logout={this.logout.bind(this)}
                 isAdmin={this.isAdmin.bind(this)}
               />
@@ -177,14 +186,12 @@ class App extends Component {
                 <Route path="/signup">
                   <SignupView signup={this.signup.bind(this)} />
                 </Route>
-                <Route path="/pantry">
-                  <PantryAdminView />
+                <Route path="/pantry/:pantry_id">
+                  <PantryAdminView owns={[...this.state.employeeOf]} />
                 </Route>
-                <Route path="/messages_a/:pantry_id">
-                  <Dashboard_adminAllMsg isAdmin={this.isAdmin.bind(this)} />
-                </Route>
-                <Route path="/messages_b/:username">
-                  <Dashboard_userAllMsg />
+                <Route path="/messageCenter/:param">
+                  {/* param: either username or pantry_id based on user type */}
+                  <MessageCenter isAdmin={() => this.isAdmin()} />
                 </Route>
                 <Route path="/pantries/:pantry_id">
                   <PantryDetailView

@@ -6,16 +6,20 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Tooltip from "react-bootstrap/Tooltip";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 // other imports
 import "../../css/common.css";
 import { toast } from "react-toastify";
 import { VscCircleFilled } from "react-icons/vsc";
+import { BsInfoCircle } from "react-icons/bs";
 
 // imports for actions and helper function
 import store from "../../store";
+import FoodService from "../../services/food.service";
 import PantryService from "../../services/pantry.service";
 import WishlistService from "../../services/wishlist.service";
 import OneClickReserveModal from "../modals/OneClickReserveModal";
@@ -33,11 +37,26 @@ class FoodItemCard extends Component {
     this.cartQuantity = React.createRef(); // for civilian user reserving foods
 
     this.state = {
+      errors: {}, // used by validating input form forquantity
       editMode: false,
       showOneClickReserveModal: false,
       cartQuantity: 0,
-      decrementBtnDisabled: false,
+      decrementBtnDisabled: true,
+      foodsInfo: [],
     };
+  }
+
+  // used to load food info to display food nutrition info
+  componentDidMount() {
+    this.fetchFoodsInfo();
+  }
+
+  fetchFoodsInfo() {
+    FoodService.getFoods().then((foods) => {
+      this.setState({
+        foodsInfo: foods,
+      });
+    });
   }
 
   /**
@@ -72,17 +91,72 @@ class FoodItemCard extends Component {
     }
   }
 
+  /**
+   * Return nutrition tooltip and on hover over display nutrition index
+   *
+   * @returns nutrition tool tip on hover over
+   */
+  showNutritionTooltip() {
+    const getNutrition = (id) => {
+      if (this.state.foodsInfo.length) {
+        for (const info of this.state.foodsInfo) {
+          if (id === info.id) return info.NUTRITION_COLUMNS_PLACEHOLDER;
+        }
+      }
+      return -1;
+    };
+
+    const renderTooltip = () => (
+      <Tooltip id="nutrition-info-tooltip">
+        <strong>
+          Nutrition index: {getNutrition(this.props.foodItem.food_id)}
+        </strong>
+      </Tooltip>
+    );
+
+    return (
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 150, hide: 400 }} // delay for show and hide the tooltip
+        overlay={renderTooltip()}
+      >
+        <BsInfoCircle
+          size="1.3rem"
+          color="#48AAAD"
+          onClick={() => {
+            console.log("hello");
+          }}
+        />
+      </OverlayTrigger>
+    );
+  }
+
   setShowOneClickReserveModal(show) {
     this.setState({
       showOneClickReserveModal: show,
     });
   }
 
-  /**
-   * TODO: This function is fired when One Click Reserve button is clicked
-   *
-   */
   onClickOneClickReserve() {
+    const input = Math.floor(parseInt(this.cartQuantity.current.value));
+    // ------ validating:
+    let allErrors = null;
+    // validation for quantity number
+    if (
+      input < 0 || // must be positive
+      input === null || // not bu null
+      !Number.isInteger(input) // is a number
+    ) {
+      allErrors = {};
+      allErrors.quantity = "Please provide a valid quantity number.";
+    }
+    if (allErrors) {
+      this.setState({ errors: allErrors });
+      return;
+    }
+    // ------ done validating
+
+    // process input data with logged in status and server
     if (!this.props.isLoggedIn()) {
       toast.info("Please log in to reserve items.");
     } else if (this.props.isAdmin()) {
@@ -92,16 +166,32 @@ class FoodItemCard extends Component {
     } else {
       this.setShowOneClickReserveModal(true);
       this.setState({
-        cartQuantity: this.cartQuantity.current.value,
+        cartQuantity: input,
+        errors: {},
       });
     }
   }
 
-  /**
-   * TODO: This function is fired when Add to Cart button is clicked
-   *
-   */
   onClickAddToCart() {
+    const input = Math.floor(parseInt(this.cartQuantity.current.value));
+    // ------ validating:
+    let allErrors = null;
+    // validation for quantity number
+    if (
+      input < 0 || // must be positive
+      input === null || // not bu null
+      !Number.isInteger(input) // is a number
+    ) {
+      allErrors = {};
+      allErrors.quantity = "Please provide a valid quantity number.";
+    }
+    if (allErrors) {
+      this.setState({ errors: allErrors });
+      return;
+    }
+    // ------ done validating
+
+    // process input data with logged in status and server
     if (!this.props.isLoggedIn()) {
       toast.info("Please log in to add items to cart.");
     } else if (this.props.isAdmin()) {
@@ -114,11 +204,13 @@ class FoodItemCard extends Component {
       store.dispatch(
         addToCart({
           item: this.props.foodItem,
-          cartQuantity: this.cartQuantity.current.value,
+          cartQuantity: input,
           pantry: this.props.pantry,
         })
       );
       toast.info("🛒 " + itemName + " was added to your cart!");
+
+      this.setState({ erros: {} });
     }
   }
 
@@ -185,19 +277,34 @@ class FoodItemCard extends Component {
    *
    */
   onClickUpdateItemQuantity() {
+    const input = Math.floor(parseInt(this.newQuantity.current.value));
+    // ------ validating:
+    let allErrors = null;
+    // validation for quantity number
+    if (
+      input < 0 || // must be positive
+      input === null || // not bu null
+      !Number.isInteger(input) // is a number
+    ) {
+      allErrors = {};
+      allErrors.quantity = "Please provide a valid quantity number.";
+    }
+    if (allErrors) {
+      this.setState({ errors: allErrors });
+      return;
+    }
+    // ------ done validating
+
     let itemName = this.props.foodItem.food_name;
     let food_id = this.props.foodItem.food_id;
 
     if (window.confirm("Are you sure you want to update " + itemName + "?")) {
       PantryService.updateFoodItem(1, food_id, {
-        quantity: this.newQuantity.current.value,
+        quantity: input,
       })
         .then(() => {
           toast.success(itemName + "'s quantity was successfully updated!");
-          this.props.updateItemQuantity(
-            food_id,
-            this.newQuantity.current.value
-          );
+          this.props.updateItemQuantity(food_id, input);
           this.deactivateEditMode();
         })
         .catch((response) => {
@@ -265,7 +372,13 @@ class FoodItemCard extends Component {
       return (
         <Row>
           <Col>
-            <Button block onClick={this.onClickUpdateItemQuantity.bind(this)}>
+            <Button
+              block
+              onClick={() => {
+                this.setState({ errors: {} });
+                this.onClickUpdateItemQuantity();
+              }}
+            >
               Update
             </Button>
           </Col>
@@ -274,7 +387,10 @@ class FoodItemCard extends Component {
               id="btn-cancel-edit-quantity"
               block
               variant="danger"
-              onClick={this.deactivateEditMode.bind(this)}
+              onClick={() => {
+                this.setState({ errors: {} });
+                this.deactivateEditMode();
+              }}
             >
               Cancel
             </Button>
@@ -317,8 +433,12 @@ class FoodItemCard extends Component {
                     defaultValue={this.props.foodItem.quantity}
                     ref={this.newQuantity}
                     min="0" // test
+                    isInvalid={!!this.state.errors.quantity} // used for form control feedback to validate
                   />
                 </Form.Group>
+                <Form.Control.Feedback type="invalid">
+                  {this.state.errors.quantity}
+                </Form.Control.Feedback>
               </Form>
             </Col>
             <Col>
@@ -354,14 +474,14 @@ class FoodItemCard extends Component {
       !this.props.wishlistMode
     ) {
       return (
-        <Row className="mt-4 justify-content-end align-items-end">
-          <Col>
-            <Row>
-              <Form.Label column="sm">Quantity to Reserve</Form.Label>
-            </Row>
-            <Row>
-              <Col className="col-8">
-                <InputGroup>
+        <>
+          <Row className="mt-2 mb-3 justify-content-center">
+            <Col>
+              <Row className="text-center">
+                <Form.Label column="sm">Quantity to Reserve</Form.Label>
+              </Row>
+              <Row className="text-center justify-content-center">
+                <InputGroup className="mt-1 w-responsive w-50" md="auto">
                   {/* Increment Button */}
                   <InputGroup.Prepend>
                     <Button
@@ -372,7 +492,7 @@ class FoodItemCard extends Component {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) + 1;
                         // set decrement button to enabled if quantity > 0
-                        if (parseInt(this.cartQuantity.current.value) > 0)
+                        if (parseInt(this.cartQuantity.current.value) > 1)
                           this.setState({ decrementBtnDisabled: false });
                         this.onUpdateCartItemQuantity();
                       }}
@@ -384,18 +504,21 @@ class FoodItemCard extends Component {
 
                   {/* Display quantity form */}
                   <FormControl
+                    required
+                    min="1" // VALIDATE: set min to 1
                     type="number"
+                    ref={this.cartQuantity}
+                    defaultValue={1}
                     onChange={() => {
+                      this.setState({ errors: {} });
                       this.onUpdateCartItemQuantity();
-                      if (parseInt(this.cartQuantity.current.value) < 1)
+                      // VALIDATE: disabled decrement button accordingly
+                      if (parseInt(this.cartQuantity.current.value) < 2)
                         this.setState({ decrementBtnDisabled: true });
                       else this.setState({ decrementBtnDisabled: false });
-                      console.log(this.state.decrementBtnDisabled);
                     }}
+                    isInvalid={!!this.state.errors.quantity} // used for form control feedback to validate
                     disabled={!this.isInStock()}
-                    defaultValue={1}
-                    ref={this.cartQuantity}
-                    min="0" // VALIDATE: set min to 0
                   />
 
                   {/* Decrement Button */}
@@ -408,7 +531,7 @@ class FoodItemCard extends Component {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) - 1;
                         // VALIDATE: set decrement button to disabled if quantity <= 1
-                        if (parseInt(this.cartQuantity.current.value) < 1)
+                        if (parseInt(this.cartQuantity.current.value) < 2)
                           this.setState({ decrementBtnDisabled: true });
                         // update quantity displayed
                         this.onUpdateCartItemQuantity();
@@ -420,52 +543,58 @@ class FoodItemCard extends Component {
                       -
                     </Button>
                   </InputGroup.Append>
+                  <Form.Control.Feedback type="invalid">
+                    {this.state.errors.quantity}
+                  </Form.Control.Feedback>
                 </InputGroup>
-              </Col>
-            </Row>
-          </Col>
-          <Col className="col-6 text-right">
+              </Row>
+            </Col>
+          </Row>
+          <Row className="justify-content-center">
             {/* display One Click Reserve buttons if item is in stock */}
             {this.isInStock() && (
-              <Row className="justify-content-end mb-1">
-                <Button
-                  id="btn-one-click-reserve"
-                  block
-                  variant="success"
-                  onClick={this.onClickOneClickReserve.bind(this)}
-                >
-                  One Click Reserve
-                </Button>
-              </Row>
+              <Button
+                id="btn-one-click-reserve"
+                variant="success"
+                type="submit"
+                className="m-2"
+                onClick={() => {
+                  this.setState({ errors: {} });
+                  this.onClickOneClickReserve();
+                }}
+              >
+                One Click Reserve
+              </Button>
             )}
             {/* display Add to Cart buttons if item is in stock */}
             {this.isInStock() && (
-              <Row className="justify-content-end mb-1">
-                <Button
-                  id="btn-add-to-cart"
-                  block
-                  variant="info"
-                  onClick={this.onClickAddToCart.bind(this)}
-                >
-                  Add to Cart
-                </Button>
-              </Row>
+              <Button
+                id="btn-add-to-cart"
+                variant="info"
+                type="submit"
+                className="m-2"
+                onClick={() => {
+                  this.setState({ errors: {} });
+                  this.onClickAddToCart();
+                }}
+              >
+                Add to Cart
+              </Button>
             )}
             {/* display Add to Wishlist buttons if item is out of stock */}
             {!this.isInStock() && (
-              <Row className="justify-content-end">
-                <Button
-                  id="btn-add-to-wishlist"
-                  block
-                  variant="dark"
-                  onClick={this.onClickAddToWishlist.bind(this)}
-                >
-                  Add to Wishlist
-                </Button>
-              </Row>
+              <Button
+                id="btn-add-to-wishlist"
+                variant="dark"
+                type="submit"
+                className="m-2"
+                onClick={this.onClickAddToWishlist.bind(this)}
+              >
+                Add to Wishlist
+              </Button>
             )}
-          </Col>
-        </Row>
+          </Row>
+        </>
       );
     }
   }
@@ -491,8 +620,12 @@ class FoodItemCard extends Component {
                       className="increment-cart-item"
                       variant="outline-primary"
                       onClick={() => {
+                        // increment cartQuantity by 1
                         this.cartQuantity.current.value =
-                          parseInt(this.cartQuantity.current.value) + 1; // increment cartQuantity by 1
+                          parseInt(this.cartQuantity.current.value) + 1;
+                        // set decrement button to enabled if quantity > 0
+                        if (parseInt(this.cartQuantity.current.value) > 1)
+                          this.setState({ decrementBtnDisabled: false });
                         this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
@@ -502,36 +635,45 @@ class FoodItemCard extends Component {
                   </InputGroup.Prepend>
                   {/* TODO: validate valid input quantity number */}
                   <FormControl
-                    onChange={this.onUpdateCartItemQuantity.bind(this)}
                     type="number"
                     defaultValue={this.props.cartQuantity}
                     ref={this.cartQuantity}
                     min="1" // test
+                    onChange={() => {
+                      this.setState({ errors: {} });
+                      this.onUpdateCartItemQuantity();
+                      // VALIDATE: disabled decrement button accordingly
+                      if (parseInt(this.cartQuantity.current.value) < 2)
+                        this.setState({ decrementBtnDisabled: true });
+                      else this.setState({ decrementBtnDisabled: false });
+                    }}
+                    isInvalid={!!this.state.errors.quantity} // used for form control feedback to validate
                   />
                   <InputGroup.Append>
                     <Button
                       className="decrement-cart-item"
                       variant="outline-primary"
                       onClick={() => {
+                        // decrement cartQuantity by 1
                         this.cartQuantity.current.value =
-                          parseInt(this.cartQuantity.current.value) - 1; // decrement cartQuantity by 1
+                          parseInt(this.cartQuantity.current.value) - 1;
+                        // VALIDATE: set decrement button to disabled if quantity <= 1
+                        if (parseInt(this.cartQuantity.current.value) < 2)
+                          this.setState({ decrementBtnDisabled: true });
+                        // update quantity displayed
                         this.onUpdateCartItemQuantity();
                       }}
-                      disabled={!this.isInStock()}
+                      disabled={
+                        !this.isInStock() || this.state.decrementBtnDisabled
+                      }
                     >
                       -
                     </Button>
                   </InputGroup.Append>
+                  <Form.Control.Feedback type="invalid">
+                    {this.state.errors.quantity}
+                  </Form.Control.Feedback>
                 </InputGroup>
-              </Col>
-              <Col>
-                {/* <Button
-                  onClick={this.onClickUpdateCartItemQuantity.bind(this)}
-                  size="sm"
-                  block
-                >
-                  Update
-                </Button> */}
               </Col>
             </Row>
           </Col>
@@ -636,22 +778,25 @@ class FoodItemCard extends Component {
         <>
           <Card className="food-item">
             <Card.Body>
-              <Card.Title className="mb-4">
+              <Card.Title className="mb-3">
                 <Row className="justify-content-between align-items-center">
                   <Col className="text-left">
-                    <span id="food_name">{food_name}</span>
+                    <span>
+                      <span id="food_name">{food_name}</span>{" "}
+                      {this.showNutritionTooltip()}
+                    </span>
                   </Col>
                   <Col className="text-right">
                     {/* Show if Item is in stock */}
                     {this.showStockInfo()}
                   </Col>
                 </Row>
-                {this.showReserveControls()}
-                {this.showAdminControls()}
-                {this.showWishlistControls()}
-                {this.showCartControls()}
-                {this.showPantryName()}
               </Card.Title>
+              {this.showReserveControls()}
+              {this.showAdminControls()}
+              {this.showWishlistControls()}
+              {this.showCartControls()}
+              {this.showPantryName()}
             </Card.Body>
           </Card>
           {this.showModal()}

@@ -188,10 +188,10 @@ class ListView extends Component {
         </Row>
         <Row className="Search justify-content-center mb-2">
           <input
-            className="searchInput w-responsive w-75"
+            className="SearchInput w-responsive w-75"
             type="text"
             onChange={(e) => this.searchData(e.target.value)}
-            placeholder="Search by name or location"
+            placeholder="Search by pantry name, address, or zip code"
           />
           <span className="SearchSpan">
             <FontAwesomeIcon className="pin" icon={faSearch} />

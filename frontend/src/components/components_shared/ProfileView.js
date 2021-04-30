@@ -235,7 +235,7 @@ class ProfileView extends Component {
             >
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
-                type={"text"}
+                type={"number"}
                 value={this.state.phone}
                 placeholder="(123) 456 7890"
                 onChange={(e) => this.setState({ phone: e.target.value })}

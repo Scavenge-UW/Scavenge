@@ -1,23 +1,22 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 
 // import for bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
 
 // import for components
 import Dashboard_newMsg from "./Dashboard_newMsg";
 import DashboardDescriptionCard from "../components_admin/DashboardDescriptionCard";
 import DashboardOpenHourCard from "../components_admin/DashboardOpenHourCard";
+import FooterMsg from "../helper_functions/FooterMsg";
 import formatters from "../helper_functions/DatetimeFormatter.function";
 
-// import for services
-import PantryService from "../../services/pantry.service";
-
 // other imports
-import { toast } from "react-toastify";
 import MySpinner from "../helper_functions/MySpinner";
+import ScrollToTop from "../helper_functions/ScrollToTop.function";
 
 /**
  * Dashboard View
@@ -30,8 +29,12 @@ import MySpinner from "../helper_functions/MySpinner";
 class DashboardView extends Component {
   constructor(props) {
     super(props);
+
+    // used by admin who is emplpoyee of multiple pantries
+    this.currentPantryName = createRef();
+
     this.state = {
-      pantry_id: null, // TODO: Change to actual pantry id
+      pantry_id: null,
       pantryName: "",
       rsvns: [],
       description: "",
@@ -47,11 +50,16 @@ class DashboardView extends Component {
       lat: "",
       lon: "",
 
+      // time to add
+      timeToAdd: null,
+
       // used by DashboardOpenHourCard
       hours: [],
     };
   }
 
+  // need a componentDidMount to reflect the change on the DashboardView
+  // (e.g. update detail, switch between pantry)
   componentDidMount() {
     const pantry = this.props.pantryDetail;
 
@@ -70,76 +78,10 @@ class DashboardView extends Component {
         img_src: pantry.img_src,
         lat: pantry.lat,
         lon: pantry.lon,
+        timeToAdd: pantry.time_to_add,
         hours: pantry.hours,
       });
     }
-  }
-
-  // ************************************************************************
-  // ************************ DashboardMessages *****************************
-  // ************************************************************************
-  /**
-   * Mark a reservation as approved
-   *
-   * @param {*} rsvn_id
-   */
-  markAsApproved(rsvn_id) {
-    console.log(rsvn_id);
-
-    PantryService.setApproved(this.state.pantry_id, rsvn_id)
-      .then(() => {
-        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-        toast.success(
-          "You have successfully approved the reservation with ID " + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error("Error while approving reservation with ID " + rsvn_id);
-      });
-  }
-
-  /**
-   * Mark a reservation as picked up
-   *
-   * @param {*} rsvn_id
-   */
-  markAsPickedUp(rsvn_id) {
-    console.log(rsvn_id);
-    PantryService.setPickedUp(this.state.pantry_id, rsvn_id)
-      .then(() => {
-        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-        toast.success(
-          "reservation with ID " +
-            rsvn_id +
-            " was successfully marked as picked up!"
-        );
-      })
-      .catch(() => {
-        toast.error(
-          "Error while marking reservation with ID " +
-            rsvn_id +
-            " as picked up."
-        );
-      });
-  }
-
-  /**
-   *  Mark a reservation as cancelled
-   *
-   * @param {*} rsvn_id
-   */
-  markAsCancelled(rsvn_id) {
-    console.log(rsvn_id);
-    PantryService.setCancelled(this.state.pantry_id, rsvn_id)
-      .then(() => {
-        this.props.fetchPantryDetail(); // push changes to be displayed by re-rendered
-        toast.success(
-          "You have successfully cancelled the reservation with ID " + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error("Error while cancelling reservation with ID " + rsvn_id);
-      });
   }
 
   // ************************************************************************
@@ -161,6 +103,8 @@ class DashboardView extends Component {
       stte: updates[4],
       phone: updates[5],
       weblink: updates[6],
+      img_src: updates[7],
+      timeToAdd: updates[8],
     });
   }
 
@@ -190,9 +134,38 @@ class DashboardView extends Component {
   // ************************************************************************
 
   /**
+   * helper function for switching pantry
+   * propogates onChange pantry id back to pantry admin view and reload the data
+   */
+  onChangeSwitchPantry() {
+    console.log("Switching to - ", this.currentPantryName.current.value);
+    this.props.setPantryId(
+      this.getPantryIdByName(this.currentPantryName.current.value)
+    );
+  }
+
+  /**
+   * Returns the name of the pantry, given pantry_id
+   */
+  getPantryNameById(id) {
+    for (const p of this.props.pantries) {
+      if (p.pantry_id === id) return p.name;
+    }
+    return "pantry name not found.";
+  }
+
+  /**
+   * Returns the id of the pantry, given pantry_name
+   */
+  getPantryIdByName(name) {
+    for (const p of this.props.pantries) {
+      if (p.name === name) return p.pantry_id;
+    }
+    return -1;
+  }
+
+  /**
    * Returns the textual description of the current dashboard.
-   *
-   * @returns
    */
   getDashboardOverview() {
     const numReservation = [...this.state.rsvns].filter(
@@ -203,7 +176,31 @@ class DashboardView extends Component {
       <>
         {/* Pantry's name */}
         <Row className="justify-content-center">
-          <h2>{this.state.pantryName}</h2>
+          {this.props.employeeOf.length > 1 ? (
+            // if the account owner has work at more than 1 pantries
+            <Form.Group controlId="pantry-manage-form">
+              <Form.Label>
+                <Col className="text-center">
+                  <h2>{this.state.pantryName}</h2>
+                </Col>
+              </Form.Label>
+              <Form.Control
+                as="select"
+                ref={this.currentPantryName}
+                onChange={() => this.onChangeSwitchPantry()}
+                defaultValue={this.getPantryNameById(this.state.pantry_id)}
+              >
+                {this.props.employeeOf.map((pid) => (
+                  <option key={pid}>{this.getPantryNameById(pid)}</option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          ) : (
+            // if the account owner has only 1 pantries
+            <Col className="text-center">
+              <h2>{this.state.pantryName}</h2>
+            </Col>
+          )}
         </Row>
         {/* Page title */}
         <Row className="justify-content-center">
@@ -225,11 +222,11 @@ class DashboardView extends Component {
     return (
       <Dashboard_newMsg
         adminMode={true}
-        pantry_id={this.state.pantry_id}
         rsvns={this.state.rsvns}
-        markAsApproved={this.markAsApproved.bind(this)}
-        markAsPickedUp={this.markAsPickedUp.bind(this)}
-        markAsCancelled={this.markAsCancelled.bind(this)}
+        pantryDetail={this.pantry}
+        pantry_id={this.state.pantry_id}
+        timeToAdd={this.state.timeToAdd}
+        fetchPantryDetail={() => this.props.fetchPantryDetail()}
       />
     );
   }
@@ -256,6 +253,7 @@ class DashboardView extends Component {
             img_src={this.state.img_src}
             lat={this.state.lat}
             lon={this.state.lon}
+            time_to_add={this.state.timeToAdd}
           />
         </Row>
       </>
@@ -319,11 +317,13 @@ class DashboardView extends Component {
           {/* Open Hours */}
           {this.getOpenHoursCards()}
 
+          {/* scroll to top button */}
+          <Row className="justify-content-center mt-4">
+            <ScrollToTop scrollStepInPx="100" delayInMs="10.50" />
+          </Row>
+
           <Row className="justify-content-center">
-            <p className="mt-4">
-              Time is Money. We provide an efficient way for you to update
-              available items.
-            </p>
+            <FooterMsg />
           </Row>
         </Container>
       );

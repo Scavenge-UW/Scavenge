@@ -1,5 +1,5 @@
 export default {
-  pantries: [
+  wishlist: [
     {
       pantry_id: 1,
       name: "The River Food Pantry",
@@ -8,108 +8,25 @@ export default {
       city: "Madison",
       state: "WI",
       phone_number: "6084428819",
-      details: "Here to serve! - Go Badgers!",
+      email: "abc1@gmail.com",
       img_src:
         "https://lh5.googleusercontent.com/p/AF1QipM6UYI64xgIkJx1w_t7RLh8eVCjelB9ogeoW_A3=w426-h240-k-no",
-      lat: 43.07,
-      lon: -89.4,
       website: "https://www.riverfoodpantry.org/",
       foods: [
         {
           food_id: 1,
           food_name: "Apple",
-          qr_code: null,
-          quantity: 5,
+          wishlist_id: 3,
         },
         {
           food_id: 2,
           food_name: "Orange",
-          qr_code: null,
-          quantity: 710,
-        },
-        {
-          food_id: 3,
-          food_name: "Avocado",
-          qr_code: 123123123,
-          quantity: -4,
-        },
-        {
-          food_id: 4,
-          food_name: "Swiss Cheese",
-          qr_code: 10101011,
-          quantity: 260,
-        },
-        {
-          food_id: 5,
-          food_name: "Cheddar Cheese",
-          qr_code: 1010111011,
-          quantity: 244,
-        },
-        {
-          food_id: 8,
-          food_name: "Pear",
-          qr_code: 2078,
-          quantity: 867,
-        },
-        {
-          food_id: 9,
-          food_name: "Potato",
-          qr_code: 5224,
-          quantity: 4118,
-        },
-        {
-          food_id: 10,
-          food_name: "Peanuts",
-          qr_code: 8630,
-          quantity: 184,
-        },
-        {
-          food_id: 11,
-          food_name: "Eggs",
-          qr_code: 37,
-          quantity: 1215,
-        },
-        {
-          food_id: 12,
-          food_name: "Noodle",
-          qr_code: 2850,
-          quantity: 513127,
+          wishlist_id: 4,
         },
         {
           food_id: 13,
           food_name: "Sparkling Water",
-          qr_code: 7065,
-          quantity: 120,
-        },
-        {
-          food_id: 16,
-          food_name: "Baguette ",
-          qr_code: 1544,
-          quantity: 15,
-        },
-        {
-          food_id: 21,
-          food_name: "Broccoli",
-          qr_code: null,
-          quantity: 21,
-        },
-        {
-          food_id: 22,
-          food_name: "Cheese Sauce",
-          qr_code: null,
-          quantity: 26,
-        },
-        {
-          food_id: 24,
-          food_name: "Kiwi",
-          qr_code: null,
-          quantity: 543,
-        },
-        {
-          food_id: 25,
-          food_name: "Avocado",
-          qr_code: 8795,
-          quantity: 0,
+          wishlist_id: 7,
         },
       ],
       hours: [
@@ -117,7 +34,7 @@ export default {
           day: 1,
           open: "07:50:00",
           close: "20:30:00",
-          detail: "go Scavenge!\ngo Team!",
+          detail: "go go go Scavenge!\ngo Team!",
         },
         {
           day: 2,
@@ -139,8 +56,8 @@ export default {
         },
         {
           day: 5,
-          open: "00:00:00",
-          close: "00:00:00",
+          open: "10:00:00",
+          close: "15:00:00",
           detail: "By Appointment Only",
         },
         {
@@ -165,44 +82,28 @@ export default {
       city: "Madison",
       state: "WI",
       phone_number: "6082239121",
-      details: "lorem ipsum dolor",
+      email: "abc2@gmail.com",
       img_src:
         "https://lh5.googleusercontent.com/p/AF1QipOukd313uIyXDlvMDbvc95D4joVMz-1ywvRnW-P=w408-h271-k-no",
-      lat: 43.07,
-      lon: -89.41,
       website: "https://www.secondharvestmadison.org/",
       foods: [
         {
-          food_id: 1,
-          food_name: "Apple",
-          qr_code: null,
-          quantity: 9,
-        },
-        {
           food_id: 2,
           food_name: "Orange",
-          qr_code: null,
-          quantity: 7,
-        },
-        {
-          food_id: 3,
-          food_name: "Avocado",
-          qr_code: 123123123,
-          quantity: -1,
+          wishlist_id: 11,
         },
         {
           food_id: 4,
           food_name: "Swiss Cheese",
-          qr_code: 10101011,
-          quantity: 193,
+          wishlist_id: 10,
         },
       ],
       hours: [
         {
           day: 1,
-          open: "01:00:00",
-          close: "02:30:00",
-          detail: "By Appointment Only",
+          open: "03:00:00",
+          close: "05:30:00",
+          detail: "Test Change",
         },
         {
           day: 2,

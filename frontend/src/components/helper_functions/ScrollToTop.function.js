@@ -3,7 +3,6 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 
 const ScrollToTop = (props) => {
-  const [intervalId, setIntervalId] = React.useState(0);
   const [thePosition, setThePosition] = React.useState(false);
 
   const timeoutRef = React.useRef(null);

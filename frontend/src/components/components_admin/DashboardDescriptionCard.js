@@ -11,8 +11,9 @@ import Button from "react-bootstrap/Button";
 import PantryService from "../../services/pantry.service";
 
 // other imports
-import { toast } from "react-toastify";
 import "../../css/common.css";
+import { toast } from "react-toastify";
+import ddtooltip from "../helper_functions/DashboardDescriptionTooltip";
 
 class DashboardDescriptionCard extends Component {
   constructor(props) {
@@ -25,6 +26,8 @@ class DashboardDescriptionCard extends Component {
     this.newStte = React.createRef();
     this.newPhone = React.createRef();
     this.newWeblink = React.createRef();
+    this.newImgSrc = React.createRef();
+    this.newTimeToAdd = React.createRef();
 
     this.state = {
       // used by in 'editModeControl'
@@ -51,6 +54,8 @@ class DashboardDescriptionCard extends Component {
       this.newStte.current.value = this.props.stte;
       this.newPhone.current.value = this.props.phone;
       this.newWeblink.current.value = this.props.weblink;
+      this.newImgSrc = this.props.img_src;
+      this.newTimeToAdd = this.props.time_to_add;
     }
   }
 
@@ -74,10 +79,11 @@ class DashboardDescriptionCard extends Component {
         state: this.newStte.current.value,
         phone_number: this.newPhone.current.value,
         details: this.newDetail.current.value,
-        img_src: this.props.img_src, // remain unchanged
+        img_src: this.props.img_src,
         lat: this.props.lat, // remain unchanged
         lon: this.props.lon, // remain unchanged
         website: this.newWeblink.current.value,
+        time_to_add: this.newTimeToAdd.current.value,
       })
         .then(() => {
           // propogate updates back to parent component
@@ -89,6 +95,8 @@ class DashboardDescriptionCard extends Component {
             this.newStte.current.value,
             this.newPhone.current.value,
             this.newWeblink.current.value,
+            this.props.img_src,
+            this.newImgSrc.current.value,
           ]);
 
           this.editModeControl(false);
@@ -159,7 +167,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formDescription">
                     <Form.Label>
-                      <strong>- description: </strong>
+                      <strong>
+                        - Description: {ddtooltip.getTooltip("description")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       as="textarea"
@@ -176,7 +186,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formAddress">
                     <Form.Label>
-                      <strong>- address: </strong>
+                      <strong>
+                        - Address: {ddtooltip.getTooltip("address")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -193,7 +205,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formZipcode">
                     <Form.Label>
-                      <strong>- zipcode: </strong>
+                      <strong>
+                        - Zipcode: {ddtooltip.getTooltip("zipcode")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="number"
@@ -210,7 +224,7 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formCity">
                     <Form.Label>
-                      <strong>- city: </strong>
+                      <strong>- City: {ddtooltip.getTooltip("city")}</strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -227,7 +241,7 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formState">
                     <Form.Label>
-                      <strong>- state: </strong>
+                      <strong>- State: {ddtooltip.getTooltip("state")}</strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -244,7 +258,9 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formPhone">
                     <Form.Label>
-                      <strong>- phone number: </strong>
+                      <strong>
+                        - Phone number: {ddtooltip.getTooltip("phone")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -261,13 +277,54 @@ class DashboardDescriptionCard extends Component {
                 <Form>
                   <Form.Group controlId="formWeblink">
                     <Form.Label>
-                      <strong>- weblink: </strong>
+                      <strong>
+                        - Weblink: {ddtooltip.getTooltip("weblink")}
+                      </strong>
                     </Form.Label>
                     <Form.Control
                       type="text"
                       ref={this.newWeblink}
                       disabled={!this.state.editMode}
                       defaultValue={this.props.weblink}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+            </Row>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left">
+                <Form>
+                  <Form.Group controlId="formImgSrc">
+                    <Form.Label>
+                      <strong>
+                        - Image Source: {ddtooltip.getTooltip("img_src")}
+                      </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      ref={this.newImgSrc}
+                      disabled={true} // not yet implemented
+                      defaultValue={this.props.img_src}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+            </Row>
+            <Row className="align-items-center m-2" md="auto">
+              <Col className="text-left">
+                <Form>
+                  <Form.Group controlId="formTimeTOAdd">
+                    <Form.Label>
+                      <strong>
+                        - Time To Add (in minutes):{" "}
+                        {ddtooltip.getTooltip("time_to_add")}
+                      </strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      ref={this.newTimeToAdd}
+                      disabled={!this.state.editMode}
+                      defaultValue={this.props.time_to_add}
                     />
                   </Form.Group>
                 </Form>

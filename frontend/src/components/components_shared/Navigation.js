@@ -1,8 +1,26 @@
 import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
+
+// imports for bootstrap
+import Row from "react-bootstrap/Row";
 import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Container from "react-bootstrap/Container";
 import { LinkContainer } from "react-router-bootstrap";
+
+// imports for icons
+import { BsGift } from "react-icons/bs";
+import { IoHomeOutline } from "react-icons/io5";
+import {
+  FiUser,
+  FiEdit,
+  FiLogIn,
+  FiLogOut,
+  FiSearch,
+  FiUserPlus,
+  FiClipboard,
+  FiHelpCircle,
+  FiShoppingCart,
+} from "react-icons/fi";
 
 class Navigation extends Component {
   constructor(props) {
@@ -33,6 +51,77 @@ class Navigation extends Component {
    * returns:
    *   the href (route) of the given content.
    */
+  getIcons(content) {
+    switch (content) {
+      case "Logout":
+        return (
+          <>
+            <FiLogOut size="0.9rem" />
+          </>
+        ); // will be redirected to '/' upon successful logout
+      case "Login":
+        return (
+          <>
+            <FiLogIn size="0.9rem" />
+          </>
+        );
+      case "Signup":
+        return (
+          <>
+            <FiUserPlus size="0.9rem" />
+          </>
+        );
+      case "Manage Pantry":
+        return (
+          <>
+            <FiEdit size="0.9rem" />
+          </>
+        );
+      case "Search Foods":
+        return (
+          <>
+            <FiSearch size="0.9rem" />
+          </>
+        );
+      case "Cart":
+        return (
+          <>
+            <FiShoppingCart size="0.9rem" />
+          </>
+        );
+      case "Profile":
+        return (
+          <>
+            <FiUser size="0.9rem" />
+          </>
+        );
+      case "Reservations":
+        return (
+          <>
+            <FiClipboard size="0.9rem" />
+          </>
+        );
+      case "Wishlist":
+        return (
+          <>
+            <BsGift size="0.9rem" />
+          </>
+        );
+      case "Help":
+        return (
+          <>
+            <FiHelpCircle size="0.9rem" />
+          </>
+        );
+      default:
+        return "/";
+    }
+  }
+
+  /*
+   * returns:
+   *   the href (route) of the given content.
+   */
   getRoute(content) {
     switch (content) {
       case "Logout":
@@ -42,7 +131,7 @@ class Navigation extends Component {
       case "Signup":
         return "/signup";
       case "Manage Pantry":
-        return "/pantry";
+        return "/pantry/" + this.props.pantry_id;
       case "Search Foods":
         return "/search-food";
       case "Cart":
@@ -63,7 +152,8 @@ class Navigation extends Component {
   /*
    * returns:
    *   multiple bootstrap component by mapping
-   *   each content to the corresponding href (route).
+   *   each content to the corresponding href (route)
+   *   and corresponding icon.
    */
   renderRoute(navbarContent) {
     // console.log(navbarContent);
@@ -74,11 +164,17 @@ class Navigation extends Component {
           to={this.getRoute(content)}
           onClick={() => this.props.logout()}
         >
-          <Nav.Link>{content}</Nav.Link>
+          <Nav.Link>
+            {this.getIcons(content)}
+            {"  " + content}
+          </Nav.Link>
         </LinkContainer>
       ) : (
         <LinkContainer key={content} to={this.getRoute(content)}>
-          <Nav.Link>{content}</Nav.Link>
+          <Nav.Link>
+            {this.getIcons(content)}
+            {"  " + content}
+          </Nav.Link>
         </LinkContainer>
       )
     );
@@ -102,7 +198,11 @@ class Navigation extends Component {
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>Scavenge</Navbar.Brand>
+            <Navbar.Brand>
+              <h3>
+                <IoHomeOutline size="1.3rem" /> Scavenge
+              </h3>
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">

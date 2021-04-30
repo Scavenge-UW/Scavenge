@@ -17,22 +17,6 @@ import pantries from "../__mocks__/pantriesMock";
 const mockPantryDetail = pantryDetail.pantryDetail;
 const mockPantries = pantries.pantries;
 
-jest.mock("../services/pantry.service", () => ({
-  ...jest.requireActual("../services/pantry.service"),
-  getDetail: (pantry_id) =>
-    jest.fn().mockImplementation((pantry_id) => {
-      return Promise.resolve(mockPantryDetail).then((response) => response);
-    }),
-  getPantries: () => {
-    return Promise.resolve(mockPantries);
-  },
-}));
-
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: () => jest.fn().mockReturnValue({ pantry_id: 2 }),
-}));
-
 jest.mock("../components/components_shared/Map", () => {
   const MapMock = () => <div />;
   return MapMock;
@@ -59,7 +43,7 @@ describe("ListView tests", () => {
   });
 
   it("should have a correctly working searchData()", () => {
-    wrapper.find("input.searchInput").simulate("change", {
+    wrapper.find("input.SearchInput").simulate("change", {
       target: {
         value: "River",
       },
@@ -116,7 +100,7 @@ describe("ListView tests", () => {
   it("should call searchData() on onChange event", () => {
     const mockSearch = jest.spyOn(listViewWrapper.instance(), "searchData");
 
-    listViewWrapper.find("input.searchInput").simulate("change", {
+    listViewWrapper.find("input.SearchInput").simulate("change", {
       target: {
         value: "The",
       },
