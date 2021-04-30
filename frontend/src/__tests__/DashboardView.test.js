@@ -26,7 +26,7 @@ jest.mock("react-router-dom", () => ({
 describe("PantryDetailView tests", () => {
   const wrapper = mount(
     <MemoryRouter>
-      <DashboardView pantryDetail={mockPantryDetail} />
+      <DashboardView pantryDetail={mockPantryDetail} employeeOf={[1]} />
     </MemoryRouter>
   );
 

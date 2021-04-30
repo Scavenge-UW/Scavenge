@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 // imports for react bootstrap
 import Container from "react-bootstrap/Container";
@@ -6,7 +7,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 // imports for components and service
 import InventoryView from "./InventoryView";
@@ -22,10 +23,14 @@ import DashboardView from "../components_shared/DashboardView";
  * @author [Yayen Lin](https://github.com/yayen-lin)
  */
 
-function PantryAdminView() {
+function PantryAdminView(props) {
   const [pantryDetail, setPantryDetail] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false); // used for spinner
 
+  const employeeOf = props.owns; // list of pantries
+  const default_pantry_id = parseInt(useParams().pantry_id); // set default pantry id on first load
+  const [pantry_id, setPantryId] = useState(default_pantry_id); // admin can switch between pantry
+  const [pantries, setPantries] = useState([]);
   /**
    * Fetch pantry detail on init
    *
@@ -36,17 +41,28 @@ function PantryAdminView() {
 
   /**
    * Fetch pantry detail
-   *
    */
-  const fetchPantryDetail = async () => {
+  const fetchPantryDetail = async (id = null) => {
     setIsLoaded(false);
-    const detail = await PantryService.getDetail(1); // TODO: change pantry id based on user's affiliation
+    const detail = await PantryService.getDetail(id ? id : pantry_id);
     setPantryDetail(detail);
+
+    // set current pantry_id
+    setPantryId(id ? id : pantry_id);
+
+    // get all pantries to load panty names to switching pantry profiles
+    const all_pantries = await PantryService.getPantries();
+    // setPantries(all_pantries.result);
+    setPantries([...Object.values(all_pantries.result)]);
+
+    // set isLoaded to true
     setIsLoaded(true);
   };
 
   const PantryAdminViewTabs = () => {
     const [tab, setTab] = useState("dashboard");
+
+    // show spinner while data is loading
     if (!isLoaded) {
       return (
         <Container id="my-wishlist-loading">
@@ -54,6 +70,7 @@ function PantryAdminView() {
         </Container>
       );
     }
+
     return (
       <Tabs
         variant="pills"
@@ -63,8 +80,14 @@ function PantryAdminView() {
       >
         <Tab eventKey="dashboard" title="Pantry Dashboard">
           <DashboardView
+            pantries={pantries}
             pantryDetail={pantryDetail}
-            fetchPantryDetail={fetchPantryDetail}
+            fetchPantryDetail={() => fetchPantryDetail()}
+            employeeOf={employeeOf}
+            setPantryId={(id) => {
+              setPantryId(id);
+              fetchPantryDetail(id);
+            }}
           />
         </Tab>
         <Tab eventKey="inventory" title="Manage Inventory">

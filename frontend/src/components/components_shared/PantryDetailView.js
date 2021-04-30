@@ -115,7 +115,9 @@ function PantryDetailView(props) {
           active={pageNo === currPage}
           onClick={() => {
             setCurrPage(pageNo);
+            window.scrollTo(0, 0); // move page to top
           }}
+          className="mr-1"
         >
           {pageNo}
         </Pagination.Item>
@@ -127,8 +129,10 @@ function PantryDetailView(props) {
       <Pagination.Prev
         onClick={() => {
           setCurrPage(currPage - 1);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === 1}
+        className="mr-1"
       />
     );
     // go to page 1 button
@@ -136,8 +140,10 @@ function PantryDetailView(props) {
       <Pagination.First
         onClick={() => {
           setCurrPage(1);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === 1}
+        className="mr-1"
       />
     );
     // next page button
@@ -145,8 +151,10 @@ function PantryDetailView(props) {
       <Pagination.Next
         onClick={() => {
           setCurrPage(currPage + 1);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === numPages}
+        className="mr-1"
       />
     );
     // go to last page button
@@ -154,8 +162,10 @@ function PantryDetailView(props) {
       <Pagination.Last
         onClick={() => {
           setCurrPage(numPages);
+          window.scrollTo(0, 0); // move page to top
         }}
         disabled={currPage === numPages}
+        className="mr-1"
       />
     );
 
@@ -280,7 +290,10 @@ function PantryDetailView(props) {
         <Row className="justify-content-center">
           <h2>Available Items</h2>
         </Row>
+        {/* top pagination */}
+        <Row className="justify-content-center mt-4">{showPagination()}</Row>
         <Row className="justify-content-center">{getFoodItemCards()}</Row>
+        {/* buttom pagination */}
         <Row className="justify-content-center mt-4">{showPagination()}</Row>
       </Container>
     );

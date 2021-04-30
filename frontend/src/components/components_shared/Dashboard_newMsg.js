@@ -90,9 +90,18 @@ class Dashboard_newMsg extends Component {
     });
   }
 
+  /**
+   * update est pickup time
+   *
+   * @param {*} estTime - desire est pickup time to update
+   */
   updateEstPickupTime(estTime) {
-    console.log("1. ", estTime);
-    this.props.setEstPickupTime(this.state.selectedID, estTime);
+    msgFunctions.setEstPickupTime(
+      this.state.selectedID,
+      estTime,
+      this.props.pantry_id,
+      () => this.props.fetchPantryDetail()
+    );
     this.setState({
       selectedEstPickup: estTime,
     });
@@ -120,7 +129,11 @@ class Dashboard_newMsg extends Component {
                 selectedApproved: rsvn.approved,
               },
               () => {
-                this.props.markAsApproved(this.state.selectedID);
+                msgFunctions.markAsApproved(
+                  this.state.selectedID,
+                  this.props.pantry_id,
+                  () => this.props.fetchPantryDetail()
+                );
               }
             );
           }
@@ -146,7 +159,11 @@ class Dashboard_newMsg extends Component {
                 selectedPickedUp: rsvn.picked_up_time,
               },
               () => {
-                this.props.markAsPickedUp(this.state.selectedID);
+                msgFunctions.markAsPickedUp(
+                  this.state.selectedID,
+                  this.props.pantry_id,
+                  () => this.props.fetchPantryDetail()
+                );
               }
             );
           }
@@ -175,10 +192,15 @@ class Dashboard_newMsg extends Component {
               },
               () => {
                 this.props.adminMode
-                  ? this.props.markAsCancelled(this.state.selectedID)
+                  ? this.props.markAsCancelled(
+                      this.state.selectedID,
+                      this.props.pantry_id,
+                      () => this.props.fetchPantryDetail()
+                    )
                   : this.props.markWithDraw(
+                      this.state.selectedID,
                       rsvn.pantry_id,
-                      this.state.selectedID
+                      () => this.props.fetchPantryDetail()
                     );
               }
             );
@@ -206,7 +228,11 @@ class Dashboard_newMsg extends Component {
                 selectedCancelled: rsvn.cancelled,
               },
               () => {
-                this.props.markAsApproved(this.state.selectedID);
+                this.props.markAsApproved(
+                  this.state.selectedID,
+                  this.props.pantry_id,
+                  () => this.props.fetchPantryDetail()
+                );
               }
             );
           }
@@ -216,36 +242,12 @@ class Dashboard_newMsg extends Component {
       </Button>
     );
 
-    // edit estimated puckup time button
-    const editEstButton = !msgFunctions.editEstButtonIsHidden(rsvn) && (
-      <Button
-        variant="dark"
-        size="sm"
-        className="m-2"
-        md="auto"
-        onClick={() => {
-          this.setState(
-            {
-              selectedID: rsvn.reservation_id,
-              selectedEstPickup: rsvn.estimated_pick_up,
-            },
-            () => {
-              this.openEditEstModal();
-            }
-          );
-        }}
-      >
-        Edit Estimated Pickup Time
-      </Button>
-    );
-
     if (this.props.adminMode) {
       controls = [
         approveButton,
         markAsPickedUpButton,
         cancelReservationButton,
         resetButton,
-        editEstButton,
       ];
     } else {
       controls = [cancelReservationButton];
@@ -257,9 +259,9 @@ class Dashboard_newMsg extends Component {
   /**
    * Iteratively returns messages according to the number of reservations received
    * and buttons for some actions.
-   *
    */
   render() {
+    // Render message object for today
     const viewMessagesForToday = [...this.props.rsvns]
       .filter((rsvn) =>
         // filter messages to show only today's reservations for admin mode
@@ -269,7 +271,7 @@ class Dashboard_newMsg extends Component {
           : formatters.getTimeElapsed(rsvn.order_time, "days") < 7
       )
       .sort((a, b) => b.reservation_id - a.reservation_id) // sort message from most recent to least
-      .slice(0, this.props.adminMode ? 2 : 5) // show only 2 messages at most
+      .slice(0, this.props.adminMode ? 2 : 5) // show only 2 messages at most for admin, 5 for user in overview
       .map((rsvn) => (
         <ListGroupItem
           tag="a"
@@ -288,7 +290,10 @@ class Dashboard_newMsg extends Component {
           <hr />
           {/* Body (status) */}
           <ListGroupItemText>
-            {msgFunctions.getMessageStatus(rsvn)}
+            {msgFunctions.getMessageStatus(
+              rsvn,
+              this.props.adminMode ? this.props.timeToAdd : null
+            )}
           </ListGroupItemText>
 
           <Row className="justify-content-center align-items-center">
@@ -318,11 +323,30 @@ class Dashboard_newMsg extends Component {
               View Reserved Foods
             </Button>
 
-            {/* 
-              approved/pickedup/cancelled/reset buttons for adminMode,
-              cancelled buttons for userMode
-            */}
+            {/* render controlled btns based on user type */}
             {this.showControls(rsvn)}
+
+            {this.props.adminMode && !msgFunctions.editEstButtonIsHidden(rsvn) && (
+              <Button
+                variant="dark"
+                size="sm"
+                className="m-2"
+                md="auto"
+                onClick={() => {
+                  this.setState(
+                    {
+                      selectedID: rsvn.reservation_id,
+                      selectedEstPickup: rsvn.estimated_pick_up,
+                    },
+                    () => {
+                      this.openEditEstModal();
+                    }
+                  );
+                }}
+              >
+                Edit Estimated Pickup Time
+              </Button>
+            )}
           </Row>
         </ListGroupItem>
       ));
@@ -332,14 +356,14 @@ class Dashboard_newMsg extends Component {
         <Row className="justify-content-center mt-2">
           {this.props.adminMode ? (
             // adminMode
-            <Link to={"/messages_a/" + this.props.pantry_id}>
+            <Link to={"/messageCenter/" + this.props.pantry_id}>
               <text style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                 View All And Search For Messages
               </text>
             </Link>
           ) : (
             // userMode
-            <Link to={"/messages_b/" + this.props.username}>
+            <Link to={"/messageCenter/" + this.props.username}>
               <text style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                 View All And Search For Reservations
               </text>

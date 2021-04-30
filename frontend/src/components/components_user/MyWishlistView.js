@@ -35,14 +35,15 @@ class MyWishlistsView extends Component {
     this.fetchResponse();
   }
 
-  // get wishlist info for user from server
   fetchResponse() {
-    WishlistService.getUserWishlist(this.props.username).then((response) => {
-      this.setState({
-        resp: response,
-        loaded: true,
-      });
-    });
+    const response = WishlistService.getUserWishlist(this.props.username).then(
+      (response) => {
+        this.setState({
+          resp: response,
+          loaded: true,
+        });
+      }
+    );
   }
 
   myWishlistOverview() {
