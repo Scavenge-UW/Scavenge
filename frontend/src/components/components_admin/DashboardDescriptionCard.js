@@ -79,7 +79,7 @@ class DashboardDescriptionCard extends Component {
         state: this.newStte.current.value,
         phone_number: this.newPhone.current.value,
         details: this.newDetail.current.value,
-        img_src: this.newImgSrc.current.value,
+        img_src: this.props.img_src,
         lat: this.props.lat, // remain unchanged
         lon: this.props.lon, // remain unchanged
         website: this.newWeblink.current.value,

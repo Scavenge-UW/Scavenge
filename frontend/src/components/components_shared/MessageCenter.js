@@ -85,7 +85,7 @@ function MessageCenter(props) {
   const paginationCount = 10;
 
   // search result
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState(null);
 
   // tabs
   const [tab, setTab] = useState("all");
@@ -312,7 +312,7 @@ function MessageCenter(props) {
       // -------------------------- search with fuse --------------------------
       let rsvns = username ? [...userRsvns] : [...pantryDetail.reservations];
 
-      if (!pattern) return; // return empty search result
+      if (!pattern) setSearchResult(null); // set search result to null for display purpose
 
       // Perform fuzzy search for pantries
       const fuse = new Fuse(rsvns, {
@@ -322,7 +322,7 @@ function MessageCenter(props) {
       });
       const result = fuse.search(pattern);
 
-      if (!result.length) return; // No matches
+      if (!result.length) setSearchResult([]); // No matches, return an empty list
 
       let filtered = [];
       result.forEach(({ item }) => {
@@ -331,7 +331,7 @@ function MessageCenter(props) {
       setSearchResult([...filtered]);
 
       // -------------------------- render search result --------------------------
-      console.log(searchResult);
+      // search result will be rendered with renderMs()
     }
   };
 
@@ -394,9 +394,11 @@ function MessageCenter(props) {
                 paginationCount * currPage
               );
     } else {
-      rsvns = [...searchResult]
-        .sort((a, b) => b.reservation_id - a.reservation_id)
-        .slice((currPage - 1) * paginationCount, paginationCount * currPage);
+      if (searchResult)
+        rsvns = [...searchResult]
+          .sort((a, b) => b.reservation_id - a.reservation_id)
+          .slice((currPage - 1) * paginationCount, paginationCount * currPage);
+      else return msgListItems;
     }
 
     for (const rsvn of rsvns) {
@@ -516,9 +518,11 @@ function MessageCenter(props) {
           : 0;
       }
     } else {
-      numItems = [...searchResult].length;
-      console.log("numItems = ", numItems);
+      if (searchResult) numItems = [...searchResult].length;
+      else numItems = 0;
     }
+
+    if (numItems === 0) return <></>;
 
     let numPages = Math.ceil(numItems / paginationCount);
     let paginationItems = [];
@@ -667,7 +671,11 @@ function MessageCenter(props) {
               <Row>{renderSearchForm()}</Row>
               <Row className="mt-4">
                 <Col className="text-center">
-                  <h5>found {searchResult.length}</h5>
+                  {searchResult ? (
+                    <h5>found matched: {searchResult.length}</h5>
+                  ) : (
+                    <></>
+                  )}
                 </Col>
               </Row>
               <hr />
