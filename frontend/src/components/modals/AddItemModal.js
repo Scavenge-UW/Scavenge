@@ -16,7 +16,7 @@ function AddItemModal(props) {
     if (!props.show) {
       clearForm();
     }
-  });
+  }, [props.show]);
 
   /**
    * Initializes the states used for the form.

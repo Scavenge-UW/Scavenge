@@ -1,6 +1,6 @@
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
-import { mount } from "enzyme";
+import { shallow, mount } from "enzyme";
 
 import InventoryView from "../components/components_admin/InventoryView";
 import "../setupTests";
@@ -14,7 +14,7 @@ describe("InventoryView tests", () => {
   wrapper.instance().addItem = jest.fn();
   wrapper.update();
 
-  it("should display title", async () => {
+  it("should display title", () => {
     expect(wrapper.find("h3").text()).toEqual("Current Inventory");
   });
 
@@ -81,8 +81,8 @@ describe("InventoryView tests", () => {
   });
 
   it("should correctly initialize form in Add Item Modal", async () => {
-    expect(wrapper.find("input#item-name").prop("value")).toEqual("");
-    expect(wrapper.find("input#item-quantity").prop("value")).toEqual(1);
+    expect(wrapper.find("input#item-name").prop("value")).toEqual(null);
+    expect(wrapper.find("input#item-quantity").prop("value")).toEqual(null);
   });
 
   it("should close the modal when close button is clicked", async () => {
