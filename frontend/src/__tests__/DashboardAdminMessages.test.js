@@ -16,10 +16,14 @@ jest.mock("react-router-dom", () => ({
   useParams: () => jest.fn().mockReturnValue({ pantry_id: "1" }),
 }));
 
+const mockIsAdmin = () => {
+  return true; // is admin
+};
+
 describe("DashboardUserMessages for admin - tests", () => {
   const wrapper = mount(
     <MemoryRouter>
-      <MessageCenter />
+      <MessageCenter isAdmin={mockIsAdmin} />
     </MemoryRouter>
   );
 

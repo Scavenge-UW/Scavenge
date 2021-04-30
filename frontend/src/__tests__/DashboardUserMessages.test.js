@@ -16,10 +16,14 @@ jest.mock("react-router-dom", () => ({
   useParams: () => jest.fn().mockReturnValue({ username: "ilkyu" }),
 }));
 
+const mockIsAdmin = () => {
+  return false; // not admin
+};
+
 describe("Message Center for user - tests", () => {
   const wrapper = mount(
     <MemoryRouter>
-      <MessageCenter />
+      <MessageCenter isAdmin={mockIsAdmin} />
     </MemoryRouter>
   );
 
