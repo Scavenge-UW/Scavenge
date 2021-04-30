@@ -16,7 +16,7 @@ jest.mock("react-router-dom", () => ({
   useParams: () => jest.fn().mockReturnValue({ username: "ilkyu" }),
 }));
 
-describe("DashboardUserMessages tests", () => {
+describe("Message Center for user - tests", () => {
   const wrapper = mount(
     <MemoryRouter>
       <MessageCenter />
