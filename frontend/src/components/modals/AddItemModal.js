@@ -37,7 +37,7 @@ function AddItemModal(props) {
   const addItem = () => {
     props.setItemToBeAdded({
       food_name: name,
-      quantity: quantity,
+      quantity: Math.floor(quantity),
     });
 
     props.onHide(); // close the modal
@@ -55,7 +55,11 @@ function AddItemModal(props) {
 
     let allErrors = null;
     // validation for number
-    if (quantity < 0 || quantity === null) {
+    if (
+      quantity < 0 || // must be positive
+      quantity === null || // not bu null
+      !Number.isInteger(parseInt(quantity)) // is a number
+    ) {
       allErrors = {};
       allErrors.quantity = "Please provide a valid quantity number.";
     }
@@ -104,7 +108,7 @@ function AddItemModal(props) {
                 type="number"
                 placeholder="quantity (i.e. a number)"
                 value={quantity}
-                isInvalid={!!errors.quantity}
+                isInvalid={!!errors.quantity} // used for form control feedback to validate
                 onChange={(e) => setQuantity(e.target.value)}
               />
               <Form.Control.Feedback type="invalid">
