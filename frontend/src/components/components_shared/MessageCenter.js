@@ -343,15 +343,15 @@ function MessageCenter(props) {
             <h4>Search for Messages</h4>
           </Col>
         </Row>
-        <Row className="justify-content-center mt-4">
+        <Row className="justify-content-center">
           <input
-            className="SearchInput w-responsive w-25"
+            className="SearchInput mt-4 w-responsive w-50"
             type="text"
             onChange={(e) => searchData(e.target.value)}
-            placeholder="Search by name or location"
+            placeholder="Seach by reservation ID, username, or food name"
           />
-          <span className="SearchSpan">
-            <FontAwesomeIcon className="pin" icon={faSearch} />
+          <span className="SearchSpan mt-4">
+            <FontAwesomeIcon icon={faSearch} />
           </span>
         </Row>
       </Container>
