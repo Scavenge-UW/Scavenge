@@ -47,6 +47,11 @@ function CartView(props) {
   const onClickCheckout = async () => {
     let reservationsByPantries = {};
 
+    if (cart.length < 1) {
+      toast.error("Add items to cart");
+      return;
+    }
+      
     await store.dispatch(fetchPantries());
 
     cart.forEach((item) => {
