@@ -7,10 +7,12 @@ import Col from "react-bootstrap/Col";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Pagination from "react-bootstrap/Pagination";
-// import { Typeahead } from "react-bootstrap-typeahead";
+import { Typeahead } from "react-bootstrap-typeahead";
 import {
   ListGroup,
   ListGroupItem,
@@ -85,6 +87,7 @@ function MessageCenter(props) {
   const paginationCount = 10;
 
   // search result
+  const [keyword, setKeyword] = useState(null);
   const [searchResult, setSearchResult] = useState(null);
 
   // tabs
@@ -304,10 +307,11 @@ function MessageCenter(props) {
   /**
    * search with fuse.js
    *
-   * @param {*} pattern
+   * @param {*}
    * @returns
    */
   const searchData = (pattern) => {
+    console.log({ pattern });
     if (pantryDetail || userRsvns) {
       // -------------------------- search with fuse --------------------------
       let rsvns = username ? [...userRsvns] : [...pantryDetail.reservations];
@@ -335,7 +339,16 @@ function MessageCenter(props) {
     }
   };
 
+  /**
+   * render search component for message center
+   *
+   * @returns a search component with search bar
+   */
   const renderSearchForm = () => {
+    const BarStyling = {
+      border: "none",
+      padding: "0.5rem",
+    };
     return (
       <Container>
         <Row className="justify-content-center mt-4">
@@ -344,15 +357,26 @@ function MessageCenter(props) {
           </Col>
         </Row>
         <Row className="justify-content-center">
-          <input
-            className="SearchInput mt-4 w-responsive w-50"
-            type="text"
-            onChange={(e) => searchData(e.target.value)}
-            placeholder="Seach by reservation ID, username, or food name"
-          />
-          <span className="SearchSpan mt-4">
-            <FontAwesomeIcon icon={faSearch} />
-          </span>
+          <InputGroup
+            id="search-form-msg-center"
+            className="mt-4 w-responsive w-50"
+          >
+            <FormControl
+              id="search-bar"
+              style={BarStyling}
+              placeholder={"Seach by reservation ID, username, or food name"}
+              onBlur={(e) => setKeyword(e.target.value)}
+            />
+            <InputGroup.Append>
+              <Button
+                id="search-btn"
+                variant="dark"
+                onClick={() => searchData(keyword)}
+              >
+                Search!
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
         </Row>
       </Container>
     );
@@ -366,37 +390,34 @@ function MessageCenter(props) {
    * @returns
    */
   const getMessageItems = (selectedTab) => {
-    let msgListItems = [];
-    let rsvns = [];
+    let msgListItems = []; // will be set to msgListItems and used in pagination
+    let rsvns = []; // will be used to load and filter messages
     if (selectedTab !== "search") {
-      if (pantryDetail || userRsvns)
-        rsvns = username
-          ? [...userRsvns]
-          : [...pantryDetail.reservations]
-              // condition for tabs to load messages based on rsvn status
-              .filter((rsvn) => {
-                if (selectedTab === "all") return rsvn;
-                if (selectedTab === "not_approved")
-                  return !rsvn.approved && !rsvn.cancelled;
-                if (selectedTab === "approved")
-                  return (
-                    rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled
-                  );
-                if (selectedTab === "cancelled") return rsvn.cancelled;
-                if (selectedTab === "complete")
-                  return (
-                    rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled
-                  );
-              })
-              .sort((a, b) => b.reservation_id - a.reservation_id)
-              .slice(
-                (currPage - 1) * paginationCount,
-                paginationCount * currPage
-              );
+      if (pantryDetail || userRsvns) {
+        rsvns = username ? [...userRsvns] : [...pantryDetail.reservations];
+        rsvns = rsvns
+          .filter((rsvn) => {
+            // condition for tabs to filter messages based on rsvn status
+            if (selectedTab === "all") return rsvn;
+            if (selectedTab === "not_approved")
+              return !rsvn.approved && !rsvn.cancelled;
+            if (selectedTab === "approved")
+              return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+            if (selectedTab === "cancelled") return rsvn.cancelled;
+            if (selectedTab === "complete")
+              return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+          })
+          // sort by reservation id in descending order
+          .sort((a, b) => b.reservation_id - a.reservation_id)
+          // slice list into 10 for each pagination
+          .slice((currPage - 1) * paginationCount, paginationCount * currPage);
+      }
     } else {
       if (searchResult)
         rsvns = [...searchResult]
+          // sort by reservation id in descending order
           .sort((a, b) => b.reservation_id - a.reservation_id)
+          // slice list into 10 for each pagination
           .slice((currPage - 1) * paginationCount, paginationCount * currPage);
       else return msgListItems;
     }
@@ -472,55 +493,24 @@ function MessageCenter(props) {
    */
   const showPagination = (selectedTab) => {
     let numItems;
+    let msgListItems;
     if (selectedTab !== "search") {
-      if (username) {
-        // food seeker user
-        numItems = userRsvns
-          ? Object.values(
-              userRsvns
-                // condition for tabs to load messages based on rsvn status
-                .filter((rsvn) => {
-                  if (selectedTab === "search") return searchResult;
-                  if (selectedTab === "all") return rsvn;
-                  if (selectedTab === "not_approved")
-                    return !rsvn.approved && !rsvn.cancelled;
-                  if (selectedTab === "approved")
-                    return (
-                      rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled
-                    );
-                  if (selectedTab === "cancelled") return rsvn.cancelled;
-                  if (selectedTab === "complete")
-                    return (
-                      rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled
-                    );
-                })
-            ).length
-          : 0;
-      } else {
-        // admin user
-        numItems = pantryDetail
-          ? Object.values(
-              pantryDetail.reservations.filter((rsvn) => {
-                if (selectedTab === "all") return rsvn;
-                if (selectedTab === "not_approved")
-                  return !rsvn.approved && !rsvn.cancelled;
-                if (selectedTab === "approved")
-                  return (
-                    rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled
-                  );
-                if (selectedTab === "cancelled") return rsvn.cancelled;
-                if (selectedTab === "complete")
-                  return (
-                    rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled
-                  );
-              })
-            ).length
-          : 0;
-      }
-    } else {
-      if (searchResult) numItems = [...searchResult].length;
-      else numItems = 0;
-    }
+      msgListItems = username ? [...userRsvns] : [...pantryDetail.reservations];
+
+      msgListItems = msgListItems
+        // condition for tabs to load messages based on rsvn status
+        .filter((rsvn) => {
+          if (selectedTab === "all") return rsvn;
+          if (selectedTab === "not_approved")
+            return !rsvn.approved && !rsvn.cancelled;
+          if (selectedTab === "approved")
+            return rsvn.approved && !rsvn.picked_up_time && !rsvn.cancelled;
+          if (selectedTab === "cancelled") return rsvn.cancelled;
+          if (selectedTab === "complete")
+            return rsvn.approved && rsvn.picked_up_time && !rsvn.cancelled;
+        });
+      numItems = msgListItems.length;
+    } else numItems = searchResult ? [...searchResult].length : 0;
 
     if (numItems === 0) return <></>;
 
