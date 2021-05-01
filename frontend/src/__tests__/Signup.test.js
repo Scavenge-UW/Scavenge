@@ -1,6 +1,8 @@
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 import { shallow } from "enzyme";
+import { Provider } from "react-redux";
+
 
 import SignupView from "../components/Authentication/SignupView";
 import "../setupTests";
