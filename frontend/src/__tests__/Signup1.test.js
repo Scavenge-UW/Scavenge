@@ -37,7 +37,7 @@ describe("Signup Profile mode tests", () => {
       });
     
       it("should have 10 states for fields in profile", () => {
-        const getProfileView = wrapper.find("ProfileView");
+        const getProfileView = wrapper.find("SignupView");
         expect(getProfileView.state("username")).toEqual("sean3");
         expect(getProfileView.state("password")).toEqual("");
         expect(getProfileView.state("phone")).toEqual("sean's phone");

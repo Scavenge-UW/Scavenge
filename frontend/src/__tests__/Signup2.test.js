@@ -4,9 +4,11 @@ import { shallow } from "enzyme";
 
 import SignupView from "../components/Authentication/SignupView";
 import "../setupTests";
+import store from "../store";
+
 
 describe("Login tests", () => {
-    const wrapper = shallow(<SignupView />);
+    const wrapper = shallow(<Provider store={store}><SignupView /></Provider>);
   
     it("should have a login button", () => {
       // There should be one button in LoginView
