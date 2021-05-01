@@ -128,6 +128,6 @@ describe("Login tests", () => {
     //   expect(wrapper.find("FormControl#city_input")).toHaveLength(0);
     //   expect(wrapper.find("FormControl#state_input")).toHaveLength(0);
     //   expect(wrapper.find("FormControl#zipcode_input")).toHaveLength(0);
-    });
+   // });
   });
   
