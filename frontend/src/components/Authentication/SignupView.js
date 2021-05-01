@@ -2,23 +2,24 @@ import React, { Component } from "react";
 import { Col, Form, Button, Container } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Redirect } from "react-router-dom";
+import { editProf } from "../../actions/profileAction";
 
 class SignupView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      username: this.props.profile ? this.props.profile.username : "",
       password: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      address: "",
-      city: "",
-      state: "",
-      zipcode: "",
-      email: "",
+      phone: this.props.profile ? this.props.profile.phone : "",
+      address: this.props.profile ? this.props.profile.address : "",
+      city: this.props.profile ? this.props.profile.city : "",
+      state: this.props.profile ? this.props.profile.state : "",
+      zipcode: this.props.profile ? this.props.profile.zipcode : "",
+      email: this.props.profile ? this.props.profile.email : "",
+      first_name: this.props.profile ? this.props.profile.firstName : "",
+      last_name: this.props.profile ? this.props.profile.lastName : "",
       type: "",
-      toHomeView: "",
+      toHomeView: false,
       // used for redirection on signup success
     };
     this.submitForm = this.submitForm.bind(this);
@@ -56,10 +57,9 @@ class SignupView extends Component {
       this.state.last_name
     ) {
 
-      this.props.editProf(user);
-      this.setState({toHomeView: true});
-      toast.success("You succesfully updated your profile")
+      this.props.editProfile(user);
       this.props.setProfile(user);
+      this.setState({toHomeView: true});
 
     } else {
       let errors = [];
@@ -114,6 +114,7 @@ class SignupView extends Component {
     }
   }
 
+
   async submitForm() {
     const user = {
       username: this.state.username,
@@ -130,59 +131,59 @@ class SignupView extends Component {
 
     let errors = [];
 
-    if (this.state.username.length == 0 ) {
-      errors.push("Username field is empty")
+    if (this.state.username.length == 0) {
+      errors.push("Username field is empty");
     }
 
-    if(this.state.password.length == 0){
-
-      errors.push("Password field is empty")
+    if (this.state.password.length == 0) {
+      errors.push("Password field is empty");
     }
 
-    if(this.state.phone.length == 0){
-
-      errors.push("Phone Number field is empty")
+    if (this.state.phone.length == 0) {
+      errors.push("Phone Number field is empty");
     }
 
-    if(this.state.address.length == 0 ){
-
-      errors.push("Address field is empty")
+    if (this.state.address.length == 0) {
+      errors.push("Address field is empty");
     }
 
-    if(this.state.city.length == 0){
-
-      errors.concat("City field is empty")
+    if (this.state.city.length == 0) {
+      errors.concat("City field is empty");
     }
 
-    if(this.state.state == 0){
-      errors.push("State Field is empty")
+    if (this.state.state == 0) {
+      errors.push("State Field is empty");
     }
 
-    if( this.state.zipcode.length == 0 ){
-      errors.push("Zipcode field is empty")
+    if (this.state.zipcode.length == 0) {
+      errors.push("Zipcode field is empty");
     }
 
-    if(this.state.email.length == 0){
-      errors.push("Email field is empty")
-    }
-    
-    if(this.state.firstName.length == 0){
-      errors.push("First name is field empty")
+    if (this.state.email.length == 0) {
+      errors.push("Email field is empty");
     }
 
-    if(this.state.lastName.length == 0){
-      errors.push("Last name is field empty")
+    if (this.state.firstName.length == 0) {
+      errors.push("First name is field empty");
     }
 
-    if(this.state.zipcode.length == 0){
-      errors.push("Zipcode field is empty")
+    if (this.state.lastName.length == 0) {
+      errors.push("Last name is field empty");
     }
 
-    if(errors.length != 0){
+    if (this.state.zipcode.length == 0) {
+      errors.push("Zipcode field is empty");
+    }
 
-      toast.error(<ul>{errors.map(er =>{return <li>{er}</li>})}</ul>)
-
-    } else{
+    if (errors.length != 0) {
+      toast.error(
+        <ul>
+          {errors.map((er) => {
+            return <li>{er}</li>;
+          })}
+        </ul>
+      );
+    } else {
       let signupResult = await this.props.signup(user);
       if (signupResult === 0) {
         // Successful signup
@@ -197,178 +198,8 @@ class SignupView extends Component {
     if (this.state.toHomeView === true) {
       return <Redirect to="/" />;
     }
-
-    if(this.props.profile == null){
-      return (
-        <Container>
-          <Form>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId="formGridEmail"
-                style={{ paddingTop: "10px", paddingLeft: "20px" }}
-              >
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  type={"text"}
-                  placeholder="Enter username"
-                  value={this.state.username}
-                  onChange={(e) => this.setState({ username: e.target.value })}
-                />
-              </Form.Group>
-  
-              <Form.Group
-                as={Col}
-                controlId="formGridPassword"
-                style={{
-                  paddingTop: "10px",
-                  paddingLeft: "10px",
-                  paddingRight: "20px",
-                }}
-              >
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type={"password"}
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChange={(e) => this.setState({ password: e.target.value })}
-                />
-              </Form.Group>
-            </Form.Row>
-  
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId="formGridFirstName"
-                style={{ paddingTop: "10px", paddingLeft: "20px" }}
-              >
-                <Form.Label>First Name</Form.Label>
-                <Form.Control
-                  type={"text"}
-                  placeholder="John"
-                  value={this.state.firstName}
-                  onChange={(e) => this.setState({ firstName: e.target.value })}
-                />
-              </Form.Group>
-  
-              <Form.Group
-                as={Col}
-                controlId="formGridLastName"
-                style={{
-                  paddingTop: "10px",
-                  paddingLeft: "10px",
-                  paddingRight: "20px",
-                }}
-              >
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control
-                  type={"text"}
-                  placeholder="Smith"
-                  value={this.state.lastName}
-                  onChange={(e) => this.setState({ lastName: e.target.value })}
-                />
-              </Form.Group>
-            </Form.Row>
-  
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId="formControlsEmail"
-                style={{ paddingLeft: "20px", paddingRight: "20px" }}
-              >
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type={"email"}
-                  value={this.state.email}
-                  placeholder="Email"
-                  onChange={(e) => this.setState({ email: e.target.value })}
-                />
-              </Form.Group>
-            </Form.Row>
-  
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId="formControlsPhone"
-                style={{ paddingLeft: "20px", paddingRight: "20px" }}
-              >
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  type={"text"}
-                  value={this.state.phone}
-                  placeholder="Phone"
-                  onChange={(e) => this.setState({ phone: e.target.value })}
-                />
-              </Form.Group>
-            </Form.Row>
-  
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId="formControlsAddress"
-                style={{ paddingLeft: "20px", paddingRight: "20px" }}
-              >
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                  type={"text"}
-                  value={this.state.address}
-                  placeholder="Address"
-                  onChange={(e) => this.setState({ address: e.target.value })}
-                />
-              </Form.Group>
-            </Form.Row>
-  
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId="formGridCity"
-                style={{ paddingLeft: "20px" }}
-              >
-                <Form.Label>City</Form.Label>
-                <Form.Control
-                  type={"text"}
-                  value={this.state.city}
-                  placeholder="City"
-                  onChange={(e) => this.setState({ city: e.target.value })}
-                />
-              </Form.Group>
-  
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>State</Form.Label>
-                <Form.Control
-                  type={"text"}
-                  value={this.state.state}
-                  placeholder="State"
-                  onChange={(e) => this.setState({ state: e.target.value })}
-                />
-              </Form.Group>
-  
-              <Form.Group
-                as={Col}
-                controlId="formGridZip"
-                style={{ paddingRight: "20px" }}
-              >
-                <Form.Label>Zip</Form.Label>
-                <Form.Control
-                  type={"number"}
-                  value={this.state.zipcode}
-                  placeholder="Zip"
-                  onChange={(e) => this.setState({ zipcode: e.target.value })}
-                />
-              </Form.Group>
-            </Form.Row>
-  
-            <Button
-              variant="primary"
-              style={{ marginLeft: "20px" }}
-              onClick={this.submitForm}
-            >
-              Submit
-            </Button>
-          </Form>
-        </Container>
-      );
-    } else {
+    
+    if(this.props.profile){
       return (
         <Container>
           <h1>Edit Your Account</h1>
@@ -479,7 +310,7 @@ class SignupView extends Component {
               >
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control
-                  type={"text"}
+                  type={"number"}
                   value={this.state.phone}
                   placeholder="(123) 456 7890"
                   onChange={(e) => this.setState({ phone: e.target.value })}
@@ -528,9 +359,10 @@ class SignupView extends Component {
             </Form.Row>
   
             <Button
-              variant="primary"
+              variant="dark"
               style={{ marginLeft: "20px" }}
               onClick={this.onSubmit.bind(this)}
+              type="submit"
             >
               Submit
             </Button>
@@ -539,7 +371,7 @@ class SignupView extends Component {
               style={{ marginLeft: "20px" }}
               onClick={() => {
                 this.setState({ toHomeView: true });
-                alert("canceled editing profile redirecting you to home page");
+                toast.info("Canceled editing profile.\nRedirecting you home.");
               }}
             >
               Cancel
@@ -547,9 +379,183 @@ class SignupView extends Component {
           </Form>
         </Container>
       );
+    }else{
+      return (
+        <Container>
+          <Form>
+            <Form.Row>
+              <Form.Group
+                as={Col}
+                style={{ paddingTop: "10px", paddingLeft: "20px" }}
+              >
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  id="username"
+                  type={"text"}
+                  placeholder="Enter username"
+                  value={this.state.username}
+                  onChange={(e) => this.setState({ username: e.target.value })}
+                />
+              </Form.Group>
+  
+              <Form.Group
+                as={Col}
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "10px",
+                  paddingRight: "20px",
+                }}
+              >
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  id="password"
+                  type={"password"}
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={(e) => this.setState({ password: e.target.value })}
+                />
+              </Form.Group>
+            </Form.Row>
+  
+            <Form.Row>
+              <Form.Group
+                as={Col}
+                style={{ paddingTop: "10px", paddingLeft: "20px" }}
+              >
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  id="firstname"
+                  type={"text"}
+                  placeholder="John"
+                  value={this.state.firstName}
+                  onChange={(e) => this.setState({ firstName: e.target.value })}
+                />
+              </Form.Group>
+  
+              <Form.Group
+                as={Col}
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "10px",
+                  paddingRight: "20px",
+                }}
+              >
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  id="lastname"
+                  type={"text"}
+                  placeholder="Smith"
+                  value={this.state.lastName}
+                  onChange={(e) => this.setState({ lastName: e.target.value })}
+                />
+              </Form.Group>
+            </Form.Row>
+  
+            <Form.Row>
+              <Form.Group
+                as={Col}
+                style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              >
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  id="email"
+                  type={"email"}
+                  value={this.state.email}
+                  placeholder="Email"
+                  onChange={(e) => this.setState({ email: e.target.value })}
+                />
+              </Form.Group>
+            </Form.Row>
+  
+            <Form.Row>
+              <Form.Group
+                as={Col}
+                controlId="formControlsPhone"
+                style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              >
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                  id="phone"
+                  type={"number"}
+                  value={this.state.phone}
+                  placeholder="Phone"
+                  onChange={(e) => this.setState({ phone: e.target.value })}
+                />
+              </Form.Group>
+            </Form.Row>
+  
+            <Form.Row>
+              <Form.Group
+                as={Col}
+                controlId="formControlsAddress"
+                style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              >
+                <Form.Label>Address</Form.Label>
+                <Form.Control
+                  id="address"
+                  type={"text"}
+                  value={this.state.address}
+                  placeholder="Address"
+                  onChange={(e) => this.setState({ address: e.target.value })}
+                />
+              </Form.Group>
+            </Form.Row>
+  
+            <Form.Row>
+              <Form.Group
+                as={Col}
+                controlId="formGridCity"
+                style={{ paddingLeft: "20px" }}
+              >
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  id="city"
+                  type={"text"}
+                  value={this.state.city}
+                  placeholder="City"
+                  onChange={(e) => this.setState({ city: e.target.value })}
+                />
+              </Form.Group>
+  
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label>State</Form.Label>
+                <Form.Control
+                  id="state"
+                  type={"text"}
+                  value={this.state.state}
+                  placeholder="State"
+                  onChange={(e) => this.setState({ state: e.target.value })}
+                />
+              </Form.Group>
+  
+              <Form.Group
+                as={Col}
+                controlId="formGridZip"
+                style={{ paddingRight: "20px" }}
+              >
+                <Form.Label>Zip</Form.Label>
+                <Form.Control
+                  id="zip"
+                  type={"number"}
+                  value={this.state.zipcode}
+                  placeholder="Zip"
+                  onChange={(e) => this.setState({ zipcode: e.target.value })}
+                />
+              </Form.Group>
+            </Form.Row>
+  
+            <Button
+              variant="dark"
+              style={{ marginLeft: "20px" }}
+              onClick={this.submitForm}
+              type="submit"
+            >
+              Submit
+            </Button>
+          </Form>
+        </Container>
+      );
     }
-
-    
   }
 }
 

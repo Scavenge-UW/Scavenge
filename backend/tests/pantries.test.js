@@ -57,7 +57,7 @@ describe('Pantries', () => {
       data = JSON.parse(data.text);
       //console.log(data);
       const length = Object.keys(data).length;
-      assert.equal(length, 15, "The pantry details does not have 15 keys");
+      assert.equal(length, 17, "The pantry details does not have 17 keys");
     });
   });
 
@@ -80,7 +80,8 @@ describe('Pantries', () => {
           "img_src": "new.img_src.png",
           "lon": "99.99",
           "lat": "99.99",
-          "website": "www.new-website.com"
+          "website": "www.new-website.com",
+          "time_to_add": 60
         })
       );
       
@@ -96,7 +97,8 @@ describe('Pantries', () => {
         "img_src": "https://lh5.googleusercontent.com/p/AF1QipM6UYI64xgIkJx1w_t7RLh8eVCjelB9ogeoW_A3=w426-h240-k-no",
         "lat": -89.4,
         "lon": 43.07,
-        "website": "https://www.riverfoodpantry.org/"
+        "website": "https://www.riverfoodpantry.org/",
+        "time_to_add": 90
       }
 
       data = await(agent
@@ -104,6 +106,27 @@ describe('Pantries', () => {
         .send(newPantryInfo)
       );
 
+      const expected = {
+        "name": "The River Food Pantry_updated",
+        "address": "2201 Darwin Rd",
+        "city": "Madison",
+        "state": "WI",
+        "zip": 53704,
+        "phone_number": "6084428815",
+        "details": "Here to serve!",
+        "employees": [
+          {
+            "first_name": "sean",
+            "last_name": "cunningham",
+            "user_email": "sjcunningham@wisc.edu"
+          }
+        ],
+        "img_src": "https://lh5.googleusercontent.com/p/AF1QipM6UYI64xgIkJx1w_t7RLh8eVCjelB9ogeoW_A3=w426-h240-k-no",
+        "lat": -89.4,
+        "lon": 43.07,
+        "website": "https://www.riverfoodpantry.org/",
+        "time_to_add": 90
+      }
       assert.equal(data.status, 200, "status was not 200");
       assert.instanceOf(data, Object, "data is not an object");
       data = JSON.parse(data.text);
@@ -117,7 +140,7 @@ describe('Pantries', () => {
       delete data['hours'];
       delete data['reservations'];
       delete data['pantry_id'];
-      assert.deepEqual(data, newPantryInfo, "Pantry was not updated correctly");
+      assert.deepEqual(data, expected, "Pantry was not updated correctly");
     });
   });
 
@@ -219,6 +242,68 @@ describe('Pantries', () => {
       //console.log(data);
       const appleInventory = data.foods[0].quantity;
       assert.equal(appleInventory, "20", "The inventory did not update correctly.");
+    });
+  });
+
+  before('User-to-Pantry', async () => {
+    //signup sean2
+    let data = await (agent
+      .post('/signup')
+      .send({
+        username: 'sean2',
+        password: 'sean2',
+        firstName: 'firstname',
+        lastName: 'lastname',
+        phone: '123456789',
+        address: 'street',
+        city: 'Madison',
+        state: 'wi',
+        zipcode: '12345',
+        email: 'email@wisc.edu'
+      })
+    );
+    // logout sean2
+    data = await (agent
+      .post('/logout')
+    );
+    // login sean1
+    data = await (agent
+      .post('/login')
+      .send({
+        username: 'sean1',
+        password: 'abc'
+      })
+    );
+  })
+  /*
+  * Test the /pantries/:/pantry_id/user/:username POST route
+  */
+  describe('User-to-Pantry', () => {
+    it('it should add a user to pantry', async () => {
+      let data = await(agent
+        .post('/pantries/1/user/sean2/')
+      );       
+      
+      assert.equal(data.status, 200, "status was not 200");
+      assert.instanceOf(data, Object, "data is not an object");
+      var expected = 1;
+      assert.deepEqual(JSON.parse(data.text)['affectedRows'], expected, "response did not match expected.")
+    });
+  });
+
+  /*
+  * Test the /pantries/:/pantry_id/user/:username DELETE route
+  */
+  describe('User-to-Pantry', () => {
+    it('it should delete a user from pantry', async () => {
+      let data = await(agent
+        .delete('/pantries/1/user/sean2/')
+      );       
+      
+      assert.equal(data.status, 200, "status was not 200");
+      assert.instanceOf(data, Object, "data is not an object");
+      var expected = 1;
+      assert.deepEqual(JSON.parse(data.text)['affectedRows'], expected, "response did not match expected.")
     });
   });
 

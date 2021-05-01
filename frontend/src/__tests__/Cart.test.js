@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 
-import CartView from "../components/CartView";
+import CartView from "../components/components_user/CartView";
 import "../setupTests";
 import cartStore from "../__mocks__/cartStoreMock";
 

@@ -7,9 +7,12 @@ const {
   pantryUpdateInventoryAction,
   updateReservationAction,
   pantryUpdateHoursAction,
-  getPantryHoursAction,
+//getPantryHoursAction,
   pantryUpdateDetailAction,
-  foodSearchAction
+  foodSearchAction,
+  pantryAddEmployeeAction,
+  pantryRemoveEmployeeAction,
+  updateEstimatedPickUpAction
 } = require("../controllers/pantry.controllers.js");
 
 const authMiddleware = require("../middleware/auth.middleware");
@@ -38,7 +41,16 @@ router.post('/pantries/:pantry_id/:food_id', authMiddleware.verifyAndGetUserInfo
 // Mark a reservation as picked up, approved, or cancelled
 router.put('/pantries/:pantry_id/reservations/:action/:reservation_id', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, updateReservationAction);
 
+// Change estimated pick up
+router.put('/pantries/:pantry_id/reservations/:reservation_id', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, updateEstimatedPickUpAction);
+
 // Search pantries by foods
 router.post('/pantries/search/', foodSearchAction);
+
+// Add user to pantry
+router.post('/pantries/:pantry_id/user/:username', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryAddEmployeeAction);
+
+// Remove user from pantry
+router.delete('/pantries/:pantry_id/user/:username', authMiddleware.verifyAndGetUserInfo, authMiddleware.requireLogin, pantryRemoveEmployeeAction);
 
 module.exports = router; // We need this at the end of every route file

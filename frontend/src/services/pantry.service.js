@@ -102,6 +102,19 @@ async function updateOpenHours(pantry_id, updDay, updHours) {
   });
 }
 
+async function updateEstPickupTime(pantry_id, reservation_id, updTime) {
+  console.log("4-1. ", pantry_id);
+  console.log("4-2. ", reservation_id);
+  console.log("4-3. ", updTime);
+  return request({
+    // /pantries/:pantry_id/reservations/:reservation_id
+    url: "/pantries/" + pantry_id + "/reservations/" + reservation_id,
+    method: "PUT",
+    data: updTime,
+    withCredentials: true,
+  });
+}
+
 const PantryService = {
   getPantries,
   getDetail,
@@ -120,6 +133,9 @@ const PantryService = {
 
   // update open hours
   updateOpenHours,
+
+  // update est pickup time
+  updateEstPickupTime,
 };
 
 export default PantryService;

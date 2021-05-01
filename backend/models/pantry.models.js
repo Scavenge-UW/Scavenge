@@ -16,6 +16,7 @@ exports.getAllPantries = async (req, res) => {
       p.lat,
       p.website,
       p.approved,
+      p.time_to_add,
       f.id as food_id,
       f.name as food_name,
       f.qr_code,
@@ -34,13 +35,18 @@ exports.getAllPantries = async (req, res) => {
       h.day,
       h.open,
       h.close,
-      h.detail      
+      h.detail,
+      u.first_name,
+      u.last_name,
+      u.email as user_email
     FROM pantry p
     LEFT JOIN inventory i ON p.id = i.pantry_id
     LEFT JOIN food f ON f.id = i.food_id
     LEFT JOIN reservation r ON r.pantry_id = p.id
     LEFT JOIN res_food rf ON r.id = rf.reservation_id
     LEFT JOIN food f2 on rf.food_id = f2.id
+    JOIN user_to_pantry utp on utp.pantry_id = p.id
+    JOIN user u on u.username = utp.username
     JOIN hours h ON p.id = h.pantry_id;
   `;
   return await execQuery("select", query);
@@ -62,6 +68,7 @@ exports.getPantryDetail = async (req, res) => {
       p.lat,
       p.website,
       p.approved,
+      p.time_to_add,
       f.id as food_id,
       f.name as food_name,
       f.qr_code,
@@ -80,7 +87,10 @@ exports.getPantryDetail = async (req, res) => {
       h.day,
       h.open,
       h.close,
-      h.detail      
+      h.detail,
+      u.first_name,
+      u.last_name,
+      u.email as user_email   
     FROM pantry p
     LEFT JOIN inventory i ON p.id = i.pantry_id
     LEFT JOIN food f ON f.id = i.food_id
@@ -88,6 +98,8 @@ exports.getPantryDetail = async (req, res) => {
     LEFT JOIN res_food rf ON r.id = rf.reservation_id
     LEFT JOIN food f2 on rf.food_id = f2.id
     JOIN hours h ON p.id = h.pantry_id
+    JOIN user_to_pantry utp on utp.pantry_id = p.id
+    JOIN user u on u.username = utp.username
     WHERE p.id = ?;
   `;
   const values = [[req.params.pantry_id]];
@@ -117,12 +129,13 @@ exports.pantryUpdateDetail = async (req, res) => {
       img_src = ?,
       lon = ?,
       lat = ?,
-      website = ?
+      website = ?,
+      time_to_add = ?
     WHERE id = ?;
   `;
   const values = [req.body.name, req.body.address, req.body.city, req.body.state, req.body.zip,
     req.body.phone_number, req.body.details, req.body.img_src, req.body.lon, req.body.lat, 
-    req.body.website, req.params.pantry_id];
+    req.body.website, req.body.time_to_add, req.params.pantry_id];
   return await execQuery("update", query, values);
 }
 
@@ -158,12 +171,23 @@ exports.pantryUpdateHours = async (req, res) => {
   return await execQuery("update", query, values);
 }
 
+exports.updateEstimatedPickUp = async (req, res) => {
+  const query = `
+    UPDATE reservation
+    SET
+      estimated_pick_up = ?
+    WHERE pantry_id = ? AND id = ?;
+  `;
+  const values = [req.body.estimated_pick_up, req.params.pantry_id, req.params.reservation_id];
+  return await execQuery("update", query, values);
+}
+
 exports.updateReservation = async (req, res) => {
   if (req.params.action === 'complete') {
     const query = `
       UPDATE reservation
       SET
-        picked_up_time = NOW()
+        picked_up_time = date_add(NOW(), INTERVAL -5 HOUR)
       WHERE id = ? AND pantry_id = ?;
     `;
     // pantry_id is determined by id, but since it's in the route we'll use it in the query
@@ -175,10 +199,15 @@ exports.updateReservation = async (req, res) => {
       UPDATE reservation
       SET
         cancelled = 0,
-        approved = 1
+        approved = 1,
+        estimated_pick_up = date_add(NOW(), INTERVAL (
+          SELECT time_to_add
+          FROM pantry
+          WHERE id = ?) 
+          - 300 MINUTE)
       WHERE id = ? AND pantry_id = ?;
     `;
-    const values = [req.params.reservation_id, req.params.pantry_id];
+    const values = [req.params.pantry_id, req.params.reservation_id, req.params.pantry_id];
     return await execQuery("update", query, values);
   } else if (req.params.action === 'cancel') {
     const query = `
@@ -261,4 +290,24 @@ exports.cancelReservation = async (req, res, food_id, quantity) => {
   `;
   const values = [quantity, food_id, req.params.pantry_id];
   return await execQuery("update", query, values);
+}
+
+// Add user to pantry as employee
+exports.pantryAddEmployee = async (req, res) => {
+  const query = `
+    INSERT INTO user_to_pantry (username, pantry_id)
+    VALUES ?;
+  `;
+  let values = [[req.params.username, req.params.pantry_id]]
+  return await execQuery("insert", query, values);
+}
+
+// DELETE user from pantry as employee
+exports.pantryRemoveEmployee = async (req, res) => {
+  const query = `
+    DELETE FROM user_to_pantry
+    WHERE username = ? AND pantry_id = ?;
+  `;
+  let values = [req.params.username, req.params.pantry_id]
+  return await execQuery("delete", query, values);
 }

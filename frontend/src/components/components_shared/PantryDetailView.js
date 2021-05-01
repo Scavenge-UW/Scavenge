@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+
+// imports for bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import Image from "react-bootstrap/Image";
+import Tabs from "react-bootstrap/Tabs";
+// import Image from "react-bootstrap/Image";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
-import { useParams } from "react-router-dom";
 
-import FoodItemCard from "../components/FoodItemCard";
-import PantryService from "../services/pantry.service";
+// imports for services and components
+import FoodItemCard from "./FoodItemCard";
+import PantryService from "../../services/pantry.service";
+
+// imports for helper functions
+import formatters from "../helper_functions/DatetimeFormatter.function";
+import MySpinner from "../helper_functions/MySpinner";
 
 /**
  * A view for user that displays details and food items in a specific pantry.
@@ -35,7 +42,7 @@ function PantryDetailView(props) {
   }, []);
 
   /**
-   * Fetch pantry detail
+   * Fetch pantry detail and food information
    *
    */
   const fetchPantryDetail = async () => {
@@ -70,15 +77,19 @@ function PantryDetailView(props) {
       (currPage - 1) * paginationCount,
       paginationCount * currPage
     );
+
     for (const foodItem of Object.values(foods)) {
       // TODO: Change to props when API is implemented
       foodItemCards.push(
         <FoodItemCard
+          pantryDetailMode
+          isLoggedIn={props.isLoggedIn}
+          isAdmin={props.isAdmin}
           username={props.username}
           key={foodItem.food_id}
           foodItem={foodItem}
           pantry={pantryDetail}
-          pantryDetailMode
+          numFoodItems={foodItemCards.length}
         />
       );
     }
@@ -110,6 +121,43 @@ function PantryDetailView(props) {
         </Pagination.Item>
       );
     }
+
+    // previous button
+    paginationItems.unshift(
+      <Pagination.Prev
+        onClick={() => {
+          setCurrPage(currPage - 1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // go to page 1 button
+    paginationItems.unshift(
+      <Pagination.First
+        onClick={() => {
+          setCurrPage(1);
+        }}
+        disabled={currPage === 1}
+      />
+    );
+    // next page button
+    paginationItems.push(
+      <Pagination.Next
+        onClick={() => {
+          setCurrPage(currPage + 1);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
+    // go to last page button
+    paginationItems.push(
+      <Pagination.Last
+        onClick={() => {
+          setCurrPage(numPages);
+        }}
+        disabled={currPage === numPages}
+      />
+    );
 
     return <Pagination>{paginationItems}</Pagination>;
   };
@@ -153,13 +201,13 @@ function PantryDetailView(props) {
   const showPantryHours = () => {
     Object.values(pantryDetail.hours);
     const daysOfTheWeek = {
-      1: "Sunday",
-      2: "Monday",
-      3: "Tuesday",
-      4: "Wednesday",
-      5: "Thursday",
-      6: "Friday",
-      7: "Saturday",
+      1: "Monday",
+      2: "Tuesday",
+      3: "Wednesday",
+      4: "Thursday",
+      5: "Friday",
+      6: "Saturday",
+      7: "Sunday",
     };
 
     let items = [];
@@ -167,8 +215,8 @@ function PantryDetailView(props) {
       items.push(
         <tr key={hours.day}>
           <td>{daysOfTheWeek[hours.day]}</td>
-          <td>{hours.open}</td>
-          <td>{hours.close}</td>
+          <td>{formatters.time(hours.open)}</td>
+          <td>{formatters.time(hours.close)}</td>
           <td>{hours.detail}</td>
         </tr>
       );
@@ -189,29 +237,26 @@ function PantryDetailView(props) {
     );
   };
 
-  if (pantryDetail !== null) {
+  if (pantryDetail) {
     const {
       name,
-      address,
-      zip,
-      city,
-      state,
-      lat,
-      lon,
-      phone_number,
+      // unused: address,zip,city,state,lat,lon,phone_number,website,
       img_src,
-      website,
     } = pantryDetail;
 
     return (
-      <Container>
+      <Container id="pantry-detail-view">
         <Row className="justify-content-center mt-4 mb-4 bg-light">
           <Col className="justify-content-center rounded">
             <Row className="justify-content-center mt-3 text-center">
               <h3>{name}</h3>
             </Row>
             <Row className="justify-content-center mx-auto mb-4">
-              <Image fluid rounded src={img_src} />
+              <img
+                src={img_src}
+                className="img-fluid"
+                alt="holder.js/100px240"
+              />
             </Row>
           </Col>
           <Col>
@@ -239,13 +284,12 @@ function PantryDetailView(props) {
         <Row className="justify-content-center mt-4">{showPagination()}</Row>
       </Container>
     );
-  } else {
-    return (
-      <Container>
-        <div className="spinner"></div>
-      </Container>
-    );
   }
+  return (
+    <Container id="pantry-detail-view-loading">
+      <MySpinner />
+    </Container>
+  );
 }
 
 export default PantryDetailView;

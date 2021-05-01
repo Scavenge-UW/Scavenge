@@ -1,23 +1,33 @@
 import React, { Component } from "react";
-import Card from "react-bootstrap/Card";
+
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Tooltip from "react-bootstrap/Tooltip";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import { VscCircleFilled } from "react-icons/vsc";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+
+// other imports
+import "../../css/common.css";
 import { toast } from "react-toastify";
+import { VscCircleFilled } from "react-icons/vsc";
+import { BsInfoCircle } from "react-icons/bs";
+
+// imports for actions and helper function
+import store from "../../store";
+import FoodService from "../../services/food.service";
+import PantryService from "../../services/pantry.service";
+import WishlistService from "../../services/wishlist.service";
+import OneClickReserveModal from "../modals/OneClickReserveModal";
 import {
   addToCart,
   deleteFromCart,
   updateQuantity,
-} from "../actions/cart.actions";
-import store from "../store";
-
-import "../css/common.css";
-import PantryService from "../services/pantry.service";
-import OneClickReserveModal from "./modals/OneClickReserveModal";
+} from "../../actions/cart.actions";
 
 class FoodItemCard extends Component {
   constructor(props) {
@@ -30,7 +40,22 @@ class FoodItemCard extends Component {
       editMode: false,
       showOneClickReserveModal: false,
       cartQuantity: 0,
+      decrementBtnDisabled: false,
+      foodsInfo: [],
     };
+  }
+
+  // used to load food info to display food nutrition info
+  componentDidMount() {
+    this.fetchFoodsInfo();
+  }
+
+  fetchFoodsInfo() {
+    FoodService.getFoods().then((foods) => {
+      this.setState({
+        foodsInfo: foods,
+      });
+    });
   }
 
   /**
@@ -65,10 +90,49 @@ class FoodItemCard extends Component {
     }
   }
 
+  /**
+   * Return nutrition tooltip and on hover over display nutrition index
+   *
+   * @returns nutrition tool tip on hover over
+   */
+  showNutritionTooltip() {
+    const getNutrition = (id) => {
+      if (this.state.foodsInfo.length) {
+        for (const info of this.state.foodsInfo) {
+          if (id === info.id) return info.NUTRITION_COLUMNS_PLACEHOLDER;
+        }
+      }
+      return -1;
+    };
+
+    const renderTooltip = () => (
+      <Tooltip id="nutrition-info-tooltip">
+        <strong>
+          Nutrition index: {getNutrition(this.props.foodItem.food_id)}
+        </strong>
+      </Tooltip>
+    );
+
+    return (
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 150, hide: 400 }} // delay for show and hide the tooltip
+        overlay={renderTooltip()}
+      >
+        <BsInfoCircle
+          size="1.3rem"
+          color="#48AAAD"
+          onClick={() => {
+            console.log("hello");
+          }}
+        />
+      </OverlayTrigger>
+    );
+  }
+
   setShowOneClickReserveModal(show) {
     this.setState({
       showOneClickReserveModal: show,
-      cartQuantity: this.cartQuantity.current.value,
     });
   }
 
@@ -77,7 +141,18 @@ class FoodItemCard extends Component {
    *
    */
   onClickOneClickReserve() {
-    this.setShowOneClickReserveModal(true);
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to reserve items.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can reserve items."
+      );
+    } else {
+      this.setShowOneClickReserveModal(true);
+      this.setState({
+        cartQuantity: this.cartQuantity.current.value,
+      });
+    }
   }
 
   /**
@@ -85,16 +160,67 @@ class FoodItemCard extends Component {
    *
    */
   onClickAddToCart() {
-    let itemName = this.props.foodItem.food_name;
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to add items to cart.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can add items to cart."
+      );
+    } else {
+      let itemName = this.props.foodItem.food_name;
 
-    store.dispatch(
-      addToCart({
-        item: this.props.foodItem,
-        cartQuantity: this.cartQuantity.current.value,
-        pantry: this.props.pantry,
-      })
-    );
-    toast.info("🛒 " + itemName + " was added to your cart!");
+      store.dispatch(
+        addToCart({
+          item: this.props.foodItem,
+          cartQuantity: this.cartQuantity.current.value,
+          pantry: this.props.pantry,
+        })
+      );
+      toast.info("🛒 " + itemName + " was added to your cart!");
+    }
+  }
+
+  /**
+   * Add item to wishlsit and prompt messages for invalid user type
+   */
+  onClickAddToWishlist() {
+    if (!this.props.isLoggedIn()) {
+      toast.info("Please log in to add items to wishlist.");
+    } else if (this.props.isAdmin()) {
+      toast.error(
+        "You are currently logged in as Admin. Only Civilian Users can add items to wishlist."
+      );
+    } else {
+      let itemName = this.props.foodItem.food_name;
+
+      WishlistService.addToWishlist(this.props.username, {
+        food_id: this.props.foodItem.food_id,
+        pantry_id: this.props.pantry.pantry_id,
+      });
+      toast.info("🎁 " + itemName + " was added to your wishlist!");
+    }
+  }
+
+  onClickDeleteWishlistItem() {
+    let username = this.props.username;
+    let wishlist_id = this.props.foodItem.wishlist_id;
+    let food_name = this.props.foodItem.food_name;
+    if (
+      window.confirm(
+        "Are you sure you want to remove " + food_name + " from your wishlist?"
+      )
+    ) {
+      WishlistService.removeFromWishlist(username, wishlist_id)
+        .then(() => {
+          this.props.fetchResponse();
+          toast.success("🗑️ Removed " + food_name + " from your wishlist.");
+        })
+        .catch((response) => {
+          if (response.message) {
+            toast.error(response.message);
+          }
+        });
+    }
   }
 
   /**
@@ -144,7 +270,7 @@ class FoodItemCard extends Component {
    * update quantity of item in cart
    *
    */
-  onClickUpdateCartItemQuantity() {
+  onUpdateCartItemQuantity() {
     let itemName = this.props.foodItem.food_name;
 
     store.dispatch(
@@ -153,7 +279,9 @@ class FoodItemCard extends Component {
         this.cartQuantity.current.value
       )
     );
-    toast.info("✏️ " + itemName + "'s quantity was updated!");
+    this.setState({
+      cartQuantity: this.cartQuantity.current.value,
+    });
   }
 
   /**
@@ -238,6 +366,7 @@ class FoodItemCard extends Component {
             <Col>
               <Form>
                 <Form.Group controlId="formQuantity">
+                  {/* TODO: validate valid input quantity number */}
                   <Form.Label>Enter quantity in stock</Form.Label>
                   <Form.Control
                     type="number"
@@ -245,6 +374,7 @@ class FoodItemCard extends Component {
                     placeholder="Quantity"
                     defaultValue={this.props.foodItem.quantity}
                     ref={this.newQuantity}
+                    min="0" // test
                   />
                 </Form.Group>
               </Form>
@@ -276,7 +406,11 @@ class FoodItemCard extends Component {
    *
    */
   showReserveControls() {
-    if (!this.props.cartMode && !this.props.adminMode) {
+    if (
+      !this.props.cartMode &&
+      !this.props.adminMode &&
+      !this.props.wishlistMode
+    ) {
       return (
         <Row className="mt-4 justify-content-end align-items-end">
           <Col>
@@ -286,32 +420,60 @@ class FoodItemCard extends Component {
             <Row>
               <Col className="col-8">
                 <InputGroup>
+                  {/* Increment Button */}
                   <InputGroup.Prepend>
                     <Button
+                      className="increment-cart-item"
                       variant="outline-primary"
                       onClick={() => {
+                        // increment cartQuantity by 1
                         this.cartQuantity.current.value =
-                          parseInt(this.cartQuantity.current.value) + 1; // increment cartQuantity by 1
+                          parseInt(this.cartQuantity.current.value) + 1;
+                        // set decrement button to enabled if quantity > 0
+                        if (parseInt(this.cartQuantity.current.value) > 0)
+                          this.setState({ decrementBtnDisabled: false });
+                        this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
                     >
                       +
                     </Button>
                   </InputGroup.Prepend>
+
+                  {/* Display quantity form */}
                   <FormControl
                     type="number"
+                    onChange={() => {
+                      this.onUpdateCartItemQuantity();
+                      // VALIDATE: disabled decrement button accordingly
+                      if (parseInt(this.cartQuantity.current.value) < 1)
+                        this.setState({ decrementBtnDisabled: true });
+                      else this.setState({ decrementBtnDisabled: false });
+                    }}
                     disabled={!this.isInStock()}
                     defaultValue={1}
                     ref={this.cartQuantity}
+                    min="0" // VALIDATE: set min to 0
                   />
+
+                  {/* Decrement Button */}
                   <InputGroup.Append>
                     <Button
+                      className="decrement-cart-item"
                       variant="outline-primary"
                       onClick={() => {
+                        // decrement cartQuantity by 1
                         this.cartQuantity.current.value =
-                          parseInt(this.cartQuantity.current.value) - 1; // decrement cartQuantity by 1
+                          parseInt(this.cartQuantity.current.value) - 1;
+                        // VALIDATE: set decrement button to disabled if quantity <= 1
+                        if (parseInt(this.cartQuantity.current.value) < 1)
+                          this.setState({ decrementBtnDisabled: true });
+                        // update quantity displayed
+                        this.onUpdateCartItemQuantity();
                       }}
-                      disabled={!this.isInStock()}
+                      disabled={
+                        !this.isInStock() || this.state.decrementBtnDisabled
+                      }
                     >
                       -
                     </Button>
@@ -321,27 +483,45 @@ class FoodItemCard extends Component {
             </Row>
           </Col>
           <Col className="col-6 text-right">
-            <Row className="justify-content-end mb-1">
-              <Button
-                id="btn-one-click-reserve"
-                block
-                variant="success"
-                onClick={this.onClickOneClickReserve.bind(this)}
-                disabled={!this.isInStock()}
-              >
-                One Click Reserve
-              </Button>
-            </Row>
-            <Row className="justify-content-end">
-              <Button
-                block
-                variant="primary"
-                onClick={this.onClickAddToCart.bind(this)}
-                disabled={!this.isInStock()}
-              >
-                Add to Cart
-              </Button>
-            </Row>
+            {/* display One Click Reserve buttons if item is in stock */}
+            {this.isInStock() && (
+              <Row className="justify-content-end mb-1">
+                <Button
+                  id="btn-one-click-reserve"
+                  block
+                  variant="success"
+                  onClick={this.onClickOneClickReserve.bind(this)}
+                >
+                  One Click Reserve
+                </Button>
+              </Row>
+            )}
+            {/* display Add to Cart buttons if item is in stock */}
+            {this.isInStock() && (
+              <Row className="justify-content-end mb-1">
+                <Button
+                  id="btn-add-to-cart"
+                  block
+                  variant="info"
+                  onClick={this.onClickAddToCart.bind(this)}
+                >
+                  Add to Cart
+                </Button>
+              </Row>
+            )}
+            {/* display Add to Wishlist buttons if item is out of stock */}
+            {!this.isInStock() && (
+              <Row className="justify-content-end">
+                <Button
+                  id="btn-add-to-wishlist"
+                  block
+                  variant="dark"
+                  onClick={this.onClickAddToWishlist.bind(this)}
+                >
+                  Add to Wishlist
+                </Button>
+              </Row>
+            )}
           </Col>
         </Row>
       );
@@ -371,16 +551,20 @@ class FoodItemCard extends Component {
                       onClick={() => {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) + 1; // increment cartQuantity by 1
+                        this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
                     >
                       +
                     </Button>
                   </InputGroup.Prepend>
+                  {/* TODO: validate valid input quantity number */}
                   <FormControl
+                    onChange={this.onUpdateCartItemQuantity.bind(this)}
                     type="number"
                     defaultValue={this.props.cartQuantity}
                     ref={this.cartQuantity}
+                    min="1" // test
                   />
                   <InputGroup.Append>
                     <Button
@@ -389,6 +573,7 @@ class FoodItemCard extends Component {
                       onClick={() => {
                         this.cartQuantity.current.value =
                           parseInt(this.cartQuantity.current.value) - 1; // decrement cartQuantity by 1
+                        this.onUpdateCartItemQuantity();
                       }}
                       disabled={!this.isInStock()}
                     >
@@ -398,13 +583,13 @@ class FoodItemCard extends Component {
                 </InputGroup>
               </Col>
               <Col>
-                <Button
+                {/* <Button
                   onClick={this.onClickUpdateCartItemQuantity.bind(this)}
                   size="sm"
                   block
                 >
                   Update
-                </Button>
+                </Button> */}
               </Col>
             </Row>
           </Col>
@@ -430,6 +615,36 @@ class FoodItemCard extends Component {
     }
   }
 
+  /**
+   * Returns controls used in wishlist mode.
+   *
+   * @returns Controls used in wishlist mode
+   */
+  showWishlistControls() {
+    // wishlistMode
+    // food={food} // contains food_id, food_name, wishlist_id
+    // pantry_id={pantryId}
+    // username={this.props.username}
+    if (this.props.wishlistMode) {
+      return (
+        <Row className="mt-4 justify-content-center" md={6}>
+          {/* <Col className="text-center" md={3}> */}
+          <Button
+            size="sm"
+            block
+            variant="danger"
+            onClick={(username, wishlist_id) =>
+              this.onClickDeleteWishlistItem()
+            }
+          >
+            Remove from Wishlist
+          </Button>
+          {/* </Col> */}
+        </Row>
+      );
+    }
+  }
+
   showPantryName() {
     if (this.props.cartMode) {
       return (
@@ -437,6 +652,17 @@ class FoodItemCard extends Component {
           <Col>
             <span style={{ fontSize: "1rem" }}>
               from {this.props.pantry.name}
+            </span>
+          </Col>
+        </Row>
+      );
+    }
+    if (this.props.wishlistMode) {
+      return (
+        <Row className="justify-content-center text-center mt-4">
+          <Col>
+            <span style={{ fontSize: "1rem" }}>
+              from {this.props.pantry_name}
             </span>
           </Col>
         </Row>
@@ -460,9 +686,9 @@ class FoodItemCard extends Component {
   }
 
   render() {
-    if (this.props.type === "filler") {
+    if (this.props.type === "filler")
       return <Card className="filler food-item" />;
-    } else {
+    else {
       const { food_id, food_name, quantity } = this.props.foodItem;
       return (
         <>
@@ -471,7 +697,10 @@ class FoodItemCard extends Component {
               <Card.Title className="mb-4">
                 <Row className="justify-content-between align-items-center">
                   <Col className="text-left">
-                    <span id="food_name">{food_name}</span>
+                    <span>
+                      <span id="food_name">{food_name}</span>{" "}
+                      {this.showNutritionTooltip()}
+                    </span>
                   </Col>
                   <Col className="text-right">
                     {/* Show if Item is in stock */}
@@ -480,6 +709,7 @@ class FoodItemCard extends Component {
                 </Row>
                 {this.showReserveControls()}
                 {this.showAdminControls()}
+                {this.showWishlistControls()}
                 {this.showCartControls()}
                 {this.showPantryName()}
               </Card.Title>

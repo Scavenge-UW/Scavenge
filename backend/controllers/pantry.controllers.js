@@ -9,6 +9,7 @@ exports.getAllPantriesAction = (req, res) => {
         result[element['pantry_id']]['foods'] = {};
         result[element['pantry_id']]['reservations'] = {};
         result[element['pantry_id']]['hours'] = {};
+        result[element['pantry_id']]['employees'] = {};
       }
       if ('reservation_id' in element) {
         result[element['pantry_id']]['reservations'][element['reservation_id']] = {};
@@ -31,6 +32,7 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['lon']           = element['lon'];
       result[element['pantry_id']]['website']       = element['website'];
       result[element['pantry_id']]['approved']      = element['approved'];
+      result[element['pantry_id']]['time_to_add']   = element['time_to_add'];
       result[element['pantry_id']]['foods'][element['food_id']] = {};
       result[element['pantry_id']]['foods'][element['food_id']]['food_id']    = element['food_id'];
       result[element['pantry_id']]['foods'][element['food_id']]['food_name']  = element['food_name'];
@@ -55,6 +57,12 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['hours'][element['day']]['open']    = element['open'];
       result[element['pantry_id']]['hours'][element['day']]['close']   = element['close'];
       result[element['pantry_id']]['hours'][element['day']]['detail']  = element['detail'];
+
+      result[element['pantry_id']]['employees'][element['first_name']] = {};
+      result[element['pantry_id']]['employees'][element['first_name']]['first_name']  = element['first_name'];
+      result[element['pantry_id']]['employees'][element['first_name']]['last_name']   = element['last_name'];
+      result[element['pantry_id']]['employees'][element['first_name']]['user_email']  = element['user_email'];
+
     });
 
     // Convert into array format without using ids as keys
@@ -75,10 +83,12 @@ exports.getAllPantriesAction = (req, res) => {
       pantryInfo['lat'] = pantry['lat'];
       pantryInfo['lon'] = pantry['lon'];
       pantryInfo['website'] = pantry['website'];
+      pantryInfo['time_to_add'] = pantry['time_to_add'];
 
       //pantryInfo['reservations'] = []; we don't want to give everyone access to the reservations
       pantryInfo['foods'] = [];
       pantryInfo['hours'] = [];
+      pantryInfo['employees'] = [];
 
       // if ('reservations' in pantry) {
       //   for (const [reservationKey, reservationData] of Object.entries(pantry['reservations'])) {
@@ -123,6 +133,15 @@ exports.getAllPantriesAction = (req, res) => {
 
         pantryInfo['hours'].push(hour);
       }
+
+      for (const [empKey, empData] of Object.entries(pantry['employees'])) {
+        let employees = {};
+        employees['first_name'] = empData['first_name'];
+        employees['last_name']  = empData['last_name'];
+        employees['emauser_emailil']      = empData['user_email'];
+
+        pantryInfo['employees'].push(employees);
+      }      
       resultsArr.push(pantryInfo);
     }
     result = resultsArr;
@@ -141,6 +160,7 @@ exports.getPantryDetailAction = (req, res) => {
     result['foods'] = {};
     result['reservations'] = {};
     result['hours'] = {};
+    result['employees'] = {};
     pantryDetail.forEach(element => {
       if ('reservation_id' in element) {
         result['reservations'][element['reservation_id']] = {};
@@ -163,6 +183,7 @@ exports.getPantryDetailAction = (req, res) => {
       result['lon']           = element['lon'];
       result['website']       = element['website'];
       result['approved']      = element['approved'];
+      result['time_to_add']   = element['time_to_add'];
       result['foods'][element['food_id']] = {};
       result['foods'][element['food_id']]['food_id']    = element['food_id'];
       result['foods'][element['food_id']]['food_name']  = element['food_name'];
@@ -187,6 +208,12 @@ exports.getPantryDetailAction = (req, res) => {
       result['hours'][element['day']]['open']    = element['open'];
       result['hours'][element['day']]['close']   = element['close'];
       result['hours'][element['day']]['detail']  = element['detail'];
+
+      result['employees'][element['first_name']] = {};
+      result['employees'][element['first_name']]['first_name']  = element['first_name'];
+      result['employees'][element['first_name']]['last_name']  = element['last_name'];
+      result['employees'][element['first_name']]['user_email']  = element['user_email'];
+
     });
 
     // Format the data
@@ -205,10 +232,12 @@ exports.getPantryDetailAction = (req, res) => {
     pantryInfo['lat'] = pantry['lat'];
     pantryInfo['lon'] = pantry['lon'];
     pantryInfo['website'] = pantry['website'];
+    pantryInfo['time_to_add'] = pantry['time_to_add'];
 
     pantryInfo['reservations'] = [];
     pantryInfo['foods'] = [];
     pantryInfo['hours'] = [];
+    pantryInfo['employees'] = [];
 
     // Only include the reservations if the user is signed in and part of the pantry
     if (req.user && req.isEmployeeOf.includes(pantryInfo['pantry_id']) && 'reservations' in pantry) {
@@ -255,6 +284,15 @@ exports.getPantryDetailAction = (req, res) => {
       pantryInfo['hours'].push(hour);
     }
 
+    for (const [empKey, empData] of Object.entries(pantry['employees'])) {
+      let employees = {};
+      employees['first_name'] = empData['first_name'];
+      employees['last_name']  = empData['last_name'];
+      employees['user_email']      = empData['user_email'];
+
+      pantryInfo['employees'].push(employees);
+    }     
+
     return res.status(200).json(pantryInfo);
   }).catch(error => {
     console.log(error);
@@ -297,9 +335,17 @@ exports.pantryUpdateHoursAction = (req, res) => {
   });
 }
 
+exports.updateEstimatedPickUpAction = (req, res) => {
+  db.updateEstimatedPickUp(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Error in query. Failed to update pantry hours." });
+  });
+}
+
 exports.updateReservationAction = (req, res) => {
   db.updateReservation(req, res).then(async data => {
-    if (req.params.action = "cancel") {
+    if (req.params.action == "cancel") {
       try {
         var resFood = await(db.getResFood(req, res));
         resFood.forEach(async(element, index) => {
@@ -400,5 +446,37 @@ exports.foodSearchAction = (req, res) => {
     return res.status(500).json({
       message: "Search failed. Error in query."
     });
+  });
+}
+
+exports.pantryAddEmployeeAction = (req, res) => {
+  // Check whether user is emp of this pantry
+  let pantryIdInt = parseInt(req.params.pantry_id, 10);
+  if (req.isEmployeeOf.indexOf(pantryIdInt) == -1) {
+    return res.status(200).json({ message: "Error. Employee login required" });
+  }
+  db.pantryAddEmployee(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+  let sqlMessage;
+    if (error.err['code'] === 'ER_NO_REFERENCED_ROW_2') {
+      sqlMessage = "User does not exist."
+    } else if (error.err['code'] === 'ER_DUP_ENTRY') {
+      sqlMessage = "Duplicate entry. User is already employee.";
+    }
+    return res.status(500).json({ message: "Error in query. Failed to add employee.",
+    detail: sqlMessage });
+  });
+}
+
+exports.pantryRemoveEmployeeAction = (req, res) => {
+  let pantryIdInt = parseInt(req.params.pantry_id, 10);
+  if (req.isEmployeeOf.indexOf(pantryIdInt) == -1) {
+    return res.status(200).json({ message: "Error. Employee login required" });
+  }
+  db.pantryRemoveEmployee(req, res).then(data => {
+    return res.status(200).json(data);
+  }).catch(error => {
+    return res.status(500).json({ message: "Error in query. Failed to remove employee." });
   });
 }
