@@ -1,12 +1,19 @@
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
+import { Provider } from "react-redux";
+
 
 import SignupView from "../components/Authentication/SignupView";
 import "../setupTests";
+import store from "../store";
+
 
 describe("Signup tests", () => {
-  const wrapper = shallow(<SignupView />);
+  const wrapper = mount(
+  <Provider store={store}>
+    <SignupView />
+  </Provider>);
 
   it("should have a submit button", () => {
     // There should be one button in LoginView

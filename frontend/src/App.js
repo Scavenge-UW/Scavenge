@@ -108,6 +108,28 @@ class App extends Component {
     });
   }
 
+  async editProfile(user) {
+    return AuthService.editProfile(user).then((response) => {
+      if (response.message) {
+        // When the API returns `message`,
+        // that means the signup has failed
+        toast.error(response.message);
+        return -1;
+      } else {
+        this.setUsername(response.username);
+        this.setToken(response.token);
+        this.setProfile(response.profile);
+
+        // We only need to import toast in other components
+        // if we want to make a notification there.
+        toast.success("🚀 Successfully edited your profile!");
+
+        return 0;
+      }
+    });
+  }
+
+
   async login(user) {
     return AuthService.login(user).then((response) => {
       if (response.message) {
@@ -144,6 +166,8 @@ class App extends Component {
       }
     });
   }
+
+
 
   isAdmin() {
     return this.state.employeeOf.length !== 0;
@@ -207,10 +231,11 @@ class App extends Component {
                   <FoodSearchView />
                 </Route>
                 <Route path="/profile">
-                  <ProfileView
+                  {/* <ProfileView
                     profile={this.state.profile}
                     setProfile={this.setProfile.bind(this)}
-                  />
+                  /> */}
+                  <SignupView profile={this.state.profile} editProfile={this.editProfile.bind(this)} setProfile={this.setProfile.bind(this)}/>
                 </Route>
                 <Route path="/help">
                   <HelpView />

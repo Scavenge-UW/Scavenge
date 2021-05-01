@@ -64,8 +64,8 @@ class ProfileView extends Component {
       this.state.last_name
     ) {
       this.props.editProf(user);
-      this.setState({ toHomeView: true });
       toast.success("You succesfully updated your profile");
+      this.setState({ toHomeView: true });
       this.props.setProfile(user);
     } else {
       let errors = [];
