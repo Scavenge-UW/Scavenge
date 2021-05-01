@@ -25,7 +25,7 @@ class SignupView extends Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  onSubmit(e) {
+ async onSubmit(e) {
     //TODO: implement actual functionalities
     e.preventDefault();
 
@@ -57,9 +57,9 @@ class SignupView extends Component {
       this.state.last_name
     ) {
 
-      this.props.editProfile(user);
-      this.props.setProfile(user);
-      this.setState({toHomeView: true});
+      this.props.editProf(user);
+      const editResult = await this.props.setProfile(user);
+      if(editResult === 0){this.setState({toHomeView: true});}
 
     } else {
       let errors = [];
@@ -559,4 +559,4 @@ class SignupView extends Component {
   }
 }
 
-export default SignupView;
+export default connect(null, { editProf })(SignupView);
