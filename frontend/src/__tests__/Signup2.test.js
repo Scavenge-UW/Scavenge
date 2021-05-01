@@ -105,29 +105,29 @@ describe("Login tests", () => {
 
     });
   
-    // it("should redirect to home on login success", async () => {
-    //   wrapper.setState({ toHomeView: false });
-    //   wrapper.setProps({
-    //     login: () => {
-    //       return 0; // mocks Login Success
-    //     },
-    //   });
-    //   const getLoginButton = wrapper.find("Button");
-    //   await getLoginButton.simulate("click", {
-    //     preventDefault: jest.fn(),
-    //   });
+    it("should redirect to home on login success", async () => {
+      wrapper.setState({ toHomeView: false });
+      wrapper.setProps({
+        signup: () => {
+          return 0; // mocks Login Success
+        },
+      });
+      const getLoginButton = wrapper.find("Button");
+      await getLoginButton.simulate("click", {
+        preventDefault: jest.fn(),
+      });
   
-    //   expect(wrapper.state("toHomeView")).toEqual(true);
-    //   expect(wrapper.find("FormControl#username_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#password_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#firstName_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#lastName_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#email_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#phone_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#address_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#city_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#state_input")).toHaveLength(0);
-    //   expect(wrapper.find("FormControl#zipcode_input")).toHaveLength(0);
-   // });
+      expect(wrapper.state("toHomeView")).toEqual(true);
+      expect(wrapper.find("FormControl#username_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#password_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#firstName_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#lastName_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#email_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#phone_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#address_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#city_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#state_input")).toHaveLength(0);
+      expect(wrapper.find("FormControl#zipcode_input")).toHaveLength(0);
+   });
   });
   
