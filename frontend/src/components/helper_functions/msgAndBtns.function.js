@@ -7,17 +7,24 @@
  * @author [Yayen Lin](https://github.com/yayen-lin)
  */
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
-// import for bootstrap
+// imports for bootstrap
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+
+// imports for reservation status icons
 import { IoCheckmarkSharp, IoCheckmarkDoneSharp } from "react-icons/io5";
 import { MdRadioButtonUnchecked } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
 
+// imports for service
+import PantryService from "../../services/pantry.service";
+
 // other imports
+import { toast } from "react-toastify";
 import formatters from "./DatetimeFormatter.function"; // time formatters
 
 const monoStyle = {
@@ -93,18 +100,20 @@ function getMessageHeader(rsvn, adminMode, weblink = null) {
   } else {
     // userMode
     const pantryname = (
-      <Button
-        tag="a"
-        onClick={() => window.open(weblink, "_blank")}
-        variant="link"
-        // size="sm"
-      >
-        <em>{rsvn.name}</em>
-      </Button>
+      <Link to={weblink}>
+        <Button
+          // tag="a"
+          // onClick={() => window.open(weblink, "_blank")}
+          variant="link"
+          // size="sm"
+        >
+          <em>{rsvn.name}</em>
+        </Button>
+      </Link>
     );
     message = (
       <>
-        {icon} You have {numItems} tems reserved at {pantryname}
+        {icon} You have {numItems} items reserved at {pantryname}
       </>
     );
   }
@@ -149,9 +158,7 @@ function getMessageOverviewAndTitle(
     return (
       // admin mode
       <>
-        <Row className="justify-content-center mt-4">
-          <h2>{pantryName}</h2>
-        </Row>
+        <Row className="justify-content-center mt-4"></Row>
         <Row className="justify-content-center mt-2">
           <h3>Message Center</h3>
         </Row>
@@ -247,11 +254,28 @@ function editEstButtonIsHidden(rsvn) {
   else return false;
 }
 
-// TODO: added bold text for changed estimated pickup time
 /**
- * return formatted reservation status.
+ * return formatted reservation status with updates shown in bold, default shown in regular font.
  */
-function getMessageStatus(rsvn) {
+function getMessageStatus(rsvn, time_to_add) {
+  let isModified = false;
+  // if est pickup time - order time !== time_to_add, then it's val has been updated
+  if (time_to_add) {
+    if (
+      formatters.getTimeElapsed(rsvn.order_time, "minutes") -
+        formatters.getTimeElapsed(rsvn.estimated_pick_up, "minutes") !==
+      time_to_add
+    )
+      isModified = true;
+  }
+  // console.log("id = ", rsvn.reservation_id);
+  // console.log("time_to_add = ", time_to_add);
+  // console.log(
+  //   "time diff = ",
+  //   formatters.getTimeElapsed(rsvn.order_time, "minutes") -
+  //     formatters.getTimeElapsed(rsvn.estimated_pick_up, "minutes")
+  // );
+
   return [
     {
       key: "ID:",
@@ -270,7 +294,13 @@ function getMessageStatus(rsvn) {
     },
     {
       key: "ESTIMATED PICK UP AT:",
-      value: formatters.datetime(rsvn.estimated_pick_up),
+      value: isModified ? (
+        // est pickup is modified, show in bold text
+        <strong>{formatters.datetime(rsvn.estimated_pick_up)}</strong>
+      ) : (
+        // not midified, show in regular text
+        formatters.datetime(rsvn.estimated_pick_up)
+      ),
       bgColor: "#F7F7F7",
     },
     {
@@ -298,15 +328,143 @@ function getMessageStatus(rsvn) {
   ));
 }
 
+/**
+ * Mark a reservation as approved
+ *
+ * @param {*} rsvn_id - reservation id to be approved
+ * @param {*} pantry_id - pantry id where the reservation id is
+ * @param {*} fetchPantryDetail - function to fetch pantry detail to update page
+ */
+function markAsApproved(rsvn_id, pantry_id, fetchPantryDetail) {
+  console.log(rsvn_id);
+
+  PantryService.setApproved(pantry_id, rsvn_id)
+    .then(() => {
+      fetchPantryDetail(); // push changes to be displayed by re-rendered
+      toast.success(
+        "You have successfully approved the reservation #" + rsvn_id
+      );
+    })
+    .catch(() => {
+      toast.error("Error while approving reservation #" + rsvn_id);
+    });
+}
+
+/**
+ * Mark a reservation as picked up
+ *
+ * @param {*} rsvn_id - reservation id to be marked as picked up
+ * @param {*} pantry_id - pantry id where the reservation id is
+ * @param {*} fetchPantryDetail - function to fetch pantry detail to update page
+ */
+function markAsPickedUp(rsvn_id, pantry_id, fetchPantryDetail) {
+  console.log(rsvn_id);
+  PantryService.setPickedUp(pantry_id, rsvn_id)
+    .then(() => {
+      fetchPantryDetail(); // push changes to be displayed by re-rendered
+      toast.success(
+        "reservation #" + rsvn_id + " was successfully marked as picked up!"
+      );
+    })
+    .catch(() => {
+      toast.error(
+        "Error while marking reservation #" + rsvn_id + " as picked up."
+      );
+    });
+}
+
+/**
+ *  Mark a reservation as cancelled
+ *
+ * @param {*} rsvn_id - reservation id to be cancelled
+ * @param {*} pantry_id - pantry id where the reservation id is
+ * @param {*} fetchPantryDetail - function to fetch pantry detail to update page
+ */
+function markAsCancelled(rsvn_id, pantry_id, fetchPantryDetail) {
+  console.log(rsvn_id);
+  PantryService.setCancelled(pantry_id, rsvn_id)
+    .then(() => {
+      fetchPantryDetail(); // push changes to be displayed by re-rendered
+      toast.success(
+        "You have successfully cancelled the reservation #" + rsvn_id
+      );
+    })
+    .catch(() => {
+      toast.error("Error while cancelling reservation #" + rsvn_id);
+    });
+}
+
+/**
+ * Update estimated pickup time to server and prompt message accordingly
+ *
+ * @param {*} rsvn_id - reservation id that is to be updated
+ * @param {*} updTime - the updated estimated pickup time
+ * @param {*} pantry_id - pantry id where the reservation id is
+ * @param {*} fetchPantryDetail - function to fetch pantry detail to update page
+ */
+function setEstPickupTime(rsvn_id, updTime, pantry_id, fetchPantryDetail) {
+  console.log("3. ", pantry_id);
+  console.log("3. ", rsvn_id);
+  console.log("3. ", updTime);
+  PantryService.updateEstPickupTime(pantry_id, rsvn_id, {
+    estimated_pick_up: updTime,
+  })
+    .then(() => {
+      fetchPantryDetail(); // push changes to be displayed by re-rendered
+      toast.success(
+        "You have successfully updated the estimated pick up time for reservation #" +
+          rsvn_id
+      );
+    })
+    .catch(() => {
+      toast.error(
+        "Error while updating pick up time for reservation #" + rsvn_id
+      );
+    });
+}
+
+/**
+ *  Mark a reservation as cancelled
+ *
+ * @param {*} rsvn_id
+ * @param {*} pantry_id - pantry id where the reservation id is
+ * @param {*} fetchResponse - function to fetch user reservation detail to update page
+ */
+function markWithDraw(rsvn_id, pantry_id, fetchResponse) {
+  console.log(rsvn_id);
+  PantryService.setCancelled(pantry_id, rsvn_id)
+    .then(() => {
+      fetchResponse(); // push changes to be displayed by re-rendered
+      toast.success(
+        "You have successfully withdrawed your reservation with ID " + rsvn_id
+      );
+    })
+    .catch(() => {
+      toast.error(
+        "Error while withdrawing your reservation with ID " + rsvn_id
+      );
+    });
+}
+
 const msgFunctions = {
+  // for both user and admin
   getMessageHeader: getMessageHeader,
   getMessageOverviewAndTitle: getMessageOverviewAndTitle,
+  cancelButtonIsHidden: cancelButtonIsHidden,
+  getMessageStatus: getMessageStatus,
+
+  // for admin
   approvedButtonIsHidden: approvedButtonIsHidden,
   pickedupButtonIsHidden: pickedupButtonIsHidden,
-  cancelButtonIsHidden: cancelButtonIsHidden,
   resetButtonIsHidden: resetButtonIsHidden,
   editEstButtonIsHidden: editEstButtonIsHidden,
-  getMessageStatus: getMessageStatus,
+  markAsApproved: markAsApproved,
+  markAsPickedUp: markAsPickedUp,
+  markAsCancelled: markAsCancelled,
+  setEstPickupTime: setEstPickupTime,
+
+  // for user
+  markWithDraw: markWithDraw,
 };
 
 export default msgFunctions;

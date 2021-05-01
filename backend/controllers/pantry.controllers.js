@@ -1,4 +1,7 @@
+require('dotenv').config();
 const db = require('../models/pantry.models.js');
+const nodemailer = require('nodemailer');
+const userDb = require('../models/user.models.js');
 
 exports.getAllPantriesAction = (req, res) => {
   let result = {};
@@ -57,12 +60,7 @@ exports.getAllPantriesAction = (req, res) => {
       result[element['pantry_id']]['hours'][element['day']]['open']    = element['open'];
       result[element['pantry_id']]['hours'][element['day']]['close']   = element['close'];
       result[element['pantry_id']]['hours'][element['day']]['detail']  = element['detail'];
-
-      result[element['pantry_id']]['employees'][element['first_name']] = {};
-      result[element['pantry_id']]['employees'][element['first_name']]['first_name']  = element['first_name'];
-      result[element['pantry_id']]['employees'][element['first_name']]['last_name']   = element['last_name'];
-      result[element['pantry_id']]['employees'][element['first_name']]['user_email']  = element['user_email'];
-
+      
     });
 
     // Convert into array format without using ids as keys
@@ -88,7 +86,6 @@ exports.getAllPantriesAction = (req, res) => {
       //pantryInfo['reservations'] = []; we don't want to give everyone access to the reservations
       pantryInfo['foods'] = [];
       pantryInfo['hours'] = [];
-      pantryInfo['employees'] = [];
 
       // if ('reservations' in pantry) {
       //   for (const [reservationKey, reservationData] of Object.entries(pantry['reservations'])) {
@@ -133,15 +130,7 @@ exports.getAllPantriesAction = (req, res) => {
 
         pantryInfo['hours'].push(hour);
       }
-
-      for (const [empKey, empData] of Object.entries(pantry['employees'])) {
-        let employees = {};
-        employees['first_name'] = empData['first_name'];
-        employees['last_name']  = empData['last_name'];
-        employees['emauser_emailil']      = empData['user_email'];
-
-        pantryInfo['employees'].push(employees);
-      }      
+  
       resultsArr.push(pantryInfo);
     }
     result = resultsArr;
@@ -209,11 +198,6 @@ exports.getPantryDetailAction = (req, res) => {
       result['hours'][element['day']]['close']   = element['close'];
       result['hours'][element['day']]['detail']  = element['detail'];
 
-      result['employees'][element['first_name']] = {};
-      result['employees'][element['first_name']]['first_name']  = element['first_name'];
-      result['employees'][element['first_name']]['last_name']  = element['last_name'];
-      result['employees'][element['first_name']]['user_email']  = element['user_email'];
-
     });
 
     // Format the data
@@ -237,7 +221,6 @@ exports.getPantryDetailAction = (req, res) => {
     pantryInfo['reservations'] = [];
     pantryInfo['foods'] = [];
     pantryInfo['hours'] = [];
-    pantryInfo['employees'] = [];
 
     // Only include the reservations if the user is signed in and part of the pantry
     if (req.user && req.isEmployeeOf.includes(pantryInfo['pantry_id']) && 'reservations' in pantry) {
@@ -282,16 +265,7 @@ exports.getPantryDetailAction = (req, res) => {
       hour['detail'] = hourData['detail'];
 
       pantryInfo['hours'].push(hour);
-    }
-
-    for (const [empKey, empData] of Object.entries(pantry['employees'])) {
-      let employees = {};
-      employees['first_name'] = empData['first_name'];
-      employees['last_name']  = empData['last_name'];
-      employees['user_email']      = empData['user_email'];
-
-      pantryInfo['employees'].push(employees);
-    }     
+    }  
 
     return res.status(200).json(pantryInfo);
   }).catch(error => {
@@ -346,6 +320,7 @@ exports.updateEstimatedPickUpAction = (req, res) => {
 exports.updateReservationAction = (req, res) => {
   db.updateReservation(req, res).then(async data => {
     if (req.params.action == "cancel") {
+      // Add foods back into DB that they reserved
       try {
         var resFood = await(db.getResFood(req, res));
         resFood.forEach(async(element, index) => {
@@ -355,9 +330,40 @@ exports.updateReservationAction = (req, res) => {
         console.log(error);
         return res.status(500).json({ message: "Error in query. Failed to cancel reservation." });
       }
+    } else if (req.params.action == "approve") {
+      // Send approval email to user
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'scavenge.uw@gmail.com',
+          pass: process.env.EMAIL_PASSWORD
+        }
+      });
+
+      let resInfo = await userDb.getUserProfileFromRes(req.params.pantry_id, req.params.reservation_id);
+      resInfo = JSON.parse(JSON.stringify(resInfo));
+      const userEmail = resInfo[0]['email'];
+      const userFirstName = resInfo[0]['first_name'];
+      const pantryName = resInfo[0]['name'];
+      
+      const mailOptions = {
+        from: 'scavenge.uw@gmail.com',
+        to: userEmail,
+        subject: 'Scavenge - Reservation Approved',
+        html: `<p>Hi, ${userFirstName},</p><p>Your reservation at <strong>${pantryName}</strong> has been approved! Please view it at <a>https://scavenge-uw.herokuapp.com/</a>.</p><p>Thanks, </p><p>Scavenge UW Team</p>`
+      };
+      
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
     }
     return res.status(200).json(data);
   }).catch(error => {
+    console.log(error);
     return res.status(500).json({ message: "Error in query. Failed to update reservation." });
   });
 }

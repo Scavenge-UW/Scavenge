@@ -153,3 +153,20 @@ exports.getUserRes = async (req, res) => {
   return await execQuery("select", query, values, 
     "failed to get user reservations due to server error.");
 }
+
+exports.getUserProfileFromRes = async (pantryId, reservationId) => {
+  const query = `
+    SELECT
+      u.first_name,
+      u.email,
+      p.name
+    FROM reservation r
+    JOIN user u ON r.username = u.username
+    JOIN pantry p ON r.pantry_id = p.id
+    WHERE r.pantry_id = ? AND r.id = ?;
+  `;
+  let values = [pantryId, reservationId];
+
+  return await execQuery("select", query, values, 
+    "failed to get user reservations due to server error.");
+}

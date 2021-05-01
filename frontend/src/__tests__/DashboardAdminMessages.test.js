@@ -4,7 +4,7 @@ import { shallow, mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MemoryRouter, Route, Link } from "react-router-dom";
 
-import Dashboard_adminAllMsg from "../components/components_admin/Dashboard_adminAllMsg";
+import MessageCenter from "../components/components_shared/MessageCenter";
 import "../setupTests";
 
 import pantryDetail from "../__mocks__/pantryDetailMock";
@@ -16,17 +16,19 @@ jest.mock("react-router-dom", () => ({
   useParams: () => jest.fn().mockReturnValue({ pantry_id: "1" }),
 }));
 
-describe("DashboardUserMessages tests", () => {
+const mockIsAdmin = () => {
+  return true; // is admin
+};
+
+describe("DashboardUserMessages for admin - tests", () => {
   const wrapper = mount(
     <MemoryRouter>
-      <Dashboard_adminAllMsg />
+      <MessageCenter isAdmin={mockIsAdmin} />
     </MemoryRouter>
   );
 
   it("should display spinner", async () => {
     // expect(wrapper.find("Container#user-reservations")).toHaveLength(1);
-    expect(wrapper.find("Container#admin-reservations-loading")).toHaveLength(
-      1
-    );
+    expect(wrapper.find("Container#all-reservations-loading")).toHaveLength(1);
   });
 });

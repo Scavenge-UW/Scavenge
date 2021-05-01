@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 
 // imports for helper functions
 import MySpinner from "../helper_functions/MySpinner";
+import msgFunctions from "../helper_functions/msgAndBtns.function";
 import formatters from "../helper_functions/DatetimeFormatter.function";
 
 /**
@@ -39,6 +40,9 @@ class MyReservationsView extends Component {
   }
 
   fetchResponse() {
+    this.setState({
+      loaded: false,
+    });
     ReservationService.getUserReservations(this.props.username).then(
       (response) => {
         this.setState({
@@ -47,27 +51,6 @@ class MyReservationsView extends Component {
         });
       }
     );
-  }
-
-  /**
-   *  Mark a reservation as cancelled
-   *
-   * @param {*} rsvn_id
-   */
-  markWithDraw(pantry_id, rsvn_id) {
-    console.log(rsvn_id);
-    PantryService.setCancelled(pantry_id, rsvn_id)
-      .then(() => {
-        this.fetchResponse(); // push changes to be displayed by re-rendered
-        toast.success(
-          "You have successfully withdrawed your reservation with ID " + rsvn_id
-        );
-      })
-      .catch(() => {
-        toast.error(
-          "Error while withdrawing your reservation with ID " + rsvn_id
-        );
-      });
   }
 
   myReservationOverview() {
@@ -114,8 +97,10 @@ class MyReservationsView extends Component {
             adminMode={false}
             rsvns={this.state.rsvns}
             username={this.props.username}
-            markWithDraw={(pantry_id, rsvn_id) =>
-              this.markWithDraw(pantry_id, rsvn_id)
+            markWithDraw={(pantry_id, rsvn_id, fetchResponse) =>
+              msgFunctions.markWithDraw(pantry_id, rsvn_id, () =>
+                this.fetchResponse()
+              )
             }
           />
         </Container>

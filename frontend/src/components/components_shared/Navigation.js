@@ -56,61 +56,61 @@ class Navigation extends Component {
       case "Logout":
         return (
           <>
-            <FiLogOut size="1.3rem" />
+            <FiLogOut size="0.9rem" />
           </>
         ); // will be redirected to '/' upon successful logout
       case "Login":
         return (
           <>
-            <FiLogIn size="1.3rem" />
+            <FiLogIn size="0.9rem" />
           </>
         );
       case "Signup":
         return (
           <>
-            <FiUserPlus size="1.3rem" />
+            <FiUserPlus size="0.9rem" />
           </>
         );
       case "Manage Pantry":
         return (
           <>
-            <FiEdit size="1.3rem" />
+            <FiEdit size="0.9rem" />
           </>
         );
       case "Search Foods":
         return (
           <>
-            <FiSearch size="1.3rem" />
+            <FiSearch size="0.9rem" />
           </>
         );
       case "Cart":
         return (
           <>
-            <FiShoppingCart size="1.3rem" />
+            <FiShoppingCart size="0.9rem" />
           </>
         );
       case "Profile":
         return (
           <>
-            <FiUser size="1.3rem" />
+            <FiUser size="0.9rem" />
           </>
         );
       case "Reservations":
         return (
           <>
-            <FiClipboard size="1.3rem" />
+            <FiClipboard size="0.9rem" />
           </>
         );
       case "Wishlist":
         return (
           <>
-            <BsGift size="1.3rem" />
+            <BsGift size="0.9rem" />
           </>
         );
       case "Help":
         return (
           <>
-            <FiHelpCircle size="1.3rem" />
+            <FiHelpCircle size="0.9rem" />
           </>
         );
       default:
@@ -131,7 +131,7 @@ class Navigation extends Component {
       case "Signup":
         return "/signup";
       case "Manage Pantry":
-        return "/pantry";
+        return "/pantry/" + this.props.pantry_id;
       case "Search Foods":
         return "/search-food";
       case "Cart":
@@ -200,7 +200,7 @@ class Navigation extends Component {
           <LinkContainer to="/">
             <Navbar.Brand>
               <h3>
-                <IoHomeOutline /> Scavenge
+                <IoHomeOutline size="1.3rem" /> Scavenge
               </h3>
             </Navbar.Brand>
           </LinkContainer>

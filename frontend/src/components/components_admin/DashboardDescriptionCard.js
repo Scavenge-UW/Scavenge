@@ -79,7 +79,7 @@ class DashboardDescriptionCard extends Component {
         state: this.newStte.current.value,
         phone_number: this.newPhone.current.value,
         details: this.newDetail.current.value,
-        img_src: this.newImgSrc.current.value,
+        img_src: this.props.img_src,
         lat: this.props.lat, // remain unchanged
         lon: this.props.lon, // remain unchanged
         website: this.newWeblink.current.value,
@@ -316,7 +316,7 @@ class DashboardDescriptionCard extends Component {
                   <Form.Group controlId="formTimeTOAdd">
                     <Form.Label>
                       <strong>
-                        - Time To Add (in hours):{" "}
+                        - Time To Add (in minutes):{" "}
                         {ddtooltip.getTooltip("time_to_add")}
                       </strong>
                     </Form.Label>
