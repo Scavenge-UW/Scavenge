@@ -3,6 +3,8 @@ import { Col, Form, Button, Container } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Redirect } from "react-router-dom";
 import { editProf } from "../../actions/profileAction";
+import { connect } from "react-redux";
+
 
 class SignupView extends Component {
   constructor(props) {
