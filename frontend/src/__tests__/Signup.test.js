@@ -8,7 +8,10 @@ import SignupView from "../components/Authentication/SignupView";
 import "../setupTests";
 
 describe("Signup tests", () => {
-  const wrapper = shallow(<SignupView />);
+  const wrapper = shallow(
+  <Provider store={store}>
+    <SignupView />
+  </Provider>);
 
   it("should have a submit button", () => {
     // There should be one button in LoginView
