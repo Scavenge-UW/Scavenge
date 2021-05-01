@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 
 import SignupView from "../components/Authentication/SignupView";
 import "../setupTests";
+import store from "../store";
+
 
 describe("Signup tests", () => {
   const wrapper = shallow(
